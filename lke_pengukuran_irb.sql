@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `lke_aspek`;
 CREATE TABLE `lke_aspek` (
-  `id` int NOT NULL,
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,,
   `nama_aspek` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `create_at` datetime DEFAULT NULL,
   `update_at` datetime DEFAULT NULL,
