@@ -1,9 +1,15 @@
 <?= $this->extend('Layouts/dashboard') ?>
+<?= $this->section('styles') ?>
+<!-- Style -->
+    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/choices.js/choices.min.css" />
+    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/css/costum.css">
+    <link {csp-style-nonce}  rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.min.css" />
+<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 
     <div class="page-heading">
-      <h3>Dashboard Admin</h3>
+      <h3>Dashboard User</h3>
     </div>
     <div class="page-content">
       <div class="card">
@@ -13,25 +19,8 @@
           <div class="card-body">
                   <!-- Chart -->
                   <div class="container pb-5 mb-sm-4">
-    <!-- Details-->
-    <div class="row mb-3">
-        <div class="col-sm-4 mb-2">
-            <div class="bg-secondary p-4 text-dark text-center"><span class="font-weight-semibold mr-2">Shipped via:</span>UPS Ground</div>
-        </div>
-        <div class="col-sm-4 mb-2">
-            <div class="bg-secondary p-4 text-dark text-center"><span class="font-weight-semibold mr-2">Status:</span>Quality check</div>
-        </div>
-        <div class="col-sm-4 mb-2">
-            <div class="bg-secondary p-4 text-dark text-center"><span class="font-weight-semibold mr-2">Expected date:</span>June 17, 2019</div>
-        </div>
-    </div>
     <!-- Progress-->
     <div class="steps">
-        <!-- <div class="steps-header">
-            <div class="progress">
-                <div class="progress-bar styl-widht" role="progressbar"  aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div> -->
         <div class="steps-body">
             <div class="step step-completed">
               <span class="step-indicator">
@@ -122,12 +111,12 @@
         </div>
     </div>
     <!-- Footer-->
-    <div class="d-sm-flex flex-wrap justify-content-between align-items-center text-center pt-4">
+    <!-- <div class="d-sm-flex flex-wrap justify-content-between align-items-center text-center pt-4">
         <div class="custom-control custom-checkbox mt-2 mr-3">
             <input class="custom-control-input" type="checkbox" id="notify-me" checked="">
             <label class="custom-control-label" for="notify-me">Notify me when order is delivered</label>
         </div><a class="btn btn-primary btn-sm mt-2" href="#order-details" data-toggle="modal">View Order Details</a>
-    </div>
+    </div> -->
 </div>
                   <!--  -->
           </div>
@@ -286,7 +275,7 @@
             </div>
             <!-- Datatable Indikator Level -->
             <div class="table-responsive">
-              <table class="table table-sm">
+              <table class="table table-sm" id="datatable">
                 <thead>
                   <tr>
                     <th>No.</th>
@@ -296,10 +285,7 @@
                   
                 </thead>
               </table>
-              No Data
             </div>
-
-
       </div>
      
     </div>
@@ -309,11 +295,10 @@
 
 
 <?= $this->section('script') ?>
-<!-- <script {csp-script-nonce}  src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
-    <!-- <script {csp-script-nonce} src="assets/vendors/apexcharts/apexcharts.js"></script> -->
-    <!-- <script {csp-script-nonce} src="assets/js/pages/dashboard.js"></script> -->
-    <script {csp-script-nonce} src="assets/vendors/choices.js/choices.min.js"></script>
-
+<script {csp-script-nonce} src="assets/vendors/choices.js/choices.min.js"></script>    
+    <script {csp-script-nonce} src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+    <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap5.min.js"></script>
     <script {csp-script-nonce} type="text/javascript">
       const ctx = document.getElementById('myChart');
       const data = {
@@ -348,17 +333,6 @@
           pointHoverBorderColor: 'rgb(54, 162, 235)'
         }]
       };
-// const config = {
-//   type: 'radar',
-//   data: data,
-//   options: {
-//     elements: {
-//       line: {
-//         borderWidth: 3
-//       }
-//     }
-//   },
-// };
 new Chart(ctx, {
     type: 'radar',
     data: data,
@@ -377,5 +351,16 @@ new Chart(ctx, {
   },
   });
     </script>
+
+  <script {csp-script-nonce} type="text/javascript">
+    LoadDatatable()
+
+    function LoadDatatable(){
+      var t = $('#datatable').DataTable({
+        "dom": 'rtip'
+      });
+    }
+    
+  </script>
     
 <?= $this->endSection() ?>

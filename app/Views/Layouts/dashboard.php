@@ -6,16 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= getenv('APPNAME') ?> | Dashboard</title>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link {csp-style-nonce}  rel="preconnect" href="https://fonts.gstatic.com">
+    <link {csp-style-nonce}  href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.css">
 
-    <link rel="stylesheet" href="assets/vendors/iconly/bold.css">
+    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/iconly/bold.css">
 
-    <link rel="stylesheet" href="assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon">
+    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/css/app.css">
+    <link {csp-style-nonce}  rel="shortcut icon" href="<?php echo base_url();?>assets/images/favicon.svg" type="image/x-icon">
+    <?= $this->renderSection('styles') ?>
+
 </head>
 
 <body>
@@ -25,15 +27,23 @@
       <div id="main">  
         <?= $this->include('Components/header') ?>
         <?= $this->renderSection('content') ?>
+        <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
         <?= $this->include('Components/footer') ?>
       </div>
 
     </div>
-    <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!-- token auth -->
+    <?php 
+    helper('cookie');
+    $token = get_cookie('Authorization', true,'');
+    echo '
+    <input type="hidden" name="token" id="token" value="'.$token.'">';
+    ?>
     
-    <script src="assets/js/main.js"></script>
-
+    
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/bootstrap.bundle.min.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/main.js"></script>
     <?= $this->renderSection('script') ?>
 </body>
 

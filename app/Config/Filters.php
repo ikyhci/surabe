@@ -34,6 +34,9 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'apiFilter'     => \App\Filters\ApiFilters::class, //register auth
+        'appFilter'     => \App\Filters\AppFilters::class, //register auth
+        'cors'          => \App\Filters\CorsFilters::class, //register cors
     ];
 
     /**
@@ -53,6 +56,7 @@ class Filters extends BaseFilters
         'before' => [
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
+            'cors',
         ],
         'after' => [
             'pagecache',   // Web Page Caching
@@ -69,9 +73,10 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            'honeypot',
+            'csrf',
+            'invalidchars',
+            // 'cors'
         ],
         'after' => [
             // 'honeypot',

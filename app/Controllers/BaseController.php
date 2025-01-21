@@ -35,7 +35,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = [];
+    protected $helpers = ['url','form','cookie','date','file','text']; 
 
     /**
      * Be sure to declare properties for any property fetch you initialized.
@@ -54,5 +54,18 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = service('session');
+        $validation = \Config\Services::validation();
+        $security = \Config\Services::security();
+
+        // E.g.: $this->session = \Config\Services::session();
+        $csp = $this->response->getCSP();
+
+        $csp->addChildSrc('self');
+        $csp->addFontSrc(['self','fonts.googleapis.com','fonts.gstatic.com']);
+        $csp->addImageSrc(['* data:','w3.org' ,'data:','blob:', '* blob:']);
+        $csp->addStyleSrc(['','unsafe-inline']);
+        $csp->addScriptSrc(['self','allow-scripts','allow-style']);
+        // $csp->addChildSrc('https://');
+        // $csp->addSandbox(['allow-forms', 'allow-scripts']);
     }
 }
