@@ -44,6 +44,8 @@ class ApiUserControllers extends BaseController
         $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $list,
+                'success'   =>  1,
+                'msg'       =>  'success',
                 );
 
         return $this->response->setJSON($data);
@@ -53,15 +55,42 @@ class ApiUserControllers extends BaseController
     {
         // code...
         // 
-        $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+        $IDX = base64_decode($this->request->getVar('form'));
         $LIMIT = null;
         $OFFSET =null;
-        $list = $this->db->query("call View_Data_List_Soal('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        $list = $this->db->query("call View_List_Data_Soal_User('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
         $data = array(
                 'token_crs' => csrf_hash(),
-                'dt'        => $list,
+                'dt'        =>  $list,
+                'success'   =>  1,
+                'msg'       =>  'success',
                 );
 
         return $this->response->setJSON($data);
+    }
+
+    public function detailIndikator()
+    {
+        $idx = $this->request->getVar('idx');
+        $LIMIT = null;
+        $OFFSET = null;
+        $indk = $this->db->query("call View_Indikator('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        $bkd  = $this->db->query("call View_Bukti_dukung('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+
+        $data = array(
+                'token_crs' => csrf_hash(),
+                'success'   =>  1,
+                'msg'       =>  'success',
+                'dt'        => array(
+                            'index'     => $indk,
+                            'prmt'      => $prmt,
+                            'btdk'      => $bkd,
+                    ),
+                
+                );
+
+        return $this->response->setJSON($data);
+
     }
 }

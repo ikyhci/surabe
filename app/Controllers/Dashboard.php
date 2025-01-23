@@ -14,8 +14,8 @@ class Dashboard extends BaseController
 
     public function index()
     {
-        // $usr ='User';
         $usr ='User';
+        // $usr ='Soal';
         // $usr ='Penilai';
         // $usr ='Super Admin';
 

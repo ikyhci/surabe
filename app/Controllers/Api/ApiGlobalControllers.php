@@ -100,4 +100,18 @@ class ApiGlobalControllers extends BaseController
 
         return $this->response->setJSON($data);
     }
+
+    public function getJenisJawaban()
+    {
+        $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+        $LIMIT = null;
+        $OFFSET =null;
+        $list = $this->db->query("call View_Jenis_Jawaban('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+                );
+
+        return $this->response->setJSON($data);
+    }
 }

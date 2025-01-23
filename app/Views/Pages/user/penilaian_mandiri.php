@@ -67,6 +67,7 @@
     LoadDatatable() 
 
     function LoadDatatable(){
+      var csrf = document.getElementById('<?= csrf_token() ?>').value;
       var t = $('#datatable').DataTable({
           "dom": 'rtip',
           "scrollX": false,
@@ -133,26 +134,34 @@
     }
 
     $(document).on('click', '.detail-form', function(){
+      var csrf = document.getElementById('<?= csrf_token() ?>').value;
+      var fd = new FormData();
+      fd.append('<?= csrf_token() ?>' , csrf);
       var idx = $(this).data('id_aspek');
-      // window.open/detail-form'
+      fd.append('idx' , idx);
       $.ajax({
         url: "<?php echo base_url();?>get-detail-form",
-        type: "GET",
+        type: "POST",
         dataType: "JSON",
         // headers: {
         //   'Authorization': 'Bearer '+token
         // },
-        data: {
-          idx:idx
-        },
+        data: fd,
         processData : false,
         contentType: false,
         cache: false,
         success: function(data){
-          console.log(data)
-          if (data.success == 1) {
-            window.location.href = "<?php echo base_url();?>"+data.dt;
-          }
+          // console.log(data)
+          $('input#<?= csrf_token() ?>').val(data.token_crs);
+          setTimeout(function(){
+                  ///
+            if (data.success == 1) {
+              window.location.href = "<?php echo base_url();?>"+data.dt;
+            }else{
+              swal("Error", "Ops Terjadi Kesalahan : "+data.msg, "error");
+            }
+
+            },500)
         }
       })
     })

@@ -8,6 +8,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 class PagesUsersControllers extends BaseController
 {
     public function __construct(){
+
         // helper('cookie');
         // $key = getenv('TOKEN_SECRET');
         // $token = get_cookie('Authorization', true,'');
@@ -29,6 +30,7 @@ class PagesUsersControllers extends BaseController
         $IDX = $this->request->getVar('idx');
         $LIMIT = null;
         $OFFSET =null;
+        $encode = base64_encode($IDX);
 
         $asp = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
         if ($asp->id != null) {
@@ -37,9 +39,11 @@ class PagesUsersControllers extends BaseController
                 'token_crs' => csrf_hash(),
                 'success'   => $asp->res,
                 'msg'       => $asp->msg,
-                'dt'        => 'detail-form',
+                'idx'       => $IDX ,
+                'dt'        => 'detail-form?form='.base64_encode($asp->id),
               );
             return $this->response->setJSON($data);
+           
          }else{
             $data = array(
                     'token_crs' =>  csrf_hash(),
@@ -54,8 +58,8 @@ class PagesUsersControllers extends BaseController
     {
         $usr = 'User';
         
-        $IDX = $this->request->getVar('idx');
-        $LIMIT = null;
+        $IDX = base64_decode($this->request->getVar('form'));
+        $LIMIT = 1;
         $OFFSET =null;
 
         $asp = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
@@ -65,9 +69,17 @@ class PagesUsersControllers extends BaseController
                 'token_crs' => csrf_hash(),
                 'success'   => $asp->res,
                 'msg'       => $asp->msg,
+                'idx'       => base64_encode($IDX) ,
                 'dt'        => $asp,
               );
             return view('Pages/user/detail_form',$data);
+        }else{
+
         }
     }
+
+    // public function FunctionName($value='')
+    // {
+    //     // code...
+    // }
 }
