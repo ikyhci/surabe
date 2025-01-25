@@ -9,6 +9,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class ApiGlobalControllers extends BaseController
 {
+    protected $db;
+    
     public function __construct(){
         // $request = request();
         // $key = getenv('TOKEN_SECRET');
@@ -114,4 +116,43 @@ class ApiGlobalControllers extends BaseController
 
         return $this->response->setJSON($data);
     }
+
+    public function getOPD()
+    {
+        $nama_opd = $this->request->getVar('nama_opd') ? $this->request->getVar('nama_opd') : null;
+        $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+        $LIMIT = null;
+        $OFFSET = null;
+        $list = $this->db->query("call View_Opd('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        if($nama_opd){
+            $i = array_search($nama_opd, array_column($list, 'nama_opd'));
+            $list = array($list[$i]);
+        }
+        $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+                );
+
+        return $this->response->setJSON($data);
+    }
+
+    public function getRoles()
+    {
+        $RoleName = $this->request->getVar('RoleName') ? $this->request->getVar('RoleName') : null;
+        // $LIMIT = null;
+        // $OFFSET = null;
+        // $list = $this->db->query("call View_Roles('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        $list = $this->db->query("call View_Roles()")->getResult();
+        if($RoleName){
+            $i = array_search($RoleName, array_column($list, 'RoleName'));
+            $list = array($list[$i]);
+        }
+        $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+                );
+
+        return $this->response->setJSON($data);
+    }
+
 }
