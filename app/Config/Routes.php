@@ -52,8 +52,24 @@ $routes->group('api',  function($routes){
 	$routes->get('get-sub-sub-aspek', 'Api\ApiGlobalControllers::getSubSubAspek');
 	$routes->get('get-indikator', 'Api\ApiGlobalControllers::getIndikator');
 	$routes->get('get-jenis-jawaban', 'Api\ApiGlobalControllers::getJenisJawaban');
+	$routes->get('get-opd', 'Api\ApiGlobalControllers::getOPD');
+	$routes->get('get-roles', 'Api\ApiGlobalControllers::getRoles');
 });
 
 
+// Super Admin Routes ['filter' => 'appFilter','cors'],
+$routes->group('/', function($routes){
+	$routes->get('user-management', 'Pages\PagesSuperAdminControllers::manageUsers');
+	$routes->get('user-management/(:segment)', 'Pages\PagesSuperAdminControllers::manageUsersDetail/$1');
 
+});
+
+// Super Admin API Routes ['filter' => 'apiFilter','cors'],
+$routes->group('api', function($routes){
+	$routes->get('get-users', 'Api\ApiSuperAdminControllers::getUsers');
+	$routes->get('get-user/(:segment)', 'Api\ApiSuperAdminControllers::getUser/$1');
+	$routes->POST('put-user/(:any)', 'Api\ApiSuperAdminControllers::updateUser/$1');
+	$routes->POST('post-user', 'Api\ApiSuperAdminControllers::addUser');
+	$routes->delete('delete-user/(:any)', 'Api\ApiSuperAdminControllers::deleteUser/$1');
+});
 
