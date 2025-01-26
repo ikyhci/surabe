@@ -98,58 +98,58 @@ $(document).ready(function(){
     $(document).on('click', '#savedataparameter', function(){
     	var crs = document.getElementById('<?= csrf_token() ?>').value
     	var fd = new FormData($('#fparameter')[0]);
-    	console.log(<?= csrf_token() ?>+':'+crs)
+    	
     	fd.append('<?= csrf_token() ?>',crs);
     	swal({
     		title: "Konfirmasi",
-        text: "Simpan Data Baru?",
-        type: "info",
-        showCancelButton: true,
-        closeOnConfirm: false,
-        showLoaderOnConfirm: true,
-    	}, function(){
-    		$.ajax({
-    			url: "<?php echo base_url();?>api/save-parameter",
-          type: "POST",
-          dataType: "JSON",
-          // headers: {
-          //   'Authorization': 'Bearer '+token
-          // },
-          data: fd,
-          processData : false,
-          contentType: false,
-          cache: false,
-          success: function(data){
-            setTimeout(function(){
-            	$("input#<?= csrf_token() ?>").val(data.token_crs);	
-	            if (data.success == 1) {
-	              swal({
-	              	title:"Data Berhasil Di Simpan",
-	                text: data.msg,
-	                type: "success"
-	              }, function(){
-	                // reload datatable
-	                ReloadData();
-	              	}
-	              );
-	             }else{
-	             	swal({
-	              	title:"Error",
-	                text: data.msg,
-	                type: "error"
-	              }, function(){
-	                ReloadData();
-	              	}
-	              );
-	             }
-            },1000);
-          },
-          error:function(xhr, ajaxOptions, thrownError){
-            setTimeout(function(){
-              swal("Error", "Ops Terjadi Kesalahan : "+thrownError, "error");
-            },500)
-          } 
-        });
+	        text: "Simpan Data Baru?",
+	        type: "info",
+	        showCancelButton: true,
+	        closeOnConfirm: false,
+	        showLoaderOnConfirm: true,
+	    	}, function(){
+	    		$.ajax({
+	    			url: "<?php echo base_url();?>api/save-parameter",
+	          type: "POST",
+	          dataType: "JSON",
+	          // headers: {
+	          //   'Authorization': 'Bearer '+token
+	          // },
+	          data: fd,
+	          processData : false,
+	          contentType: false,
+	          cache: false,
+	          success: function(data){
+	            setTimeout(function(){
+	            	$("input#<?= csrf_token() ?>").val(data.token_crs);	
+		            if (data.success == 1) {
+		              swal({
+		              	title:"Data Berhasil Di Simpan",
+		                text: data.msg,
+		                type: "success"
+		              }, function(){
+		                // reload datatable
+		                ReloadData();
+		              	}
+		              );
+		             }else{
+		             	swal({
+		              	title:"Error",
+		                text: data.msg,
+		                type: "error"
+		              }, function(){
+		                ReloadData();
+		              	}
+		              );
+		             }
+	            },1000);
+	          },
+	          error:function(xhr, ajaxOptions, thrownError){
+	            setTimeout(function(){
+	              swal("Error", "Ops Terjadi Kesalahan : "+thrownError, "error");
+	            },500)
+	          } 
+	        });
     	});
     });
 
@@ -193,7 +193,7 @@ $(document).ready(function(){
        	event.stopPropagation();
         form.classList.add('was-validated');
         swal({
-	    		title: "Konfirmasi",
+	    	title: "Konfirmasi",
 	        text: text,
 	        type: "info",
 	        showCancelButton: true,

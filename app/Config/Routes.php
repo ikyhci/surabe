@@ -23,6 +23,7 @@ $routes->group('api',  function($routes){
 	// $routes->get('dashboard', 'Dashboard::index');
 	$routes->get('get-penilaian-mandiri', 'Api\ApiUserControllers::getPenilaianMandiri');
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
+	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
 });
 
 

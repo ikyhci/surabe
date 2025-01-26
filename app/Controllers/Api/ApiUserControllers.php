@@ -69,12 +69,12 @@ class ApiUserControllers extends BaseController
         return $this->response->setJSON($data);
     }
 
-    public function detailIndikator()
+    public function getDetailIndikator()
     {
-        $idx = $this->request->getVar('idx');
+        $IDX = $this->request->getVar('idx');
         $LIMIT = null;
         $OFFSET = null;
-        $indk = $this->db->query("call View_Indikator('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        $indk = $this->db->query("call View_Indikator('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
         $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
         $bkd  = $this->db->query("call View_Bukti_dukung('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
 
@@ -83,11 +83,10 @@ class ApiUserControllers extends BaseController
                 'success'   =>  1,
                 'msg'       =>  'success',
                 'dt'        => array(
-                            'index'     => $indk,
-                            'prmt'      => $prmt,
-                            'btdk'      => $bkd,
-                    ),
-                
+                                'indk'  => $indk,
+                                'prmt'  => $prmt,
+                                'btdk'  => $bkd,
+                                ),
                 );
 
         return $this->response->setJSON($data);

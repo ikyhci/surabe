@@ -8,34 +8,27 @@
                 
             </div>
             <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <tr>
+                            <td>Domain</td>
+                            <td>: </td>
+                        </tr>
+                        <tr>
+                            <td>Aspek</td>
+                            <td id="aspk">: </td>
+                        </tr>
+                        <tr>
+                            <td>Indikator</td>
+                            <td id="indk">: </td>
+                        </tr>
+                    </table>      
+                </div>
+                <h6>Parameter</h6>
             	<div id="content-form">
-            		<p>Terdapat aktivitas penggunaan Layanan Jaringan Intra Pemerintah Daerah</p>
-            		<p>Jawaban :</p>
-            		<form id="fjwb">
-            			<div class="form-check">
-                        <input class="form-check-input" type="radio" name="pilihan" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Ya
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="pilihan" id="flexRadioDefault2">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Tidak
-                        </label>
-                    </div>
-            		</form>
             		
-                    <p>Bukti Dukung.</p>
-                    <ul>
-                    	<li>Nota Dinas</li>
-                    	<li>Surat Permohonan</li>
-                    	<li>Surat Balasan</li>
-                    	<li>Berita Acara Pemanfaatan Jaringan Intra Pemerintah Daerah</li>
-                    	<li>Laporan Pemanfaatan </li>
+                    
 
-                    </ul>
-                    <p>Upload Bukti Dukung</p>
 
             	</div>
 
