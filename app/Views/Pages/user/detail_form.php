@@ -1,11 +1,14 @@
 <?= $this->extend('Layouts/dashboard') ?>
 <?= $this->section('styles') ?>
 <!-- Styles -->
-    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/choices.js/choices.min.css" />
-    <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/css/costum.css">
-    <link {csp-style-nonce}  rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
-    <link {csp-style-nonce}  rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
-    <link {csp-style-nonce}  rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.5.1/css/rowGroup.dataTables.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/choices.js/choices.min.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/costum.css">
+    <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.5.1/css/rowGroup.dataTables.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="assets/vendors/sweetalert/sweetalert.css">
+   
+
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -80,9 +83,66 @@
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/dataTables.rowGroup.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/rowGroup.dataTables.js"></script>
+     <script {csp-script-nonce} src="assets/vendors/sweetalert/sweetalert.min.js"></script>
+    
     <script {csp-script-nonce} type="text/javascript">
       $(document).ready(function(){
          LoadDatatable() 
+
+         $(document).on('click' , '#savedata', function(){
+          var crs = document.getElementById('<?= csrf_token() ?>').value
+          var fd = new FormData($('#formdata')[0]);
+          fd.append('<?= csrf_token() ?>',crs);
+
+          var form = document.getElementById('formdata');
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add('was-validated');
+          }else{
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add('was-validated');
+            swal({
+              title: "Konfirmasi",
+              text: 'Simpan Jawaban!',
+              type: "info",
+              showCancelButton: true,
+              closeOnConfirm: false,
+              showLoaderOnConfirm: true,
+              }, function(){
+                $.ajax({
+                  url: '<?php echo base_url();?>api/save-jawaban',
+                  type: "POST",
+                  dataType: "JSON",
+                  // headers: {
+                  //   'Authorization': 'Bearer '+token
+                  // },
+                  data: fd,
+                  processData : false,
+                  contentType: false,
+                  cache: false,
+                  success:function(data){
+                    $('input#<?= csrf_token() ?>').val(data.token_crs)
+                    setTimeout(function(){
+                      if (data.success == 1) {
+                        swal('success','Data Berhasil Di Simpan','success');
+                      }else{
+                        swal({
+                          title:"Error",
+                          text: data.msg,
+                          type: "error"
+                        });
+                      }
+
+                      },1000)
+
+                  },
+                })
+              })
+          }
+          
+         })
 
           function LoadDatatable(){
             var form = document.getElementById('form').value
@@ -121,7 +181,7 @@
                         
                         btn +="<div class='btn-group mb-3 btn-group-sm'>"+
                         
-                          "<a href='#'' class='btn icon btn-outline-info detail-indikator' data-idx='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-eye' viewBox='0 0 16 16'><path d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z'/><path d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0'/></svg></a>"
+                          "<button class='btn icon btn-outline-info detail-indikator' data-idx='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-eye' viewBox='0 0 16 16'><path d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z'/><path d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0'/></svg></button>"
                         +"</div>"
                         return btn;
                       }
@@ -170,13 +230,17 @@
                 document.getElementById('aspk').innerHTML = ': '+data.dt.indk.aspek
                 document.getElementById('indk').innerHTML = ': '+data.dt.indk.indikator
                 if (data.dt.indk.num == 1 ) {
-                  loadPilihanGanda(data.dt.prmt)
+                  // linear
+                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk.jwbx)
                 }
                 if (data.dt.indk.num == 2 ) {
-                  loadPilihanGanda(data.dt.prmt)
+                  // yesno
+                  loadYesNo(data.dt.prmt, data.dt.btdk, data.dt.indk.jwbx)
                 }
                 if (data.dt.indk.num == 4 ) {
-                  loadPilihanGanda(data.dt.prmt)
+                  //pilihan ganda
+                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk.jwbx)
+                  
                 }
                 
                 $('#Detailparameter').modal('show');
@@ -185,66 +249,120 @@
 
           })
 
-          function loadPilihanGanda(data){
+          function loadPilihanGanda(data,dkn, jwb){
             var str = '<ol type="A">'
-            var plh ='';
+            var plh = '';
+            var upl = '';
+            var flx = '<ol type="*">';
 
              for (var i = 0; i < data.length; i++) {
                str += '<li>'+data[i].nama_parameter+'</li>'
                plh += '<option value="'+String.fromCharCode(65+i)+'">'+String.fromCharCode(65+i)+'</option>'
              }
 
+
+            for (var i = 0; i < dkn.length; i++) {
+                if (dkn[i].filesx === '0') {
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+                }else{
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+dkn[i].filesx+'" target="_blank">'+dkn[i].bukti_dukung+'</a></div></li>'
+                }
+              
+             }
+             
+
               str += '</ol>';
-              str += '<form id="jwb">'+
+              str += '<form id="formdata" enctype="multipart/form-data">'+
+                        '<input type="hidden" name="indikator" value="'+dkn[0].id_indikator+'">'+
                         '<div class="col-md-12 mb-6">'+
-                          '<h6>Jawaban <span class="text-danger">*</span></h6>'+
-                          '<select class=" form-select" name="jwb" id="jwb" required>'+
+                          '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
+                          '<select class=" form-select" name="jwbn" id="jwb" required>'+
                             '<option selected disabled value="">Choose...</option>'+ 
                             plh+              
                           '</select>'+
-                        '</div>'+
+                        '</div></div>'+
                         '<h6>Bukti Dukung : </h6>'+
-                        '<div class="table-responsive">'+
-                          '<table class="table mb-0">'+
-                          // 
-                            '<tr>'+
-                              '<td> *Kenutuhan Dokument OPD</td>'+
-                              '<td>: '+
-                                // '<div class="form-group">'+
-                                  // '<label>Upload berkas</label>'+
-                                  '<input id="file" type="file" name="file" required="true">'+
-                                  // '<small>Max file size 6 MB</small>'+
-                                '</div>'+
-                              '</td>'+
-                            '</tr>'+
-                            // 
-                          '</table> '+
-                        '</div>'+
+                         '<div class="row">'+
+                            '<div class="col-sm-12"><ol>'+
+                              upl+
+                            '</ol></div>'+
+                          '</div>'+
+                        
                       '</form>';
+
+                flx += '</ol>';
 
 
 
             document.getElementById('content-form').innerHTML = str;
-            // return fm;
-            console.log(data)
+            document.getElementById('content-upload').innerHTML = flx;
+            $("#jwb").val(jwb).trigger('change')
           }
 
           function loadLinear(){
 
           }
 
-          function loadYesNo() {
-            
+          function loadYesNo(data,dkn,jwb) {
+            var str = '<ol type="*">'
+            var plh = '';
+            var upl = '';
+            var flx = '<ol type="*">';
+
+             for (var i = 0; i < data.length; i++) {
+               str += '<li>'+data[i].nama_parameter+'</li>'
+              
+             }
+
+             for (var i = 0; i < dkn.length; i++) {
+                if (dkn[i].filesx === '0') {
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+                }else{
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+dkn[i].filesx+'" target="_blank">'+dkn[i].bukti_dukung+'</a></div></li>'
+                }
+              
+             }
+
+
+
+              str += '</ol>';
+              str += '<form id="formdata" enctype="multipart/form-data">'+
+                        '<input type="hidden" name="indikator" id="indikator" value="'+dkn[0].id_indikator+'">'+
+                        '<div class="col-md-12 mb-6">'+
+                          '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
+                            '<div class="form-check">'+
+                                '<input class="form-check-input" value="YA" type="radio" name="jwbn" id="jwb1">'+
+                                  '<label class="form-check-label" for="flexRadioDefault1">YA</label></div>'+
+                            '<div class="form-check">'+
+                                '<input class="form-check-input" value="TIDAK" type="radio" name="jwbn" id="jwb2">'+
+                                        '<label class="form-check-label" for="flexRadioDefault1">TIDAK</label></div>'+
+                        '</div></div>'+
+                        '<h6>Bukti Dukung : </h6>'+
+                         '<div class="row">'+
+                            '<div class="col-sm-12"><ol>'+
+                              upl+
+                            '</ol></div>'+
+                          '</div>'+
+                        
+                      '</form>';
+
+            flx += '</ol>';
+
+            document.getElementById('content-form').innerHTML = str;
+            document.getElementById('content-upload').innerHTML = flx;
+
+            if (jwb === 'YA') {
+              document.getElementById('jwb1').checked = true;
+            }
+            if (jwb === 'TIDAK') {
+              document.getElementById('jwb2').checked = true;
+            }
           }
 
       })
-   
-    
-  </script>
+  </script>    
 
-
-
-
-    
     
 <?= $this->endSection() ?>

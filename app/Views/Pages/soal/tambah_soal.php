@@ -183,7 +183,7 @@ $(document).ready(function(){
     		 text = 'Simpan Data Aspek Baru ?'
     	}
     	var form = document.getElementById('formdata');
-    	console.log(form.checkValidity() )
+    
     	if (form.checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
@@ -201,7 +201,7 @@ $(document).ready(function(){
 	        showLoaderOnConfirm: true,
 	    	}, function(){
 	    		$.ajax({
-	    			url: url,
+	    		url: url,
 	          type: "POST",
 	          dataType: "JSON",
 	          // headers: {

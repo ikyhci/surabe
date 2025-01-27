@@ -24,6 +24,7 @@ $routes->group('api',  function($routes){
 	$routes->get('get-penilaian-mandiri', 'Api\ApiUserControllers::getPenilaianMandiri');
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
+	$routes->post('save-jawaban','Api\ApiUserControllers::saveJawaban');
 });
 
 

@@ -35,61 +35,182 @@ class ApiUserControllers extends BaseController
 
     public function getPenilaianMandiri()
     {
-        // code...View_Penilaian_Mandiri
-        $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-        $LIMIT = null;
-        $OFFSET =null;
-        // $list = $this->db->query("call View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
-        $list = $this->db->query("call View_Penilaian_Mandiri()")->getResult();
-        $data = array(
-                'token_crs' => csrf_hash(),
-                'dt'        => $list,
-                'success'   =>  1,
-                'msg'       =>  'success',
-                );
+        try {
+            // if (!empty($this->decoded->aud)) {
+                $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+                $LIMIT = null;
+                $OFFSET =null;
+                // $list = $this->db->query("call View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $list = $this->db->query("call View_Penilaian_Mandiri()")->getResult();
+                $data = array(
+                        'token_crs' => csrf_hash(),
+                        'dt'        => $list,
+                        'success'   =>  1,
+                        'msg'       =>  'success',
+                        );
 
-        return $this->response->setJSON($data);
+                return $this->response->setJSON($data);
+            // }else{
+            //     $data = array(
+            //         'token_crs' =>  csrf_hash(),
+            //         'success'   =>  0,
+            //         'msg'       =>  'error invalid token'
+            //     );
+            //     return $this->response->setJSON($data);
+            // }
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
     }
 
     public function getSoalData()
     {
-        // code...
-        // 
-        $IDX = base64_decode($this->request->getVar('form'));
-        $LIMIT = null;
-        $OFFSET =null;
-        $list = $this->db->query("call View_List_Data_Soal_User('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
-        $data = array(
-                'token_crs' => csrf_hash(),
-                'dt'        =>  $list,
-                'success'   =>  1,
-                'msg'       =>  'success',
-                );
+        try {
+            // if (!empty($this->decoded->aud)) {
+                $IDX = base64_decode($this->request->getVar('form'));
+                $LIMIT = null;
+                $OFFSET =null;
+                $list = $this->db->query("call View_List_Data_Soal_User('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $data = array(
+                        'token_crs' => csrf_hash(),
+                        'dt'        =>  $list,
+                        'success'   =>  1,
+                        'msg'       =>  'success',
+                        );
 
-        return $this->response->setJSON($data);
+                return $this->response->setJSON($data);
+            // }else{
+            //     $data = array(
+            //         'token_crs' =>  csrf_hash(),
+            //         'success'   =>  0,
+            //         'msg'       =>  'error invalid token'
+            //     );
+            //     return $this->response->setJSON($data);
+            // }
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
     }
 
     public function getDetailIndikator()
     {
-        $IDX = $this->request->getVar('idx');
-        $LIMIT = null;
-        $OFFSET = null;
-        $indk = $this->db->query("call View_Indikator('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
-        $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
-        $bkd  = $this->db->query("call View_Bukti_dukung('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+        try {
+            // if (!empty($this->decoded->aud)) {
+                // 
+                $IDX = $this->request->getVar('idx');
+                $LIMIT = null;
+                $OFFSET = null;
+                $userid = 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5';
+                $indk = $this->db->query("call View_Indikator('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getRow();
+                $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $bkd  = $this->db->query("call View_Bukti_dukung('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getResult();
 
-        $data = array(
-                'token_crs' => csrf_hash(),
-                'success'   =>  1,
-                'msg'       =>  'success',
-                'dt'        => array(
-                                'indk'  => $indk,
-                                'prmt'  => $prmt,
-                                'btdk'  => $bkd,
-                                ),
-                );
+                $data = array(
+                        'token_crs' => csrf_hash(),
+                        'success'   =>  1,
+                        'msg'       =>  'success',
+                        'dt'        => array(
+                                        'indk'  => $indk,
+                                        'prmt'  => $prmt,
+                                        'btdk'  => $bkd,
+                                        ),
+                        );
 
-        return $this->response->setJSON($data);
+                return $this->response->setJSON($data);
+            // }else{
+            //     $data = array(
+            //         'token_crs' =>  csrf_hash(),
+            //         'success'   =>  0,
+            //         'msg'       =>  'error invalid token'
+            //     );
+            //     return $this->response->setJSON($data);
+            // }
 
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
+
+    }
+
+    public function saveJawaban()
+    {
+        try {
+            // if (!empty($this->decoded->aud)) {
+                // 
+
+                $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+                $indkt  = $this->request->getVar('indikator');
+                $nama   = $this->request->getVar('jwbn');
+                $userid = 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5';//$this->decoded->userid
+
+                $save = $this->db->query("CALL Jawaban_add_edit('".
+                    $userid."','".
+                    $id."','".
+                    $nama."','".
+                    $indkt."')")->getRow();
+
+                $getFl = $this->db->query("CALL View_File_For_Upload('".$indkt."','".$userid."',null,null)")->getResult();
+
+                foreach ($getFl as $key) {
+                    if ($this->request->getFile($key->id)->isValid() && ! $this->request->getFile($key->id)->hasMoved()) {
+                        $newName = $this->request->getFile($key->id)->getRandomName();
+                        $this->request->getFile($key->id)->move('uploadfile', $newName);
+                        $savebukti = $this->db->query("CALL upload_bukti_add_edit('".
+                            $userid."','".
+                            $id."','".
+                            $key->id."','".
+                            $newName."')")->getRow();
+                    }else{
+
+                    }
+              
+                    
+                }
+
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  1,
+                        'msg'       =>  'Tambah Data Berhasil',
+                    );
+                return $this->response->setJSON($data);
+                // 
+            // }else{
+            //     $data = array(
+            //         'token_crs' =>  csrf_hash(),
+            //         'success'   =>  0,
+            //         'msg'       =>  'error invalid token'
+            //     );
+            //     return $this->response->setJSON($data);
+            // }
+            
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
     }
 }

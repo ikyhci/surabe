@@ -4,6 +4,7 @@
     <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/choices.js/choices.min.css" />
     <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/css/costum.css">
     <link {csp-style-nonce}  rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.min.css" />
+    
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -299,7 +300,9 @@
     <script {csp-script-nonce} src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap5.min.js"></script>
+    
     <script {csp-script-nonce} type="text/javascript">
+      
       const ctx = document.getElementById('myChart');
       const data = {
         labels: [

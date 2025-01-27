@@ -26,7 +26,7 @@ class CorsFilters implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         //
-        header('Access-Control-Allow-Origin: https://csirt.sultengprov.go.id/');
+        header('Access-Control-Allow-Origin: http://localhost:8080');
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
         header("Access-Control-Allow-Credentials: true");
         header("Access-Control-Max-Age: 86400");

@@ -26,11 +26,12 @@
                 </div>
                 <h6>Parameter</h6>
             	<div id="content-form">
-            		
-                    
-
 
             	</div>
+                <h6>File Yang Telah Di Upload</h6>
+                <div id="content-upload">
+                    
+                </div>
 
             </div>
             <div class="modal-footer">
@@ -38,10 +39,10 @@
                     <i class="bx bx-x d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Close</span>
                 </button>
-                <!-- <button type="button" class="btn btn-primary ml-1" id="savedata">
+                <button type="button" class="btn btn-primary ml-1" id="savedata">
                 	<i class="bx bx-check d-block d-sm-none"></i>
                 	<span class="d-none d-sm-block">Save</span>
-                </button> -->
+                </button>
             </div>
         </div>
     </div>
