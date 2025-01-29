@@ -26,7 +26,7 @@
               <tr>
                 <td>Detail Form</td>
                 <td class="text-end">
-                  <a href="<?php echo base_url(); ?>penilaian-mandiri" class="btn btn-primary" id="back"> Kembali</a>
+                  <a href="<?php echo base_url(); ?>dashboard/penilaian-mandiri" class="btn btn-primary" id="back"> Kembali</a>
                 </td>
               </tr>
               <tr>
@@ -226,7 +226,7 @@
               cache: false,
               success: function(data){
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
-                console.log(data)
+                // console.log(data)
                 document.getElementById('aspk').innerHTML = ': '+data.dt.indk.aspek
                 document.getElementById('indk').innerHTML = ': '+data.dt.indk.indikator
                 if (data.dt.indk.num == 1 ) {

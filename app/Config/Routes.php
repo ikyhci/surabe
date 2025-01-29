@@ -5,14 +5,19 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Dashboard::index');
-$routes->get('/login','PublicPages::login');
+// $routes->get('/', 'Dashboard::index');
+$routes->get('/','PublicPages::login');
 $routes->get('/unauthorized','Dashboard::Unauthorized');
+
+$routes->group('api',  function($routes){
+	$routes->post('login','Auth\AuthControllers::auth');
+});
+
 //Users
 
 // user page routes ['filter' => 'appFilter','cors'],
-$routes->group('/',  function($routes){
-	$routes->get('dashboard', 'Dashboard::index');
+$routes->group('dashboard',  function($routes){
+	$routes->get('', 'Dashboard::index');
 	$routes->get('penilaian-mandiri', 'Pages\PagesUsersControllers::index');
 	$routes->post('get-detail-form', 'Pages\PagesUsersControllers::detailForm');
 	$routes->get('detail-form', 'Pages\PagesUsersControllers::listDetail');
@@ -29,8 +34,8 @@ $routes->group('api',  function($routes){
 
 
 // Soal page routes , ['filter' => 'appFilter','cors'],
-$routes->group('/', function($routes){
-	$routes->get('dashboard', 'Dashboard::index');
+$routes->group('dashboard', function($routes){
+	$routes->get('', 'Dashboard::index');
 	$routes->get('/tambah-data-penilaian', 'Pages\PagesSoalControllers::addData');
 });
 
@@ -60,7 +65,7 @@ $routes->group('api',  function($routes){
 
 
 // Super Admin Routes ['filter' => 'appFilter','cors'],
-$routes->group('/', function($routes){
+$routes->group('dashboard', function($routes){
 	$routes->get('user-management', 'Pages\PagesSuperAdminControllers::manageUsers');
 	$routes->get('user-management/(:segment)', 'Pages\PagesSuperAdminControllers::manageUsersDetail/$1');
 

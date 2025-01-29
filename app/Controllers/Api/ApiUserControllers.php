@@ -172,18 +172,17 @@ class ApiUserControllers extends BaseController
                 $getFl = $this->db->query("CALL View_File_For_Upload('".$indkt."','".$userid."',null,null)")->getResult();
 
                 foreach ($getFl as $key) {
-                    if ($this->request->getFile($key->id)->isValid() && ! $this->request->getFile($key->id)->hasMoved()) {
-                        $newName = $this->request->getFile($key->id)->getRandomName();
-                        $this->request->getFile($key->id)->move('uploadfile', $newName);
-                        $savebukti = $this->db->query("CALL upload_bukti_add_edit('".
-                            $userid."','".
-                            $id."','".
-                            $key->id."','".
-                            $newName."')")->getRow();
-                    }else{
-
+                    if ($this->request->getFile($key->id) != null) {
+                        if ($this->request->getFile($key->id)->isValid() && ! $this->request->getFile($key->id)->hasMoved()) {
+                            $newName = $this->request->getFile($key->id)->getRandomName();
+                            $this->request->getFile($key->id)->move('uploadfile', $newName);
+                            $savebukti = $this->db->query("CALL upload_bukti_add_edit('".
+                                $userid."','".
+                                $id."','".
+                                $key->id."','".
+                                $newName."')")->getRow();
+                        }
                     }
-              
                     
                 }
 

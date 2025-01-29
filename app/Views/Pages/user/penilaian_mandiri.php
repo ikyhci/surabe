@@ -140,7 +140,7 @@
       var idx = $(this).data('id_aspek');
       fd.append('idx' , idx);
       $.ajax({
-        url: "<?php echo base_url();?>get-detail-form",
+        url: "<?php echo base_url();?>dashboard/get-detail-form",
         type: "POST",
         dataType: "JSON",
         // headers: {

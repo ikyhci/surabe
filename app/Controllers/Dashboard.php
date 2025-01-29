@@ -1,23 +1,31 @@
 <?php
 
 namespace App\Controllers;
+use CodeIgniter\Cookie\Cookie;
+use CodeIgniter\Cookie\CookieStore;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Config\Services;
+use CodeIgniter\HTTP\Response;
+use CodeIgniter\HTTP\Header;
 
 class Dashboard extends BaseController
 {
-    // public function __construct(){
-    //     helper('cookie');
-    //     $key = getenv('TOKEN_SECRET');
-    //     $token = get_cookie('Authorization', true,'');
-    //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-    //     $this->db = db_connect();
-    // }
+    public function __construct(){
+        helper('cookie');
+        $key = getenv('TOKEN_SECRET');
+        $token = get_cookie('__LKE-Authorization', true,'');
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        // $this->db = db_connect();
+    }
 
     public function index()
     {
-        $usr ='User';
+        $usr =$this->decoded->rln;
         // $usr ='Soal';
         // $usr ='Penilai';
         // $usr ='Super Admin';
+        // if (!empty($this->decoded->rln)) {
 
         if ($usr == 'User') {
             $data = array('usr' => $usr, );

@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="stylesheet" href="assets/css/pages/auth.css">
+    <link {csp-style-nonce} href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link {csp-style-nonce} rel="stylesheet" href="assets/css/bootstrap.css">
+    <link {csp-style-nonce} rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link {csp-style-nonce} rel="stylesheet" href="assets/css/app.css">
+    <link {csp-style-nonce} rel="stylesheet" href="assets/vendors/toastify/toastify.css">
+    <link {csp-style-nonce} rel="stylesheet" href="assets/css/pages/auth.css">
 </head>
 
 <body>
@@ -19,46 +20,48 @@
             <div class="col-sm-5 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
-                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo"></a>
+                        <a href="/"><img src="assets/images/logo/logo.png" alt="Logo"></a>
                     </div>
+                    <!-- <div class="text-center pesan-valid" id="valid"> -->
                     <h1 class="auth-title">Log in.</h1>
-                    <form action="index.html">
+
+                    <form id="login" method="POST" class="needs-validations login-form" novalidate>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl" placeholder="Username">
+
+                            <input type="text" name="username" class="form-control form-control" placeholder="Username" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control-xl" placeholder="Password">
+                            <input type="password" name="password" class="form-control form-control" placeholder="Password" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-shield-lock"></i>
                             </div>
                         </div>
-                        <div class="form-check form-check-sm d-flex align-items-end">
-                            <input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label text-gray-600" for="flexCheckDefault">
-                                Keep me logged in
-                            </label>
-                        </div>
-                        <button class="btn btn-primary btn-block btn-sm shadow-lg mt-5">Log in</button>
+                        <!-- capcha -->
+                        <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                        <button type="submit" id="btnLogin"class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
-                        <p class="text-gray-600">Don't have an account? <a href="auth-register.html"
-                                class="font-bold">Sign
-                                up</a>.</p>
+
                         <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">
                 <div id="auth-right">
+                    <img class="bgimgs" src="/assets/images/bg/bg.jpg">
 
                 </div>
             </div>
         </div>
 
     </div>
+    <script {csp-script-nonce} src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script {csp-script-nonce} src="assets/vendors/toastify/toastify.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/bootstrap.bundle.min.js"></script>
+    <script {csp-script-nonce} src="assets/js/pages/auth.js"></script>
 </body>
 
 </html>

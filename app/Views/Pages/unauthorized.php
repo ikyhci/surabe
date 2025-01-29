@@ -17,7 +17,7 @@
         <div class="error-page container">
           <div class="row">
             <div class="col-sm-12 d-flex justify-content-center">
-              <img class="img-error w-25 p-3" src="assets/images/samples/error-403.png" alt="Not Found">
+              <img class="img-error w-25 p-3" src="assets/images/error-403.png" alt="Not Found">
             </div>
             <div class="col-sm-12">
                 <div class="text-center">
