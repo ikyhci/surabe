@@ -88,7 +88,7 @@
 $(document).ready(function(){
 	// 
 	var act = document.getElementById('<?= csrf_token() ?>')
-    	var token = document.getElementById('token').value;
+    var token = document.getElementById('token').value;
 
     
     LoadDatatable()
@@ -108,18 +108,18 @@ $(document).ready(function(){
 	        closeOnConfirm: false,
 	        showLoaderOnConfirm: true,
 	    	}, function(){
-	    		$.ajax({
-	    			url: "<?php echo base_url();?>api/save-parameter",
-	          type: "POST",
-	          dataType: "JSON",
-	          // headers: {
-	          //   'Authorization': 'Bearer '+token
-	          // },
-	          data: fd,
-	          processData : false,
-	          contentType: false,
-	          cache: false,
-	          success: function(data){
+	    	$.ajax({
+	    		url: "<?php echo base_url();?>api/save-parameter",
+	          	type: "POST",
+	          	dataType: "JSON",
+	          	headers: {
+	          	  'Authorization': 'Bearer '+token
+	          	},
+	          	data: fd,
+	          	processData : false,
+	          	contentType: false,
+	          	cache: false,
+	          	success: function(data){
 	            setTimeout(function(){
 	            	$("input#<?= csrf_token() ?>").val(data.token_crs);	
 		            if (data.success == 1) {
@@ -204,9 +204,9 @@ $(document).ready(function(){
 	    		url: url,
 	          type: "POST",
 	          dataType: "JSON",
-	          // headers: {
-	          //   'Authorization': 'Bearer '+token
-	          // },
+	          headers: {
+	            'Authorization': 'Bearer '+token
+	          },
 	          data: fd,
 	          processData : false,
 	          contentType: false,
@@ -312,10 +312,17 @@ $(document).ready(function(){
     })
 
     function loadaspek(nums) {
+    	var csrf = document.getElementById('<?= csrf_token() ?>').value
     	
     	$.ajax({
 				url: '<?php echo base_url();?>api/get-aspek',
 				type:'GET',
+				headers: {
+		            'Authorization': 'Bearer '+token
+		         },
+		        data:{
+					<?= csrf_token() ?>: csrf
+				},
 				dataType: 'json',
 				success: function(res){
 					if (nums == 1) {
@@ -340,9 +347,16 @@ $(document).ready(function(){
     }
 
     function loadJawaban(){
+    	var csrf = document.getElementById('<?= csrf_token() ?>').value
     	$.ajax({
 				url: '<?php echo base_url();?>api/get-jenis-jawaban',
 				type:'GET',
+				headers: {
+		            'Authorization': 'Bearer '+token
+		         },
+		        data:{
+					<?= csrf_token() ?>: csrf
+				},
 				dataType: 'json',
 				success: function(res){
 						$("#jjwb").find('option').remove();
@@ -479,7 +493,7 @@ $(document).ready(function(){
 		}
 
     function LoadDatatable(){
-
+    	var csrf = document.getElementById('<?= csrf_token() ?>').value
       	var t = $('#datatable').DataTable({
 	        "dom": 'rtip',
 	        "scrollX": false,
@@ -490,12 +504,12 @@ $(document).ready(function(){
 					"ajax": {
 						"url": "<?php echo base_url(); ?>api/get-penilaian-spbe",
 						"contentType": 'application/json',
-						// "headers": {
-						// 	'Authorization': 'Bearer '+token
-						// },
-						// "data":{
-						// 	<?= csrf_token() ?>: csrf
-						// },
+						"headers": {
+							'Authorization': 'Bearer '+token
+						},
+						"data":{
+							<?= csrf_token() ?>: csrf
+						},
 						"method": "GET",
 						"dataSrc": function(data){
 							$('input#<?= csrf_token() ?>').val(data.token_crs)
@@ -517,8 +531,8 @@ $(document).ready(function(){
 									
 									btn +="<div class='btn-group mb-3 btn-group-sm'>"+
 									
-										"<a href='#'' class='btn icon btn-outline-warning' data-parameter='" + JsonResultRow.id_parameter + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></a>"+
-										"<a href='#'' class='btn icon btn-outline-danger' data-parameter='" + JsonResultRow.id_parameter + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></a>"
+										"<button class='btn icon btn-outline-warning' data-parameter='" + JsonResultRow.id_parameter + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+										"<button class='btn icon btn-outline-danger hapus-parameter' data-parameter='" + JsonResultRow.id_parameter + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 
 									+"</div>"
 									return btn;
@@ -548,15 +562,68 @@ $(document).ready(function(){
     
 // 
 })
-    	
+  </script>
+  <script {csp-script-nonce} type="text/javascript">
+  	$(document).ready(function(){
+  		var token = document.getElementById('token').value;
+  		// 
+  		$(document).on('click', '.hapus-parameter', function(){
+  			var csrf = document.getElementById('<?= csrf_token() ?>').value
+  			var idx = $(this).data('parameter')
+  			swal({
+              title: "Konfirmasi",
+              text: 'Hapus Parameter!',
+              type: "warning",
+              showCancelButton: true,
+              closeOnConfirm: false,
+              showLoaderOnConfirm: true,
+              },function(){
+              	$.ajax({
+                  url: '<?php echo base_url();?>api/del-parameter',
+                  type: "POST",
+                  dataType: "JSON",
+                  headers: {
+                    'Authorization': 'Bearer '+token
+                  },
+                  data: {
+                  	idx : idx,
+                  	<?= csrf_token() ?>: csrf
+                  },
+                  processData : false,
+                  contentType: false,
+                  cache: false,
+                  success:function(data){
+                    $('input#<?= csrf_token() ?>').val(data.token_crs)
+                    setTimeout(function(){
+                      if (data.success == 1) {
+                        swal('success','Data Berhasil Di Hapus','success');
+                      }else{
+                        swal({
+                          title:"Error",
+                          text: data.msg,
+                          type: "error"
+                        });
+                      }
+
+                      },1000)
+
+                  },
+                })
+
+              }
+             )
+  		})
+  	})
   </script>
 <?= $this->include('Pages/soal/add_scr') ?>
 
   <script {csp-script-nonce} type="text/javascript">
   	//change select box
 $(document).ready(function(){
+	var token = document.getElementById('token').value;
 
 	$(document).on('change', '#aspek', function(){
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
     	var optionSelected = $(this).find("option:selected");
 			var valueSelected  = optionSelected.val();
 			var textSelected   = optionSelected.text();
@@ -564,8 +631,12 @@ $(document).ready(function(){
 			if (valueSelected != '') {
 				$.ajax({
 					url: '<?php echo base_url();?>api/get-sub-aspek',
+					headers: {
+			            'Authorization': 'Bearer '+token
+			         },
 					data:{
-						idx :valueSelected
+						idx :valueSelected,
+						<?= csrf_token() ?>: csrf
 					},
 					type:'GET',
 					dataType: 'json',
@@ -584,15 +655,20 @@ $(document).ready(function(){
 
     // 
     $(document).on('change', '#subaspek', function(){
+    	var csrf = document.getElementById('<?= csrf_token() ?>').value
     	var optionSelected = $(this).find("option:selected");
 			var valueSelected  = optionSelected.val();
 			var textSelected   = optionSelected.text();
 			
 			if (valueSelected != '') {
 				$.ajax({
+					headers: {
+			            'Authorization': 'Bearer '+token
+			         },
 					url: '<?php echo base_url();?>api/get-sub-sub-aspek',
 					data:{
-						idx :valueSelected
+						idx :valueSelected,
+						<?= csrf_token() ?>: csrf
 					},
 					type:'GET',
 					dataType: 'json',
@@ -611,15 +687,20 @@ $(document).ready(function(){
     });
     // 
     $(document).on('change', '#subsubaspek', function(){
+    	var csrf = document.getElementById('<?= csrf_token() ?>').value
     	var optionSelected = $(this).find("option:selected");
 			var valueSelected  = optionSelected.val();
 			var textSelected   = optionSelected.text();
 	
 			if (valueSelected != '') {
 				$.ajax({
+					headers: {
+			            'Authorization': 'Bearer '+token
+			         },
 					url: '<?php echo base_url();?>api/get-indikator',
 					data:{
-						idx :valueSelected
+						idx :valueSelected,
+						<?= csrf_token() ?>: csrf
 					},
 					type:'GET',
 					dataType: 'json',
@@ -641,15 +722,21 @@ $(document).ready(function(){
 
     // Tambah Data Indikator
     $(document).on('change', '#aspek1', function(){
+    	var csrf = document.getElementById('<?= csrf_token() ?>').value
     	var optionSelected = $(this).find("option:selected");
 			var valueSelected  = optionSelected.val();
 			var textSelected   = optionSelected.text();
 			
 			if (valueSelected != '') {
 				$.ajax({
+
 					url: '<?php echo base_url();?>api/get-sub-aspek',
+					headers: {
+			            'Authorization': 'Bearer '+token
+			         },
 					data:{
-						idx :valueSelected
+						idx :valueSelected,
+						<?= csrf_token() ?>: csrf
 					},
 					type:'GET',
 					dataType: 'json',
@@ -667,15 +754,20 @@ $(document).ready(function(){
     });
     // ////
     $(document).on('change', '#subaspek1', function(){
+    	var csrf = document.getElementById('<?= csrf_token() ?>').value
     	var optionSelected = $(this).find("option:selected");
 			var valueSelected  = optionSelected.val();
 			var textSelected   = optionSelected.text();
 			
 			if (valueSelected != '') {
 				$.ajax({
+					headers: {
+			            'Authorization': 'Bearer '+token
+			         },
 					url: '<?php echo base_url();?>api/get-sub-sub-aspek',
 					data:{
-						idx :valueSelected
+						idx :valueSelected,
+						<?= csrf_token() ?>: csrf
 					},
 					type:'GET',
 					dataType: 'json',

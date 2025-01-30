@@ -11,6 +11,7 @@ $routes->get('/unauthorized','Dashboard::Unauthorized');
 
 $routes->group('api',  function($routes){
 	$routes->post('login','Auth\AuthControllers::auth');
+	$routes->post('logout','Auth\AuthControllers::Logout');
 });
 
 //Users
@@ -36,7 +37,7 @@ $routes->group('api',  function($routes){
 // Soal page routes , ['filter' => 'appFilter','cors'],
 $routes->group('dashboard', function($routes){
 	$routes->get('', 'Dashboard::index');
-	$routes->get('/tambah-data-penilaian', 'Pages\PagesSoalControllers::addData');
+	$routes->get('tambah-data-penilaian', 'Pages\PagesSoalControllers::addData');
 });
 
 //end soal

@@ -4,27 +4,34 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Config\Services;
+use CodeIgniter\HTTP\Response;
+use CodeIgniter\HTTP\Header;
 
 class ApiUserControllers extends BaseController
 {
+    protected $db;
+
     public function __construct(){
-        // $request = request();
-        // $key = getenv('TOKEN_SECRET');
-        // $token = null;
-        // $header = $request->getHeader("Authorization");
-        //  if(!empty($header)) {
-        //     if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
-        //         $token = $matches[1];
-        //     }
-        // }
-        // if(is_null($token) || empty($token)) {
-        //     $response = service('response');
-        //     $response->setBody('Access denied');
-        //     $response->setStatusCode(401);
-        //     return $response;
-        // }else{
-        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        // }
+        $request = request();
+        $key = getenv('TOKEN_SECRET');
+        $token = null;
+        $header = $request->getHeader("Authorization");
+         if(!empty($header)) {
+            if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
+                $token = $matches[1];
+            }
+        }
+        if(is_null($token) || empty($token)) {
+            $response = service('response');
+            $response->setBody('Access denied');
+            $response->setStatusCode(401);
+            return $response;
+        }else{
+            $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        }
         $this->db = db_connect();
     }
     
@@ -36,7 +43,7 @@ class ApiUserControllers extends BaseController
     public function getPenilaianMandiri()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $LIMIT = null;
                 $OFFSET =null;
@@ -50,14 +57,14 @@ class ApiUserControllers extends BaseController
                         );
 
                 return $this->response->setJSON($data);
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
 
         } catch (Exception $e) {
             $data = array(
@@ -73,7 +80,7 @@ class ApiUserControllers extends BaseController
     public function getSoalData()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 $IDX = base64_decode($this->request->getVar('form'));
                 $LIMIT = null;
                 $OFFSET =null;
@@ -86,14 +93,14 @@ class ApiUserControllers extends BaseController
                         );
 
                 return $this->response->setJSON($data);
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
 
         } catch (Exception $e) {
             $data = array(
@@ -109,12 +116,12 @@ class ApiUserControllers extends BaseController
     public function getDetailIndikator()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
                 $IDX = $this->request->getVar('idx');
                 $LIMIT = null;
                 $OFFSET = null;
-                $userid = 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5';
+                $userid = $this->decoded->ids;
                 $indk = $this->db->query("call View_Indikator('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getRow();
                 $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
                 $bkd  = $this->db->query("call View_Bukti_dukung('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getResult();
@@ -131,14 +138,14 @@ class ApiUserControllers extends BaseController
                         );
 
                 return $this->response->setJSON($data);
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
 
         } catch (Exception $e) {
             $data = array(
@@ -155,13 +162,13 @@ class ApiUserControllers extends BaseController
     public function saveJawaban()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indikator');
                 $nama   = $this->request->getVar('jwbn');
-                $userid = 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5';//$this->decoded->userid
+                $userid = $this->decoded->ids;//$this->decoded->userid
 
                 $save = $this->db->query("CALL Jawaban_add_edit('".
                     $userid."','".
@@ -193,14 +200,14 @@ class ApiUserControllers extends BaseController
                     );
                 return $this->response->setJSON($data);
                 // 
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
             
         } catch (Exception $e) {
             $data = array(

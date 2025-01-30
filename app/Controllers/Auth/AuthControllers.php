@@ -130,7 +130,27 @@ class AuthControllers extends BaseController
 
     public function Logout()
     {
-        // helper('cookie');
+        $request = request();
+        $token = null;
+        $header = $request->getHeader("Authorization");
+        $key = getenv('TOKEN_SECRET');
+         if(!empty($header)) {
+            if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
+                $token = $matches[1];
+            }
+        }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+
+        $id = $this->decoded->ids;
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } 
+        $logs = $this->db->query("CALL log_user('".$id."','".$ip."', 'LOGOUT')");
+
         setcookie(
             // '__Secure-Authorization',
             '__LKE-Authorization',
@@ -146,14 +166,15 @@ class AuthControllers extends BaseController
         );
         // delete_cookie('__Secure-Authorization');
         delete_cookie('__LKE-Authorization');
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } 
-        $logs = $this->db->query("CALL log_user('".$chek->uid."','".$ip."', 'LOGOUT')");
-        return redirect()->to(base_url().'login');
+        
+        $data = array(
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  1,
+                'msg'       =>  'success',
+                'redirec'   => base_url().'',
+                );
+        return $this->response->setJSON($data);
+        
+        // return redirect()->to(base_url().'login');
     }
 }

@@ -4,27 +4,34 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Config\Services;
+use CodeIgniter\HTTP\Response;
+use CodeIgniter\HTTP\Header;
 
 class ApiSoalControllers extends BaseController
 {
+    protected $db;
+
     public function __construct(){
-        // $request = request();
-        // $key = getenv('TOKEN_SECRET');
-        // $token = null;
-        // $header = $request->getHeader("Authorization");
-        //  if(!empty($header)) {
-        //     if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
-        //         $token = $matches[1];
-        //     }
-        // }
-        // if(is_null($token) || empty($token)) {
-        //     $response = service('response');
-        //     $response->setBody('Access denied');
-        //     $response->setStatusCode(401);
-        //     return $response;
-        // }else{
-        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        // }
+        $request = request();
+        $key = getenv('TOKEN_SECRET');
+        $token = null;
+        $header = $request->getHeader("Authorization");
+         if(!empty($header)) {
+            if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
+                $token = $matches[1];
+            }
+        }
+        if(is_null($token) || empty($token)) {
+            $response = service('response');
+            $response->setBody('Access denied');
+            $response->setStatusCode(401);
+            return $response;
+        }else{
+            $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        }
         $this->db = db_connect();
     }
 
@@ -32,7 +39,7 @@ class ApiSoalControllers extends BaseController
     {
         //
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
@@ -44,7 +51,7 @@ class ApiSoalControllers extends BaseController
                 $eval  = $this->request->getVar('eval');
                 $btswkt  = $this->request->getVar('wkt');
                 $thpn  = null;
-                $userid = 'c01e70c5551bf859d6de5dd332deaf41c6895742';//$this->decoded->userid
+                $userid = $this->decoded->ids;//$this->decoded->userid
 
                 $save = $this->db->query("CALL Aspek_add_edit('".
                     $userid."','".
@@ -64,14 +71,14 @@ class ApiSoalControllers extends BaseController
                     );
                 return $this->response->setJSON($data);
                 // 
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
             
         } catch (Exception $e) {
             $data = array(
@@ -87,14 +94,14 @@ class ApiSoalControllers extends BaseController
     public function saveSubAspek()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $aspk   = $this->request->getVar('aspek');
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
-                $userid = 'c01e70c5551bf859d6de5dd332deaf41c6895742';//$this->decoded->userid
+                $userid = $this->decoded->ids;//$this->decoded->userid
 
                 $save = $this->db->query("CALL Sub_Aspek_add_edit('".
                     $userid."','".
@@ -109,14 +116,14 @@ class ApiSoalControllers extends BaseController
                     );
                 return $this->response->setJSON($data);
                 // 
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
             
         } catch (Exception $e) {
             $data = array(
@@ -132,14 +139,14 @@ class ApiSoalControllers extends BaseController
     public function saveSubSubAspek()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $aspk   = $this->request->getVar('subaspek');
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
-                $userid = 'c01e70c5551bf859d6de5dd332deaf41c6895742';//$this->decoded->userid
+                $userid = $this->decoded->ids;//$this->decoded->userid
 
                 $save = $this->db->query("CALL Sub_Sub_Aspek_add_edit('".
                     $userid."','".
@@ -154,14 +161,14 @@ class ApiSoalControllers extends BaseController
                     );
                 return $this->response->setJSON($data);
                 // 
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
             
         } catch (Exception $e) {
             $data = array(
@@ -177,7 +184,7 @@ class ApiSoalControllers extends BaseController
     public function saveIndikator()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
@@ -186,7 +193,7 @@ class ApiSoalControllers extends BaseController
                 $ssasp  = $this->request->getVar('subsubaspek');
                 $nama   = $this->request->getVar('nama');
                 $jjwb   = $this->request->getVar('jjwb');
-                $userid = 'c01e70c5551bf859d6de5dd332deaf41c6895742';//$this->decoded->userid
+                $userid = $this->decoded->ids;//$this->decoded->userid
 
                 $save = $this->db->query("CALL Indikator_add_edit('".
                     $userid."','".
@@ -201,14 +208,14 @@ class ApiSoalControllers extends BaseController
                     );
                 return $this->response->setJSON($data);
                 // 
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
             
         } catch (Exception $e) {
             $data = array(
@@ -225,13 +232,13 @@ class ApiSoalControllers extends BaseController
     public function saveParameter()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indikator');
                 $nama   = $this->request->getVar('nama');
-                $userid = 'c01e70c5551bf859d6de5dd332deaf41c6895742';//$this->decoded->userid
+                $userid = $this->decoded->ids;//$this->decoded->userid
 
                 $save = $this->db->query("CALL Parameter_add_edit('".
                     $userid."','".
@@ -245,14 +252,14 @@ class ApiSoalControllers extends BaseController
                     );
                 return $this->response->setJSON($data);
                 // 
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
             
         } catch (Exception $e) {
             $data = array(
@@ -268,13 +275,13 @@ class ApiSoalControllers extends BaseController
     public function saveBuktiDukung()
     {
         try {
-            // if (!empty($this->decoded->aud)) {
+            if (!empty($this->decoded->aud)) {
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indkt');
                 $nama   = $this->request->getVar('nama');
-                $userid = 'c01e70c5551bf859d6de5dd332deaf41c6895742';//$this->decoded->userid
+                $userid = $this->decoded->ids;//$this->decoded->userid
 
                 $save = $this->db->query("CALL Bukti_dukung_add_edit('".
                     $userid."','".
@@ -288,14 +295,14 @@ class ApiSoalControllers extends BaseController
                     );
                 return $this->response->setJSON($data);
                 // 
-            // }else{
-            //     $data = array(
-            //         'token_crs' =>  csrf_hash(),
-            //         'success'   =>  0,
-            //         'msg'       =>  'error invalid token'
-            //     );
-            //     return $this->response->setJSON($data);
-            // }
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
             
         } catch (Exception $e) {
             $data = array(

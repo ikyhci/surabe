@@ -87,6 +87,7 @@
     
     <script {csp-script-nonce} type="text/javascript">
       $(document).ready(function(){
+        var token = document.getElementById('token').value;
          LoadDatatable() 
 
          $(document).on('click' , '#savedata', function(){
@@ -115,9 +116,9 @@
                   url: '<?php echo base_url();?>api/save-jawaban',
                   type: "POST",
                   dataType: "JSON",
-                  // headers: {
-                  //   'Authorization': 'Bearer '+token
-                  // },
+                  headers: {
+                    'Authorization': 'Bearer '+token
+                  },
                   data: fd,
                   processData : false,
                   contentType: false,
@@ -158,9 +159,9 @@
                 "ajax": {
                   "url": "<?php echo base_url(); ?>api/get-indikator-penilaian",
                   "contentType": 'application/json',
-                  // "headers": {
-                  //  'Authorization': 'Bearer '+token
-                  // },
+                  "headers": {
+                   'Authorization': 'Bearer '+token
+                  },
                   "data":{
                    "<?= csrf_token() ?>": csrf,
                    "form" : form,
@@ -224,6 +225,9 @@
             fd.append('idx',idx);
             $.ajax({
               url: '<?php echo base_url(); ?>api/get-detail-indikator',
+              headers: {
+                    'Authorization': 'Bearer '+token
+                  },
               data:fd,
               type: "POST",
               dataType: "JSON",

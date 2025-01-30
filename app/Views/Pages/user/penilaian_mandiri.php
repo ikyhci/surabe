@@ -65,6 +65,7 @@
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
     <script {csp-script-nonce} type="text/javascript">
     LoadDatatable() 
+    var token = document.getElementById('token').value;
 
     function LoadDatatable(){
       var csrf = document.getElementById('<?= csrf_token() ?>').value;
@@ -78,12 +79,12 @@
           "ajax": {
             "url": "<?php echo base_url(); ?>api/get-penilaian-mandiri",
             "contentType": 'application/json',
-            // "headers": {
-            //  'Authorization': 'Bearer '+token
-            // },
-            // "data":{
-            //  <?= csrf_token() ?>: csrf
-            // },
+            "headers": {
+             'Authorization': 'Bearer '+token
+            },
+            "data":{
+             <?= csrf_token() ?>: csrf
+            },
             "method": "GET",
             "dataSrc": function(data){
               $('input#<?= csrf_token() ?>').val(data.token_crs)
@@ -143,9 +144,9 @@
         url: "<?php echo base_url();?>dashboard/get-detail-form",
         type: "POST",
         dataType: "JSON",
-        // headers: {
-        //   'Authorization': 'Bearer '+token
-        // },
+        headers: {
+          'Authorization': 'Bearer '+token
+        },
         data: fd,
         processData : false,
         contentType: false,
