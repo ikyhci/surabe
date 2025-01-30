@@ -4,6 +4,11 @@ namespace App\Controllers\Pages;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Cookie\Cookie;
+use CodeIgniter\Cookie\CookieStore;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Config\Services;
 
 class PagesSoalControllers extends BaseController
 {

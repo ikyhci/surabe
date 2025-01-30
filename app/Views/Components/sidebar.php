@@ -1,7 +1,7 @@
 <?php 
 $directoryURI = $_SERVER['REQUEST_URI'];
 $path = parse_url($directoryURI, PHP_URL_PATH);
-$components = explode('/', $path);
+$components = explode('/dashboard', $path);
 $first_part = $components[1];
 ?>
 <div id="sidebar" class="active">
@@ -24,7 +24,7 @@ $first_part = $components[1];
         
 
         <li class="sidebar-item <?php if ($first_part=="") {echo "active"; } else  {echo "";} ?> ">
-          <a href="/dashboard" class='sidebar-link'>
+          <a href="<?php echo base_url();?>dashboard" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
             <span>Dashboard</span>
           </a>
@@ -32,8 +32,8 @@ $first_part = $components[1];
         <?php if($usr == 'User'){;?>
         <li class="sidebar-title">Tingkat Kematangan SPBE</li>
 
-        <li class="sidebar-item <?php if ($first_part=="penilaian-mandiri") {echo "active"; } else  {echo "";} ?>">
-          <a href="dashboard/penilaian-mandiri" class='sidebar-link'>
+        <li class="sidebar-item <?php if ($first_part=="/penilaian-mandiri") {echo "active"; } else  {echo "";} ?>">
+          <a href="<?php echo base_url();?>dashboard/penilaian-mandiri" class='sidebar-link'>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
             </svg>
@@ -45,8 +45,8 @@ $first_part = $components[1];
         <?php if ($usr == 'Penilai') {
           ?>
 
-        <li class="sidebar-item <?php if ($first_part=="penilaian-mandiri") {echo "active"; } else  {echo "";} ?>">
-          <a href="/dashboard/penilaian-mandiri" class='sidebar-link'>
+        <li class="sidebar-item <?php if ($first_part=="/penilaian-mandiri") {echo "active"; } else  {echo "";} ?>">
+          <a href="<?php echo base_url();?>dashboard/penilaian-mandiri" class='sidebar-link'>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
               <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -58,8 +58,8 @@ $first_part = $components[1];
       <?php if ($usr == 'Soal') {
           ?>
 
-        <li class="sidebar-item <?php if ($first_part=="tambah-data-penilaian") {echo "active"; } else  {echo "";} ?>">
-          <a href="/dashboard/tambah-data-penilaian" class='sidebar-link'>
+        <li class="sidebar-item <?php if ($first_part=="/tambah-data-penilaian") {echo "active"; } else  {echo "";} ?>">
+          <a href="<?php echo base_url();?>dashboard/tambah-data-penilaian" class='sidebar-link'>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
               <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -79,7 +79,7 @@ $first_part = $components[1];
           </a>
           <ul class="submenu ">
             <li class="submenu-item ">
-              <a href="form-editor-quill.html">tess menu</a>
+              <a href="#">tess menu</a>
             </li>
           </ul>
         </li>
@@ -87,8 +87,8 @@ $first_part = $components[1];
 
         <li class="sidebar-title">Management</li>
 
-        <li class="sidebar-item <?php if ($first_part=="user-management") {echo "active"; } else  {echo "";} ?>">
-          <a href="/dashboard/user-management" class='sidebar-link'>
+        <li class="sidebar-item <?php if ($first_part=="/user-management") {echo "active"; } else  {echo "";} ?>">
+          <a href="<?php echo base_url();?>dashboard/user-management" class='sidebar-link'>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
               <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
             </svg>
@@ -96,8 +96,8 @@ $first_part = $components[1];
           </a>
         </li>
 
-        <li class="sidebar-item <?php if ($first_part=="opd-management") {echo "active"; } else  {echo "";} ?>">
-          <a href="<?= base_url('/dashboard/opd-management') ?>" class='sidebar-link'>
+        <li class="sidebar-item <?php if ($first_part=="/opd-management") {echo "active"; } else  {echo "";} ?>">
+          <a href="<?php echo base_url();?>dashboard/opd-management" class='sidebar-link'>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
               <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
               <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z"/>
@@ -108,8 +108,8 @@ $first_part = $components[1];
       <?php };?>
 
 
-        <li class="sidebar-item <?php if ($first_part=="help") {echo "active"; } else  {echo "";} ?>">
-          <a href="/help" class='sidebar-link'>
+        <li class="sidebar-item <?php if ($first_part=="/help") {echo "active"; } else  {echo "";} ?>">
+          <a href="<?php echo base_url();?>help" class='sidebar-link'>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question-fill" viewBox="0 0 16 16">
               <path d="M5.933.87a2.89 2.89 0 0 1 4.134 0l.622.638.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01zM7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0m1.602-2.027c.04-.534.198-.815.846-1.26.674-.475 1.05-1.09 1.05-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.7 1.7 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745.336 0 .504-.24.554-.627"/>
             </svg>

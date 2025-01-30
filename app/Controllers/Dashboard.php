@@ -15,33 +15,42 @@ class Dashboard extends BaseController
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
         $token = get_cookie('__LKE-Authorization', true,'');
-        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        if(is_null($token) || empty($token)) {
+            return redirect()->to(base_url().'unauthorized');
+        }else{
+             $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        }
+       
         // $this->db = db_connect();
     }
 
     public function index()
     {
-        $usr =$this->decoded->rln;
-        // $usr ='Soal';
-        // $usr ='Penilai';
-        // $usr ='Super Admin';
-        // if (!empty($this->decoded->rln)) {
+        if (!empty($this->decoded->rln)) {
+        $usr = $this->decoded->rln;
+            // $usr ='Soal';
+            // $usr ='Penilai';
+            // $usr ='Super Admin';
+            // if (!empty($this->decoded->rln)) {
 
-        if ($usr == 'User') {
-            $data = array('usr' => $usr, );
-            return view('Pages/user/dashboard',$data);
-        }
-        if ($usr == 'Soal') {
-            $data = array('usr' => $usr, );
-            return view('Pages/soal/dashboard',$data);
-        }
-        if ($usr == 'Penilai') {
-            $data = array('usr' => $usr, );
-            return view('Pages/dashboard',$data);
-        }
-        if ($usr == 'Super Admin') {
-            $data = array('usr' => $usr, );
-            return view('Pages/dashboard',$data);
+            if ($usr == 'User') {
+                $data = array('usr' => $usr, );
+                return view('Pages/user/dashboard',$data);
+            }
+            if ($usr == 'Soal') {
+                $data = array('usr' => $usr, );
+                return view('Pages/soal/dashboard',$data);
+            }
+            if ($usr == 'Penilai') {
+                $data = array('usr' => $usr, );
+                return view('Pages/dashboard',$data);
+            }
+            if ($usr == 'Super Admin') {
+                $data = array('usr' => $usr, );
+                return view('Pages/dashboard',$data);
+            }
+        }else{
+            return redirect()->to(base_url().'unauthorized');
         }
     }
 

@@ -4,36 +4,42 @@ namespace App\Controllers\Pages;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Cookie\Cookie;
+use CodeIgniter\Cookie\CookieStore;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Config\Services;
 
 class PagesUsersControllers extends BaseController
 {
     public function __construct(){
 
-        // helper('cookie');
-        // $key = getenv('TOKEN_SECRET');
-        // $token = get_cookie('Authorization', true,'');
-        // $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        helper('cookie');
         $this->db = db_connect();
+        $key = getenv('TOKEN_SECRET');
+        $token = get_cookie('__LKE-Authorization', true,'');
+        if(is_null($token) || empty($token)) {
+            return redirect()->to(base_url().'unauthorized');
+        }else{
+             $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        }
     }
     
     public function index()
     {
-        // if (!empty($this->decoded->aud)) {
-            $usr = 'User';
+        if (!empty($this->decoded->rln)) {
+            $usr = $this->decoded->rln;
             $data = array('usr' => $usr, );
             return view('Pages/user/penilaian_mandiri',$data);
-        // }else{
-        //     $response = service('response');
-        //     $response->setJSON(['success' => false, 'message' => 'Unauthorized. Token is required!']);
-        //     $response->setStatusCode(401);
-        //     return $response;
-        // }
+        }else{
+            return redirect()->to(base_url().'unauthorized');
+        }
     }
 
     public function detailForm()
     {
-        // if (!empty($this->decoded->aud)) {
-            $usr = 'User';
+        if (!empty($this->decoded->rln)) {
+            $usr = $this->decoded->rln;
             
             $IDX = $this->request->getVar('idx');
             $LIMIT = null;
@@ -49,6 +55,7 @@ class PagesUsersControllers extends BaseController
                     'msg'       => $asp->msg,
                     'idx'       => $IDX ,
                     'dt'        => 'dashboard/detail-form?form='.base64_encode($asp->id),
+                    // ''
                   );
                 return $this->response->setJSON($data);
                
@@ -60,18 +67,15 @@ class PagesUsersControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
              }
-        // }else{
-        //     $response = service('response');
-        //     $response->setJSON(['success' => false, 'message' => 'Unauthorized. Token is required!']);
-        //     $response->setStatusCode(401);
-        //     return $response;
-        // }
+        }else{
+            return redirect()->to(base_url().'unauthorized');
+        }
     }
 
     public function listDetail()
     {
-        // if (!empty($this->decoded->aud)) {
-            $usr = 'User';
+        if (!empty($this->decoded->rln)) {
+            $usr = $this->decoded->rln;
             
             $IDX = base64_decode($this->request->getVar('form'));
             $LIMIT = 1;
@@ -89,16 +93,12 @@ class PagesUsersControllers extends BaseController
                   );
                 return view('Pages/user/detail_form',$data);
             }else{
-
+                return redirect()->to(base_url().'404');
             }
 
-            // 
-        // }else{
-        //     $response = service('response');
-        //     $response->setJSON(['success' => false, 'message' => 'Unauthorized. Token is required!']);
-        //     $response->setStatusCode(401);
-        //     return $response;
-        // }
+        }else{
+            return redirect()->to(base_url().'unauthorized');
+        }
     }
 
     // public function FunctionName($value='')

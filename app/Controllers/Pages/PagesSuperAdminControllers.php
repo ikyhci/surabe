@@ -7,6 +7,12 @@ use App\Controllers\BaseController;
 // use CodeIgniter\Database\Database;
 use App\Models\SuperAdminModel;
 
+use CodeIgniter\Cookie\Cookie;
+use CodeIgniter\Cookie\CookieStore;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Config\Services;
+
 class PagesSuperAdminControllers extends BaseController
 {
     protected $db;
