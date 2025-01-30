@@ -90,6 +90,7 @@ class AuthControllers extends BaseController
                         $token,[
                             'expires'=>time() +3600,
                             //'prefix' => '__Secure-',
+                            // 'prefix' => '__LKE-',
                             'path'=>'/',
                             'domain'=> '',
                             'secure'=>true,
@@ -139,6 +140,7 @@ class AuthControllers extends BaseController
                 $token = $matches[1];
             }
         }
+        
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
 
         $id = $this->decoded->ids;
@@ -157,6 +159,7 @@ class AuthControllers extends BaseController
             '',[
                 'expires'=>'',
                 //'prefix' => '__Secure-',
+                // 'prefix' => '__LKE-',
                 'path'=>'/',
                 'domain'=> '',
                 'secure'=>true,

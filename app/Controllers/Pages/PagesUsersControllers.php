@@ -12,17 +12,19 @@ use Config\Services;
 
 class PagesUsersControllers extends BaseController
 {
+
+    protected $db;
     public function __construct(){
 
         helper('cookie');
-        $this->db = db_connect();
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('__LKE-Authorization', true,'');
+        $token = get_cookie('Authorization', true,'__LKE-');
         if(is_null($token) || empty($token)) {
             return redirect()->to(base_url().'unauthorized');
         }else{
              $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         }
+        $this->db = db_connect();
     }
     
     public function index()

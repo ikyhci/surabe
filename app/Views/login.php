@@ -51,7 +51,16 @@
             </div>
             <div class="col-lg-7 d-none d-lg-block">
                 <div id="auth-right">
-                    <img class="bgimgs" src="/assets/images/bg/bg.jpg">
+                    <div class="container text-center d-flex justify-content-center">
+                        <div class="vertical-center">
+                            <h2 class="text-white">Aplikasi Evaluasi<br>Sistem Pemerintahan Berbasis Elektronik</h2>
+                            <h4 class="text-white">Dinas Komunikasi, Informatika, Persandian, Dan Statistik<br> Provinsi Sulawesi Tengah</h4>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                  
 
                 </div>
             </div>

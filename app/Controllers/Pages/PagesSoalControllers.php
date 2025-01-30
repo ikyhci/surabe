@@ -12,12 +12,13 @@ use Config\Services;
 
 class PagesSoalControllers extends BaseController
 {
+    protected $db;
     public function __construct(){
-        // helper('cookie');
-        // $key = getenv('TOKEN_SECRET');
-        // $token = get_cookie('Authorization', true,'');
-        // $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        $this->db = db_connect();
+        helper('cookie');
+        $key = getenv('TOKEN_SECRET');
+        $token = get_cookie('Authorization', true,'__LKE-');
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        // $this->db = db_connect();
     }
     
     public function index()

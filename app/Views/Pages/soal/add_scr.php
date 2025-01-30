@@ -1,8 +1,8 @@
 <script {csp-script-nonce}  type="text/javascript">
-	// load data indikator
 $(document).ready(function(){
 	var token = document.getElementById('token').value;
-		$(document).on('click', '.view-indikator', function(){
+
+	$(document).on('click', '.view-indikator', function(){
 		let tabls = document.getElementById('content-views');
 		document.getElementById('title-views').innerHTML = 'List Data Indikator'
 		$('#parameter').modal('hide');
@@ -46,6 +46,11 @@ $(document).ready(function(){
 
 	})
 
+	function ReloadData(tbl) {
+			// var t = $(tbl).DataTable();
+			// t.ajax.reload(null, false);
+	}
+
 	function loadaspek() {
 		var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-aspek').DataTable({
@@ -67,7 +72,6 @@ $(document).ready(function(){
 				},
 				"method": "GET",
 				"dataSrc": function(data){
-					console.log(data)
 					$('input#<?= csrf_token() ?>').val(data.token_crs)
 					return data.dt;
 				},
@@ -112,6 +116,15 @@ $(document).ready(function(){
 			});
 		}).draw();
 	}
+
+	//hapus aspek
+	$(document).on('click', '.aspek-delete' , function(){
+		var idx = $(this).data('id_aspek');
+		var url = '<?php echo base_url();?>api/del-aspek';
+		var nmx = 'Aspek';
+		deleteData(idx, url, nmx, '#tbl-aspek')
+	})
+
 
 	function loadsubaspek() {
 		var csrf = document.getElementById('<?= csrf_token() ?>').value
@@ -167,6 +180,14 @@ $(document).ready(function(){
 			});
 		}).draw();
 	}
+
+	//hapus aspek
+	$(document).on('click', '.sub-aspek-delete' , function(){
+		var idx = $(this).data('id_sub_aspek');
+		var url = '<?php echo base_url();?>api/del-sub-aspek';
+		var nmx = 'Sub Aspek';
+		deleteData(idx, url, nmx, '#tbl-sub-aspek')
+	})
 
 
 	function loadsubsubaspek() {
@@ -224,6 +245,13 @@ $(document).ready(function(){
 		}).draw();
 	}
 
+	$(document).on('click', '.sub-sub-aspek-delete' , function(){
+		var idx = $(this).data('id_sub_sub_aspek');
+		var url = '<?php echo base_url();?>api/del-sub-sub-aspek';
+		var nmx = 'Sub Sub Aspek';
+		deleteData(idx, url, nmx, '#tbl-sub-sub-aspek')
+	})
+
 
 	function loadindikator(){
 		var csrf = document.getElementById('<?= csrf_token() ?>').value
@@ -280,6 +308,13 @@ $(document).ready(function(){
 			});
 		}).draw();
 	}
+
+	$(document).on('click', '.indikator-delete' , function(){
+		var idx = $(this).data('id_indikator');
+		var url = '<?php echo base_url();?>api/del-indikator';
+		var nmx = 'Indikator Dan Bukti Dukung';
+		deleteData(idx, url, nmx, '#tbl-indikator')
+	})
 
 
 	function formatIndikator(){
@@ -353,7 +388,50 @@ $(document).ready(function(){
         return tblx;
 
 	}
-})
 
-	
+	function deleteData(idx, url, nmx, ket){
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
+  		var fd = new FormData();
+  		fd.append('<?= csrf_token() ?>', csrf)
+  		fd.append('idx', idx)
+		swal({
+            title: "Konfirmasi",
+            text: 'Hapus Data '+nmx+'!',
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+            },function(){
+              	$.ajax({
+                  	url: url,
+                  	type: "POST",
+                  	dataType: "JSON",
+                  	headers: {
+                    	'Authorization': 'Bearer '+token
+                  	},
+                  	data:fd,
+                  	processData : false,
+                  	contentType: false,
+                  	cache: false,
+                  	success:function(data){
+                    	$('input#<?= csrf_token() ?>').val(data.token_crs)
+                    	setTimeout(function(){
+                      		if (data.success == 1) {
+                        		swal('success','Data Berhasil Di Hapus','success');
+                        		ReloadData(ket)
+                      		}else{
+                        		swal({
+                          			title:"Error",
+                          			text: data.msg,
+                          			type: "error"
+                        		});
+                      		}
+                    	},1000)
+                  	},
+                })
+
+            });
+	}
+
+});
 </script>

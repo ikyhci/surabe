@@ -315,4 +315,68 @@ class ApiSoalControllers extends BaseController
         }
     }
 
+    public function delAspek()
+    {
+        // code...
+    }
+
+    public function delSubAspek()
+    {
+        // code...
+    }
+
+    public function delSubSubAspek()
+    {
+        // code...
+    }
+
+    public function delIndikator()
+    {
+        // code...
+    }
+
+    public function delParameter()
+    {
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idp     = $this->request->getVar('idp');
+                $idk     = $this->request->getVar('idk');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL Parameter_delete('".
+                    $userid."','".
+                    $idp."','".
+                    $idk."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
+    }
+
+
 }

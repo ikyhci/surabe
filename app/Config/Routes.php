@@ -14,6 +14,10 @@ $routes->group('api',  function($routes){
 	$routes->post('logout','Auth\AuthControllers::Logout');
 });
 
+//global page ['filter' => 'appFilter','cors'],
+$routes->group('dashboard', function($routes){
+	$routes->get('help', 'Dashboard::help');
+});
 //Users
 
 // user page routes ['filter' => 'appFilter','cors'],
@@ -26,7 +30,6 @@ $routes->group('dashboard',  function($routes){
 
 //Api Users ['filter' => 'apiFilter','cors'],
 $routes->group('api',  function($routes){
-	// $routes->get('dashboard', 'Dashboard::index');
 	$routes->get('get-penilaian-mandiri', 'Api\ApiUserControllers::getPenilaianMandiri');
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
@@ -49,6 +52,13 @@ $routes->group('dashboard', function($routes){
 	$routes->post('save-parameter', 'Api\ApiSoalControllers::saveParameter');
 	$routes->post('save-indikator', 'Api\ApiSoalControllers::saveIndikator');
 	$routes->post('save-bukti-dukung', 'Api\ApiSoalControllers::saveBuktiDukung');
+	$routes->post('del-parameter', 'Api\ApiSoalControllers::delParameter');
+
+	$routes->post('del-aspek', 'Api\ApiSoalControllers::delAspek');
+	$routes->post('del-sub-aspek', 'Api\ApiSoalControllers::delSubAspek');
+	$routes->post('del-sub-sub-aspek', 'Api\ApiSoalControllers::delSubSubAspek');
+	$routes->post('del-indikator', 'Api\ApiSoalControllers::delIndikator');
+	
 	
  });
 

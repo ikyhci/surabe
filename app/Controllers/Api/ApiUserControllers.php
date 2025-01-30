@@ -12,6 +12,7 @@ use CodeIgniter\HTTP\Header;
 
 class ApiUserControllers extends BaseController
 {
+    
     protected $db;
 
     public function __construct(){
@@ -44,6 +45,7 @@ class ApiUserControllers extends BaseController
     {
         try {
             if (!empty($this->decoded->aud)) {
+                
                 $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $LIMIT = null;
                 $OFFSET =null;

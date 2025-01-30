@@ -236,7 +236,7 @@
               cache: false,
               success: function(data){
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
-                console.log(data)
+              
                 if (data.dt.indk.tombol == 0) {
                   document.getElementById('tblfoot').innerHTML = 
                   '<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+

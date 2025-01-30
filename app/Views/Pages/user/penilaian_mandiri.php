@@ -64,10 +64,11 @@
     <script {csp-script-nonce} src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
     <script {csp-script-nonce} type="text/javascript">
-    LoadDatatable() 
     var token = document.getElementById('token').value;
 
+    LoadDatatable(); 
     function LoadDatatable(){
+
       var csrf = document.getElementById('<?= csrf_token() ?>').value;
       var t = $('#datatable').DataTable({
           "dom": 'rtip',
@@ -80,16 +81,16 @@
             "url": "<?php echo base_url(); ?>api/get-penilaian-mandiri",
             "contentType": 'application/json',
             "headers": {
-             'Authorization': 'Bearer '+token
+              'Authorization': 'Bearer '+token
             },
             "data":{
-             <?= csrf_token() ?>: csrf
+              <?= csrf_token() ?>: csrf
             },
             "method": "GET",
             "dataSrc": function(data){
+              
               $('input#<?= csrf_token() ?>').val(data.token_crs)
               return data.dt;
-
             },
           },
           "columns":[
@@ -152,7 +153,7 @@
         contentType: false,
         cache: false,
         success: function(data){
-          // console.log(data)
+    
           $('input#<?= csrf_token() ?>').val(data.token_crs);
           setTimeout(function(){
                   ///

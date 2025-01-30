@@ -11,10 +11,13 @@ use CodeIgniter\HTTP\Header;
 
 class Dashboard extends BaseController
 {
+
     public function __construct(){
+        // parent::__construct();
         helper('cookie');
+        // // $this->db = db_connect();
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('__LKE-Authorization', true,'');
+        $token = get_cookie('Authorization', true,'__LKE-');
         if(is_null($token) || empty($token)) {
             return redirect()->to(base_url().'unauthorized');
         }else{
@@ -27,11 +30,8 @@ class Dashboard extends BaseController
     public function index()
     {
         if (!empty($this->decoded->rln)) {
-        $usr = $this->decoded->rln;
-            // $usr ='Soal';
-            // $usr ='Penilai';
-            // $usr ='Super Admin';
-            // if (!empty($this->decoded->rln)) {
+            $usr = $this->decoded->rln;
+            
 
             if ($usr == 'User') {
                 $data = array('usr' => $usr, );
@@ -51,11 +51,24 @@ class Dashboard extends BaseController
             }
         }else{
             return redirect()->to(base_url().'unauthorized');
+            
         }
     }
 
     public function Unauthorized()
     {
         return view('Pages/unauthorized');
+    }
+
+    public function help()
+    {
+        if (!empty($this->decoded->rln)) {
+            $usr = $this->decoded->rln;
+            $data = array('usr' => $usr, );
+            return view('Pages/help',$data);
+        }else{
+            return redirect()->to(base_url().'unauthorized');
+            
+        }
     }
 }
