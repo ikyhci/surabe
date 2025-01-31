@@ -48,3 +48,11 @@ Thumbs.db
 *.mov
 *.wmv
 
+# CodeIgniter4 specific files
+writable/*
+!writable/.htaccess
+.env
+phpunit.xml
+phpunit.xml.dist
+build/
+tests/_output/

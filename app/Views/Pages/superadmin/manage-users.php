@@ -96,15 +96,16 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
-<script {csp-script-nonce} src="assets/vendors/jquery/jquery.min.js"></script>
-<link {csp-style-nonce} rel="stylesheet" href="assets/vendors/dataTables/dataTables.min.css">
-<script {csp-script-nonce} src="assets/vendors/dataTables/dataTables.min.js"></script>
+<script {csp-script-nonce} src="/assets/vendors/jquery/jquery.min.js"></script>
+<link {csp-style-nonce} rel="stylesheet" href="/assets/vendors/dataTables/dataTables.min.css">
+<script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
 
-<link {csp-script-nonce} rel="stylesheet" href="assets/vendors/choices.js/choices.min.css" />
-<script {csp-script-nonce} src="assets/vendors/choices.js/choices.min.js"></script>
-<script {csp-script-nonce} src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link {csp-script-nonce} rel="stylesheet" href="/assets/vendors/choices.js/choices.min.css" />
+<script {csp-script-nonce} src="/assets/vendors/choices.js/choices.min.js"></script>
+<script {csp-script-nonce} src="/assets/vendors/sweetalert2/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript">
+  const TOKEN = "<?= ($token) ? $token : "" ?>";
   $(document).ready(function() {
 
     setTimeout(function() {
@@ -135,6 +136,9 @@
       url: '/api/get-roles',
       method: 'GET',
       dataType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
       success: function(response) {
         if (response.dt) {
           roleSelect.setValue(response.dt.map((dt) => {
@@ -154,6 +158,9 @@
       url: '/api/get-opd',
       method: 'GET',
       dataType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN,
+      },
       success: function(response) {
         if (response.dt) {
           opdSelect.setValue(response.dt.map((dt) => {
@@ -175,6 +182,9 @@
       "ajax": {
         "url": "<?= base_url('api/get-users') ?>",
         "type": "GET",
+        "headers": {
+          'Authorization': 'Bearer ' + TOKEN
+        },
         "dataSrc": "dt"
       },
       "columns": [{
@@ -210,26 +220,55 @@
       $.ajax({
         url: `<?= base_url('api/get-user') ?>/${uid}`,
         type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + TOKEN
+        },
         success: function(response) {
           $('#formDetail').attr('action', actionUrl);
           $('#UserName').val(response.dt.UserName);
           $('#FullName').val(response.dt.FullName);
           $('#Phone').val(response.dt.Phone);
           $('#EmailAdds').val(response.dt.EmailAdds);
-          $.get('/api/get-roles', {
+          $.ajax({
+            url: '/api/get-roles',
+            type: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + TOKEN
+            },
+            data: {
               RoleName: response.dt.RoleName
-            })
-            .done(function(data) {
-              roleSelect.setChoiceByValue(data.dt[0].RoleId);
-              roleSelect.disable();
-            });
-          $.get('/api/get-opd', {
+            },
+            success: function(data) {
+              if (data.dt && data.dt.length > 0) {
+                roleSelect.setChoiceByValue(data.dt[0].RoleId);
+                roleSelect.disable();
+              }
+            },
+            error: function() {
+              console.error('Gagal mengambil data role.');
+            }
+          });
+
+          $.ajax({
+            url: '/api/get-opd',
+            type: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + TOKEN
+            },
+            data: {
               nama_opd: response.dt.nama_opd
-            })
-            .done(function(data) {
-              opdSelect.setChoiceByValue(data.dt[0].id);
-              opdSelect.disable();
-            });
+            },
+            success: function(data) {
+              if (data.dt && data.dt.length > 0) {
+                opdSelect.setChoiceByValue(data.dt[0].id);
+                opdSelect.disable();
+              }
+            },
+            error: function() {
+              console.error('Gagal mengambil data OPD.');
+            }
+          });
+
 
           $('#userModal').modal('show');
         },
@@ -267,23 +306,32 @@
       // var formData = $(this).serialize();
       // console.log(formData);
 
-      $.post("<?= base_url('api/post-user') ?>", {
-        UserName: $('#UserName').val(),
-        FullName: $('#FullName').val(),
-        Phone: $('#Phone').val(),
-        EmailAdds: $('#EmailAdds').val(),
-        RoleName: $('#RoleName').val(),
-        nama_opd: $('#nama_opd').val(),
-        Password: $('#Password').val(),
-        ConfirmPassword: $('#ConfirmPassword').val(),
-        "<?= csrf_token() ?>": $('#<?= csrf_token() ?>').val()
-      }, function(response) {
-        if (response.res) {
+      $.ajax({
+        url: "<?= base_url('api/post-user') ?>",
+        type: "POST",
+        headers: {
+          'Authorization': 'Bearer ' + TOKEN
+        },
+        data: {
+          UserName: $('#UserName').val(),
+          FullName: $('#FullName').val(),
+          Phone: $('#Phone').val(),
+          EmailAdds: $('#EmailAdds').val(),
+          RoleName: $('#RoleName').val(),
+          nama_opd: $('#nama_opd').val(),
+          Password: $('#Password').val(),
+          ConfirmPassword: $('#ConfirmPassword').val(),
+          "<?= csrf_token() ?>": $('#<?= csrf_token() ?>').val()
+        },
+        success: function(response) {
           alert(response.msg);
-          $('#userModal').modal('hide');
-          table.ajax.reload();
-        } else {
-          alert(response.msg);
+          if (response.res) {
+            $('#userModal').modal('hide');
+            table.ajax.reload();
+          }
+        },
+        error: function(xhr) {
+          alert("Terjadi kesalahan: " + xhr.responseText);
         }
       });
 
@@ -295,6 +343,9 @@
       $.ajax({
         url: `<?= base_url('api/get-user') ?>/${uid}`,
         type: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + TOKEN
+        },
         success: function(response) {
           const user = response.dt;
 
@@ -319,6 +370,9 @@
                 type: 'DELETE',
                 data: {
                   "<?= csrf_token() ?>": $('#<?= csrf_token() ?>').val()
+                },
+                headers: {
+                  Authorization: 'Bearer ' + TOKEN
                 },
                 success: function(response) {
                   if (response.res) {

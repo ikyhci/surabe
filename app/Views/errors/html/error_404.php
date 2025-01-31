@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - LKE</title>
-    <link {csp-style-nonce} href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link {csp-style-nonce} href="/assets/fonts/css2.css" rel="stylesheet">
     <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.css">
     <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/app.css">
