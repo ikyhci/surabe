@@ -43,10 +43,10 @@
                         <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                         <button type="submit" id="btnLogin"class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
                     </form>
-                    <div class="text-center mt-5 text-lg fs-4">
+                    <!-- <div class="text-center mt-5 text-lg fs-4">
 
                         <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">
