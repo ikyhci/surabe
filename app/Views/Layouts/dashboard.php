@@ -7,7 +7,7 @@
     <title><?= getenv('APPNAME') ?> | Dashboard</title>
 
     <link {csp-style-nonce}  rel="preconnect" href="https://fonts.gstatic.com">
-    <link {csp-style-nonce}  href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link {csp-style-nonce}  href="/assets/fonts/css2.css" rel="stylesheet">
     <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.css">
 
     <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/iconly/bold.css">
@@ -41,6 +41,7 @@
     ?>
     
     
+    <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/bootstrap.bundle.min.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/main.js"></script>

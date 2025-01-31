@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link {csp-style-nonce} href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link {csp-style-nonce} href="/assets/fonts/css2.css" rel="stylesheet">
     <link {csp-style-nonce} rel="stylesheet" href="assets/css/bootstrap.css">
     <link {csp-style-nonce} rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link {csp-style-nonce} rel="stylesheet" href="assets/css/app.css">
@@ -67,7 +67,7 @@
         </div>
 
     </div>
-    <script {csp-script-nonce} src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
     <script {csp-script-nonce} src="assets/vendors/toastify/toastify.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/bootstrap.bundle.min.js"></script>
     <script {csp-script-nonce} src="assets/js/pages/auth.js"></script>

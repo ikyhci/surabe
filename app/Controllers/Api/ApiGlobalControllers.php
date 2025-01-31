@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
+use Clue\React\NDJson\Decoder;
 use CodeIgniter\HTTP\ResponseInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -15,6 +16,7 @@ use CodeIgniter\HTTP\Header;
 class ApiGlobalControllers extends BaseController
 {
     protected $db;
+    protected $decoded;
     
     public function __construct(){
         $request = request();
