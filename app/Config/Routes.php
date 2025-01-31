@@ -91,3 +91,13 @@ $routes->group('api', function($routes){
 	$routes->delete('delete-user/(:any)', 'Api\ApiSuperAdminControllers::deleteUser/$1');
 });
 
+// route Penilai
+$routes->group('dashboard', function($routes){
+	$routes->get('penilaian', 'Pages\PagesPenilaiControllers::index');
+	$routes->get('penilaian/detail-form', 'Pages\PagesPenilaiControllers::detailForm');
+});
+$routes->group('api', function($routes){
+	$routes->get('penilaian/data-opd', 'Api\ApiPenilaiControllers::getPenilaianMandiri');
+	$routes->post('penilaian/jawabanOpdIndikator', 'Api\ApiPenilaiControllers::jawabanOpdIndikator');
+	$routes->post('penilaian/simpanPoint', 'Api\ApiPenilaiControllers::simpanPoint');
+});

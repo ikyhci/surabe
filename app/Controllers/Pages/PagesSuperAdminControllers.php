@@ -18,18 +18,29 @@ class PagesSuperAdminControllers extends BaseController
     protected $db;
     protected $superAdminModel;
     public $data;
-
+    protected $decoded;
+    
     public function __construct(){
+        helper('cookie');
+        $key = getenv('TOKEN_SECRET');
+        $token = $_COOKIE['__LKE-Authorization']; // get_cookie('__LKE-Authorization');
+        
+        if(is_null($token) || empty($token)) {
+            $response = service('response');
+            $response->setStatusCode(302);
+            $response->setHeader('Location', base_url('unauthorized'));
+            $response->send();
+            exit;
+        }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        
+        $this->db = db_connect();
         $this->data = [
-            'title' => 'Manage Users',
-            'usr' => 'Super Admin',
+            'title' => 'Penilaian',
+            'usr' => $this->decoded->rln,
+            'ids' => $this->decoded->ids,
+            'token' => $token
         ];
-    //     helper('cookie');
-    //     $key = getenv('TOKEN_SECRET');
-    //     $token = get_cookie('Authorization', true,'');
-    //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        // $this->db = db_connect();
-        $this->superAdminModel = new SuperAdminModel();
     }
     
     public function index()
