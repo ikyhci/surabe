@@ -14,6 +14,7 @@ use CodeIgniter\HTTP\Header;
 
 class AuthControllers extends BaseController
 {
+    protected $db;
     public function __construct()
     {
         helper('cookie');
@@ -140,7 +141,7 @@ class AuthControllers extends BaseController
                 $token = $matches[1];
             }
         }
-        
+
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
 
         $id = $this->decoded->ids;

@@ -317,22 +317,166 @@ class ApiSoalControllers extends BaseController
 
     public function delAspek()
     {
-        // code...
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL Aspek_delete('".
+                    $userid."','".
+                    $idx."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
     }
 
     public function delSubAspek()
     {
-        // code...
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL Sub_Aspek_delete('".
+                    $userid."','".
+                    $idx."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
     }
 
     public function delSubSubAspek()
     {
-        // code...
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL sub_Sub_Aspek_delete('".
+                    $userid."','".
+                    $idx."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
     }
 
     public function delIndikator()
     {
-        // code...
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL Indikator_delete('".
+                    $userid."','".
+                    $idx."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
     }
 
     public function delParameter()

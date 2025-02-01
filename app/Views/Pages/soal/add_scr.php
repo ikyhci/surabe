@@ -46,10 +46,7 @@ $(document).ready(function(){
 
 	})
 
-	function ReloadData(tbl) {
-			// var t = $(tbl).DataTable();
-			// t.ajax.reload(null, false);
-	}
+	
 
 	function loadaspek() {
 		var csrf = document.getElementById('<?= csrf_token() ?>').value
@@ -122,7 +119,11 @@ $(document).ready(function(){
 		var idx = $(this).data('id_aspek');
 		var url = '<?php echo base_url();?>api/del-aspek';
 		var nmx = 'Aspek';
-		deleteData(idx, url, nmx, '#tbl-aspek')
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
+  		var fd = new FormData();
+  		fd.append('<?= csrf_token() ?>', csrf)
+  		fd.append('idx', idx)
+		deleteData(fd, url, nmx, '1')
 	})
 
 
@@ -186,7 +187,11 @@ $(document).ready(function(){
 		var idx = $(this).data('id_sub_aspek');
 		var url = '<?php echo base_url();?>api/del-sub-aspek';
 		var nmx = 'Sub Aspek';
-		deleteData(idx, url, nmx, '#tbl-sub-aspek')
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
+  		var fd = new FormData();
+  		fd.append('<?= csrf_token() ?>', csrf)
+  		fd.append('idx', idx)
+		deleteData(fd, url, nmx, '2')
 	})
 
 
@@ -249,7 +254,11 @@ $(document).ready(function(){
 		var idx = $(this).data('id_sub_sub_aspek');
 		var url = '<?php echo base_url();?>api/del-sub-sub-aspek';
 		var nmx = 'Sub Sub Aspek';
-		deleteData(idx, url, nmx, '#tbl-sub-sub-aspek')
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
+  		var fd = new FormData();
+  		fd.append('<?= csrf_token() ?>', csrf)
+  		fd.append('idx', idx)
+		deleteData(fd, url, nmx, '3')
 	})
 
 
@@ -313,7 +322,26 @@ $(document).ready(function(){
 		var idx = $(this).data('id_indikator');
 		var url = '<?php echo base_url();?>api/del-indikator';
 		var nmx = 'Indikator Dan Bukti Dukung';
-		deleteData(idx, url, nmx, '#tbl-indikator')
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
+  		var fd = new FormData();
+  		fd.append('<?= csrf_token() ?>', csrf)
+  		fd.append('idx', idx)
+  		console.log(idx)
+		deleteData(fd, url, nmx, '4')
+	})
+
+	$(document).on('click', '.hapus-parameter', function(){
+		var idx = $(this).data('id_indikator');
+		var url = '<?php echo base_url();?>api/del-parameter';
+		var idk = $(this).data('indk');
+  		var idp = $(this).data('prmt');
+  		var csrf = document.getElementById('<?= csrf_token() ?>').value
+  		var fd = new FormData();
+  		fd.append('<?= csrf_token() ?>', csrf)
+  		fd.append('idp', idp)
+  		fd.append('idk', idk)
+		var nmx = 'Parameter';
+		deleteData(fd, url, nmx, '5')
 	})
 
 
@@ -389,11 +417,28 @@ $(document).ready(function(){
 
 	}
 
-	function deleteData(idx, url, nmx, ket){
-		var csrf = document.getElementById('<?= csrf_token() ?>').value
-  		var fd = new FormData();
-  		fd.append('<?= csrf_token() ?>', csrf)
-  		fd.append('idx', idx)
+	function ReloadData(ket) {
+		if (ket == 1) {
+			var t = $('#tbl-aspek').DataTable();
+		}
+		if (ket == 2) {
+			var t = $('#tbl-sub-aspek').DataTable();
+		}
+		if (ket == 3) {
+			var t = $('#tbl-sub-sub-aspek').DataTable();
+		}
+		if (ket == 4) {
+			var t = $('#tbl-indikator').DataTable();
+		}
+		if (ket == 5) {
+			var t = $('#datatable').DataTable();
+		}
+		
+		t.ajax.reload(null, false);
+	}
+
+
+	function deleteData(fd, url, nmx, ket){
 		swal({
             title: "Konfirmasi",
             text: 'Hapus Data '+nmx+'!',

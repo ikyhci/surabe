@@ -78,7 +78,7 @@
 
 <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/choices.js/choices.min.js"></script>
     <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
-    <script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/dataTables/dataTables.min.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/dataTables.rowGroup.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/rowGroup.dataTables.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/sweetalert/sweetalert.min.js"></script>
@@ -564,66 +564,7 @@ $(document).ready(function(){
 // 
 })
   </script>
-  <script {csp-script-nonce} type="text/javascript">
-  	$(document).ready(function(){
-  		var token = document.getElementById('token').value;
-  		function ReloadData() {
-			var t = $("#datatable").DataTable();
-			t.ajax.reload(null, false);
-		}
-  		// 
-  		$(document).on('click', '.hapus-parameter', function(){
-  			var csrf = document.getElementById('<?= csrf_token() ?>').value
-  			var idk = $(this).data('indk');
-  			var idp = $(this).data('prmt');
-  			var fd = new FormData();
-  			fd.append('<?= csrf_token() ?>', csrf)
-  			fd.append('idp', idp)
-  			fd.append('idk', idk)
-  			swal({
-              title: "Konfirmasi",
-              text: 'Hapus Parameter!',
-              type: "warning",
-              showCancelButton: true,
-              closeOnConfirm: false,
-              showLoaderOnConfirm: true,
-              },function(){
-              	$.ajax({
-                  url: '<?php echo base_url();?>api/del-parameter',
-                  type: "POST",
-                  dataType: "JSON",
-                  headers: {
-                    'Authorization': 'Bearer '+token
-                  },
-                  data:fd,
-                  processData : false,
-                  contentType: false,
-                  cache: false,
-                  success:function(data){
-                    $('input#<?= csrf_token() ?>').val(data.token_crs)
-                    setTimeout(function(){
-                      if (data.success == 1) {
-                        swal('success','Data Berhasil Di Hapus','success');
-                        ReloadData();
-                      }else{
-                        swal({
-                          title:"Error",
-                          text: data.msg,
-                          type: "error"
-                        });
-                      }
-                    },1000)
-                  },
-                })
 
-              }
-             )
-  		})
-  		// 
-
-  		
-  	})
-  </script>
 <?= $this->include('Pages/soal/add_scr') ?>
 
   <script {csp-script-nonce} type="text/javascript">

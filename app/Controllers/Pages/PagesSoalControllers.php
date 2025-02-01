@@ -12,27 +12,38 @@ use Config\Services;
 
 class PagesSoalControllers extends BaseController
 {
-    protected $db;
+    // protected $db;
     public function __construct(){
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
         $token = get_cookie('Authorization', true,'__LKE-');
-        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        if(is_null($token) || empty($token)) {
+            return redirect()->to(base_url().'unauthorized');
+        }else{
+             $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        }
         // $this->db = db_connect();
     }
     
     public function index()
     {
-        $data = array('usr' => 'Soal', );
-        return view('Pages/soal/dashboard',$data);
+        if (!empty($this->decoded->rln)) {
+            $data = array('usr' => $this->decoded->rln, 
+            );
+            return view('Pages/soal/dashboard',$data);
+        }else{
+            return redirect()->to(base_url().'unauthorized');
+        }
     }
 
     public function addData()
     {
-        
-
-        $data = array('usr' => 'Soal',
-         );
-        return view('Pages/soal/tambah_soal',$data);
+        if (!empty($this->decoded->rln)) {
+            $data = array('usr' => $this->decoded->rln,
+            );
+            return view('Pages/soal/tambah_soal',$data);
+        }else{
+            return redirect()->to(base_url().'unauthorized');
+        }
     }
 }
