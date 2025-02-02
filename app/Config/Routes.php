@@ -1,10 +1,15 @@
 <?php
 
+use App\Controllers\Pages\PagesSuperAdminControllers;
 use CodeIgniter\Router\RouteCollection;
+
 
 /**
  * @var RouteCollection $routes
  */
+
+$routes->setAutoRoute(false);
+
 // $routes->get('/', 'Dashboard::index');
 $routes->get('/','PublicPages::login');
 $routes->get('/unauthorized','Dashboard::Unauthorized');
@@ -81,7 +86,7 @@ $routes->group('api',  function($routes){
 $routes->group('dashboard', function($routes){
 	$routes->get('user-management', 'Pages\PagesSuperAdminControllers::manageUsers');
 	$routes->get('user-management/(:segment)', 'Pages\PagesSuperAdminControllers::manageUsersDetail/$1');
-
+	$routes->get('opd-management', [PagesSuperAdminControllers::class, 'manageOpd']);
 });
 
 // Super Admin API Routes ['filter' => 'apiFilter','cors'],
@@ -91,6 +96,8 @@ $routes->group('api', function($routes){
 	$routes->POST('put-user/(:any)', 'Api\ApiSuperAdminControllers::updateUser/$1');
 	$routes->POST('post-user', 'Api\ApiSuperAdminControllers::addUser');
 	$routes->delete('delete-user/(:any)', 'Api\ApiSuperAdminControllers::deleteUser/$1');
+	$routes->post('save-opd', 'Api\ApiSuperAdminControllers::saveOPD');
+	$routes->post('del-opd', 'Api\ApiSuperAdminControllers::delOPD');
 });
 
 // route Penilai

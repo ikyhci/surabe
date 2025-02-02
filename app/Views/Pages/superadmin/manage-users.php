@@ -11,7 +11,7 @@
       <h6>Daftar User</h6>
     </div>
     <div class="card-body">
-      <table id="table" class="table table-striped table-bordered" style="width:100%">
+      <table id="table" class="table table-striped table-bordered">
         <thead>
           <tr>
             <th>ID</th>

@@ -13,6 +13,8 @@ use App\Models\PenilaianModel;
 
 class ApiPenilaiControllers extends BaseController
 {
+    protected $decoded;
+    
     public function __construct(){
         $request = request();
         $key = getenv('TOKEN_SECRET');

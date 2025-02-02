@@ -189,4 +189,77 @@ class ApiSuperAdminControllers extends BaseController
         //     ]);
         // }
     }
+
+    
+    public function saveOPD()
+    {
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'nama_opd'   => 'required|min_length[3]|max_length[100]',
+        ]);
+    
+        if (!$this->validate($validation->getRules())) {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => false,
+                'msg' => $validation->getErrors()
+            ]);
+        }
+    
+        $opid = $this->request->getPost('opd_id');
+        $opnm = $this->request->getPost('nama_opd');
+        $uidx = $this->decoded->ids;
+    
+        $result = $this->superAdminModel->updateOpd($uidx, $opid, $opnm);
+    
+        if ($result['res'] == 1) {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => true,
+                'msg' => $result['msg']
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => false,
+                'msg' => $result['msg']
+            ]);
+        }
+    }
+
+    // delOPD
+    public function delOPD()
+    {
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'id'   => 'required|numeric',
+        ]);
+    
+        if (!$this->validate($validation->getRules())) {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => false,
+                'msg' => $validation->getErrors()
+            ]);
+        }
+    
+        $opid = $this->request->getPost('id');
+        $uidx = $this->decoded->ids;
+    
+        $result = $this->superAdminModel->deleteOpd($uidx, $opid);
+    
+        if ($result['res'] == 1) {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => true,
+                'msg' => $result['msg']
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => false,
+                'msg' => $result['msg']
+            ]);
+        }
+    }
 }
