@@ -255,47 +255,49 @@ $(document).ready(function(){
 
     })
 
-
-
     $(document).on('click', '.add-indikator', function(){
     	let inputs = document.getElementById('content-input');
     	document.getElementById('title-input').innerHTML = 'Tambah Data Indikator'
     	$('#parameter').modal('hide');
+    	inputs.innerHTML = '';
+    	inputs.innerHTML = inputindikator();
     	loadaspek(2)
     	loadJawaban()
     	$('#add-data').modal('show');
-    	inputs.innerHTML = '';
-    	inputs.innerHTML = inputindikator();
+    	
     })
 
     $(document).on('click', '.add-sub-sub-aspek', function(){
     	let inputs = document.getElementById('content-input');
     	document.getElementById('title-input').innerHTML = 'Tambah Data Sub Sub Aspek'
     	$('#parameter').modal('hide');
-    	loadaspek(2)
-    	$('#add-data').modal('show');
     	inputs.innerHTML = '';
     	inputs.innerHTML = inputsubsubaspek();
+    	loadaspek(2)
+    	$('#add-data').modal('show');
+    	
 
     })
     $(document).on('click', '.add-sub-aspek', function(){
     	let inputs = document.getElementById('content-input');
     	document.getElementById('title-input').innerHTML = 'Tambah Data Sub Aspek'
     	$('#parameter').modal('hide');
-    	loadaspek(2)
-    	$('#add-data').modal('show');
     	inputs.innerHTML = '';
     	inputs.innerHTML = inputsubaspek();
+    	loadaspek(2)
+    	$('#add-data').modal('show');
+    	
     	
     })
     $(document).on('click', '.add-aspek', function(){
     	let inputs = document.getElementById('content-input');
     	document.getElementById('title-input').innerHTML = 'Tambah Data Aspek'
     	$('#parameter').modal('hide');
-    	loadaspek(2)
-    	$('#add-data').modal('show');
     	inputs.innerHTML = '';
     	inputs.innerHTML = inputaspek();
+    	loadaspek(2)
+    	$('#add-data').modal('show');
+    	
     	
     })
 
@@ -305,11 +307,27 @@ $(document).ready(function(){
     	let inputs = document.getElementById('content-input');
     	document.getElementById('title-input').innerHTML = 'Tambah Data Bukti Dukung'
     	$('#view-data').modal('hide');
-    	loadaspek(2)
-    	$('#add-data').modal('show');
     	inputs.innerHTML = '';
     	inputs.innerHTML = inputbuktidukung(idx,nmx);
+    	loadaspek(2)
+    	$('#add-data').modal('show');
+    	
     })
+
+    // Edit Data
+
+    $(document).on('click', '.edit-parameter', function(){
+    	var idx = $(this).data('prmt')
+    	var ind = $(this).data('ind')
+    	let inputs = document.getElementById('content-edit');
+    	document.getElementById('title-edit').innerHTML = 'Edit Data Parameter'
+    	inputs.innerHTML = '';
+    	inputs.innerHTML = editData(idx,ind);
+    	$('#edit-data').modal('show');
+    })
+
+
+    // end
 
     function loadaspek(nums) {
     	var csrf = document.getElementById('<?= csrf_token() ?>').value
@@ -370,17 +388,14 @@ $(document).ready(function(){
     }
 
 
-    // ///////////load data to select 
-
-    //////////////////////// template input modal
-
     function inputbuktidukung(idx, nmx){
     	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate> <input type="hidden" value="0" id="datainput"><input type="hidden" value="'+idx+'" name="indkt" id="indkt"><h6>Indikator :</h6>'+
-    	'<div class="alert alert-light">'+nmx+'.</div>'+
-    							'<div class="form-group">'+
-                        '<h6>Nama Bukti Dukung <span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Bukti Dukung" required>'+
-                    '</div></form>';
+
+    		'<div class="alert alert-light">'+nmx+'.</div>'+
+    			'<div class="form-group">'+
+                '<h6>Nama Bukti Dukung <span class="text-danger">*</span></h6>'+
+                '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Bukti Dukung" required>'+
+               '</div></form>';
 
        return inpx;
     }
@@ -388,6 +403,7 @@ $(document).ready(function(){
 
     function inputindikator(){
     	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate> <input type="hidden" value="1" id="datainput">'+
+
             		'<div class="col-md-12 mb-6">'+
                        '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
                         '<div class="input-group mb-3">'+
@@ -417,6 +433,7 @@ $(document).ready(function(){
 
     function inputsubsubaspek() {
     	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" value="2" id="datainput">'+
+
             		'<div class="col-md-12 mb-6">'+
                        '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
                         '<div class="input-group mb-3">'+
@@ -440,6 +457,7 @@ $(document).ready(function(){
 
     function inputsubaspek() {
     	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" value="3" id="datainput">'+
+
             		'<div class="col-md-12 mb-6">'+
                        '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
                         '<div class="input-group mb-3">'+
@@ -457,6 +475,7 @@ $(document).ready(function(){
 
     function inputaspek() {
     	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" value="4" id="datainput">'+
+
                     '<div class="form-group">'+
                         '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Aspek" required></div>'+
@@ -483,6 +502,20 @@ $(document).ready(function(){
         return inpx;
     }
 
+
+    function editData(idx, nmx) {
+    	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" id="datainput" value="'+nmx+'">'+
+
+    		'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+    		'<div class="alert alert-light">'+nmx+'.</div>'+
+    			'<div class="form-group">'+
+                '<h6>Nama Parameter<span class="text-danger">*</span></h6>'+
+                '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Parameter" required>'+
+               '</div></form>';
+
+               return inpx;
+    }
 
     // end template
 
@@ -522,7 +555,6 @@ $(document).ready(function(){
 						{"data": null, defaultContent: ''},
 						
 						{"data": "nama_parameter"},
-						// {"data": "indikator"},
 						{"data": "tahun"},
 						{"data": "res"},
 						{"data": "create_at"},
@@ -532,8 +564,8 @@ $(document).ready(function(){
 									
 									btn +="<div class='btn-group mb-3 btn-group-sm'>"+
 									
-										"<button class='btn icon btn-outline-warning' data-indk='" + JsonResultRow.id_parameter + "' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
-										"<button class='btn icon btn-outline-danger hapus-parameter' data-indk='" + JsonResultRow.id_parameter + "' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
+										"<button class='btn icon btn-outline-warning edit-parameter' data-indk='" + JsonResultRow.id + "' data-ind='"+JsonResultRow.indikator+"' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+										"<button class='btn icon btn-outline-danger hapus-parameter' data-indk='" + JsonResultRow.id + "' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 
 									+"</div>"
 									return btn;

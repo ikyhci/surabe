@@ -31,22 +31,26 @@ class Dashboard extends BaseController
     {
         if (!empty($this->decoded->rln)) {
             $usr = $this->decoded->rln;
+            $data = array(
+                'usr' => $usr,
+                'uname' => $this->decoded->iss, 
+            );
             
 
             if ($usr == 'User') {
-                $data = array('usr' => $usr, );
+
                 return view('Pages/user/dashboard',$data);
             }
             if ($usr == 'Soal') {
-                $data = array('usr' => $usr, );
+                
                 return view('Pages/soal/dashboard',$data);
             }
             if ($usr == 'Penilai') {
-                $data = array('usr' => $usr, );
+              
                 return view('Pages/dashboard',$data);
             }
             if ($usr == 'Super Admin') {
-                $data = array('usr' => $usr, );
+                
                 return view('Pages/dashboard',$data);
             }
         }else{

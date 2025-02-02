@@ -20,7 +20,7 @@
             <div class="col-sm-5 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
-                        <a href="/"><img src="assets/images/logo/logo.png" alt="Logo"></a>
+                        <!-- <a href="/"><img src="assets/images/logo/logo.png" alt="Logo"></a> -->
                     </div>
                     <!-- <div class="text-center pesan-valid" id="valid"> -->
                     <h1 class="auth-title">Log in.</h1>

@@ -43,7 +43,23 @@ $(document).ready(function(){
 		tabls.innerHTML ='';
 		tabls.innerHTML = formatAspek()
 		loadaspek()
+	})
 
+	$(document).on('click', '.indikator-view', function(){
+		var idx = $(this).data('id_indikator')
+		let tabls = document.getElementById('content-views');
+		document.getElementById('title-views').innerHTML = 'List Data Bukti Dukung'
+		$('#view-data').modal('hide');
+		setTimeout(function(){
+			tabls.innerHTML ='';
+			tabls.innerHTML = formatbuktidukung()
+			loadbuktidukung(idx)
+			$('#view-data').modal('show');
+
+		},500)
+		
+		
+		
 	})
 
 	
@@ -87,7 +103,6 @@ $(document).ready(function(){
 						var btn = '';
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
-						// "<a href='#'' class='btn icon btn-outline-primary' data-indikator='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-circle' viewBox='0 0 16 16'><path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16'/><path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/></svg></a>"+
 									
 						"<button class='btn icon btn-outline-warning aspek-edit' data-id_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
@@ -161,8 +176,6 @@ $(document).ready(function(){
 						var btn = '';
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
-						// "<a href='#'' class='btn icon btn-outline-primary' data-id_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-circle' viewBox='0 0 16 16'><path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16'/><path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/></svg></a>"+
-									
 						"<button class='btn icon btn-outline-warning sub-aspek-edit' data-id_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
 						"<button class='btn icon btn-outline-danger sub-aspek-delete' data-id_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
@@ -229,7 +242,6 @@ $(document).ready(function(){
 						var btn = '';
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
-						// "<a href='#'' class='btn icon btn-outline-primary' data-indikator='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-circle' viewBox='0 0 16 16'><path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16'/><path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/></svg></a>"+
 									
 						"<button class='btn icon btn-outline-warning sub-sub-aspek-edit' data-id_sub_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
@@ -297,6 +309,8 @@ $(document).ready(function(){
 						var btn = '';
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
+						"<button class='btn icon btn-outline-success indikator-view' data-id_indikator='" + JsonResultRow.id + "' data-indikator='"+JsonResultRow.indikator+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-eye' viewBox='0 0 16 16'><path d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z'/><path d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0'/></svg></button>"+
+
 						"<button class='btn icon btn-outline-primary indikator-plus' data-id_indikator='" + JsonResultRow.id + "' data-indikator='"+JsonResultRow.indikator+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-circle' viewBox='0 0 16 16'><path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16'/><path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/></svg></button>"+
 									
 						"<button class='btn icon btn-outline-warning indikator-edit' data-id_indikator='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
@@ -329,6 +343,72 @@ $(document).ready(function(){
   		console.log(idx)
 		deleteData(fd, url, nmx, '4')
 	})
+
+	function loadbuktidukung(idx){
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
+		var t = $('#tbl-bukti-dukung').DataTable({
+			"dom": 'rtip',
+			"destroy": true,
+	        "scrollX": false,
+			"processing": true,
+			"language": {
+				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+			},
+			"ajax": {
+				"url": "<?php echo base_url(); ?>api/get-bukti-dukung",
+				"contentType": 'application/json',
+				"headers": {
+					'Authorization': 'Bearer '+token
+				},
+				"data":{
+					<?= csrf_token() ?>: csrf,
+					idx : idx
+				},
+				"method": "GET",
+				"dataSrc": function(data){
+					$('input#<?= csrf_token() ?>').val(data.token_crs)
+					return data.dt;
+				},
+			},
+			"columns":[
+				{"data" : null, defaultContent: ''},
+				{"data" : "bukti_dukung"},
+				{
+					"render": function(data, type, JsonResultRow, meta) {
+						var btn = '';
+									
+						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
+						"<button class='btn icon btn-outline-warning bukti-edit' data-bukti='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+
+						"<button class='btn icon btn-outline-danger bukti-delete' data-bukti='" + JsonResultRow.id + "' ><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
+						+"</div>"
+						return btn;
+					}
+				}
+			]
+		});
+		t.on('order.dt search.dt', function() {
+			t.column(0, {
+				search: 'applied',
+				order: 'applied'
+			}).nodes().each(function(cell, i) {
+				cell.innerHTML = i + 1;
+			});
+		}).draw();
+	}
+
+	$(document).on('click', '.bukti-delete', function(){
+		var idx = $(this).data('bukti');
+		var url = '<?php echo base_url();?>api/del-bukti-dukung';
+  		var csrf = document.getElementById('<?= csrf_token() ?>').value
+  		var fd = new FormData();
+  		fd.append('<?= csrf_token() ?>', csrf)
+  		fd.append('idx', idx)
+		var nmx = 'Bukti Dukung';
+		deleteData(fd, url, nmx, '6')
+	})
+
+	
 
 	$(document).on('click', '.hapus-parameter', function(){
 		var idx = $(this).data('id_indikator');
@@ -414,7 +494,22 @@ $(document).ready(function(){
                            '<tbody></tbody>'+ 
                        '</table></div>';
         return tblx;
+	}
 
+	function formatbuktidukung(){
+		var tblx = '<div class="table-responsive">'+
+                       '<table class="table mb-0" id="tbl-bukti-dukung">'+
+                           '<thead>'+
+                               '<tr>'+
+                                   '<th>No</th>'+
+                                   // '<th>Indikator</th>'+
+                                   '<th>Bukti Dukung</th>'+
+                                   '<th>Aksi</th>'+
+                               '</tr>'+
+                           '</thead>'+
+                           '<tbody></tbody>'+ 
+                       '</table></div>';
+        return tblx;
 	}
 
 	function ReloadData(ket) {
@@ -432,6 +527,9 @@ $(document).ready(function(){
 		}
 		if (ket == 5) {
 			var t = $('#datatable').DataTable();
+		}
+		if (ket == 6) {
+			var t = $('#tbl-bukti-dukung').DataTable();
 		}
 		
 		t.ajax.reload(null, false);

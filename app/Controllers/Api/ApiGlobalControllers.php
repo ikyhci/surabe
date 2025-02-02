@@ -156,6 +156,35 @@ class ApiGlobalControllers extends BaseController
         }
     }
 
+    public function getBuktiDukung()
+    {
+         if (!empty($this->decoded->aud)) {
+            $IDX    = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+            $LIMIT  = null;
+            $OFFSET = null;
+            $userid = null;
+            $list   = $this->db->query("call View_Bukti_dukung('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getResult();
+            $data = array(
+                    'token_crs' => csrf_hash(),
+                    'dt'        => $list,
+                    );
+
+            return $this->response->setJSON($data);
+        }else{
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+            return $this->response->setJSON($data);
+        }
+    }
+
+    public function getParameter()
+    {
+        // code...
+    }
+
     public function getJenisJawaban()
     {
         if (!empty($this->decoded->aud)) {

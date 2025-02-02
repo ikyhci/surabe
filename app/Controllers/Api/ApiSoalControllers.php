@@ -479,6 +479,48 @@ class ApiSoalControllers extends BaseController
         }
     }
 
+
+    public function delBuktiDukung()
+    {
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL Bukti_dukung_delete('".
+                    $userid."','".
+                    $idx."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
+    }
+
     public function delParameter()
     {
         try {

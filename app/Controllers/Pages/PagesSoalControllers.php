@@ -25,16 +25,18 @@ class PagesSoalControllers extends BaseController
         // $this->db = db_connect();
     }
     
-    public function index()
-    {
-        if (!empty($this->decoded->rln)) {
-            $data = array('usr' => $this->decoded->rln, 
-            );
-            return view('Pages/soal/dashboard',$data);
-        }else{
-            return redirect()->to(base_url().'unauthorized');
-        }
-    }
+    // public function index()
+    // {
+    //     if (!empty($this->decoded->rln)) {
+    //         $data = array(
+    //             'usr'   => $this->decoded->rln, 
+    //             'uname' => $this->decoded->iss,
+    //         );
+    //         return view('Pages/soal/dashboard',$data);
+    //     }else{
+    //         return redirect()->to(base_url().'unauthorized');
+    //     }
+    // }
 
     public function addData()
     {

@@ -58,6 +58,7 @@ $routes->group('dashboard', function($routes){
 	$routes->post('del-sub-aspek', 'Api\ApiSoalControllers::delSubAspek');
 	$routes->post('del-sub-sub-aspek', 'Api\ApiSoalControllers::delSubSubAspek');
 	$routes->post('del-indikator', 'Api\ApiSoalControllers::delIndikator');
+	$routes->post('del-bukti-dukung', 'Api\ApiSoalControllers::delBuktiDukung');
 	
 	
  });
@@ -72,6 +73,7 @@ $routes->group('api',  function($routes){
 	$routes->get('get-jenis-jawaban', 'Api\ApiGlobalControllers::getJenisJawaban');
 	$routes->get('get-opd', 'Api\ApiGlobalControllers::getOPD');
 	$routes->get('get-roles', 'Api\ApiGlobalControllers::getRoles');
+	$routes->get('get-bukti-dukung', 'Api\ApiGlobalControllers::getBuktiDukung');
 });
 
 
