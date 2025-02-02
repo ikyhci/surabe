@@ -11,7 +11,7 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 30/01/2025 18:58:02
+ Date: 01/02/2025 09:27:15
 */
 
 SET NAMES utf8mb4;
@@ -41,7 +41,6 @@ CREATE TABLE `lke_aspek` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `lke_aspek` (`id`, `nama_aspek`, `create_at`, `update_at`, `bobot`, `tahun`, `nama_form`, `deskripsi`, `evaluasi`, `batas_waktu`, `tahapan`) VALUES ('0d94dc2a709e6902b75bb2bbdb03c64b754f6061', 'Capaian Sasaran Strategis', '2025-01-07 15:21:08', NULL, '100', '2025', 'Evaluasi SPBE ', 'Evaluasi SPBE 2025', 'Evaluasi', '2025-01-31 11:06:50', NULL);
-INSERT INTO `lke_aspek` (`id`, `nama_aspek`, `create_at`, `update_at`, `bobot`, `tahun`, `nama_form`, `deskripsi`, `evaluasi`, `batas_waktu`, `tahapan`) VALUES ('50f4b22980b235473e0aec170a1d7674d9c1cf8b', 'nama aspeknya', '2025-01-22 14:37:56', NULL, '100', '2026', 'Evaluasi SOPBE 2026', 'Deskripsinya ', 'Evaluasi SPBE', '2025-02-01 14:37:00', '');
 COMMIT;
 
 -- ----------------------------
@@ -72,7 +71,6 @@ INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at
 INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('446b1f1826c499438e5997be8c45a327e84054a9', '2297bc7097bd46bc7c4ede020b5ae086066a1db1', 'Domain Infrastruktur (optional/wajib bagi yang memiliki infrastruktur sendiri dan memanfaatkan Pusat Data Nasional)', '2025-01-26 09:19:42', NULL);
 INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('44d91bfe6df3bddc9ea50b56113bc0ee6a8b6246', '4abb0d7caa97e312fd7bc64f9c546c8aac281776', 'Dokumen Manajemen Data PD (List user, log aktivitas, dataset PD)', '2025-01-26 09:14:33', NULL);
 INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('4c1eb8e041367470eaded5434cff0d8a359520b0', '2297bc7097bd46bc7c4ede020b5ae086066a1db1', 'Domain Aplikasi (selaras dengan Layanan dan data/informasi-nya)', '2025-01-26 09:19:10', NULL);
-INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('5017aab44f2e1a342e1ffb695c221963cf774398', '123338438afd46814a983f6dd03618590f3c651a', 'apalah', '2025-01-22 15:42:16', NULL);
 INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('5087cbcf9ae0b8ebcefadbe026c1a0e250db6023', 'ad6f0561a6f4e19729f13e0a1afa3858c249cf2a', 'Sesuai dengan standar teknis pembangunan/pengembangan aplikasi di lingkungan Pemerintah Provinsi Sulawesi Tengah (Koordinasi dengan bidang aptika diskominfo)', '2025-01-26 09:22:40', NULL);
 INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('57986fad3194affd91a723cd2a19775f85ae432c', '2297bc7097bd46bc7c4ede020b5ae086066a1db1', 'Domain Proses Bisnis (sampai level n dan kelengkapan metadata)', '2025-01-26 09:18:33', NULL);
 INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('5b162be176913d3202291a04f6f0b417c127ca0d', '8435c182e666a3078b9406a9291767a4e5553a05', 'Dokumen Manajemen Aset TIK PD', '2025-01-26 09:21:28', NULL);
@@ -114,6 +112,7 @@ CREATE TABLE `lke_detail_opd` (
 BEGIN;
 INSERT INTO `lke_detail_opd` (`id`, `userid`, `opdid`, `create_at`, `update_at`) VALUES ('4020ed4e44627c775afaabcfb931112dcf1004f9', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'f0dc55976676c13304f0fc322812d091dfbd7824', '2025-01-30 11:02:07', NULL);
 INSERT INTO `lke_detail_opd` (`id`, `userid`, `opdid`, `create_at`, `update_at`) VALUES ('a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'f0dc55976676c13304f0fc322812d091dfbd7824', '2025-01-07 19:10:31', NULL);
+INSERT INTO `lke_detail_opd` (`id`, `userid`, `opdid`, `create_at`, `update_at`) VALUES ('bc0b0cae6f113fe1227907685874a215d3bae2ed', '6d7c668a43ecfcf2baeafad0a48ec1ba17748f13', 'f0dc55976676c13304f0fc322812d091dfbd7824', '2025-02-01 09:25:06', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -134,7 +133,6 @@ CREATE TABLE `lke_indikator` (
 -- Records of lke_indikator
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_indikator` (`id`, `id_sub_sub_aspek`, `indikator`, `create_at`, `update_at`, `jenis_jawaban`) VALUES ('123338438afd46814a983f6dd03618590f3c651a', '32da4f783e3ae10d3c5397b70286d2cf0da24e10', 'nama indikatornya', '2025-01-22 14:39:17', NULL, 'cadc4eff78bea93969d1f94ea7816656ad5d80a2');
 INSERT INTO `lke_indikator` (`id`, `id_sub_sub_aspek`, `indikator`, `create_at`, `update_at`, `jenis_jawaban`) VALUES ('2297bc7097bd46bc7c4ede020b5ae086066a1db1', 'e067c3695db1f4a537fbced4ef5b1e0fdbcd4413', 'Telah Memiliki Dokumen Arsitektur SPBE Perangkat Daerah', '2025-01-16 13:04:21', NULL, 'b7be0e8c9a91dc2bfe3fd36e915731a0e32a1307');
 INSERT INTO `lke_indikator` (`id`, `id_sub_sub_aspek`, `indikator`, `create_at`, `update_at`, `jenis_jawaban`) VALUES ('374367084e673af84bcbf2f998198f6e2e02770d', 'e067c3695db1f4a537fbced4ef5b1e0fdbcd4413', 'Telah menerapkan Manajemen Risiko SPBE', '2025-01-17 13:15:42', NULL, 'cadc4eff78bea93969d1f94ea7816656ad5d80a2');
 INSERT INTO `lke_indikator` (`id`, `id_sub_sub_aspek`, `indikator`, `create_at`, `update_at`, `jenis_jawaban`) VALUES ('37707fc0417b80bb7dfa064f979a2c5ab7073eb3', 'e067c3695db1f4a537fbced4ef5b1e0fdbcd4413', 'Telah menggunakan Sistem Penghubung Layanan Pemerintah Daerah', '2025-01-17 13:15:15', NULL, 'cadc4eff78bea93969d1f94ea7816656ad5d80a2');
@@ -216,12 +214,20 @@ CREATE TABLE `lke_log_user` (
 -- Records of lke_log_user
 -- ----------------------------
 BEGIN;
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('02ee58450210b4dd9bc7d7c36450d5a133483633', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-02-01 08:28:34', '::1', 'LOGOUT');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('0375131efa966fd30a3f396a8be100198c788de2', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 08:00:47', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('07739431eda54b0237c0b491d30176fa8ac15c48', '6d7c668a43ecfcf2baeafad0a48ec1ba17748f13', 'penilai', '2025-02-01 09:25:47', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('1219b19995ae5a993e7a535d87186d15015807c5', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 10:38:07', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('16a65c40b50af8085e71bec5646b6fc3019e6218', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:39:48', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('194848c0cf4696e5f1fc53b0cc1e23d76053887d', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-02-01 08:05:30', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('1fce37d33284e935fbcf9f7c69d2cd2019362302', 'c01e70c5551bf859d6de5dd332deaf41c6895742', 'Super Admin', '2025-01-29 13:45:19', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('215d9fb605243f3bed4bdab47c2130c5f201aa1e', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 08:28:44', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('2851afd6a02a1234cc455b7adda17de410035dc3', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 09:26:43', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('2eb7f5fb9a7716b49cad2f984d7f20854b475906', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 08:00:52', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('37370561649955e31efc975fe12d9f8e9990623f', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 17:25:02', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('38f8a336d864627e473608e15782eb644df7317a', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 17:34:59', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('3bf97aa06fd8e31fca274dc8766e3d652066a3ae', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 15:12:34', '::1', 'LOGOUT');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('48a6d010efd164b9c44656fe71103559c2c52c5d', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 08:05:20', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('55a52b342310fc1d9855eb216fa6d97b2ab73067', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 11:27:52', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('5b56261f266f0a93a3b5eacb32dafa51cf89233b', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:43:22', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('5e6218f561856dbec3eec97229a575936c407813', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:10:23', '::1', 'LOGOUT');
@@ -229,12 +235,15 @@ INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `statu
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('679258574282bcb2061ccc619b6d978c14601cd6', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 15:10:36', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('6bab7835cdadec9581c0b64f8fc3cd79cfb2b1dc', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:32:21', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('73edc6b2ccacdd8ae680ec71a6414dc5bc3c394f', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:38:48', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('7a0a0ee3a85c261697e2de2d99ceffeb538a81da', '6d7c668a43ecfcf2baeafad0a48ec1ba17748f13', 'penilai', '2025-02-01 09:26:34', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('7cd95939bc4e38a47b5ecfc1e824a1b101c1a82f', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 16:01:21', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('7d50d350aac733ec5b4c94e0d306806868908d1b', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 14:56:57', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('86fbf2adae48025d7e203cc2c8690199ed9a7340', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 18:11:08', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('87ad1fa3ec3d6b1ccd03f45fb1a8b834988485f3', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 18:11:17', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('87e8356b398debc3d2be3952ed5449447b52e0a1', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 08:05:09', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('8be37c97ca0ed046233e61a8e00ea133ed20b7c6', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 17:53:17', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('8c83b7c3a923f8b2bfa6c3b3d08843b8ab42ab59', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 14:57:10', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('91af97ac5e1d039f7c403ee14a1d818aa3fb5d30', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 09:21:27', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('a1aba678f81c8fd8b9b634afa39f9a2ebb11a593', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 16:08:03', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('a48d01ca030ba240f241082d0956b15ec38f9acc', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 09:32:46', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('a910d294390b7bf8f4635ea791ac0aaad9ffd270', 'c01e70c5551bf859d6de5dd332deaf41c6895742', 'Super Admin', '2025-01-29 14:15:43', '::1', 'LOGIN');
@@ -249,13 +258,18 @@ INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `statu
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('c46a7b55b4056ce0efbff21f86e81c415f33d9ea', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 13:45:01', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('c5b9e8859926d041c0edd58e1818e785a1d44f59', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 15:29:39', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('c70c5db9a3e521bfa1b74206e8de78e1d99f6586', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 17:53:40', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('cc7dea88449380dd6b7b0b32614950392465e310', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-01-30 19:01:15', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('ce127aafe16c74adbe98b46d55e4a99c892d34dc', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:29:28', '::1', 'LOGOUT');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('cf2e21296734dabccac98d66e10f5c5914f14bd0', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 09:25:38', '::1', 'LOGOUT');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('cf6ec60415ac2b519070cd9d1df5c342d957139f', '85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', '2025-02-01 09:21:14', '::1', 'LOGOUT');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('d30b6c49feb2af22afa1a48490d328cb03f83a9c', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 19:01:07', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('dc4a72f365dc60ea8d0ea0d31da514521eb4d667', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 18:21:02', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('dd7cac1d12cfe50f75f946dd224cc4ae01d086b7', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:13:05', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('e287e1daecfdea59c5fcce3bc62f045ad084bf84', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 11:27:19', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('e3171902fc74bc07d8247c3911817697f6b39fc2', 'c01e70c5551bf859d6de5dd332deaf41c6895742', 'Super Admin', '2025-01-29 13:47:03', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('e6bde6283b049cb4bf2f4da7e1c0c14dde14ba40', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 15:40:00', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('eaee3a15831495ee314497f1d0d2b6e40ed5485e', 'c01e70c5551bf859d6de5dd332deaf41c6895742', 'Super Admin', '2025-01-29 13:49:41', '::1', 'LOGIN');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('f9cccd25138241bb91b8f17232c486f84bf70312', 'a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', '2025-01-30 18:59:40', '::1', 'LOGIN');
 COMMIT;
 
 -- ----------------------------
@@ -278,24 +292,38 @@ CREATE TABLE `lke_logs` (
 BEGIN;
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('00034df0b4462ad22a9130ccb112561ae5a0ec21', '2025-01-30 14:57:10', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 14:57:10');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('00fc783eb5a4e47db2a26da88c8da68cac0d2749', '2025-01-30 18:21:02', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 18:21:02');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('0814b7377ea4be3c86058cfcd61b343874a0ac09', '2025-02-01 09:06:05', 'DELETE', 'soal', 'Hapus Data Aspek  : nama aspeknya', '2025-02-01 09:06:05');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('0eb2ad98120a0f94d53aef7a4af05392b48f8486', '2025-01-30 15:40:00', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 15:40:00');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('0f7e7028169911ed995e77daac2382e4c9274c6b', '2025-01-30 15:10:36', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 15:10:36');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('11a09aeb705d4a8a06c298d3e0ea245866a28af9', '2025-01-30 13:52:49', 'ERROR', 'System', 'del Parameter :Unknown column \'id_parameter\' in \'field list\'', '2025-01-30 13:52:49');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('13e16b9ed7b2fd06c48c29c872918bc5a2824e1b', '2025-01-27 14:20:15', 'INSERT', 'user', 'Tambah Data Jawaban : YAParameter : Telah menggunakan Layanan Jaringan Intra Pemerintah Daerah', '2025-01-27 14:20:15');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('1c3fe931225f24b26aa9119c678db4d25400de45', '2025-02-01 09:26:43', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 09:26:43');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('1ed9a7c8ac3c212baaf64cc4334e0891f79a07de', '2025-02-01 09:25:06', 'INSERT', 'administrator', 'Tambah Data Berhasil : penilai Full Name : penilai', '2025-02-01 09:25:06');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('20b1de531f98743ae2e0a7933f6aebacf9aa3fff', '2025-01-30 17:34:59', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 17:34:59');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('23b7321a9bca82f2e60ec8690b3d311da011467c', '2025-02-01 09:25:38', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 09:25:38');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('2610f57e2ec08a1c2ded78db7f8d29b5f5a242f0', '2025-01-30 11:27:19', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 11:27:19');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('2cb2d17a39f7abed4669cc490663e8d5e0f867f9', '2025-01-30 14:08:34', 'ERROR', 'System', 'del Parameter :Unknown column \'odk\' in \'where clause\'', '2025-01-30 14:08:34');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('2d21166edcd39d89719df0ecb0d25820d3a51716', '2025-01-30 15:38:48', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 15:38:48');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('2d220f5afb34189569b5b828fc6f708386375dd9', '2025-02-01 09:05:39', 'DELETE', 'soal', 'Hapus Data Sub Aspek  : nama sub aspek', '2025-02-01 09:05:39');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('2e9375d5f30fccc59e4416b122dafee3fe048eb7', '2025-01-30 11:27:52', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 11:27:52');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('2efd66ac5b3f902377dd318602e2e508ead522d7', '2025-01-30 17:53:40', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 17:53:40');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('2f4c7ee2ac619d95f3726bfc4d763da75f4c3fda', '2025-01-30 15:39:48', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 15:39:48');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('324efc0dceb32550b7edf4092f6ee03dd43ee938', '2025-01-29 13:45:19', 'LOGIN', 'USER', 'User Login :Super Admin', '2025-01-29 13:45:19');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('37408f5a1bcb9da617498fe8ab93119847913644', '2025-01-30 13:45:01', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 13:45:01');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('3b4ac52957b60bc2d0129c577ef5e870084bfee2', '2025-02-01 09:21:14', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 09:21:14');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('3bb0aa9f0b83fa5596cc2d14b369d168f357d255', '2025-02-01 08:05:20', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 08:05:20');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('3c806fa5c23a9fa9b8477ff10d70d2f7d6abbab8', '2025-01-30 15:32:11', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 15:32:11');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('4044fa87ea91a9de351dda612f8a8736ca2e2e4a', '2025-01-30 14:10:32', 'INSERT', 'soal', 'Tambah Data Parameter : nama parameternya', '2025-01-30 14:10:32');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('4c1e477ac57eb236f3d89117fed3b94c42f4bd41', '2025-02-01 09:26:34', 'LOGIN', 'USER', 'User Login :penilai', '2025-02-01 09:26:34');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('4d58d0d537150fc188ab34565cc78f30965001ef', '2025-01-30 19:01:15', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 19:01:15');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('50851d08d087b4adbfabc5193bae6ef9ebfe0790', '2025-01-30 18:59:40', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 18:59:40');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('52f471237c6a0334e1453312b4122b1e1678a4fc', '2025-01-30 18:11:17', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 18:11:17');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('53477ed82fd8c92a8f1e86181c59deea65ba0e37', '2025-02-01 08:28:34', 'LOGIN', 'USER', 'User Login :user', '2025-02-01 08:28:34');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('5a18f9d29d6978982e83dc45fa0e5657036c6491', '2025-01-30 19:01:07', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 19:01:07');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('5eb8d0e25238c7541d62609982b196e019e04919', '2025-01-30 14:56:57', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 14:56:57');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('602bc917acaefedfbc302e8dd988c68b0d0e18c2', '2025-02-01 08:00:52', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 08:00:52');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('637fd165c3345618c4432cb9bb5706e4cd004caf', '2025-01-30 16:08:03', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 16:08:03');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('65fd1b4110f19c476a9dda05fbfb55cc4eb99d7e', '2025-02-01 09:05:09', 'DELETE', 'soal', 'Hapus Data Sub Sub Aspek  : nama sub sub aspeknya', '2025-02-01 09:05:09');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('6e3a98e58fdba5d440e880eaf4354585b0b99c6f', '2025-01-30 16:13:36', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 16:13:36');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('716e8482fc1656bf2bc1d9839bdeff533883a699', '2025-01-29 13:47:03', 'LOGIN', 'USER', 'User Login :Super Admin', '2025-01-29 13:47:03');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('7416de49565495aa7d74cd8413bac3b76ac9f77b', '2025-01-30 14:09:00', 'DELETE', 'soal', 'Hapus Parameter  : nama parametrnya', '2025-01-30 14:09:00');
@@ -315,15 +343,22 @@ INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VAL
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('a8c8763647028207975f2f90ca87f4bbaeb68cfc', '2025-01-29 14:23:05', 'LOGIN', 'USER', 'User Login :user', '2025-01-29 14:23:05');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b7f78e3e5b239e5e23fcc589240991104921719a', '2025-01-30 16:03:24', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 16:03:24');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('bad8a896cefd2916738a749f9cdb9f40f2ce5662', '2025-01-30 17:53:17', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 17:53:17');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('bf352c6104ad6e758bc6216bcc6f719fd3a9ff8e', '2025-02-01 08:28:44', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 08:28:44');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('c3cf4ac2e5bef4a372a23ddb7a73b1c13fde4b04', '2025-01-30 14:10:37', 'DELETE', 'soal', 'Hapus Parameter  : nama parameternya', '2025-01-30 14:10:37');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('c670bc58f922fd873cf70f462da964ba1dbfb0ad', '2025-02-01 08:56:19', 'DELETE', NULL, 'Hapus Data Indikator  : nama indikatornya', '2025-02-01 08:56:19');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('c6f23426255f25364ef3ac641d7471a5b56f8089', '2025-02-01 08:05:09', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 08:05:09');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('c88189f03614a06c3641c90b56e15bd53fcf170f', '2025-01-30 14:09:50', 'INSERT', 'soal', 'Tambah Data Parameter : nama parameternya', '2025-01-30 14:09:50');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('c97cedab5fe7d39fb19cc563e20ebaa6e6cbae2b', '2025-01-27 14:25:15', 'INSERT', 'user', 'Tambah Data File Bukti Dukung : 1737959115_a2aa9578e9a43de60a27.xlsx ,bukti Dukung  : 2ac7a07aa5bd59892125f98d23fec8cce41b9742', '2025-01-27 14:25:15');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('ced63cbde55b7cac0cedfdcde5335b80430eb037', '2025-02-01 08:05:30', 'LOGIN', 'USER', 'User Login :user', '2025-02-01 08:05:30');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('d17e9e5ccbd7e25d1b244c706e928f3f35db9046', '2025-01-30 18:11:08', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 18:11:08');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('d28956086b50fd4c7b11dba0c1229b96654b50f3', '2025-01-30 15:29:39', 'LOGIN', 'USER', 'User Login :soal', '2025-01-30 15:29:39');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('d44264c64e1f5e013fb8d01bd2c703393253f11a', '2025-01-27 13:42:06', 'INSERT', 'user', 'Tambah Data File Bukti Dukung : 1737956526_5572248522f278d4fe7f.jpeg ,bukti Dukung  : 7b3f2f3c3be15de407ff4d02881c424482970ad9', '2025-01-27 13:42:06');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('d49fb6a7aaedb816fdef3f128f986ee25662c35d', '2025-02-01 08:00:47', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 08:00:47');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('da7433a16f01b5586fc877e4538c245d48e36093', '2025-01-30 17:25:02', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 17:25:02');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('e165a83534f597a9cd518434ebd2d3efeeab965b', '2025-02-01 09:21:27', 'LOGIN', 'USER', 'User Login :soal', '2025-02-01 09:21:27');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('e3606e69e35629f1f911164ba321c459b7d42160', '2025-01-29 14:22:59', 'UPDATE', 'user', 'UPDATE Password User  : user Full Name : user', '2025-01-29 14:22:59');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('e7faffaf37e9302013a0c6866e8c14866d8501cd', '2025-01-27 13:42:06', 'INSERT', 'user', 'Tambah Data Jawaban : YAParameter : Telah Menggunakan Layanan Perencanan Berbasis Elektronik', '2025-01-27 13:42:06');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('eb89e10be69bca7a618160c6c6e15dfd5d83bc96', '2025-02-01 09:25:47', 'LOGIN', 'USER', 'User Login :penilai', '2025-02-01 09:25:47');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('ef2e06c724a5c3ca6392abec380b666af8484901', '2025-01-30 15:32:21', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 15:32:21');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('f2e980e104c002d1943eb97e55d886f3e846e1db', '2025-01-30 15:45:06', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 15:45:06');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('f53e3999169842e9aa6570513def7999271beaac', '2025-01-30 15:29:28', 'LOGIN', 'USER', 'User Login :user', '2025-01-30 15:29:28');
@@ -417,6 +452,7 @@ BEGIN;
 INSERT INTO `lke_role` (`Uid`, `RoleId`, `Create_at`, `Update_at`) VALUES ('c01e70c5551bf859d6de5dd332deaf41c6895742', '49bc74a69d7256191ab4d953a6516e73c70f08db', '2025-01-07 13:47:03', NULL);
 INSERT INTO `lke_role` (`Uid`, `RoleId`, `Create_at`, `Update_at`) VALUES ('a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', '618d4897a69c737080de4216b15b64e1909ecba0', '2025-01-07 19:10:31', NULL);
 INSERT INTO `lke_role` (`Uid`, `RoleId`, `Create_at`, `Update_at`) VALUES ('85adeb743adbcd35b7cf642df747d5f128e6125a', '8fdad4894c55a3dbfb4fe280c02bd55512df3803', '2025-01-30 11:02:07', NULL);
+INSERT INTO `lke_role` (`Uid`, `RoleId`, `Create_at`, `Update_at`) VALUES ('6d7c668a43ecfcf2baeafad0a48ec1ba17748f13', 'ae7deb37b1eac722afda8c431c677662afd57af9', '2025-02-01 09:25:06', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -461,7 +497,6 @@ CREATE TABLE `lke_sub_aspek` (
 -- Records of lke_sub_aspek
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_sub_aspek` (`id`, `nama_sub_aspek`, `create_at`, `update_at`, `id_aspek`, `bobot`) VALUES ('572a502a62ab5241d2e05c743def9df76fcac29c', 'nama sub aspek', '2025-01-22 14:38:22', NULL, '50f4b22980b235473e0aec170a1d7674d9c1cf8b', '100');
 INSERT INTO `lke_sub_aspek` (`id`, `nama_sub_aspek`, `create_at`, `update_at`, `id_aspek`, `bobot`) VALUES ('edb9ad9b75699c50ae95aa5309e6ff14387dcbbe', 'Tingkat Kematangan SPBE Perangkat Daerah', '2025-01-07 15:25:53', NULL, '0d94dc2a709e6902b75bb2bbdb03c64b754f6061', '100');
 COMMIT;
 
@@ -483,7 +518,6 @@ CREATE TABLE `lke_sub_sub_aspek` (
 -- Records of lke_sub_sub_aspek
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('32da4f783e3ae10d3c5397b70286d2cf0da24e10', 'nama sub sub aspeknya', '2025-01-22 14:38:50', NULL, '572a502a62ab5241d2e05c743def9df76fcac29c', '50');
 INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('81510049dbd401f5f40714a0e289c94df3616532', 'Tingkat Kematangan Kapabilitas Layanan', '2025-01-10 11:29:04', NULL, 'edb9ad9b75699c50ae95aa5309e6ff14387dcbbe', '30');
 INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('c0d12296859859d8a149c1bc74e3613c6f621225', 'Penyelenggaraan Statistik Sektoral', '2025-01-10 11:29:44', NULL, 'edb9ad9b75699c50ae95aa5309e6ff14387dcbbe', '20');
 INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('e067c3695db1f4a537fbced4ef5b1e0fdbcd4413', 'Tingkat Kematangan Kapabilitas Proses', '2025-01-07 15:27:54', NULL, 'edb9ad9b75699c50ae95aa5309e6ff14387dcbbe', '50');
@@ -551,6 +585,7 @@ CREATE TABLE `lke_user` (
 -- Records of lke_user
 -- ----------------------------
 BEGIN;
+INSERT INTO `lke_user` (`uid`, `UserName`, `FullName`, `PassEnc`, `Phone`, `EmailAdds`, `Create_at`, `Update_at`, `actv`) VALUES ('6d7c668a43ecfcf2baeafad0a48ec1ba17748f13', 'penilai', 'penilai', 0xD69AEAED31B2EF9D2D4338276965F075, '0', 'penilai@mail.com', '2025-02-01 09:25:06', NULL, 'TRUE');
 INSERT INTO `lke_user` (`uid`, `UserName`, `FullName`, `PassEnc`, `Phone`, `EmailAdds`, `Create_at`, `Update_at`, `actv`) VALUES ('85adeb743adbcd35b7cf642df747d5f128e6125a', 'soal', 'soal', 0xD69AEAED31B2EF9D2D4338276965F075, '0', 'soal@mail.com', '2025-01-30 11:02:07', NULL, 'TRUE');
 INSERT INTO `lke_user` (`uid`, `UserName`, `FullName`, `PassEnc`, `Phone`, `EmailAdds`, `Create_at`, `Update_at`, `actv`) VALUES ('a3fff5eb4d729348ff7aaf71a69bd3e78b072da5', 'user', 'user', 0xD69AEAED31B2EF9D2D4338276965F075, '-', '-', '2025-01-07 19:10:31', '2025-01-29 14:22:59', 'TRUE');
 INSERT INTO `lke_user` (`uid`, `UserName`, `FullName`, `PassEnc`, `Phone`, `EmailAdds`, `Create_at`, `Update_at`, `actv`) VALUES ('c01e70c5551bf859d6de5dd332deaf41c6895742', 'administrator', 'Super Admin', 0xD69AEAED31B2EF9D2D4338276965F075, '-', '-', '2025-01-07 13:47:03', NULL, 'TRUE');
@@ -2451,56 +2486,60 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `View_Jawaban_By_OPD`;
 delimiter ;;
-CREATE PROCEDURE `View_Jawaban_By_OPD`(idx VARCHAR(255),lmt VARCHAR(255), ofst VARCHAR(255))
+CREATE PROCEDURE `View_Jawaban_By_OPD`(IN idx VARCHAR(255), 
+    IN id_opd VARCHAR(255),  -- Tambahkan parameter untuk ID OPD
+    IN lmt VARCHAR(255), 
+    IN ofst VARCHAR(255))
 BEGIN
-  #Routine body goes here...
-	DECLARE lmtx INT;
-	DECLARE ofset INT;
-	DECLARE res VARCHAR(255);
-	DECLARE msg VARCHAR(255);
-	IF (lmt REGEXP '^-?[0-9]+$') THEN
-		SET lmtx = lmt;
-	ELSE
-		SET lmtx = 200;
-	END IF;
-	IF (ofst REGEXP '^-?[0-9]+$') THEN
-		SET ofset = ofst;
-	ELSE
-		SET ofset = 0;
-	END IF;
-	IF(idx IS NULL OR idx ='')THEN
-		SET res = 1;
-		SET msg = 'success';
-		SELECT
-			res, msg,
-			a.Jawaban,
-			d.nama_opd,
-			b.UserName,
-			e.indikator 
-		FROM
-			lke_jawaban AS a
-			INNER JOIN lke_user AS b ON a.userid = b.uid
-			INNER JOIN lke_detail_opd AS c ON b.uid = c.userid
-			INNER JOIN lke_opd AS d ON c.opdid = d.id
-			INNER JOIN lke_indikator AS e ON a.id_indikator = e.id;
-	ELSE
-		SET res = 1;
-		SET msg = 'success';
-		SELECT
-			res, msg,
-			a.Jawaban,
-			d.nama_opd,
-			b.UserName,
-			e.indikator 
-		FROM
-			lke_jawaban AS a
-			INNER JOIN lke_user AS b ON a.userid = b.uid
-			INNER JOIN lke_detail_opd AS c ON b.uid = c.userid
-			INNER JOIN lke_opd AS d ON c.opdid = d.id
-			INNER JOIN lke_indikator AS e ON a.id_indikator = e.id
-			WHERE a.id = idx;
-	
-	END IF;
+    -- Deklarasi Variabel
+    DECLARE lmtx INT DEFAULT 200;
+    DECLARE ofset INT DEFAULT 0;
+    DECLARE res INT DEFAULT 1;
+    DECLARE msg VARCHAR(255) DEFAULT 'success';
+
+    -- Validasi limit dan offset
+    IF (lmt REGEXP '^-?[0-9]+$') THEN
+        SET lmtx = CAST(lmt AS SIGNED);
+    END IF;
+
+    IF (ofst REGEXP '^-?[0-9]+$') THEN
+        SET ofset = CAST(ofst AS SIGNED);
+    END IF;
+
+    -- Cek apakah idx kosong atau tidak
+    IF (idx IS NULL OR idx = '') THEN
+        -- Ambil semua data dengan filter ID OPD dan pagination
+        SELECT 
+            res AS status, msg AS message,
+            a.Jawaban,
+            d.nama_opd,
+            b.UserName,
+            e.indikator 
+        FROM lke_jawaban AS a
+        INNER JOIN lke_user AS b ON a.userid = b.uid
+        INNER JOIN lke_detail_opd AS c ON b.uid = c.userid
+        INNER JOIN lke_opd AS d ON c.opdid = d.id
+        INNER JOIN lke_indikator AS e ON a.id_indikator = e.id
+        WHERE (id_opd IS NULL OR id_opd = '' OR d.id = id_opd)  -- Tambahkan filter ID OPD
+        LIMIT lmtx OFFSET ofset;
+    
+    ELSE
+        -- Ambil data berdasarkan idx dan filter ID OPD
+        SELECT 
+            res AS status, msg AS message,
+            a.Jawaban,
+            d.nama_opd,
+            b.UserName,
+            e.indikator 
+        FROM lke_jawaban AS a
+        INNER JOIN lke_user AS b ON a.userid = b.uid
+        INNER JOIN lke_detail_opd AS c ON b.uid = c.userid
+        INNER JOIN lke_opd AS d ON c.opdid = d.id
+        INNER JOIN lke_indikator AS e ON a.id_indikator = e.id
+        WHERE a.id = idx 
+          AND (id_opd IS NULL OR id_opd = '' OR d.id = id_opd);  -- Tambahkan filter ID OPD
+    
+    END IF;
 END
 ;;
 delimiter ;
@@ -2842,6 +2881,10 @@ delimiter ;;
 CREATE PROCEDURE `View_Penilaian_Mandiri`()
 BEGIN
   #Routine body goes here...
+-- 	harus ada parameternya
+-- baru tampil datanya
+
+
 	SELECT
 	a.id, 
 	a.tahun, 
@@ -2876,6 +2919,20 @@ BEGIN
 	a.tahapan
 FROM
 	lke_aspek AS a
+	
+	WHERE a.id IN (
+	SELECT
+		lke_aspek.id 
+	FROM
+		lke_parameter
+		INNER JOIN lke_indikator ON lke_parameter.id_indikator = lke_indikator.id
+		INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+		INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+		INNER JOIN lke_aspek ON lke_sub_aspek.id_aspek = lke_aspek.id 
+	WHERE
+		lke_aspek.id = a.id 
+	)
+
 ORDER BY
 	a.nama_aspek ASC;
 END

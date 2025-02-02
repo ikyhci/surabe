@@ -111,5 +111,43 @@ class SuperAdminModel extends Model
         }
     }
 
+    // updateOpd
+    public function updateOpd($uidx, $id, $nama_opd)
+    {
+        $query = $this->db->query("CALL Opd_add_edit(?, ?, ?)", [$uidx, $id, $nama_opd]);
+    
+        $result = $query->getRowArray();
+    
+        if ($result['res'] == 1) {
+            return [
+                'res' => 'success',
+                'msg' => $result['msg']
+            ];
+        } else {
+            return [
+                'res' => 'error',
+                'msg' => $result['msg']
+            ];
+        }
+    }
 
+    // deleteOpd
+    public function deleteOpd($uidx, $id)
+    {
+        $query = $this->db->query("CALL Opd_delete(?, ?)", [$uidx, $id]);
+    
+        $result = $query->getRowArray();
+    
+        if ($result['res'] == 1) {
+            return [
+                'res' => 'success',
+                'msg' => $result['msg']
+            ];
+        } else {
+            return [
+                'res' => 'error',
+                'msg' => $result['msg']
+            ];
+        }
+    }
 }
