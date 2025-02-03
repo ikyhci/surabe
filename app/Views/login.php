@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link {csp-style-nonce} href="/assets/fonts/css2.css" rel="stylesheet">
-    <link {csp-style-nonce} rel="stylesheet" href="assets/css/bootstrap.css">
-    <link {csp-style-nonce} rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link {csp-style-nonce} rel="stylesheet" href="assets/css/app.css">
-    <link {csp-style-nonce} rel="stylesheet" href="assets/vendors/toastify/toastify.css">
-    <link {csp-style-nonce} rel="stylesheet" href="assets/css/pages/auth.css">
+    <link {csp-style-nonce} href="<?php echo base_url();?>assets/fonts/css2.css" rel="stylesheet">
+    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.css">
+    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/app.css">
+    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/toastify/toastify.css">
+    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/pages/auth.css">
 </head>
 
 <body>
@@ -68,9 +68,9 @@
 
     </div>
     <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
-    <script {csp-script-nonce} src="assets/vendors/toastify/toastify.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/toastify/toastify.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/bootstrap.bundle.min.js"></script>
-    <script {csp-script-nonce} src="assets/js/pages/auth.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/auth.js"></script>
 </body>
 
 </html>

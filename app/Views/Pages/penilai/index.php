@@ -16,7 +16,7 @@
     <div class="card-body">
       <div class="form-group">
         <select class="choices form-select choices__input" name="aspek" id="aspek">
-          <!-- <option value="">Pilih Aspek</option> -->
+          <option value="" selected disabled>-- Pilih Aspek --</option>
           <?php foreach($aspek as $key => $val) : ?>
             <option value="<?= $val->id ?>"><?= $val->nama_aspek. ', ' . $val->sub_aspek . ' Tahun ' . $val->tahun ?></option>
           <?php endforeach; ?>
@@ -35,31 +35,43 @@
 
 <?= $this->section('script') ?>
 
-<script {csp-script-nonce} src="/assets/vendors/jquery/jquery.min.js"></script>
-<link {csp-style-nonce} rel="stylesheet" href="/assets/vendors/dataTables/dataTables.min.css">
-<script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
+<script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/jquery/jquery.min.js"></script>
+<link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>/assets/vendors/dataTables/dataTables.min.css">
+<script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/dataTables/dataTables.min.js"></script>
 
-<link {csp-script-nonce} rel="stylesheet" href="/assets/vendors/choices.js/choices.min.css" />
-<script {csp-script-nonce} src="/assets/vendors/choices.js/choices.min.js"></script>
-<script {csp-script-nonce} src="/assets/vendors/sweetalert2/sweetalert.min.js"></script>
+<link {csp-script-nonce} rel="stylesheet" href="<?php echo base_url();?>/assets/vendors/choices.js/choices.min.css" />
+<script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/choices.js/choices.min.js"></script>
+<script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/sweetalert2/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript">
   $(document).ready(function() {
+    var token = document.getElementById('token').value;
+
     getOpd($('#aspek').val());
 
     $('#aspek').change(function() {
       let aspek = $(this).val();
       getOpd(aspek);
+      console.log(aspek)
     });
 
+    
+
     function getOpd(asp) {
+      var crs = document.getElementById('<?= csrf_token() ?>').value
       if (!asp) {
         asp = $('#aspek').val();
       }
+
+      $.ajaxSetup({
+        headers:{
+          'Authorization': 'Bearer '+token
+           }
+        });
       // if (!asp) {
       //   asp = new Date().getFullYear()
       // }
-      $.get('<?= base_url('api/penilaian/data-opd?asp=') ?>' + asp, function(data) {
+      $.get('<?= base_url('api/penilaian/data-opd?asp=') ?>', function(data) {
         let tbody = '';
         data.data.forEach((opd, index) => {
           let progress = ((opd.detail.jumlah_kondisi / opd.detail.jumlah_indikator) * 100).toFixed(2);

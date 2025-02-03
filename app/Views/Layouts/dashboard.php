@@ -15,7 +15,7 @@
     <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link {csp-style-nonce}  rel="stylesheet" href="<?php echo base_url();?>assets/css/app.css">
-    <link {csp-style-nonce}  rel="shortcut icon" href="<?php echo base_url();?>assets/images/favicon.svg" type="image/x-icon">
+    <link {csp-style-nonce}  rel="shortcut icon" href="<?php echo base_url();?>/favicon.ico" type="image/x-icon">
     <?= $this->renderSection('styles') ?>
 
 </head>

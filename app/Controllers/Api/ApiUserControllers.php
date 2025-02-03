@@ -128,6 +128,8 @@ class ApiUserControllers extends BaseController
                 $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
                 $bkd  = $this->db->query("call View_Bukti_dukung('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getResult();
 
+                $flx = $this->db->query("CALL View_UploadFile(null,'".$userid."','".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+
                 $data = array(
                         'token_crs' => csrf_hash(),
                         'success'   =>  1,
@@ -136,6 +138,7 @@ class ApiUserControllers extends BaseController
                                         'indk'  => $indk,
                                         'prmt'  => $prmt,
                                         'btdk'  => $bkd,
+                                        'flx'   => $flx,
                                         ),
                         );
 

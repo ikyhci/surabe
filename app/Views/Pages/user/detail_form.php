@@ -235,6 +235,7 @@
               contentType: false,
               cache: false,
               success: function(data){
+              
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
                 if (data.dt.indk.tombol == 0) {
@@ -260,15 +261,15 @@
                 document.getElementById('indk').innerHTML = ': '+data.dt.indk.indikator
                 if (data.dt.indk.num == 1 ) {
                   // linear
-                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk.jwbx)
+                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
                 }
                 if (data.dt.indk.num == 2 ) {
                   // yesno
-                  loadYesNo(data.dt.prmt, data.dt.btdk, data.dt.indk.jwbx)
+                  loadYesNo(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
                 }
                 if (data.dt.indk.num == 4 ) {
                   //pilihan ganda
-                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk.jwbx)
+                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
                   
                 }
                 
@@ -278,7 +279,7 @@
 
           })
 
-          function loadPilihanGanda(data,dkn, jwb){
+          function loadPilihanGanda(data,dkn, jwb, fls){
             var str = '<ol type="A">'
             var plh = '';
             var upl = '';
@@ -290,15 +291,35 @@
              }
 
 
-            for (var i = 0; i < dkn.length; i++) {
-                if (dkn[i].filesx === '0') {
-                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
-                }else{
-                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
-                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+dkn[i].filesx+'" target="_blank">'+dkn[i].bukti_dukung+'</a></div></li>'
-                }
+            // for (var i = 0; i < dkn.length; i++) {
+            //     if (dkn[i].filesx === '0') {
+            //       upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+            //     }else{
+            //       upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+            //       flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+dkn[i].filesx+'" target="_blank">'+dkn[i].bukti_dukung+'</a></div></li>'
+            //     }
               
-             }
+            //  }
+             if (jwb.tombol == 0) {
+              for (var i = 0; i < dkn.length; i++) {
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+              
+              }
+
+              for (var i = 0; i < fls.length; i++) {
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+              }
+
+            }else{
+              for (var i = 0; i < dkn.length; i++) {
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+              }
+
+              for (var i = 0; i < fls.length; i++) {
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+              
+              }
+            }
              
 
               str += '</ol>';
@@ -326,14 +347,15 @@
 
             document.getElementById('content-form').innerHTML = str;
             document.getElementById('content-upload').innerHTML = flx;
-            $("#jwb").val(jwb).trigger('change')
+            $("#jwb").val(jwb.jwbx).trigger('change')
           }
 
           function loadLinear(){
 
           }
 
-          function loadYesNo(data,dkn,jwb) {
+          function loadYesNo(data,dkn,jwb, fls) {
+
             var str = '<ol type="*">'
             var plh = '';
             var upl = '';
@@ -344,15 +366,28 @@
               
              }
 
-             for (var i = 0; i < dkn.length; i++) {
-                if (dkn[i].filesx === '0') {
+            if (jwb.tombol == 0) {
+              for (var i = 0; i < dkn.length; i++) {
                   upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
-                }else{
-                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
-                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+dkn[i].filesx+'" target="_blank">'+dkn[i].bukti_dukung+'</a></div></li>'
-                }
               
-             }
+              }
+
+              for (var i = 0; i < fls.length; i++) {
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+              }
+
+            }else{
+              for (var i = 0; i < dkn.length; i++) {
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+              }
+
+              for (var i = 0; i < fls.length; i++) {
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+              
+              }
+            }
+
+             
 
 
 
@@ -382,10 +417,10 @@
             document.getElementById('content-form').innerHTML = str;
             document.getElementById('content-upload').innerHTML = flx;
 
-            if (jwb === 'YA') {
+            if (jwb.jwbx === 'YA') {
               document.getElementById('jwb1').checked = true;
             }
-            if (jwb === 'TIDAK') {
+            if (jwb.jwbx === 'TIDAK') {
               document.getElementById('jwb2').checked = true;
             }
           }
