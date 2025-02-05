@@ -14,6 +14,7 @@ class ApiUserControllers extends BaseController
 {
     
     protected $db;
+    protected $decoded;
 
     public function __construct(){
         $request = request();
@@ -49,9 +50,10 @@ class ApiUserControllers extends BaseController
                 // $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $LIMIT = null;
                 $OFFSET =null;
-                $thn = $this->request->getVar('thn')? $this->request->getVar('thn') : null;;
+                $thn = $this->request->getVar('thn')? $this->request->getVar('thn') : null;
+                $uid = $this->decoded->ids;
                 // $list = $this->db->query("call View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
-                $list = $this->db->query("call View_Penilaian_Mandiri('".$thn."')")->getResult();
+                $list = $this->db->query("call View_Penilaian_Mandiri('".$thn."','".$uid."')")->getResult();
                 $data = array(
                         'token_crs' => csrf_hash(),
                         'dt'        => $list,
@@ -87,7 +89,8 @@ class ApiUserControllers extends BaseController
                 $IDX = base64_decode($this->request->getVar('form'));
                 $LIMIT = null;
                 $OFFSET =null;
-                $list = $this->db->query("call View_List_Data_Soal_User('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $uid = $this->decoded->ids;
+                $list = $this->db->query("call View_List_Data_Soal_User('".$IDX."','".$LIMIT."','".$OFFSET."','".$uid."')")->getResult();
                 $data = array(
                         'token_crs' => csrf_hash(),
                         'dt'        =>  $list,
