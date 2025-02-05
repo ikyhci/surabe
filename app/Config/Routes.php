@@ -28,7 +28,7 @@ $routes->group('dashboard',['filter' => 'appFilter'], function($routes){
 
 
 // user page routes 
-$routes->group('dashboard',['filter' => 'roles:User'],  function($routes){
+$routes->group('dashboard',['filter' => ['roles:User','cors']],  function($routes){
 	$routes->get('penilaian-mandiri', 'Pages\PagesUsersControllers::index');
 	$routes->post('get-detail-form', 'Pages\PagesUsersControllers::detailForm');
 	$routes->get('detail-form', 'Pages\PagesUsersControllers::listDetail');
@@ -44,7 +44,7 @@ $routes->group('api',  function($routes){
 
 
 // Soal page routes , ,
-$routes->group('dashboard',['filter' => 'roles:Soal,Super Admin'], function($routes){
+$routes->group('dashboard',['filter' => ['roles:Soal,Super Admin','cors']], function($routes){
 	$routes->get('tambah-data-penilaian', 'Pages\PagesSoalControllers::addData');
 });
 
@@ -83,7 +83,7 @@ $routes->group('api',  function($routes){
 
 
 // Super Admin Routes ['filter' => 'appFilter','cors'],
-$routes->group('dashboard',['filter' => 'appFilter',], function($routes){
+$routes->group('dashboard',['filter' => ['roles:Super Admin','cors']], function($routes){
 	$routes->get('user-management', 'Pages\PagesSuperAdminControllers::manageUsers');
 	$routes->get('user-management/(:segment)', 'Pages\PagesSuperAdminControllers::manageUsersDetail/$1');
 	$routes->get('opd-management', [PagesSuperAdminControllers::class, 'manageOpd']);
@@ -101,7 +101,7 @@ $routes->group('api', function($routes){
 });
 
 // route Penilai
-$routes->group('dashboard',['filter' => 'appFilter'], function($routes){
+$routes->group('dashboard',['filter' => ['roles:Penilai,Super Admin','cors']], function($routes){
 	$routes->get('penilaian', 'Pages\PagesPenilaiControllers::index');
 	$routes->get('penilaian/detail-form', 'Pages\PagesPenilaiControllers::detailForm');
 });

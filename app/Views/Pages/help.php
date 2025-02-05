@@ -31,7 +31,7 @@
 
 <?= $this->section('script') ?>
 <!-- Script -->
-<script {csp-script-nonce} src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>""></script>
 <script {csp-script-nonce}  type="text/javascript">
     
 </script>
