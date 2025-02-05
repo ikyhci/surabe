@@ -46,11 +46,12 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
                 
-                $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+                // $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $LIMIT = null;
                 $OFFSET =null;
+                $thn = $this->request->getVar('thn')? $this->request->getVar('thn') : null;;
                 // $list = $this->db->query("call View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
-                $list = $this->db->query("call View_Penilaian_Mandiri()")->getResult();
+                $list = $this->db->query("call View_Penilaian_Mandiri('".$thn."')")->getResult();
                 $data = array(
                         'token_crs' => csrf_hash(),
                         'dt'        => $list,

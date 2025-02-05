@@ -131,7 +131,7 @@
             <div class="row">
               <div class=" col-sm-6">
                 <div class="form-group">
-                  <select class="choices form-select">
+                  <select class="choices form-select" id="pilih-tahun">
                       <option value="square">Square</option>
                       <option value="rectangle">Rectangle</option>
                       <option value="rombo">Rombo</option>
@@ -309,14 +309,14 @@
           'Kebijakan Internal Terkait Tatakelola SPBE',
           'Kebijakan Internal Layanan SPBE',
           'Kelembagaan',
-          'Strategi Dan Perencanaan',
-          'Teknologi Informasi Dan komunikasi',
-          'Layanan AdPem Berbasis Elektronik',
-          'Aplikasi Publik Berbasis Elektronik'
+          // 'Strategi Dan Perencanaan',
+          // 'Teknologi Informasi Dan komunikasi',
+          // 'Layanan AdPem Berbasis Elektronik',
+          // 'Aplikasi Publik Berbasis Elektronik'
         ],
         datasets: [{
           label: 'Aplikasi SPBE Target',
-          data: [2, 2.5, 4, 2, 3, 2.3, 1],
+          data: [2, 2.5, 4],//, 2, 3, 2.3, 1],
           fill: true,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgb(255, 99, 132)',
@@ -326,7 +326,7 @@
           pointHoverBorderColor: 'rgb(255, 99, 132)'
         }, {
           label: 'Aplikasi SPBE Index',
-          data: [1, 3.5, 2.4, 1, 4.5, 3, 2],
+          data: [1, 3.5, 2.4],//, 1, 4.5, 3, 2],
           fill: true,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgb(54, 162, 235)',

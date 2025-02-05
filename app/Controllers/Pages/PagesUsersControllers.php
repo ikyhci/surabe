@@ -9,29 +9,35 @@ use CodeIgniter\Cookie\CookieStore;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Config\Services;
+// use Exception;
 
 class PagesUsersControllers extends BaseController
 {
 
     protected $db;
+    protected $decoded;
     public function __construct(){
 
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
         $token = get_cookie('Authorization', true,'__LKE-');
-        if(is_null($token) || empty($token)) {
-            return redirect()->to(base_url().'unauthorized');
-        }else{
-             $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
     
     public function index()
     {
         if (!empty($this->decoded->rln)) {
+            $IDX = null;
+            $LIMIT = null;
+            $OFFSET =null;
+            $thn = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+
             $usr = $this->decoded->rln;
-            $data = array('usr' => $usr, );
+            $data = array(
+                'usr'  => $usr,
+                'thn'       => $thn,
+                 );
             return view('Pages/user/penilaian_mandiri',$data);
         }else{
             return redirect()->to(base_url().'unauthorized');
@@ -49,6 +55,7 @@ class PagesUsersControllers extends BaseController
             $encode = base64_encode($IDX);
 
             $asp = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
+            
             if ($asp->id != null) {
                  $data = array(
                     'usr'       => $usr,
@@ -56,6 +63,7 @@ class PagesUsersControllers extends BaseController
                     'success'   => $asp->res,
                     'msg'       => $asp->msg,
                     'idx'       => $IDX ,
+                    
                     'dt'        => 'dashboard/detail-form?form='.base64_encode($asp->id),
                     // ''
                   );

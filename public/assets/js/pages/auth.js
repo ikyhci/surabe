@@ -63,7 +63,7 @@
                                         gravity:"top",
                                         position: "center",
                                         backgroundColor: "#DC143C",
-                                        className: "text-dark",
+                                        className: "text-white",
                                     }).showToast();
                                     // console.log(thrownError)
                                     // setTimeout(function(){

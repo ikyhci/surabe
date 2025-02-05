@@ -37,6 +37,7 @@ class Filters extends BaseFilters
         'apiFilter'     => \App\Filters\ApiFilters::class, //register auth
         'appFilter'     => \App\Filters\AppFilters::class, //register auth
         'cors'          => \App\Filters\CorsFilters::class, //register cors
+        'roles'            => \App\Filters\Roles::class,
     ];
 
     /**

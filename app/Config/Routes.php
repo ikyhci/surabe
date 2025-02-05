@@ -20,14 +20,15 @@ $routes->group('api',  function($routes){
 });
 
 //global page ['filter' => 'appFilter','cors'],
-$routes->group('dashboard', function($routes){
+$routes->group('dashboard',['filter' => 'appFilter'], function($routes){
 	$routes->get('help', 'Dashboard::help');
+	$routes->get('', 'Dashboard::index');
 });
 //Users
 
-// user page routes ['filter' => 'appFilter','cors'],
-$routes->group('dashboard',  function($routes){
-	$routes->get('', 'Dashboard::index');
+
+// user page routes 
+$routes->group('dashboard',['filter' => 'roles:User'],  function($routes){
 	$routes->get('penilaian-mandiri', 'Pages\PagesUsersControllers::index');
 	$routes->post('get-detail-form', 'Pages\PagesUsersControllers::detailForm');
 	$routes->get('detail-form', 'Pages\PagesUsersControllers::listDetail');
@@ -42,9 +43,8 @@ $routes->group('api',  function($routes){
 });
 
 
-// Soal page routes , ['filter' => 'appFilter','cors'],
-$routes->group('dashboard', function($routes){
-	$routes->get('', 'Dashboard::index');
+// Soal page routes , ,
+$routes->group('dashboard',['filter' => 'roles:Soal,Super Admin'], function($routes){
 	$routes->get('tambah-data-penilaian', 'Pages\PagesSoalControllers::addData');
 });
 
@@ -83,7 +83,7 @@ $routes->group('api',  function($routes){
 
 
 // Super Admin Routes ['filter' => 'appFilter','cors'],
-$routes->group('dashboard', function($routes){
+$routes->group('dashboard',['filter' => 'appFilter',], function($routes){
 	$routes->get('user-management', 'Pages\PagesSuperAdminControllers::manageUsers');
 	$routes->get('user-management/(:segment)', 'Pages\PagesSuperAdminControllers::manageUsersDetail/$1');
 	$routes->get('opd-management', [PagesSuperAdminControllers::class, 'manageOpd']);
@@ -101,7 +101,7 @@ $routes->group('api', function($routes){
 });
 
 // route Penilai
-$routes->group('dashboard', function($routes){
+$routes->group('dashboard',['filter' => 'appFilter'], function($routes){
 	$routes->get('penilaian', 'Pages\PagesPenilaiControllers::index');
 	$routes->get('penilaian/detail-form', 'Pages\PagesPenilaiControllers::detailForm');
 });

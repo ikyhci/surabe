@@ -5,6 +5,9 @@ namespace App\Filters;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Throwable; 
 
 class AppFilters implements FilterInterface
 {
@@ -28,29 +31,46 @@ class AppFilters implements FilterInterface
         //
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('Authorization', true,'__Secure-') ? get_cookie('Authorization', true,'__Secure-') : null;
+        // $token = get_cookie('Authorization', true,'__Secure-') ? get_cookie('Authorization', true,'__Secure-') : null;
+        $token = get_cookie('Authorization', true,'__LKE-') ? get_cookie('Authorization', true,'__LKE-') : null;
 
   
         // check if token is null or empty
         if(is_null($token) || empty($token)) {
-            // $response = service('response');
-            // $response->setJSON(['success' => false, 'message' => 'Unauthorized. Token is required!']);
-            // $response->setStatusCode(401);
-            // return $response;
-            return redirect()->to(base_url().'unauthorized');
+            $response = service('response');
+            $response->setJSON(['success' => false, 'message' => 'Unauthorized. Token is required!']);
+            $response->setStatusCode(401);
+            return $response;
+            // return redirect()->to(base_url().'unauthorized');
         }
 
   
         try {
             $decoded = JWT::decode($token, new Key($key, 'HS256'));
+
+           
+            
+
         } catch (\Throwable $ex) {
             // $response = service('response');
             // $response->setBody('Access denied Invalid Token.');
             // $response->setStatusCode(401);
-            // delete_cookie('__Secure-Authorization');
+            // // delete_cookie('__Secure-Authorization');
             // return $response;
             return redirect()->to(base_url().'unauthorized');
         }
+
+        // $role = $arguments['0'] ? $arguments['0'] : '';
+
+        // if ($decoded->rln != $role) {
+        //     // return redirect()->to(base_url().'unauthorized');
+        //     $response = service('response');
+        //     $response->setBody('Access denied Invalid Token. decode :'.$decoded->rln.'  dan '.$role .'argumernt :' );
+        //     $response->setStatusCode(401);
+        //     // delete_cookie('__Secure-Authorization');
+        //     return $response;
+        // }
+
     }
 
     /**

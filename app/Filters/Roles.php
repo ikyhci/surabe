@@ -5,9 +5,11 @@ namespace App\Filters;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Throwable; 
 
-class ApiFilters implements FilterInterface
+class Roles implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -26,34 +28,29 @@ class ApiFilters implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        //
+        helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $header = $request->getHeader("Authorization");
-        $token = null;
-  
-        // extract the token from the header
-        if(!empty($header)) {
-            if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
-                $token = $matches[1];
-            }
-        }
+        // $token = get_cookie('Authorization', true,'__Secure-') ? get_cookie('Authorization', true,'__Secure-') : null;
+        $token = get_cookie('Authorization', true,'__LKE-') ? get_cookie('Authorization', true,'__LKE-') : null;
+
   
         // check if token is null or empty
         if(is_null($token) || empty($token)) {
-            $response = service('response');
-            $response->setBody('Access denied');
-            $response->setStatusCode(401);
-            return $response;
+            return redirect()->to(base_url().'unauthorized');
         }
-  
+
         try {
-            // $decoded = JWT::decode($token, $key, array("HS256"));
             $decoded = JWT::decode($token, new Key($key, 'HS256'));
-        } catch (Exception $ex) {
-            $response = service('response');
-            $response->setBody('Access denied');
-            $response->setStatusCode(401);
-            return $response;
+
+        } catch (\Throwable $ex) {
+            return redirect()->to(base_url().'unauthorized');
+        }
+
+        $role = $arguments['0'] ? $arguments['0'] : '';
+
+        if ($decoded->rln != $role) {
+            return redirect()->to(base_url().'unauthorized');
+         
         }
     }
 

@@ -20,13 +20,10 @@
         <div class="card-body">
             <div class="form-group">
                   <select class="choices form-select" id="pilih-tahun">
-                      <option value="square">-- Pilih Tahun Form --</option>
-                      <option value="rectangle">Rectangle</option>
-                      <option value="rombo">Rombo</option>
-                      <option value="romboid">Romboid</option>
-                      <option value="trapeze">Trapeze</option>
-                      <option value="traible">Triangle</option>
-                      <option value="polygon">Polygon</option>
+                      <option value="" selected disabled>-- Pilih Tahun Form --</option>
+                      <?php foreach ($thn as $key ): ?>
+                        <option value="<?=$key->tahun;?>"><?=$key->tahun;?></option>
+                      <?php endforeach ?>
                   </select>
                 </div>   
             <!-- Data Table  -->
@@ -62,18 +59,30 @@
 <?= $this->include('Pages/user/popup') ?>
 <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/choices.js/choices.min.js"></script>
     <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
-    <script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/dataTables/dataTables.min.js"></script>
     <script {csp-script-nonce} type="text/javascript">
     var token = document.getElementById('token').value;
+
+    $(document).change('#pilih-tahun', function(){
+      
+      var optionSelected = $(this).find("option:selected");
+      var valueSelected  = optionSelected.val();
+      LoadDatatable(valueSelected); 
+    })
     
     LoadDatatable(); 
-    function LoadDatatable(){
+    function reloadTable(){
+      var t = $("#datatable").DataTable();
+      t.ajax.reload(null, false);
+    }
 
+    function LoadDatatable(thn){
       var csrf = document.getElementById('<?= csrf_token() ?>').value;
       var t = $('#datatable').DataTable({
           "dom": 'rtip',
           "scrollX": false,
           "processing": true,
+          "destroy": true,
           "language": {
             "processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
           },
@@ -84,7 +93,8 @@
               'Authorization': 'Bearer '+token
             },
             "data":{
-              <?= csrf_token() ?>: csrf
+              <?= csrf_token() ?>: csrf,
+              'thn': thn
             },
             "method": "GET",
             "dataSrc": function(data){

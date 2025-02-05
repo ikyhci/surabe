@@ -188,8 +188,8 @@ class ApiSoalControllers extends BaseController
                 // 
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-                $aspk   = $this->request->getVar('aspek');
-                $sasp   = $this->request->getVar('subaspek');
+                // $aspk   = $this->request->getVar('aspek');
+                // $sasp   = $this->request->getVar('subaspek');
                 $ssasp  = $this->request->getVar('subsubaspek');
                 $nama   = $this->request->getVar('nama');
                 $jjwb   = $this->request->getVar('jjwb');

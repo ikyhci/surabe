@@ -12,17 +12,20 @@ use CodeIgniter\HTTP\Header;
 class Dashboard extends BaseController
 {
 
+    protected $decoded;
+
     public function __construct(){
         // parent::__construct();
         helper('cookie');
         // // $this->db = db_connect();
         $key = getenv('TOKEN_SECRET');
         $token = get_cookie('Authorization', true,'__LKE-');
-        if(is_null($token) || empty($token)) {
-            return redirect()->to(base_url().'unauthorized');
-        }else{
-             $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        // if(is_null($token) || empty($token)) {
+        //     return redirect()->to(base_url().'unauthorized');
+        // }else{
+        //      $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        // }
        
         // $this->db = db_connect();
     }
@@ -35,8 +38,6 @@ class Dashboard extends BaseController
                 'usr' => $usr,
                 'uname' => $this->decoded->iss, 
             );
-            
-
             if ($usr == 'User') {
 
                 return view('Pages/user/dashboard',$data);

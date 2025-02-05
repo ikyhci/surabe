@@ -1,7 +1,7 @@
 <?= $this->extend('Layouts/dashboard') ?>
 <?= $this->section('styles') ?>
 <!-- Styles -->
-    <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/choices.js/choices.min.css" />
+   
     <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/costum.css">
     <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
     <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
@@ -78,9 +78,9 @@
 <input type="hidden" name="form" id="form" value="<?= $idx;?>">
 <!-- popup -->
 <?= $this->include('Pages/user/popup') ?>
-<script {csp-script-nonce} src="assets/vendors/choices.js/choices.min.js"></script>
+
     <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
-    <script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/dataTables/dataTables.min.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/dataTables.rowGroup.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/rowGroup.dataTables.js"></script>
      <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/sweetalert/sweetalert.min.js"></script>
@@ -181,7 +181,7 @@
                         var btn = '';
                         var btncl = '';
                         if (JsonResultRow.tombol == 1) {
-                          btncl = 'btn-outline-success'
+                          btncl = 'btn-outline-primary'
                         }else{
                           btncl = 'btn-outline-warning'
                         }
@@ -261,7 +261,7 @@
                 document.getElementById('indk').innerHTML = ': '+data.dt.indk.indikator
                 if (data.dt.indk.num == 1 ) {
                   // linear
-                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
+                  loadLinear(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
                 }
                 if (data.dt.indk.num == 2 ) {
                   // yesno
@@ -290,16 +290,6 @@
                plh += '<option value="'+String.fromCharCode(65+i)+'">'+String.fromCharCode(65+i)+'</option>'
              }
 
-
-            // for (var i = 0; i < dkn.length; i++) {
-            //     if (dkn[i].filesx === '0') {
-            //       upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
-            //     }else{
-            //       upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
-            //       flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+dkn[i].filesx+'" target="_blank">'+dkn[i].bukti_dukung+'</a></div></li>'
-            //     }
-              
-            //  }
              if (jwb.tombol == 0) {
               for (var i = 0; i < dkn.length; i++) {
                   upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
@@ -350,9 +340,77 @@
             $("#jwb").val(jwb.jwbx).trigger('change')
           }
 
-          function loadLinear(){
+          function loadLinear(data,dkn,jwb, fls){
+            var str = '<ol type="A">'
+            // var plh = '';
+            var upl = '';
+            var flx = '<ol type="*">';
 
+             for (var i = 0; i < data.length; i++) {
+               str += '<li>'+data[i].nama_parameter+'</li>'
+               // plh += '<option value="'+String.fromCharCode(65+i)+'">'+String.fromCharCode(65+i)+'</option>'
+             }
+             
+             if (jwb.tombol == 0) {
+              for (var i = 0; i < dkn.length; i++) {
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+              
+              }
+
+              for (var i = 0; i < fls.length; i++) {
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+              }
+
+            }else{
+              for (var i = 0; i < dkn.length; i++) {
+                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+              }
+
+              for (var i = 0; i < fls.length; i++) {
+                  flx += '<li><div class="form-group"><a href="<?php echo base_url();?>uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+              
+              }
+            }
+             
+
+              str += '</ol>';
+              str += '<form id="formdata" enctype="multipart/form-data">'+
+                        '<input type="hidden" name="indikator" value="'+dkn[0].id_indikator+'">'+
+                        '<div class="col-md-12 mb-6">'+
+                          '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
+                          '<input type="range" class="form-range" name="jwbn" value="0" min="0" max="100" id="customRange2" required>'+
+                          '<small id="ranges">Value : 0</small>'+
+                        '</div></div>'+
+                        '<h6>Bukti Dukung : </h6>'+
+                         '<div class="row">'+
+                            '<div class="col-sm-12"><ol>'+
+                              upl+
+                            '</ol></div>'+
+                          '</div>'+
+                        
+                      '</form>';
+
+                flx += '</ol>';
+
+
+
+            document.getElementById('content-form').innerHTML = str;
+            document.getElementById('content-upload').innerHTML = flx;
+
+            $('#customRange2').val(jwb.jwbx)
+            var output = document.getElementById("ranges");
+            output.innerHTML = 'Value : '+jwb.jwbx
           }
+
+          $(document).on('change', '#customRange2',function(){
+            var slider = document.getElementById("customRange2");
+            var output = document.getElementById("ranges");
+            output.innerHTML = 'Value : '+slider.value;
+            // console.log(slider.value)
+            slider.oninput = function() {
+              output.innerHTML = 'Value : '+this.value;
+            }
+          })
 
           function loadYesNo(data,dkn,jwb, fls) {
 

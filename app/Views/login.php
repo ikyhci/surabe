@@ -22,7 +22,6 @@
                     <div class="auth-logo">
                         <!-- <a href="/"><img src="assets/images/logo/logo.png" alt="Logo"></a> -->
                     </div>
-                    <!-- <div class="text-center pesan-valid" id="valid"> -->
                     <h1 class="auth-title">Log in.</h1>
 
                     <form id="login" method="POST" class="needs-validations login-form" novalidate>
