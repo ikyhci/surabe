@@ -19,7 +19,7 @@ class ApiSuperAdminControllers extends BaseController
     protected $db;
     
     public function __construct(){
-        $request = request();
+        $response = service('response');
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
@@ -28,14 +28,15 @@ class ApiSuperAdminControllers extends BaseController
                 $token = $matches[1];
             }
         }
-        if(is_null($token) || empty($token)) {
-            $response = service('response');
-            $response->setBody('Access denied');
-            $response->setStatusCode(401);
-            return $response;
-        }else{
-            $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        }
+        // if(is_null($token) || empty($token)) {
+        //     $response = service('response');
+        //     $response->setBody('Access denied');
+        //     $response->setStatusCode(401);
+        //     return $response;
+        // }else{
+        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        // }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
         $this->superAdminModel = new SuperAdminModel();
     }

@@ -9,7 +9,11 @@ class PublicPages extends BaseController
 {
     public function login()
     {
-        //
         return view('login');
+    }
+
+    public function Unauthorized()
+    {
+        return view('Pages/unauthorized');
     }
 }

@@ -26,6 +26,12 @@ class Roles implements FilterInterface
      *
      * @return RequestInterface|ResponseInterface|string|void
      */
+
+
+    protected $key;
+    protected $decoded;
+    protected $header;
+    protected $token;
     public function before(RequestInterface $request, $arguments = null)
     {
         helper('cookie');
@@ -46,11 +52,10 @@ class Roles implements FilterInterface
             return redirect()->to(base_url().'unauthorized');
         }
 
-        $role = $arguments['0'] ? $arguments['0'] : '';
+        //check role with argument
+        if (!in_array($decoded->rln , $arguments, true)) {
 
-        if ($decoded->rln != $role) {
             return redirect()->to(base_url().'unauthorized');
-         
         }
     }
 

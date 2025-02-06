@@ -13,9 +13,12 @@ use CodeIgniter\HTTP\Header;
 class ApiSoalControllers extends BaseController
 {
     protected $db;
+    protected $decoded;
+    protected $response;
 
     public function __construct(){
         $request = request();
+        $response = service('response');
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
@@ -24,14 +27,19 @@ class ApiSoalControllers extends BaseController
                 $token = $matches[1];
             }
         }
-        if(is_null($token) || empty($token)) {
-            $response = service('response');
-            $response->setBody('Access denied');
-            $response->setStatusCode(401);
-            return $response;
-        }else{
-            $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        }
+        // if(is_null($token) || empty($token)) {
+        //     $data = array(
+        //             'token_crs'     =>  csrf_hash(),
+        //             'success'       =>  0,
+        //             'msg'           =>  'Access denied',
+        //             'StatusCode'    =>  '401',
+        //             );
+        //     return $this->response->setJSON($data);
+
+        // }else{
+        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        // }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
 
