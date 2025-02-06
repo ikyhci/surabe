@@ -14,11 +14,9 @@ class ApiSoalControllers extends BaseController
 {
     protected $db;
     protected $decoded;
-    protected $response;
 
     public function __construct(){
         $request = request();
-        $response = service('response');
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");

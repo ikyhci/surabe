@@ -19,7 +19,7 @@ class ApiSuperAdminControllers extends BaseController
     protected $db;
     
     public function __construct(){
-        $response = service('response');
+        $request = request();
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
