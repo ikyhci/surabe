@@ -49,6 +49,7 @@ Thumbs.db
 *.wmv
 
 # CodeIgniter4 specific files
+public/uploadfile/*
 writable/*
 !writable/.htaccess
 .env
@@ -56,3 +57,4 @@ phpunit.xml
 phpunit.xml.dist
 build/
 tests/_output/
+*.sql
