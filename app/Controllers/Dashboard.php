@@ -63,10 +63,6 @@ class Dashboard extends BaseController
         }
     }
 
-    public function Unauthorized()
-    {
-        return view('Pages/unauthorized');
-    }
 
     public function help()
     {

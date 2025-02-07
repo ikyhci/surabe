@@ -12,15 +12,16 @@ $routes->setAutoRoute(false);
 
 // $routes->get('/', 'Dashboard::index');
 $routes->get('/','PublicPages::login');
-$routes->get('/unauthorized','Dashboard::Unauthorized');
+$routes->get('/unauthorized','PublicPages::Unauthorized');
 
+//login logout
 $routes->group('api',  function($routes){
 	$routes->post('login','Auth\AuthControllers::auth');
-	$routes->post('logout','Auth\AuthControllers::Logout');
+	// $routes->post('logout','Auth\AuthControllers::Logout');
 });
 
 //global page ['filter' => 'appFilter','cors'],
-$routes->group('dashboard',['filter' => 'appFilter'], function($routes){
+$routes->group('dashboard',['filter' => ['appFilter','roles:User,Soal,Super Admin,Penilai']], function($routes){
 	$routes->get('help', 'Dashboard::help');
 	$routes->get('', 'Dashboard::index');
 });
@@ -35,7 +36,7 @@ $routes->group('dashboard',['filter' => ['roles:User','cors']],  function($route
 });
 
 //Api Users ['filter' => 'apiFilter','cors'],
-$routes->group('api',  function($routes){
+$routes->group('api', ['filter' => ['apiFilter:User','cors']], function($routes){
 	$routes->get('get-penilaian-mandiri', 'Api\ApiUserControllers::getPenilaianMandiri');
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
@@ -50,7 +51,7 @@ $routes->group('dashboard',['filter' => ['roles:Soal,Super Admin','cors']], func
 
 //end soal
 // Soal Api Routes  ['filter' => 'apiFilter','cors'],
- $routes->group('api', function($routes){
+ $routes->group('api',['filter' => ['apiFilter:Soal,Super Admin','cors']], function($routes){
 	$routes->post('save-aspek', 'Api\ApiSoalControllers::saveAspek');
 	$routes->post('save-sub-aspek', 'Api\ApiSoalControllers::saveSubAspek');
 	$routes->post('save-sub-sub-aspek', 'Api\ApiSoalControllers::saveSubSubAspek');
@@ -69,7 +70,7 @@ $routes->group('dashboard',['filter' => ['roles:Soal,Super Admin','cors']], func
  });
 
 // Global API ['filter' => 'apiFilter','cors'],
-$routes->group('api',  function($routes){
+$routes->group('api',['filter' => ['apiFilter:Soal,Super Admin,Penilai,User','cors']],  function($routes){
 	$routes->get('get-penilaian-spbe', 'Api\ApiGlobalControllers::getPenilain');
 	$routes->get('get-aspek', 'Api\ApiGlobalControllers::getAspek');
 	$routes->get('get-sub-aspek', 'Api\ApiGlobalControllers::getSubAspek');
@@ -79,6 +80,9 @@ $routes->group('api',  function($routes){
 	$routes->get('get-opd', 'Api\ApiGlobalControllers::getOPD');
 	$routes->get('get-roles', 'Api\ApiGlobalControllers::getRoles');
 	$routes->get('get-bukti-dukung', 'Api\ApiGlobalControllers::getBuktiDukung');
+
+	// Logout
+	$routes->post('logout','Auth\AuthControllers::Logout');
 });
 
 
@@ -90,7 +94,7 @@ $routes->group('dashboard',['filter' => ['roles:Super Admin','cors']], function(
 });
 
 // Super Admin API Routes ['filter' => 'apiFilter','cors'],
-$routes->group('api', function($routes){
+$routes->group('api',['filter' => ['apiFilter:Super Admin','cors']], function($routes){
 	$routes->get('get-users', 'Api\ApiSuperAdminControllers::getUsers');
 	$routes->get('get-user/(:segment)', 'Api\ApiSuperAdminControllers::getUser/$1');
 	$routes->POST('put-user/(:any)', 'Api\ApiSuperAdminControllers::updateUser/$1');

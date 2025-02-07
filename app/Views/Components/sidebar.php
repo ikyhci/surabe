@@ -42,7 +42,7 @@ $first_part = $components[1];
         </li>
         <?php } ;?>
 
-        <?php if ($usr == 'Penilai') {
+        <?php if ($usr == 'Penilai' || $usr == 'Super Admin') {
           ?>
 
         <li class="sidebar-item <?php if ($first_part=="/penilaian") {echo "active"; } else  {echo "";} ?>">
@@ -55,7 +55,7 @@ $first_part = $components[1];
           </a>
         </li> 
       <?php };?>
-      <?php if ($usr == 'Soal') {
+      <?php if ($usr == 'Soal' || $usr == 'Super Admin') {
           ?>
 
         <li class="sidebar-item <?php if ($first_part=="/tambah-data-penilaian") {echo "active"; } else  {echo "";} ?>">

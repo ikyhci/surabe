@@ -26,6 +26,10 @@ class AppFilters implements FilterInterface
      *
      * @return RequestInterface|ResponseInterface|string|void
      */
+    
+    protected $key;
+    protected $decoded;
+    protected $token;
     public function before(RequestInterface $request, $arguments = null)
     {
         //
@@ -37,39 +41,19 @@ class AppFilters implements FilterInterface
   
         // check if token is null or empty
         if(is_null($token) || empty($token)) {
-            $response = service('response');
-            $response->setJSON(['success' => false, 'message' => 'Unauthorized. Token is required!']);
-            $response->setStatusCode(401);
-            return $response;
-            // return redirect()->to(base_url().'unauthorized');
+
+            return redirect()->to(base_url().'unauthorized');
         }
 
   
         try {
-            $decoded = JWT::decode($token, new Key($key, 'HS256'));
 
-           
-            
+            $decoded = JWT::decode($token, new Key($key, 'HS256'));  
 
         } catch (\Throwable $ex) {
-            // $response = service('response');
-            // $response->setBody('Access denied Invalid Token.');
-            // $response->setStatusCode(401);
-            // // delete_cookie('__Secure-Authorization');
-            // return $response;
+
             return redirect()->to(base_url().'unauthorized');
         }
-
-        // $role = $arguments['0'] ? $arguments['0'] : '';
-
-        // if ($decoded->rln != $role) {
-        //     // return redirect()->to(base_url().'unauthorized');
-        //     $response = service('response');
-        //     $response->setBody('Access denied Invalid Token. decode :'.$decoded->rln.'  dan '.$role .'argumernt :' );
-        //     $response->setStatusCode(401);
-        //     // delete_cookie('__Secure-Authorization');
-        //     return $response;
-        // }
 
     }
 

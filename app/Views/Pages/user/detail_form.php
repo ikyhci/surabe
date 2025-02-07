@@ -279,7 +279,10 @@
 
           })
 
-          function loadPilihanGanda(data,dkn, jwb, fls){
+          function loadPilihanGanda(data, dkn, jwb, fls){
+            // const sortbydate = (data) => data.sort().reverse()
+            // console.log(data)
+            // console.log(sortbydate(data))
             var str = '<ol type="A">'
             var plh = '';
             var upl = '';

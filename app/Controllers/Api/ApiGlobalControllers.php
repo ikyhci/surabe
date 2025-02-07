@@ -28,14 +28,19 @@ class ApiGlobalControllers extends BaseController
                 $token = $matches[1];
             }
         }
-        if(is_null($token) || empty($token)) {
-            $response = service('response');
-            $response->setBody('Access denied');
-            $response->setStatusCode(401);
-            return $response;
-        }else{
-            $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        }
+
+        // if(is_null($token) || empty($token)) {
+        //     $data = array(
+        //             'token_crs'     =>  csrf_hash(),
+        //             'success'       =>  0,
+        //             'msg'           =>  'Access denied',
+        //             'StatusCode'    =>  '401',
+        //             );
+        //     return $response->setJSON($data);
+        // }else{
+        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+        // }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
     
@@ -78,11 +83,12 @@ class ApiGlobalControllers extends BaseController
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
-            return $this->response->setJSON($data);
+                    'token_crs'     =>  csrf_hash(),
+                    'success'       =>  0,
+                    'msg'           =>  'Access denied cntrl',
+                    'StatusCode'    =>  '401',
+                    );
+            return  json_encode($data);
         }
     }
 
