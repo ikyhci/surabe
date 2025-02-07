@@ -15,7 +15,14 @@
 #--------------------------------------------------------------------
 
 APPNAME=lke
-# CI_ENVIRONMENT = production
+ #CI_ENVIRONMENT = production
+ #CI_ENVIRONMENT = development
+
+#--------------------------------------------------------------------
+# TOKEN JWT
+#--------------------------------------------------------------------
+
+TOKEN_SECRET = 77268ertfgfft7dggafs762t3o8gyf7gfo47gofuyg764guygus6y4
 
 #--------------------------------------------------------------------
 # APP
@@ -31,10 +38,10 @@ APPNAME=lke
 # DATABASE
 #--------------------------------------------------------------------
 
-database.default.hostname = mariadb
-database.default.database = lke
-database.default.username = lke
-database.default.password = lke
+database.default.hostname = localhost
+database.default.database = lke_pengukuran_irb
+database.default.username = root
+database.default.password = QwErTy@12345
 database.default.DBDriver = MySQLi
 database.default.DBPrefix =
 database.default.port = 3306
