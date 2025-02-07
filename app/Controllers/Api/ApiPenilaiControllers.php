@@ -56,9 +56,10 @@ class ApiPenilaiControllers extends BaseController
 
     public function jawabanOpdIndikator()
     {
-        $dtOpd = $this->request->getVar('dataOpd');
-        $indikator = json_decode(base64_decode($dtOpd));
-        
+        $penilaianModel = new PenilaianModel();
+        $idOpd = $this->request->getVar('idOpd');
+        $id_indikator = $this->request->getVar('id');
+        $indikator = $penilaianModel->indikatorAndJawabanOpd($id_indikator, $idOpd);
         $response = [
             'csrf_token' => csrf_hash(),
             'status' => 200,
@@ -70,11 +71,18 @@ class ApiPenilaiControllers extends BaseController
 
     public function simpanPoint()
     {
-        $data = $this->request->getVar('data');
-        $point = $this->request->getVar('point');
+        
+        $dataForm = $this->request->getVar('dataForm');
+        parse_str($dataForm, $parsedData);
+        $data = $parsedData['data'];
+        $point = $parsedData['point'];
+        $keterangan = $parsedData['keterangan'];
+        $aprv = isset($parsedData['aprv']) ? $parsedData['aprv'] : null;
+        $jawaban = isset($parsedData['jawaban']) ? $parsedData['jawaban'] : null;
+
         $id_jawaban = json_decode(base64_decode($data))->kondisiOpd[0]->id_jawaban;
         $penilaianModel = new PenilaianModel();
-        $update = $penilaianModel->updatePoint($id_jawaban, $point);
+        $update = $penilaianModel->updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban);
         if ($update === false) {
             $response = [
                 'status' => 400,
@@ -102,5 +110,56 @@ class ApiPenilaiControllers extends BaseController
         //     'point' => $point
         // ];
         // return $this->response->setJSON($response);
+    }
+
+    public function uploadBuktiDukung(){
+
+        $penilaianModel = new PenilaianModel();
+        $idOpd = $this->request->getVar('idOpd');
+        $id_indikator = $this->request->getVar('idIndikator');
+        $idbkt = $this->request->getVar('id');
+        $indikator = $penilaianModel->indikatorAndJawabanOpd($id_indikator, $idOpd);
+
+        $file = $this->request->getFile('file');
+        if (!$file->isValid()) {
+            $response = [
+                'csrf_token' => csrf_hash(),
+                'status' => 400,
+                'message' => $file->getErrorString(),
+                'data' => $indikator
+            ];
+            return $this->response->setJSON($response);
+        }
+
+        $newName = $file->getRandomName();
+        $file->move('uploadfile', $newName);
+        if ($file->hasMoved()) {
+            $savebukti = $penilaianModel->saveBuktiDukung($idOpd, $idbkt, $newName);
+            if ($savebukti === false) {
+                unlink('uploadfile/' . $newName);
+                $response = [
+                    'csrf_token' => csrf_hash(),
+                    'status' => 400,
+                    'message' => 'File Gagal diunggah',
+                    'data' => $indikator
+                ];
+            }else {
+                $response = [
+                    'csrf_token' => csrf_hash(),
+                    'status' => 200,
+                    'message' => 'File Berhasil diunggah',
+                    'data' => $indikator
+                ];
+            }
+        } else {
+            $response = [
+                'csrf_token' => csrf_hash(),
+                'status' => 400,
+                'message' => 'File gagal diunggah',
+                'data' => $indikator
+            ];
+        }
+        
+        return $this->response->setJSON($response);
     }
 }

@@ -20,6 +20,9 @@ class Dashboard extends BaseController
         // // $this->db = db_connect();
         $key = getenv('TOKEN_SECRET');
         $token = get_cookie('Authorization', true,'__LKE-');
+        if (!$token) {
+            return redirect()->to(base_url().'unauthorized');
+        }
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         // if(is_null($token) || empty($token)) {
         //     return redirect()->to(base_url().'unauthorized');

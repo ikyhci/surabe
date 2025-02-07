@@ -74,7 +74,7 @@
 
 <link {csp-style-nonce} rel="stylesheet" href="/assets/vendors/dataTables/dataTables.min.css">
 <script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
-<script {csp-script-nonce} src="/assets/vendors/sweetalert2/sweetalert.min.js"></script>
+<script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript">
 

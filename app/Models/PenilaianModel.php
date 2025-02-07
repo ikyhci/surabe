@@ -93,7 +93,7 @@ class PenilaianModel extends Model
     {
         if ($indikator_id && !$aspek_id) {
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai')
+                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
                 ->join('lke_user b', 'a.userid = b.uid', 'inner')
                 ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
                 ->join('lke_opd d', 'c.opdid = d.id', 'inner')
@@ -107,7 +107,7 @@ class PenilaianModel extends Model
                 ->getResultArray();
         }elseif(!$indikator_id && $aspek_id){
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai')
+                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
                 ->join('lke_user b', 'a.userid = b.uid', 'inner')
                 ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
                 ->join('lke_opd d', 'c.opdid = d.id', 'inner')
@@ -121,7 +121,7 @@ class PenilaianModel extends Model
                 ->getResultArray();
         }elseif($indikator_id && $aspek_id){
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai')
+                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
                 ->join('lke_user b', 'a.userid = b.uid', 'inner')
                 ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
                 ->join('lke_opd d', 'c.opdid = d.id', 'inner')
@@ -136,7 +136,7 @@ class PenilaianModel extends Model
                 ->getResultArray();
         }else{
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator')
+                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
                 ->join('lke_user b', 'a.userid = b.uid', 'inner')
                 ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
                 ->join('lke_opd d', 'c.opdid = d.id', 'inner')
@@ -154,6 +154,9 @@ class PenilaianModel extends Model
     {
         // $sql = "CALL View_Aspek('".$id_asp."', null, null)";
         $aspek = $this->db->query("CALL View_Aspek('".$id_asp."', null, null)")->getRow();
+        if (!$aspek) {
+            return null;
+        }
         // dd([$aspek, $id_asp, $id_opd, 'sql' => $sql]);
         $aspek->subaspek = $this->db->table('lke_sub_aspek')->where('id_aspek', $aspek->id)->get()->getResult();
 
@@ -181,6 +184,18 @@ class PenilaianModel extends Model
         return $aspek;
     }
 
+    public function indikatorAndJawabanOpd($id_ind, $id_opd) {
+        $indikator = $this->db->table('lke_indikator')->where('id', $id_ind)->get()->getRow();
+        $indikator->jenis_jawaban = $this->db->table('lke_Jenis_Jawaban')->where('id', $indikator->jenis_jawaban)->get()->getRow();
+        $indikator->parameter = $this->db->table('lke_parameter')->where('id_indikator', $indikator->id)->get()->getResult();
+        $indikator->kondisiOpd = $this->getJawabanByOPD($id_opd, $id_ind, null);
+        $indikator->bukti_dukung = $this->db->table('lke_bukti_dukung')->where('id_indikator', $indikator->id)->get()->getResult();
+        foreach($indikator->kondisiOpd as $s => $kondisi){
+            $indikator->kondisiOpd[$s]['bukti'] = $this->getUploadBukti(null, $indikator->id, $id_opd);
+        }
+        return $indikator;
+    }
+
     public function getUploadBukti($idbukti=null, $idIndikator=null, $idOpd=null)
     {
         $builder = $this->db->table('lke_indikator i')
@@ -206,12 +221,25 @@ class PenilaianModel extends Model
         return $query->getResultArray();
     }
     
-    public function updatePoint($id_jawaban, $point)
+    public function updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban)
     {
         $builder = $this->db->table('lke.lke_jawaban');
         $builder->where('id', $id_jawaban);
-        $builder->update(['nilai' => $point]);
+        $builder->update([
+            'nilai' => $point, 
+            'aprove' => $aprv, 
+            'ket' => $keterangan, 
+            'Jawaban' => $jawaban
+        ]);
         return $this->db->affectedRows();
         // return true;
+    }
+
+    public function saveBuktiDukung($idOpd, $idbkt, $newName)
+    {
+        $userId = $this->db->table('lke_detail_opd')->where('opdid', $idOpd)->get()->getRow()->userid;
+
+        $this->db->query("CALL upload_bukti_add_edit('$idOpd', '', '$idbkt', '$newName')");
+        return $this->db->affectedRows();
     }
 }
