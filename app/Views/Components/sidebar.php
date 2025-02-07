@@ -11,7 +11,7 @@ $first_part = $components[1];
         <div class="logo">
           <a href="index.html">
             <!-- <img src="assets/images/logo/logo.png" alt="Logo" srcset=""> -->
-            <h1>DKIPS</h1>
+            <h1>SURABE</h1>
           </a>
         </div>
         <div class="toggler">

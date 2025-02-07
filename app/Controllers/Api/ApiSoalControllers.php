@@ -25,18 +25,6 @@ class ApiSoalControllers extends BaseController
                 $token = $matches[1];
             }
         }
-        // if(is_null($token) || empty($token)) {
-        //     $data = array(
-        //             'token_crs'     =>  csrf_hash(),
-        //             'success'       =>  0,
-        //             'msg'           =>  'Access denied',
-        //             'StatusCode'    =>  '401',
-        //             );
-        //     return $this->response->setJSON($data);
-
-        // }else{
-        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        // }
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
