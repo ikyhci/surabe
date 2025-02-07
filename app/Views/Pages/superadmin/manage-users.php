@@ -102,7 +102,7 @@
 
 <link {csp-script-nonce} rel="stylesheet" href="/assets/vendors/choices.js/choices.min.css" />
 <script {csp-script-nonce} src="/assets/vendors/choices.js/choices.min.js"></script>
-<script {csp-script-nonce} src="/assets/vendors/sweetalert2/sweetalert.min.js"></script>
+<script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript">
   const TOKEN = "<?= ($token) ? $token : "" ?>";
