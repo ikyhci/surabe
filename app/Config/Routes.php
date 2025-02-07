@@ -106,11 +106,12 @@ $routes->group('api',['filter' => ['apiFilter:Super Admin','cors']], function($r
 
 // route Penilai
 $routes->group('dashboard',['filter' => ['roles:Penilai,Super Admin','cors']], function($routes){
-	$routes->get('penilaian', 'Pages\PagesPenilaiControllers::index');
-	$routes->get('penilaian/detail-form', 'Pages\PagesPenilaiControllers::detailForm');
+    $routes->get('penilaian', 'Pages\PagesPenilaiControllers::index');
+    $routes->get('penilaian/detail-form', 'Pages\PagesPenilaiControllers::detailForm');
 });
-$routes->group('api',['filter' => ['apiFilter:Penilai,Super Admin','cors']], function($routes){
-	$routes->get('penilaian/data-opd', 'Api\ApiPenilaiControllers::getPenilaianMandiri');
-	$routes->post('penilaian/jawabanOpdIndikator', 'Api\ApiPenilaiControllers::jawabanOpdIndikator');
-	$routes->post('penilaian/simpanPoint', 'Api\ApiPenilaiControllers::simpanPoint');
+$routes->group('api', function($routes){
+    $routes->get('penilaian/data-opd', 'Api\ApiPenilaiControllers::getPenilaianMandiri');
+    $routes->post('penilaian/jawabanOpdIndikator', 'Api\ApiPenilaiControllers::jawabanOpdIndikator');
+    $routes->post('penilaian/simpanPoint', 'Api\ApiPenilaiControllers::simpanPoint');
+		$routes->post('penilaian/uploadBuktiDukung', 'Api\ApiPenilaiControllers::uploadBuktiDukung');
 });

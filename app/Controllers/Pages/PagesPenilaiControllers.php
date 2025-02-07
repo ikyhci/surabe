@@ -20,21 +20,21 @@ class PagesPenilaiControllers extends BaseController
     public function __construct(){
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        if(!isset($_COOKIE['__LKE-Authorization'])) {
-            $response = service('response');
-            $response->setStatusCode(302);
-            $response->setHeader('Location', base_url('unauthorized'));
-            $response->send();
-            exit;
-        }
+        // if(!isset($_COOKIE['__LKE-Authorization'])) {
+        //     $response = service('response');
+        //     $response->setStatusCode(302);
+        //     $response->setHeader('Location', base_url('unauthorized'));
+        //     $response->send();
+        //     exit;
+        // }
         $token = $_COOKIE['__LKE-Authorization']; // get_cookie('__LKE-Authorization');
-        if(is_null($token) || empty($token)) {
-            $response = service('response');
-            $response->setStatusCode(302);
-            $response->setHeader('Location', base_url('unauthorized'));
-            $response->send();
-            exit;
-        }
+        // if(is_null($token) || empty($token)) {
+        //     $response = service('response');
+        //     $response->setStatusCode(302);
+        //     $response->setHeader('Location', base_url('unauthorized'));
+        //     $response->send();
+        //     exit;
+        // }
         
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         
@@ -52,7 +52,11 @@ class PagesPenilaiControllers extends BaseController
         $penilaianModel = new PenilaianModel();
         $this->data['opd'] = $penilaianModel->getDataOpd(null);
         $this->data['aspek'] = $penilaianModel->getAspek();
-        // dd($this->data['opd']);
+        // $id_asp = $this->data['aspek'][0]->id;
+        // $this->data['all_data'] = $penilaianModel->nestedData($id_asp); 
+        // echo "<pre>";
+        // print_r($this->data['all_data']);
+        // die;
         return view('/Pages/penilai/index', $this->data);
     }
 
@@ -60,12 +64,13 @@ class PagesPenilaiControllers extends BaseController
     {
         $form = $this->request->getVar('form');
         $this->data['form'] = json_decode(base64_decode($form), true);
+
         $penilaianModel = new PenilaianModel();
         $data = $penilaianModel->nestedData( $this->data['form']['idasp'], $this->data['form']['opdid'] );
         // echo "<pre>";
-        // echo json_encode($data);
+        // print_r($this->data['form']);
         // die;
-        $IDX = '0d94dc2a709e6902b75bb2bbdb03c64b754f6061'; //$this->data['form']['opdid'];
+        $IDX = $this->data['form']['idasp'];
         $LIMIT = 1;
         $OFFSET =null;
 
@@ -90,7 +95,7 @@ class PagesPenilaiControllers extends BaseController
         
         $penilaianModel = new PenilaianModel();
         // $data = $penilaianModel->getDetailForm();
-        // dd($this->data);
+        // pd($this->data);
         return view('/Pages/penilai/detail_form', $this->data);
     }
     
