@@ -1,7 +1,7 @@
 <?= $this->extend('Layouts/dashboard') ?>
 <?= $this->section('styles') ?>
 <!-- Styles -->
-
+<link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/sweetalert/sweetalert.css">
 
 
 <?= $this->endSection() ?>
@@ -9,7 +9,7 @@
 <?= $this->section('content') ?>
 <!-- Content -->
 <div class="page-heading">
-    <h3>Dashboard Soal</h3>
+    <h3>Dashboard</h3>
 </div>
 <div class="page-content">
 	 <section class="row">
@@ -26,7 +26,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Aspek</h6>
-                                                <h6 class="font-extrabold mb-0">0</h6>
+                                                <h6 class="font-extrabold mb-0" id="asp">0</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -43,7 +43,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Sub Aspek</h6>
-                                                <h6 class="font-extrabold mb-0">0</h6>
+                                                <h6 class="font-extrabold mb-0" id="sasp">0</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -60,7 +60,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Sub Sub Aspek</h6>
-                                                <h6 class="font-extrabold mb-0">0</h6>
+                                                <h6 class="font-extrabold mb-0" id="ssasp">0</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Indikator</h6>
-                                                <h6 class="font-extrabold mb-0">0</h6>
+                                                <h6 class="font-extrabold mb-0" id="indk">0</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Parameter</h6>
-                                                <h6 class="font-extrabold mb-0">0</h6>
+                                                <h6 class="font-extrabold mb-0" id="prmt">0</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Bukti Dukung</h6>
-                                                <h6 class="font-extrabold mb-0">0</h6>
+                                                <h6 class="font-extrabold mb-0" id="bktdk">0</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@
                     <div class="col-12 col-lg-3">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h4>User</h4>
+                                <h4>Selamat Datang.</h4>
                                 <button type="button" class="btn btn-outline-primary btn-sm profil-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                                         <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"></path>
@@ -149,7 +149,7 @@
                                         <img src="assets/images/faces/1.jpg" alt="Face 1">
                                     </div>
                                     <div class="ms-3 name">
-                                        <h5 class="font-bold"><?= $uname;?></h5>
+                                        <h5 class="font-bold" id="unamex"><?= $uname;?></h5>
                                         <h6 class="text-muted mb-0"><?= $usr;?></h6>
                                     </div>
                                 </div>
@@ -168,11 +168,163 @@
 
 <?= $this->include('Pages/profil') ?>
 <!-- Script -->
+<script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/sweetalert/sweetalert.min.js"></script>
+
 <script {csp-script-nonce} type="text/javascript">
     $(document).ready(function(){
+        var token = document.getElementById('token').value;
+        loadData()
+
+
+        function loadData(){
+            var csrf = document.getElementById('<?= csrf_token() ?>').value
+            $.ajax({
+                url: '<?php echo base_url();?>api/get-dashboard-data',
+                type:'GET',
+                headers: {
+                    'Authorization': 'Bearer '+token
+                 },
+                data:{
+                    <?= csrf_token() ?>: csrf
+                },
+                dataType: 'json',
+                success: function(res){
+                    $("input#<?= csrf_token() ?>").val(res.token_crs); 
+                    document.getElementById('asp').innerHTML    = res.dt.asp;
+                    document.getElementById('sasp').innerHTML   = res.dt.sasp;
+                    document.getElementById('ssasp').innerHTML  = res.dt.ssasp;
+                    document.getElementById('indk').innerHTML   = res.dt.indk;
+                    document.getElementById('prmt').innerHTML   = res.dt.prmt;
+                    document.getElementById('bktdk').innerHTML  = res.dt.bktdk;
+
+                }
+            });
+        }
 
         $(document).on('click', '.profil-btn', function(){
-            $('#edit-data').modal('show')
+            // 
+            var csrf = document.getElementById('<?= csrf_token() ?>').value
+            
+            $.ajax({
+                url: '<?php echo base_url();?>api/get-user-by-id',
+                type:'POST',
+                headers: {
+                    'Authorization': 'Bearer '+token
+                 },
+                data:{
+                    <?= csrf_token() ?>: csrf
+                },
+                dataType: 'json',
+                success: function(res){
+
+                    $("input#<?= csrf_token() ?>").val(res.token_crs); 
+                    document.getElementById('fname').value  = res.dt.FullName;
+                    document.getElementById('uname').value  = res.dt.UserName;
+                    document.getElementById('umail').value   = res.dt.EmailAdds;
+                    document.getElementById('phone').value  = res.dt.Phone;
+                    document.getElementById('idx').value  = res.dt.uid;
+
+                    document.getElementById('newpas').value ='';
+                    document.getElementById('reppas').value ='';
+                    document.getElementById('newpas').disabled = true;
+                    document.getElementById('newpas').required = false;
+                    document.getElementById('reppas').disabled = true;
+                    document.getElementById('reppas').required = false;
+                    var chk = document.getElementById('edtpas')
+                    if (chk.checked == true) {
+                        chk.checked = false
+                    }
+
+                    $('#edit-data').modal('show');
+                }
+            });
+        })
+
+        $(document).on('change', '#edtpas', function(){
+            var chk = document.getElementById('edtpas')
+            if (chk.checked == true) {
+                
+                document.getElementById('newpas').disabled = false;
+                document.getElementById('newpas').required = true;
+                document.getElementById('reppas').disabled = false;
+                document.getElementById('reppas').required = true;
+            }else{
+                
+                document.getElementById('newpas').disabled = true;
+                document.getElementById('newpas').required = false;
+                document.getElementById('reppas').disabled = true;
+                document.getElementById('reppas').required = false;
+            }
+        })
+
+        // function save data 
+        $(document).on('click', '#updates', function(){
+            var crs = document.getElementById('<?= csrf_token() ?>').value
+            var fd = new FormData($('#formdata')[0]);
+            
+            fd.append('<?= csrf_token() ?>',crs);
+            var form = document.getElementById('formdata');
+
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.classList.add('was-validated'); 
+            }else{
+                event.preventDefault();
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                swal({
+                title: "Konfirmasi",
+                text: "Perubahan Data ?",
+                type: "info",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+                },function(){
+                    $.ajax({
+                        url: "<?php echo base_url();?>api/update-user-data",
+                        type: "POST",
+                        dataType: "JSON",
+                        headers: {
+                          'Authorization': 'Bearer '+token
+                        },
+                        data: fd,
+                        processData : false,
+                        contentType: false,
+                        cache: false,
+                        success: function(res){
+                            console.log(res)
+                            $("input#<?= csrf_token() ?>").val(res.token_crs);
+                            if (res.success == 1) {
+                                swal({
+                                    title:"Data Berhasil Di Simpan",
+                                    text: res.msg,
+                                    type: "success"
+                                }, function(){
+                                        document.getElementById('unamex').innerHTML = document.getElementById('uname').value
+                                        $('#edit-data').modal('hide');
+                                    }
+                                );  
+                            }else{
+                                swal({
+                                    title:"Ops..",
+                                    text: res.msg,
+                                    type: "error"
+                                }, function(){
+                                        $('#edit-data').modal('hide');
+                                    }
+                                );
+                            }
+                            
+                            // 
+
+                        }
+                    })
+                });//
+            }
+
+            
+
         })
     })
 </script>

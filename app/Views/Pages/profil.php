@@ -23,11 +23,26 @@
                         </div>
                         <div class="form-group">
                             <h6>Email <span class="text-danger">*</span></h6>
-                            <input type="text" class="form-control" id="mail" name="mail" placeholder="Email" required>
+                            <input type="text" class="form-control" id="umail" name="umail" placeholder="Email" required>
                         </div>
                         <div class="form-group">
                             <h6>No Hp<span class="text-danger">*</span></h6>
                             <input type="text" class="form-control" id="phone" name="phone" placeholder="No Hp" required>
+                        </div>
+                        <div class="form-group">
+                            <h6>Password Baru<span class="text-danger">*</span></h6>
+                            <input type="text" min="6" max="15" class="form-control" id="newpas" name="newpas" placeholder="Password Baru" disabled>
+                        </div>
+                        <div class="form-group">
+                            <h6>Ulangi Password<span class="text-danger">*</span></h6>
+                            <input type="text" min="6" max="15" class="form-control" id="reppas" name="reppas" placeholder="Ulangi Password" disabled>
+                        </div>
+                        <div class="form-check">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="form-check-input form-check-info" 
+                                                name="customCheck" id="edtpas">
+                                <label class="form-check-label" for="edtpas">Edit Password</label>
+                            </div>
                         </div>
                    </form>
 
