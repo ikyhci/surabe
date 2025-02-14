@@ -102,6 +102,8 @@ $routes->group('api',['filter' => ['apiFilter:Super Admin','cors']], function($r
 	$routes->delete('delete-user/(:any)', 'Api\ApiSuperAdminControllers::deleteUser/$1');
 	$routes->post('save-opd', 'Api\ApiSuperAdminControllers::saveOPD');
 	$routes->post('del-opd', 'Api\ApiSuperAdminControllers::delOPD');
+
+	$routes->get('capaian-opd', 'Api\ApiSuperAdminControllers::capaianOpd');
 });
 
 // route Penilai

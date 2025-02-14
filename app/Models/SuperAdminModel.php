@@ -150,4 +150,17 @@ class SuperAdminModel extends Model
             ];
         }
     }
+
+    public function getOpd($id_opd = null){
+
+        $builder = $this->db->table('lke_opd')->select('id id_opd, nama_opd, singkatan');
+        
+        if (!is_null($id_opd)) {
+            $builder->where('id', $id_opd);
+        }
+        
+        $query = $builder->get();
+
+        return $query->getResult();
+    }
 }

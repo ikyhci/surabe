@@ -263,4 +263,26 @@ class ApiSuperAdminControllers extends BaseController
             ]);
         }
     }
+
+    public function capaianOpd()
+    {
+        $superAdminModel = new SuperAdminModel();
+        $list = $superAdminModel->getOpd();
+        foreach ($list as $key => $value) {
+            $list[$key]->capaian_sasaran_strategis = $capaian_sasaran_strategis = rand(65, 100);
+            $list[$key]->capaian_pelaksanaan_kebijakan_rb = $capaian_pelaksanaan_kebijakan_rb = rand(65, 100);
+            $list[$key]->capaian_strategis_pelaksanaan_rb_general = $capaian_strategis_pelaksanaan_rb_general = rand(65, 100);
+            $list[$key]->strategi_membangun_rb_tematik = $strategi_membangun_rb_tematik = rand(65, 100);
+            $list[$key]->capaian_dampak_rb_tematik = $capaian_dampak_rb_tematik = rand(65, 100);
+            $list[$key]->capaian = ($capaian_sasaran_strategis + $capaian_pelaksanaan_kebijakan_rb + $capaian_strategis_pelaksanaan_rb_general + $strategi_membangun_rb_tematik + $capaian_dampak_rb_tematik) / 5;
+        }
+        $data = array(
+            'success'   =>  1,
+            'msg'       =>  'success',
+            'token_crs' => csrf_hash(),
+            'dt'        => $list,
+        );
+
+        return $this->response->setJSON($data);
+    }
 }

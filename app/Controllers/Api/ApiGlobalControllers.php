@@ -78,7 +78,7 @@ class ApiGlobalControllers extends BaseController
             $data = array(
                     'token_crs' => csrf_hash(),
                     'dt'        => $list,
-                    );
+                );
 
             return $this->response->setJSON($data);
         }else{
@@ -87,7 +87,7 @@ class ApiGlobalControllers extends BaseController
                     'success'       =>  0,
                     'msg'           =>  'Access denied cntrl',
                     'StatusCode'    =>  '401',
-                    );
+                );
             return  json_encode($data);
         }
     }
