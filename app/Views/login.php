@@ -21,6 +21,7 @@
                 <div id="auth-left">
                     <div class="auth-logo">
                         <!-- <a href="/"><img src="assets/images/logo/logo.png" alt="Logo"></a> -->
+                        
                     </div>
                     <h1 class="auth-title">Log in.</h1>
 
@@ -42,25 +43,16 @@
                         <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                         <button type="submit" id="btnLogin"class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
                     </form>
-                    <!-- <div class="text-center mt-5 text-lg fs-4">
-
-                        <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
-                    </div> -->
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">
                 <div id="auth-right">
                     <div class="container text-center d-flex justify-content-center">
                         <div class="vertical-center">
-                            <h2 class="text-white">Aplikasi Evaluasi<br>Sistem Pemerintahan Berbasis Elektronik</h2>
-                            <h4 class="text-white">Dinas Komunikasi, Informatika, Persandian, Dan Statistik<br> Provinsi Sulawesi Tengah</h4>
+                            <h2 class="text-white">SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK<br>(SURABE)</h2>
+                            <h4 class="text-white">Pemerintah Provinsi Sulawesi Tengah</h4>
                         </div>
-                        
-                        
                     </div>
-                    
-                  
-
                 </div>
             </div>
         </div>

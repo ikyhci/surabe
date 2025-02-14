@@ -41,6 +41,7 @@ $routes->group('api', ['filter' => ['apiFilter:User','cors']], function($routes)
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
 	$routes->post('save-jawaban','Api\ApiUserControllers::saveJawaban');
+
 });
 
 
@@ -65,6 +66,9 @@ $routes->group('dashboard',['filter' => ['roles:Soal,Super Admin','cors']], func
 	$routes->post('del-sub-sub-aspek', 'Api\ApiSoalControllers::delSubSubAspek');
 	$routes->post('del-indikator', 'Api\ApiSoalControllers::delIndikator');
 	$routes->post('del-bukti-dukung', 'Api\ApiSoalControllers::delBuktiDukung');
+
+	$routes->get('get-dashboard-data', 'Api\ApiSoalControllers::getDashboard');
+	$routes->post('update-user-data','Api\ApiSoalControllers::updateUserData');
 	
 	
  });
@@ -80,6 +84,8 @@ $routes->group('api',['filter' => ['apiFilter:Soal,Super Admin,Penilai,User','co
 	$routes->get('get-opd', 'Api\ApiGlobalControllers::getOPD');
 	$routes->get('get-roles', 'Api\ApiGlobalControllers::getRoles');
 	$routes->get('get-bukti-dukung', 'Api\ApiGlobalControllers::getBuktiDukung');
+
+	$routes->post('get-user-by-id','Api\ApiGlobalControllers::getUSerById');
 
 	// Logout
 	$routes->post('logout','Auth\AuthControllers::Logout');

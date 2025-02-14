@@ -19,7 +19,10 @@
                     <h4>Help </h4>
                 </div>
                 <div class="card-body">
-                    <div id="chart-profile-visit"></div>
+                    <div id="chart-profile-visit">
+                        Jika Mengalami Masalah silahkan hubungi jimy komionfo: kontak person : 0822-5926-3752 <br>
+                        atau AAn kominfo , kontak Person : 
+                    </div>
                 </div>
             </div>
         </div>
@@ -31,7 +34,7 @@
 
 <?= $this->section('script') ?>
 <!-- Script -->
-<script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>""></script>
+<script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
 <script {csp-script-nonce}  type="text/javascript">
     
 </script>

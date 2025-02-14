@@ -25,20 +25,105 @@ class ApiSoalControllers extends BaseController
                 $token = $matches[1];
             }
         }
-        // if(is_null($token) || empty($token)) {
-        //     $data = array(
-        //             'token_crs'     =>  csrf_hash(),
-        //             'success'       =>  0,
-        //             'msg'           =>  'Access denied',
-        //             'StatusCode'    =>  '401',
-        //             );
-        //     return $this->response->setJSON($data);
-
-        // }else{
-        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        // }
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
+    }
+
+
+    public function updateUserData()
+    {
+        if (!empty($this->decoded->aud)) {
+            $idx    = $this->request->getVar('idx');
+            $fname  = $this->request->getVar('fname');
+            $uname  = $this->request->getVar('uname');
+            $umail  = $this->request->getVar('umail');
+            $uphon  = $this->request->getVar('phone');
+            $upass  = $this->request->getVar('newpas') ? $this->request->getVar('newpas') : null;
+            $reppas = $this->request->getVar('reppas');
+            $psw ='';
+            $udt = '';
+
+
+
+            $upddata = $this->db->query("CALL User_Update_data('".
+                $idx."','".
+                $uname."','".
+                $fname."','".
+                $uphon."','".
+                $umail."')")->getRow();
+
+            $udt = $upddata->res;
+
+            if ($upass != null) {
+                if ($upass == $reppas) {
+                    $uppass = $this->db->query("CALL User_update_password('".
+                    $idx."','".
+                    $reppas."')")->getRow();
+
+                    $psw = $uppass->res;
+
+
+                }else{
+                    $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  0,
+                        'msg'       =>  'error password tidak sama.'
+                    );
+                }
+                
+            }
+
+            if ($udt == 1 && $psw == 1) {
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  1,
+                    'msg'       =>  'Data dan Password Berhasil Di Perbarui.'
+                );
+            }else if ($udt == 1) {
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  1,
+                    'msg'       =>  'Data Berhasil Di Perbarui.'
+                );
+            }
+
+           
+
+
+            return $this->response->setJSON($data);
+
+        }else{
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token.'
+                );
+            return $this->response->setJSON($data);
+        }
+    }
+
+
+    public function getDashboard()
+    {
+        if (!empty($this->decoded->aud)) {
+            // $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+            // $LIMIT = null;
+            // $OFFSET =null;
+            $list = $this->db->query("call View_Dashboard_Soal()")->getRow();
+            $data = array(
+                    'token_crs' => csrf_hash(),
+                    'dt'        => $list,
+                    );
+
+            return $this->response->setJSON($data);
+        }else{
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+            return $this->response->setJSON($data);
+        }
     }
 
     public function saveAspek()

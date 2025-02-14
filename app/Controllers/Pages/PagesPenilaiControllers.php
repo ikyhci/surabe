@@ -20,21 +20,9 @@ class PagesPenilaiControllers extends BaseController
     public function __construct(){
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        // if(!isset($_COOKIE['__LKE-Authorization'])) {
-        //     $response = service('response');
-        //     $response->setStatusCode(302);
-        //     $response->setHeader('Location', base_url('unauthorized'));
-        //     $response->send();
-        //     exit;
-        // }
+    
         $token = $_COOKIE['__LKE-Authorization']; // get_cookie('__LKE-Authorization');
-        // if(is_null($token) || empty($token)) {
-        //     $response = service('response');
-        //     $response->setStatusCode(302);
-        //     $response->setHeader('Location', base_url('unauthorized'));
-        //     $response->send();
-        //     exit;
-        // }
+
         
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         

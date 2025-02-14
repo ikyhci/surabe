@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= getenv('APPNAME') ?> | Dashboard</title>
+    <title>SURABE | Dashboard</title>
 
     <link {csp-style-nonce}  rel="preconnect" href="https://fonts.gstatic.com">
     <link {csp-style-nonce}  href="/assets/fonts/css2.css" rel="stylesheet">

@@ -30,7 +30,7 @@
 
   <!-- Modal -->
   <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
-    <div class="modal-dialog-centered modal-dialog modal-md" role="document">
+    <div class="modal-dialog-centered modal-dialog modal-md " role="document">
       <div class="modal-content">
         <div class="modal-header bg-primary">
           <h5 class="modal-title white" id="userModalLabel">User Details</h5>

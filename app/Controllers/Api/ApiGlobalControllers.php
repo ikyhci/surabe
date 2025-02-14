@@ -28,18 +28,6 @@ class ApiGlobalControllers extends BaseController
                 $token = $matches[1];
             }
         }
-
-        // if(is_null($token) || empty($token)) {
-        //     $data = array(
-        //             'token_crs'     =>  csrf_hash(),
-        //             'success'       =>  0,
-        //             'msg'           =>  'Access denied',
-        //             'StatusCode'    =>  '401',
-        //             );
-        //     return $response->setJSON($data);
-        // }else{
-        //     $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        // }
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
@@ -259,6 +247,36 @@ class ApiGlobalControllers extends BaseController
                     'dt'        => $list,
                     );
 
+            return $this->response->setJSON($data);
+        }else{
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+            return $this->response->setJSON($data);
+        }
+    }
+
+    public function getUSerById()
+    {
+        if (!empty($this->decoded->aud)) {
+            $IDX    = $this->decoded->ids ? $this->decoded->ids : null;
+            $LIMIT  = null;
+            $OFFSET = null;
+
+            if ($IDX != null) {
+                $list   = $this->db->query("call View_Users('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
+                $data   = array(
+                        'token_crs' => csrf_hash(),
+                        'dt'        => $list,
+                        );
+            }else{
+                $data   = array(
+                        'token_crs' => csrf_hash(),
+                        'dt'        => 'No Data',
+                        );
+            }
             return $this->response->setJSON($data);
         }else{
             $data = array(
