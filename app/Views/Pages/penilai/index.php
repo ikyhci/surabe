@@ -22,9 +22,17 @@
       <div class="form-group">
         <select class="choices form-select choices__input" name="aspek" id="aspek">
           <!-- <option value="">Pilih Aspek</option> -->
-          <?php foreach ($aspek as $key => $val) : ?>
-            <option value="<?= $val->id ?>"><?= $val->nama_aspek . ', ' . $val->sub_aspek . ' Tahun ' . $val->tahun ?></option>
-          <?php endforeach; ?>
+          <!-- <php foreach ($aspek as $key => $val) : ?>
+            <option value="<= $val->id ?>"><= $val->nama_aspek . ', ' . $val->sub_aspek . ' Tahun ' . $val->tahun ?></option>
+          <php endforeach; ?> -->
+            <?php
+            $currentYear = date('Y');
+            for ($i = 0; $i < 5; $i++) {
+              $year = $currentYear - $i;
+              $selected = ($i == 0) ? 'selected' : '';
+              echo "<option value=\"$year\" $selected>$year</option>";
+            }
+            ?>
         </select>
       </div>
       <br>

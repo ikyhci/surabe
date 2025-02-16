@@ -35,14 +35,14 @@
             <td>Nama Form</td>
             <td>: <?= $dt->nama_form; ?></td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td>Aspek</td>
             <td>: <?= $dt->nama_aspek; ?></td>
           </tr>
           <tr>
             <td>Sub Aspek</td>
             <td>: <?= $aspek->subaspek[0]->nama_sub_aspek; ?></td>
-          </tr>
+          </tr> -->
           <tr>
             <td>OPD</td>
             <td>: <?= $aspek->opd[0]->nama_opd ?></td>
@@ -51,10 +51,18 @@
       </table>
       <br>
 
-      <!-- Data Table  -->
-      <p>Data Indikator</p>
-      <div class="table-responsive">
-        <table class="table table-sm" id="datatable">
+    </div>
+
+  </div>
+
+  <?php foreach( $aspek->subaspek as $key => $domain ) : ?>
+  <div class="card shadow mb-4">
+    <div class="card-header bg-primary py-2">
+      <h4 class="card-title text-white"><?= $domain->nama_sub_aspek ?></h4>
+    </div>
+    <div class="card-body">
+
+    <table class="table table-sm" id="datatable">
           <thead>
             <tr>
               <th>No.</th>
@@ -66,7 +74,7 @@
           </thead>
           <tbody>
             <?php $no = 1;
-            foreach ($aspek->subaspek[0]->subsubaspek as $a => $ssa): ?>
+            foreach ($domain->subsubaspek as $a => $ssa): ?>
               <tr id="<?= $ssa->id; ?>" class="alert alert-secondary list-ssa">
                 <td><?= $no++; ?></td>
                 <td><?= $ssa->nama_sub_sub_aspek ?></td>
@@ -74,7 +82,7 @@
                 <td></td>
               </tr>
               <?php foreach ($ssa->indikator as $ind) : ?>
-                <tr class="list-indikator  <?= $ssa->id; ?>">
+                <tr class="list-indikator  <?= $ssa->id; ?>  d-none">
                   <td></td>
                   <td><?= $ind->indikator; ?></td>
                   <td><?= (!empty($ind->kondisiOpd))? $ind->kondisiOpd[0]['nilai'] : "" ?></td>
@@ -91,13 +99,9 @@
             <?php endforeach; ?>
           </tbody>
         </table>
-      </div>
-
-
     </div>
-
   </div>
-
+  <?php endforeach; ?>
 </div>
 
 <!-- modal -->

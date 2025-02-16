@@ -51,13 +51,18 @@ class PagesPenilaiControllers extends BaseController
     public function detailForm()
     {
         $form = $this->request->getVar('form');
-        $this->data['form'] = json_decode(base64_decode($form), true);
-
+        try {
+            $this->data['form'] = json_decode(base64_decode($form), true);
+            if (empty($this->data['form'])) {
+                return redirect()->to('/dashboard/penilaian');
+            }
+        } catch (\Exception $e) {
+            return redirect()->to('/dashboard/penilaian');
+        }
+        // dd($this->data['form']);    
         $penilaianModel = new PenilaianModel();
         $data = $penilaianModel->nestedData( $this->data['form']['idasp'], $this->data['form']['opdid'] );
-        // echo "<pre>";
-        // print_r($this->data['form']);
-        // die;
+        // pd($data);
         $IDX = $this->data['form']['idasp'];
         $LIMIT = 1;
         $OFFSET =null;
@@ -81,7 +86,7 @@ class PagesPenilaiControllers extends BaseController
         $this->data['dt']           = $asp ;
         $this->data['aspek']        = $data ;
         
-        $penilaianModel = new PenilaianModel();
+        // $penilaianModel = new PenilaianModel();
         // $data = $penilaianModel->getDetailForm();
         // pd($this->data);
         return view('/Pages/penilai/detail_form', $this->data);

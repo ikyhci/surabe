@@ -8,6 +8,7 @@ use Firebase\JWT\Key;
 use Config\Services;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\Header;
+use App\Models\DashboardModel;
 
 class Dashboard extends BaseController
 {

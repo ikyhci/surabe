@@ -2,14 +2,16 @@
 
 namespace App\Controllers\Api;
 
+use CodeIgniter\HTTP\IncomingRequest;
 use App\Controllers\BaseController;
+use App\Models\DashboardModel;
 use Clue\React\NDJson\Decoder;
+use CodeIgniter\HTTP\Header;
+use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Services;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
 
 // Global API Controller
 
@@ -23,11 +25,15 @@ class ApiGlobalControllers extends BaseController
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
-         if(!empty($header)) {
+        if (!$header) {
+            $token = $request->getCookie('__LKE-Authorization');
+        }
+        if(!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
         }
+        
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
@@ -288,4 +294,49 @@ class ApiGlobalControllers extends BaseController
         }
     }
 
+
+
+    public function nilai()
+    {
+
+        $tahun = $this->request->getVar('tahun') ?? date('Y');
+
+        $dashboardModel = new DashboardModel();
+
+
+        $opd = $dashboardModel->getOpd();
+        foreach ($opd as $key => $value) {
+            $aspek = $dashboardModel->getAspek($tahun);
+            foreach ($aspek as $k => $v) {
+                $subAspek = $dashboardModel->getSubAspek($v->id);
+                foreach ($subAspek as $kk => $vv) {
+                    $subSubAspek = $dashboardModel->getSubSubAspek($vv->id);
+                    $totalSubSubAspekNilai = 0;
+                    foreach ($subSubAspek as $kkk => $vvv) {
+                        $nilai = $dashboardModel->nilaiSubSubAspekOpd($vvv->id, $value->id);
+                        $subSubAspek[$kkk]->nilai = $nilai?? 0 ;
+                        $totalSubSubAspekNilai += $nilai;
+                    }
+                    $subAspek[$kk]->sub_sub_aspek = $subSubAspek;
+                    $subAspek[$kk]->nilai = $totalSubSubAspekNilai;
+                }
+
+                $totalSubAspekNilai = array_sum(array_column($subAspek, 'nilai'));
+                $aspek[$k]->sub_aspek = $subAspek;
+                $aspek[$k]->nilai = $totalSubAspekNilai / count($subAspek);
+            }
+
+            $opd[$key]->aspek = $aspek;
+        }
+
+        $data = [
+            'success' => true,
+            'data' => $opd,
+            'msg' => 'Data berhasil diambil',
+            'token_crs' => csrf_hash(),
+        ];
+
+        return $this->response->setJSON($data);
+    }
+    
 }

@@ -14,6 +14,8 @@ $routes->setAutoRoute(false);
 $routes->get('/','PublicPages::login');
 $routes->get('/unauthorized','PublicPages::Unauthorized');
 
+$routes->get('/coba', 'Api\ApiGlobalControllers::nilai');
+
 //login logout
 $routes->group('api',  function($routes){
 	$routes->post('login','Auth\AuthControllers::auth');

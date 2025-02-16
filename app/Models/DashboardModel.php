@@ -13,16 +13,6 @@ class DashboardModel extends Model
         $this->db = db_connect();
     }
 
-    public function getAspek($tahun = null) {
-
-        $aspek = $this->db->table('lke_aspek')
-                    ->select('id, nama_aspek');
-        if ($tahun !== null) {
-            $aspek->where('tahun', $tahun);
-        }
-        $aspek = $aspek->get()->getResult();
-    }
-
     public function nilaiSubSubAspekOpd($id_ssa, $id_opd=null){
         $builder = $this->db->table('lke_sub_sub_aspek ssa')
                     ->select('o.nama_opd, ssa.nama_sub_sub_aspek, COALESCE(AVG(j.nilai) * CAST(ssa.bobot AS DECIMAL(10,2)), 0) AS nilai')
@@ -44,6 +34,40 @@ class DashboardModel extends Model
 
         return $query;
     }
+
+    public function getAspek($tahun = null) {
+
+        $aspek = $this->db->table('lke_aspek')
+                    ->select('id, nama_aspek');
+        if ($tahun !== null) {
+            $aspek->where('tahun', $tahun);
+        }
+        $aspek = $aspek->get()->getResult();
+        return $aspek;
+    }
     
+    public function getSubAspek($id_aspek) {
+        $sub_aspek = $this->db->table('lke_sub_aspek')
+                    ->select('id, nama_sub_aspek')
+                    ->where('id_aspek', $id_aspek);
+        $sub_aspek = $sub_aspek->get()->getResult();
+        return $sub_aspek;
+    }
+
+    public function getSubSubAspek($id_sub_aspek) {
+        $sub_sub_aspek = $this->db->table('lke_sub_sub_aspek')
+                    ->select('id, nama_sub_sub_aspek')
+                    ->where('id_sub_aspek', $id_sub_aspek);
+        $sub_sub_aspek = $sub_sub_aspek->get()->getResult();
+        return $sub_sub_aspek;
+    }
+
+    public function getOpd() {
+        $opd = $this->db->table('lke_opd')
+                    ->select('id, nama_opd');
+        $opd = $opd->get()->getResult();
+        return $opd;
+    }
     
+
 }
