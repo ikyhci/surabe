@@ -235,6 +235,7 @@
               contentType: false,
               cache: false,
               success: function(data){
+                // console.log(data)
               
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
@@ -280,9 +281,6 @@
           })
 
           function loadPilihanGanda(data, dkn, jwb, fls){
-            // const sortbydate = (data) => data.sort().reverse()
-            // console.log(data)
-            // console.log(sortbydate(data))
             var str = '<ol type="A">'
             var plh = '';
             var upl = '';

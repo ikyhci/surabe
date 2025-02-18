@@ -58,7 +58,7 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
-      # - './lke_pengukuran_irb.sql:db.sql'
+      - '.:/app'
       - mariadb_data:/var/lib/mysql
       # - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
     command: [
