@@ -182,6 +182,10 @@ $(document).ready(function(){
     		 url = '<?php echo base_url();?>api/save-aspek'
     		 text = 'Simpan Data Aspek Baru ?'
     	}
+    	if (inputs == 5 ) {
+    		 url = '<?php echo base_url();?>api/save-rb'
+    		 text = 'Simpan Data RB Baru ?'
+    	}
     	var form = document.getElementById('formdata');
     
     	if (form.checkValidity() === false) {
@@ -276,8 +280,8 @@ $(document).ready(function(){
     	loadaspek(2)
     	$('#add-data').modal('show');
     	
-
     })
+
     $(document).on('click', '.add-sub-aspek', function(){
     	let inputs = document.getElementById('content-input');
     	document.getElementById('title-input').innerHTML = 'Tambah Data Sub Aspek'
@@ -287,8 +291,8 @@ $(document).ready(function(){
     	loadaspek(2)
     	$('#add-data').modal('show');
     	
-    	
     })
+
     $(document).on('click', '.add-aspek', function(){
     	let inputs = document.getElementById('content-input');
     	document.getElementById('title-input').innerHTML = 'Tambah Data Aspek'
@@ -298,8 +302,22 @@ $(document).ready(function(){
     	loadaspek(2)
     	$('#add-data').modal('show');
     	
+    })
+
+    // add rb
+
+    $(document).on('click', '.add-rb', function(){
+    	let inputs = document.getElementById('content-input');
+    	document.getElementById('title-input').innerHTML = 'Tambah Data RB'
+    	$('#parameter').modal('hide');
+    	inputs.innerHTML = '';
+    	inputs.innerHTML = inputrb();
+    	// loadaspek(2)
+    	$('#add-data').modal('show');
     	
     })
+
+
 
     $(document).on('click', '.indikator-plus', function(){
     	var idx = $(this).data('id_indikator');
@@ -314,12 +332,17 @@ $(document).ready(function(){
     	
     })
 
+
     // Edit Data
 
 
 
 
     // end
+
+    function loadrb() {
+    	// body...
+    }
 
     function loadaspek(nums) {
     	var csrf = document.getElementById('<?= csrf_token() ?>').value
@@ -377,6 +400,11 @@ $(document).ready(function(){
 						}
 				}
 			});
+    }
+
+
+    function inputParameter(){
+    	var inpx = ''
     }
 
 
@@ -495,6 +523,20 @@ $(document).ready(function(){
     }
 
 
+    function inputrb(){
+    	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" value="5" id="datainput">'+
+
+                    '<div class="form-group">'+
+                        '<h6>Nama RB <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama RB" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
+
+                        '</form>';
+        return inpx;
+    }
+
     
 
     // end template
@@ -583,6 +625,15 @@ $(document).ready(function(){
   	//change select box
 $(document).ready(function(){
 	var token = document.getElementById('token').value;
+
+	$(document).on('change','#rb', function(){
+		var csrf = document.getElementById('<?= csrf_token() ?>').value
+    	var optionSelected = $(this).find("option:selected");
+		var valueSelected  = optionSelected.val();
+		var textSelected   = optionSelected.text();
+
+
+	})
 
 	$(document).on('change', '#aspek', function(){
 		var csrf = document.getElementById('<?= csrf_token() ?>').value

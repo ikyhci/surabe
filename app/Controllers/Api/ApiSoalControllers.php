@@ -9,6 +9,7 @@ use Firebase\JWT\Key;
 use Config\Services;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\Header;
+use Exception;
 
 class ApiSoalControllers extends BaseController
 {
@@ -27,79 +28,6 @@ class ApiSoalControllers extends BaseController
         }
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
-    }
-
-
-    public function updateUserData()
-    {
-        if (!empty($this->decoded->aud)) {
-            $idx    = $this->request->getVar('idx');
-            $fname  = $this->request->getVar('fname');
-            $uname  = $this->request->getVar('uname');
-            $umail  = $this->request->getVar('umail');
-            $uphon  = $this->request->getVar('phone');
-            $upass  = $this->request->getVar('newpas') ? $this->request->getVar('newpas') : null;
-            $reppas = $this->request->getVar('reppas');
-            $psw ='';
-            $udt = '';
-
-
-
-            $upddata = $this->db->query("CALL User_Update_data('".
-                $idx."','".
-                $uname."','".
-                $fname."','".
-                $uphon."','".
-                $umail."')")->getRow();
-
-            $udt = $upddata->res;
-
-            if ($upass != null) {
-                if ($upass == $reppas) {
-                    $uppass = $this->db->query("CALL User_update_password('".
-                    $idx."','".
-                    $reppas."')")->getRow();
-
-                    $psw = $uppass->res;
-
-
-                }else{
-                    $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  0,
-                        'msg'       =>  'error password tidak sama.'
-                    );
-                }
-                
-            }
-
-            if ($udt == 1 && $psw == 1) {
-                $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  1,
-                    'msg'       =>  'Data dan Password Berhasil Di Perbarui.'
-                );
-            }else if ($udt == 1) {
-                $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  1,
-                    'msg'       =>  'Data Berhasil Di Perbarui.'
-                );
-            }
-
-           
-
-
-            return $this->response->setJSON($data);
-
-        }else{
-            $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token.'
-                );
-            return $this->response->setJSON($data);
-        }
     }
 
 
@@ -122,6 +50,47 @@ class ApiSoalControllers extends BaseController
                     'success'   =>  0,
                     'msg'       =>  'error invalid token'
                 );
+            return $this->response->setJSON($data);
+        }
+    }
+
+
+    public function saveRb()
+    {
+        try {
+            if (!empty($this->decoded->aud)) {
+                $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+                $nama   = $this->request->getVar('nama');
+                $bobot  = $this->request->getVar('bobot');
+                $userid = $this->decoded->ids;
+
+                $save = $this->db->query("CALL Rb_add_edit('".
+                    $userid."','".
+                    $id."','".
+                    $nama."','".$bobot."')")->getRow();
+
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $save->res,
+                        'msg'       =>  $save->msg,
+                    );
+                return $this->response->setJSON($data);
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+            
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -416,6 +385,48 @@ class ApiSoalControllers extends BaseController
                 $userid = $this->decoded->ids;
 
                 $del = $this->db->query("CALL Aspek_delete('".
+                    $userid."','".
+                    $idx."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
+    }
+
+
+    public function delRb()
+    {
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL Rb_delete('".
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
