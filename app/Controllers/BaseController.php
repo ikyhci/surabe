@@ -59,13 +59,14 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = \Config\Services::session();
         $csp = $this->response->getCSP();
-
+        // $csp->addConnectSrc('http://localhost:8080', true);
         $csp->addChildSrc('self');
         $csp->addFontSrc(['self','fonts.googleapis.com','fonts.gstatic.com']);
         $csp->addImageSrc(['* data:','w3.org' ,'data:','blob:', '* blob:']);
         $csp->addStyleSrc(['','unsafe-inline']);
         $csp->addScriptSrc(['self','allow-scripts','allow-style']);
-        // $csp->addChildSrc('https://');
+
+        $csp->addChildSrc('self');
         // $csp->addSandbox(['allow-forms', 'allow-scripts']);
     }
 }
