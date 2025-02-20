@@ -27,6 +27,7 @@
     </div>
 </div>
 
+
 <!-- data view -->
 <div class="modal fade text-left" id="view-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"role="document">
@@ -55,37 +56,5 @@
 
 <!-- end view data -->
 
-<!-- Edit Data -->
 
-<div class="modal fade text-left" id="edit-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title white" id="title-edit">
-                   
-                </h5>
-                
-            </div>
-            <div class="modal-body">
-               <div id="content-edit">
-                
-                   <!-- view datax -->
-               </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Close</span>
-                </button>
-                <button type="button" class="btn btn-primary ml-1" id="updates">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Save</span>
-                </button>
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- End Edit Data -->
 

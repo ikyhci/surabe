@@ -292,49 +292,6 @@ class ApiSoalControllers extends BaseController
 
     }
 
-    public function saveParameter()
-    {
-        try {
-            if (!empty($this->decoded->aud)) {
-                // 
-
-                $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-                $indkt  = $this->request->getVar('indikator');
-                $nama   = $this->request->getVar('nama');
-                $userid = $this->decoded->ids;
-
-                $save = $this->db->query("CALL Parameter_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $indkt."')")->getRow();
-                $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
-                return $this->response->setJSON($data);
-                // 
-            }else{
-                $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
-                return $this->response->setJSON($data);
-            }
-            
-        } catch (Exception $e) {
-            $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
-            );
-            return $this->response->setJSON($data);
-            
-        }
-    } 
-
     public function saveBuktiDukung()
     {
         try {
@@ -377,6 +334,49 @@ class ApiSoalControllers extends BaseController
             
         }
     }
+
+    public function saveParameter()
+    {
+        try {
+            if (!empty($this->decoded->aud)) {
+                // 
+
+                $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+                $indkt  = $this->request->getVar('indikator');
+                $nama   = $this->request->getVar('nama');
+                $userid = $this->decoded->ids;
+
+                $save = $this->db->query("CALL Parameter_add_edit('".
+                    $userid."','".
+                    $id."','".
+                    $nama."','".
+                    $indkt."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $save->res,
+                        'msg'       =>  $save->msg,
+                    );
+                return $this->response->setJSON($data);
+                // 
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+            
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
+    } 
 
     public function delAspek()
     {

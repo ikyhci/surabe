@@ -46,7 +46,7 @@
                 </div>  -->   
             <!-- Data Table  -->
             <div class="table-responsive">
-              <table class="table table-sm" id="datatable">
+              <table class="table table-sm" id="tbl-parameter">
                 <thead>
                   <tr>
                     <th>No.</th>
@@ -85,58 +85,6 @@
     <script {csp-script-nonce} src="<?php echo base_url();?>/assets/js/pages/soal.js"></script>
 
 <?= $this->include('Pages/soal/add_scr') ?>
-
-  <script {csp-script-nonce}  type="text/javascript">
-  	//update function
-  	$(document).ready(function(){
-  		
-
-  		$(document).on('click', '.edit-parameter', function(){
-  			var t = $('#datatable').DataTable();
-  			var data = t.row($(this).closest('tr')).data();
-
-	    	var idx = $(this).data('prmt')
-	    	var ind = $(this).data('ind')
-	    	let inputs = document.getElementById('content-edit');
-	    	document.getElementById('title-edit').innerHTML = 'Edit Data Parameter'
-	    	inputs.innerHTML = '';
-	    	inputs.innerHTML = editDataparameter(idx,ind,data[Object.keys(data)[5]]);
-	    	
-	    	$('#edit-data').modal('show');
-	    })
-
-	    function editDataparameter(idx, nmx, prmt) {
-	    	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" id="datainput" value="'+nmx+'">'+
-
-	    		'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
-
-	    		'<div class="alert alert-light">'+nmx+'.</div>'+
-	    			'<div class="form-group">'+
-	                '<h6>Nama Parameter<span class="text-danger">*</span></h6>'+
-	                '<textarea type="text" class="form-control" id="nama" name="nama" placeholder="Nama Parameter" required>'+prmt+'</textarea>'+
-	               '</div></form>';
-
-	               return inpx;
-	    }
-
-	    function editDataIndikator(){
-
-	    }
-
-	    function editDataSubSubAspek(){
-
-	    }
-
-	    function editDataSubAspek(){
-
-	    }
-
-	    function editDataAspek(){
-	    	
-	    }
-
-  	})
-  </script>
 
 
     

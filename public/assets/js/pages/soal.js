@@ -325,6 +325,127 @@ $(document).ready(function(){
 		},500)
 	})
 
+	// function Edit Data 
+	//////////////////////////////////////////////////////////
+
+	$(document).on('click', '.rb-edit', function() {
+	    var t = $('#tbl-rb').DataTable();
+  		var data = t.row($(this).closest('tr')).data();
+
+  		var idx = $(this).data('id')
+	    let inputs = document.getElementById('content-input');
+	    document.getElementById('title-input').innerHTML = 'Edit Data RB'
+	    inputs.innerHTML = '';
+	    inputs.innerHTML = editDataRB(idx,data[Object.keys(data)[3]],data[Object.keys(data)[4]]);
+	    $('#add-data').modal('show');
+	})
+
+	$(document).on('click','.aspek-edit', function(){
+	    var t = $('#tbl-aspek').DataTable();
+  		var data = t.row($(this).closest('tr')).data();
+
+  		var idx = $(this).data('id_aspek')
+  		var idr = $(this).data('id_rb')
+	    let inputs = document.getElementById('content-input');
+	    document.getElementById('title-input').innerHTML = 'Edit Data Aspek'
+	    inputs.innerHTML = '';
+	    inputs.innerHTML = editDataAspek(idr, idx,
+	    	data[Object.keys(data)[4]],
+	    	data[Object.keys(data)[7]],
+	    	data[Object.keys(data)[3]],
+	    	data[Object.keys(data)[8]],
+	    	data[Object.keys(data)[10]],
+	    	data[Object.keys(data)[9]],
+	    	data[Object.keys(data)[5]],
+	    )
+	    $('#add-data').modal('show');
+	})
+
+	$(document).on('click','.sub-aspek-edit', function(){
+	    var t = $('#tbl-sub-aspek').DataTable();
+  		var data = t.row($(this).closest('tr')).data();
+
+  		var idx = $(this).data('id_sub_aspek')
+  		var ids = $(this).data('id_aspek')
+	    let inputs = document.getElementById('content-input');
+	    document.getElementById('title-input').innerHTML = 'Edit Data Sub Aspek'
+	    inputs.innerHTML = '';
+	    inputs.innerHTML = editDataSubAspek(ids, idx,
+	    	data[Object.keys(data)[6]],
+	    	data[Object.keys(data)[3]]
+	    )
+
+	    $('#add-data').modal('show');
+	})
+
+
+	$(document).on('click','.sub-sub-aspek-edit', function(){
+	    var t = $('#tbl-sub-sub-aspek').DataTable();
+  		var data = t.row($(this).closest('tr')).data();
+
+  		var idx = $(this).data('id_sub_sub_aspek')
+  		var ids = $(this).data('sub_aspek')
+	    let inputs = document.getElementById('content-input');
+	    document.getElementById('title-input').innerHTML = 'Edit Data Sub Sub Aspek'
+	    inputs.innerHTML = '';
+	    inputs.innerHTML = editDataSubSubAspek(ids, idx,
+	    	data[Object.keys(data)[3]],
+	    	data[Object.keys(data)[8]]
+	    )
+	    $('#add-data').modal('show');
+	})
+
+
+	$(document).on('click','.indikator-edit', function(){
+	    	var t = $('#tbl-indikator').DataTable();
+  			var data = t.row($(this).closest('tr')).data();
+
+  			var idx = $(this).data('id_indikator')
+  			var ids = $(this).data('sub_sub_aspek')
+  			var jwb = $(this).data('jjwb')
+	    	let inputs = document.getElementById('content-input');
+	    	document.getElementById('title-input').innerHTML = 'Edit Data Indikator'
+	    	inputs.innerHTML = '';
+	    	inputs.innerHTML = editDataIndikator(ids, idx,
+	    		data[Object.keys(data)[5]],
+	    		)
+	    	$('#add-data').modal('show');
+	    	loadJawaban()
+	    	setTimeout(function(){
+	    		$('#jjwb').val(jwb).trigger('change')
+	    	},100)
+	})
+
+	$(document).on('click', '.bukti-edit', function(){
+  		var t = $('#tbl-bukti-dukung').DataTable();
+  		var data = t.row($(this).closest('tr')).data();
+
+	    var idx = $(this).data('bukti')
+	    var ind = $(this).data('indk')
+	    let inputs = document.getElementById('content-input');
+	    document.getElementById('title-input').innerHTML = 'Edit Data Bukti Dukung'
+	    inputs.innerHTML = '';
+	    inputs.innerHTML = editBuktiDukung(idx,ind,data[Object.keys(data)[4]]);
+	    	
+	   	$('#add-data').modal('show');
+	})
+
+	$(document).on('click', '.edit-parameter', function(){
+  		var t = $('#tbl-parameter').DataTable();
+  		var data = t.row($(this).closest('tr')).data();
+
+	    var idx = $(this).data('prmt')
+	    var ind = $(this).data('indk')
+	    let inputs = document.getElementById('content-input');
+	    document.getElementById('title-input').innerHTML = 'Edit Data Parameter'
+	    inputs.innerHTML = '';
+	    inputs.innerHTML = editDataparameter(ind, idx, data[Object.keys(data)[3]], data[Object.keys(data)[5]]);
+	    	
+	    $('#add-data').modal('show');
+	})
+
+
+
 	// function Delete data 
 	//////////////////////////////////////////////////////////
 
@@ -795,6 +916,138 @@ $(document).ready(function(){
         return inpx;
     }
 
+    // Template Edit Data 
+	//////////////////////////////////////////////////////////
+
+	function editDataRB(idx, nmx, bbt){
+	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+	    				'<input type="hidden" id="datainput" value="1">'+
+	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+	    				'<div class="form-group">'+
+                        '<h6>Nama RB <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama RB" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" name="bobot" value="'+bbt+'" placeholder="Bobot" required></div>'+
+
+                        '</form>';
+        return inpx;
+	}
+
+	function editDataAspek(idr, idx, nmx, bbt, thn, nmf, evl, dsk, wkt){
+	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+	    				'<input type="hidden" id="datainput" value="2">'+
+	    				'<input type="hidden" name="rb" value="'+idr+'" id="rb">'+
+	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    				'<div class="form-group">'+
+                        '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama Aspek" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" name="bobot" value="'+bbt+'" placeholder="Bobot" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Tahun <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="tahun" name="tahun" value="'+thn+'" placeholder="Tahun" required></div>'+
+                         '<div class="form-group">'+
+                        '<h6>Nama Form <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="namaform" name="namaform" value="'+nmf+'" placeholder="Nama Form" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Evaluasi <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="eval" name="eval" value="'+evl+'" placeholder="Evaluasi" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Deskripsi <span class="text-danger">*</span></h6>'+
+                        '<textarea type="text" class="form-control" id="desk" name="desk" placeholder="Deskripsi" required>'+dsk+'</textarea></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Batas Waktu <span class="text-danger">*</span></h6>'+
+                        '<input type="datetime-local" class="form-control" id="wkt" value="'+wkt+'" name="wkt" placeholder="Batas Waktu" required></div>'+
+
+                        '</form>';
+        return inpx;
+	}
+
+	function editDataSubAspek(ids, idx, bbt, nmx ){
+	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+	    				'<input type="hidden" id="datainput" value="3">'+
+	    				'<input type="hidden" name="aspek" value="'+ids+'" id="aspek">'+
+	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    				'<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" value="'+bbt+'" name="bobot" placeholder="Bobot" required></div>'+
+                    	'<div class="form-group">'+
+                        '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama sub sub aspek" required>'+
+                    	'</div></form>';
+        return inpx;
+
+	}
+
+	function editDataSubSubAspek(ids, idx, nmx, bbt){
+	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+	    				'<input type="hidden" id="datainput" value="4">'+
+	    				'<input type="hidden" name="subaspek" value="'+ids+'" id="subaspek">'+
+	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    				'<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" value="'+bbt+'" name="bobot" placeholder="Bobot" required></div>'+
+                    	'<div class="form-group">'+
+                        '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama sub sub aspek" required>'+
+                    	'</div></form>';
+        return inpx;
+
+	}
+
+	function editDataIndikator(ids, idx, nmx){
+	    	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+	    				'<input type="hidden" id="datainput" value="5">'+
+	    				'<input type="hidden" name="subsubaspek" value="'+ids+'" id="subsubaspek">'+
+	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    				'<div class="form-group">'+
+                        '<h6>Nama Indikator <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" value="'+nmx+'" name="nama" placeholder="Nama Indikator" required>'+
+                    '</div>'+
+                    '<div class="col-md-12 mb-6">'+
+                       '<h6>Jenis Jawaban <span class="text-danger">*</span></h6>'+
+                        '<div class="input-group mb-3">'+
+                            '<select class=" form-select" name="jjwb" id="jjwb" required></select>'+
+                        '</div></div></form>';
+        return inpx;       
+    }
+
+    function editBuktiDukung(ids, idx, nmx){
+	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+	    				'<input type="hidden" id="datainput" value="6">'+
+	    				'<input type="hidden" name="indkt" value="'+ids+'" id="indkt">'+
+	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+	    				
+    			'<div class="form-group">'+
+                '<h6>Nama Bukti Dukung <span class="text-danger">*</span></h6>'+
+                '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama Bukti Dukung" required>'+
+               '</div></form>';
+
+       return inpx;
+	}
+
+
+	function editDataparameter(ids, idx, nmx, prmt) {
+	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+	    		'<input type="hidden" id="datainput" value="7">'+
+	    		'<input type="hidden" name="indikator" value="'+ids+'" id="indikator">'+
+	    		'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    		'<div class="alert alert-light">'+nmx+'.</div>'+
+	    			'<div class="form-group">'+
+	                '<h6>Nama Parameter<span class="text-danger">*</span></h6>'+
+	                '<textarea type="text" class="form-control" id="nama" name="nama" placeholder="Nama Parameter" required>'+prmt+'</textarea>'+
+	               '</div></form>';
+
+	    return inpx;
+	}
+
 
     // Template View Data 
 	//////////////////////////////////////////////////////////
@@ -827,6 +1080,7 @@ $(document).ready(function(){
                                    '<th>Deskripsi</th>'+
                                    '<th>Evaluasi</th>'+
                                    '<th>Batas Waktu</th>'+
+                                   '<th>Tahun</th>'+
                                    '<th>Sub Aspek</th>'+
                                    '<th>Aksi</th>'+
                                '</tr>'+
@@ -843,6 +1097,7 @@ $(document).ready(function(){
                                '<tr>'+
                                    '<th>No</th>'+
                                    '<th>Sub Aspek</th>'+
+                                   '<th>Bobot</th>'+
                                    '<th>Sub Sub Aspek</th>'+
                                    '<th>Aksi</th>'+
                                '</tr>'+
@@ -859,6 +1114,7 @@ $(document).ready(function(){
                                '<tr>'+
                                    '<th>No</th>'+
                                    '<th>Sub Sub Aspek</th>'+
+                                   '<th>Bobot</th>'+
                                    '<th>Indikator</th>'+
                                    '<th>Aksi</th>'+
                                '</tr>'+
@@ -901,10 +1157,6 @@ $(document).ready(function(){
                        '</table></div>';
         return tblx;
 	}
-
-	// Template Edit Data 
-	//////////////////////////////////////////////////////////
-
 
 	//  Load Data Datatable
 	//////////////////////////////////////////////////////////
@@ -995,6 +1247,7 @@ $(document).ready(function(){
 				{"data" : "deskripsi"},
 				{"data" : "evaluasi"},
 				{"data" : "batas_waktu"},
+				{"data" : "tahun"},
 				{"data" : "sub_aspek"},
 				{
 					"render": function(data, type, JsonResultRow, meta) {
@@ -1002,7 +1255,7 @@ $(document).ready(function(){
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
 									
-						"<button class='btn icon btn-outline-warning aspek-edit' data-id_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+						"<button class='btn icon btn-outline-warning aspek-edit' data-id_aspek='" + JsonResultRow.id + "' data-id_rb='"+JsonResultRow.rb_id+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
 						"<button class='btn icon btn-outline-danger aspek-delete' data-id_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 						+"</div>"
@@ -1056,13 +1309,14 @@ $(document).ready(function(){
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_sub_aspek"},
+				{"data" : "bobot"},
 				{"data" : "sub_sub_aspek"},
 				{
 					"render": function(data, type, JsonResultRow, meta) {
 						var btn = '';
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
-						"<button class='btn icon btn-outline-warning sub-aspek-edit' data-id_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+						"<button class='btn icon btn-outline-warning sub-aspek-edit' data-id_sub_aspek='" + JsonResultRow.id + "' data-id_aspek='"+JsonResultRow.id_aspek+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
 						"<button class='btn icon btn-outline-danger sub-aspek-delete' data-id_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 						+"</div>"
@@ -1109,6 +1363,7 @@ $(document).ready(function(){
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_sub_sub_aspek"},
+				{"data" : "bobot"},
 				{"data" : "indikator"},
 				{
 					"render": function(data, type, JsonResultRow, meta) {
@@ -1116,7 +1371,7 @@ $(document).ready(function(){
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
 									
-						"<button class='btn icon btn-outline-warning sub-sub-aspek-edit' data-id_sub_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+						"<button class='btn icon btn-outline-warning sub-sub-aspek-edit' data-id_sub_sub_aspek='" + JsonResultRow.id + "' data-sub_aspek='"+JsonResultRow.id_sub_aspek+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
 						"<button class='btn icon btn-outline-danger sub-sub-aspek-delete' data-id_sub_sub_aspek='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button"
 						+"</div>"
@@ -1174,7 +1429,7 @@ $(document).ready(function(){
 
 						"<button class='btn icon btn-outline-primary indikator-plus' data-id_indikator='" + JsonResultRow.id + "' data-indikator='"+JsonResultRow.indikator+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-circle' viewBox='0 0 16 16'><path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16'/><path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/></svg></button>"+
 									
-						"<button class='btn icon btn-outline-warning indikator-edit' data-id_indikator='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+						"<button class='btn icon btn-outline-warning indikator-edit' data-id_indikator='" + JsonResultRow.id + "' data-sub_sub_aspek='"+JsonResultRow.id_sub_sub_aspek+"' data-jjwb='"+JsonResultRow.jwbid+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
 						"<button class='btn icon btn-outline-danger indikator-delete' data-id_indikator='" + JsonResultRow.id + "' ><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 						+"</div>"
@@ -1227,7 +1482,7 @@ $(document).ready(function(){
 						var btn = '';
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
-						"<button class='btn icon btn-outline-warning bukti-edit' data-bukti='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+						"<button class='btn icon btn-outline-warning bukti-edit' data-bukti='" + JsonResultRow.id + "' data-indk='"+JsonResultRow.id_indikator+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
 
 						"<button class='btn icon btn-outline-danger bukti-delete' data-bukti='" + JsonResultRow.id + "' ><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 						+"</div>"
@@ -1247,7 +1502,7 @@ $(document).ready(function(){
 	}
 
 	function LoadParameter(){
-      	var t = $('#datatable').DataTable({
+      	var t = $('#tbl-parameter').DataTable({
 	        "dom": 'rtip',
 	        "scrollX": false,
 			"processing": true,
@@ -1265,6 +1520,7 @@ $(document).ready(function(){
 						},
 						"method": "GET",
 						"dataSrc": function(data){
+
 							csrf.value = data.token_crs
 							return data.dt;
 
@@ -1298,9 +1554,9 @@ $(document).ready(function(){
 						}
 					],
 					// order: [[2, 'asc']],
-					rowGroup: {
-			        dataSrc: 'indikator'
-			    }
+					"rowGroup": {
+			        	dataSrc: 'indikator'
+			    	}
 	    });
       t.on('order.dt search.dt', function() {
 			t.column(0, {
@@ -1335,7 +1591,7 @@ $(document).ready(function(){
 			var t = $('#tbl-bukti-dukung').DataTable();
 		}
 		if (ket == 7) {
-			var t = $('#datatable').DataTable();
+			var t = $('#tbl-parameter').DataTable();
 		}
 		t.ajax.reload(null, false);
 	}
