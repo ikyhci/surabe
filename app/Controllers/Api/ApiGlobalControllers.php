@@ -2,14 +2,17 @@
 
 namespace App\Controllers\Api;
 
+use CodeIgniter\HTTP\IncomingRequest;
 use App\Controllers\BaseController;
+use App\Models\DashboardModel;
 use Clue\React\NDJson\Decoder;
+use CodeIgniter\Commands\Utilities\Publish;
+use CodeIgniter\HTTP\Header;
+use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Services;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
 
 // Global API Controller
 
@@ -23,11 +26,15 @@ class ApiGlobalControllers extends BaseController
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
-         if(!empty($header)) {
+        if (!$header) {
+            $token = $request->getCookie('__LKE-Authorization');
+        }
+        if(!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
         }
+        
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
@@ -164,7 +171,7 @@ class ApiGlobalControllers extends BaseController
             $data = array(
                     'token_crs' => csrf_hash(),
                     'dt'        => $list,
-                    );
+                );
 
             return $this->response->setJSON($data);
         }else{
@@ -173,7 +180,7 @@ class ApiGlobalControllers extends BaseController
                     'success'       =>  0,
                     'msg'           =>  'Access denied cntrl',
                     'StatusCode'    =>  '401',
-                    );
+                );
             return  json_encode($data);
         }
     }
@@ -386,4 +393,64 @@ class ApiGlobalControllers extends BaseController
         }
     }
 
+
+
+    public function nilai()
+    {
+
+        $tahun = $this->request->getVar('tahun') ?? date('Y');
+
+        $dashboardModel = new DashboardModel();
+
+
+        $opd = $dashboardModel->getOpd();
+        foreach ($opd as $key => $value) {
+            $opd[$key]->nilai = 0;
+            $instrumen = $dashboardModel->getInstrumen();
+            $nilaiInstrumen = [];
+
+            $aspek = $dashboardModel->getAspek($tahun);
+            foreach ($aspek as $k => $v) {
+                $subAspek = $dashboardModel->getSubAspek($v->id);
+                foreach ($subAspek as $kk => $vv) {
+                    $subSubAspek = $dashboardModel->getSubSubAspek($vv->id);
+                    $totalSubSubAspekNilai = 0;
+                    foreach ($subSubAspek as $kkk => $vvv) {
+                        $nilai = $dashboardModel->nilaiSubSubAspekOpd($vvv->id, $value->id)->nilai;
+                        $subSubAspek[$kkk]->nilai = $nilai?? 0 ;
+                        $totalSubSubAspekNilai += $nilai;
+                    }
+                    $subAspek[$kk]->sub_sub_aspek = $subSubAspek;
+                    $subAspek[$kk]->nilai = $totalSubSubAspekNilai;
+                }
+
+                $totalSubAspekNilai = array_sum(array_column($subAspek, 'nilai'));
+                $aspek[$k]->sub_aspek = $subAspek;
+                $aspek[$k]->nilai = $totalSubAspekNilai / count($subAspek);
+                foreach ($instrumen as $ik => $iv) {
+                    if ($iv->id == $v->rb_id) {
+                        $instrumen[$ik]->nilai +=  $aspek[$k]->nilai;
+                        $instrumen[$ik]->aspek[] = $aspek[$k];
+                    } else {
+                        $instrumen[$ik]->nilai +=  0;
+                        $instrumen[$ik]->aspek = [];
+                    }
+
+                    $opd[$key]->nilai += $instrumen[$ik]->nilai;
+                }
+            }
+            $opd[$key]->instrumen = $instrumen;
+
+        }
+
+        $data = [
+            'success' => true,
+            'dt' => $opd,
+            'msg' => 'Data berhasil diambil',
+            'token_crs' => csrf_hash(),
+        ];
+
+        return $this->response->setJSON($data);
+    }
+    
 }

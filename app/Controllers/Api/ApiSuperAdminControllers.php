@@ -11,6 +11,8 @@ use Firebase\JWT\Key;
 use Config\Services;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\Header;
+use CodeIgniter\Model;
+use stdClass;
 
 class ApiSuperAdminControllers extends BaseController
 {
@@ -254,5 +256,38 @@ class ApiSuperAdminControllers extends BaseController
                 'msg' => $result['msg']
             ]);
         }
+    }
+
+    public function capaianOpd()
+    {
+        $dashboardModel = new \App\Models\DashboardModel;
+        $tahun = $this->request->getVar('tahun') ?? date('Y') ;
+        $list = [];
+        $nilaiOpd = $dashboardModel->nilaiOpd($tahun);
+        foreach($nilaiOpd as $k => $v) {
+            $opd = new stdClass();
+            $opd->id_opd = $v->id;
+            $opd->nama_opd = $v->nama_opd;
+            $opd->singkatan = $v->singkatan;
+            $opd->nilai = 0;
+            $nilaisum = 0;
+            $opd->domains = [];
+            foreach ($v->instrumen as $rb) {
+                $nilaisum += $rb->nilai;
+                foreach ($rb->aspek as $aspek) {
+                    $opd->domains[] = $aspek;
+                }
+            }
+            $opd->nilai = $nilaisum / count($v->instrumen);
+            $list[] = $opd;
+        }
+        
+        $data = array(
+            'success'   =>  1,
+            'msg'       =>  'success',
+            'token_crs' => csrf_hash(),
+            'dt'        => $list,
+        );
+        return $this->response->setJSON($data);
     }
 }

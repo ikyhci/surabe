@@ -84,6 +84,7 @@ $routes->group('api',['filter' => ['apiFilter:Soal,Super Admin,Penilai,User','co
 	$routes->get('get-roles', 'Api\ApiGlobalControllers::getRoles');
 	$routes->get('get-bukti-dukung', 'Api\ApiGlobalControllers::getBuktiDukung');
 	$routes->get('get-rb', 'Api\ApiGlobalControllers::getRb');
+	$routes->get('nilai-opd', 'Api\ApiGlobalControllers::nilai');
 
 	$routes->post('get-user-by-id','Api\ApiGlobalControllers::getUSerById');
 
@@ -110,6 +111,8 @@ $routes->group('api',['filter' => ['apiFilter:Super Admin','cors']], function($r
 	$routes->delete('delete-user/(:any)', 'Api\ApiSuperAdminControllers::deleteUser/$1');
 	$routes->post('save-opd', 'Api\ApiSuperAdminControllers::saveOPD');
 	$routes->post('del-opd', 'Api\ApiSuperAdminControllers::delOPD');
+
+	$routes->get('capaian-opd', 'Api\ApiSuperAdminControllers::capaianOpd');
 });
 
 // route Penilai
@@ -122,4 +125,6 @@ $routes->group('api',['filter' => ['apiFilter:Penilai,Super Admin','cors']], fun
     $routes->post('penilaian/jawabanOpdIndikator', 'Api\ApiPenilaiControllers::jawabanOpdIndikator');
     $routes->post('penilaian/simpanPoint', 'Api\ApiPenilaiControllers::simpanPoint');
 	$routes->post('penilaian/uploadBuktiDukung', 'Api\ApiPenilaiControllers::uploadBuktiDukung');
+
+	$routes->get('capaian-opd', 'Api\ApiSuperAdminControllers::capaianOpd');
 });

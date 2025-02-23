@@ -8,6 +8,7 @@ use Firebase\JWT\Key;
 use Config\Services;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\Header;
+use App\Models\DashboardModel;
 
 class Dashboard extends BaseController
 {
@@ -35,11 +36,13 @@ class Dashboard extends BaseController
 
     public function index()
     {
+
         if (!empty($this->decoded->rln)) {
             $usr = $this->decoded->rln;
             $data = array(
                 'usr' => $usr,
-                'uname' => $this->decoded->iss, 
+                'uname' => $this->decoded->iss,
+                'token' => get_cookie('Authorization', true,'__LKE-'),
             );
             if ($usr == 'User') {
 
@@ -51,18 +54,17 @@ class Dashboard extends BaseController
             }
             if ($usr == 'Penilai') {
               
-                return view('Pages/dashboard',$data);
+                return view('Pages/penilai/dashboard',$data);
             }
             if ($usr == 'Super Admin') {
                 
-                return view('Pages/dashboard',$data);
+                return view('Pages/superadmin/dashboard',$data);
             }
         }else{
             return redirect()->to(base_url().'unauthorized');
             
         }
     }
-
 
     public function help()
     {

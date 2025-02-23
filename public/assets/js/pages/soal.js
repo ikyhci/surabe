@@ -1,6 +1,9 @@
 $(document).ready(function(){
+	let httpProtocol = window.location.protocol;
+	let host = window.location.host;
+	let urlx = httpProtocol+'//'+host;
 	//global variable
-	var urlx = 'http://localhost:8080/'//window.location.host;
+	// var urlx = 'http://' + window.location.host;
 	var token = document.getElementById('token').value;
 	var csrf = document.getElementById('csrf_token')
 

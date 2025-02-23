@@ -196,8 +196,6 @@
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript" >
-    console.log('Dashboard Penilai');
-    
     $(document).ready(function() {
         $.ajax({
             url: "<?= base_url('api/capaian-opd') ?>",
@@ -225,9 +223,7 @@
                     $.each(item.domains, function(index, d) {
                         row += `<td class="text-center">${d.nilai}</td>`;
                         capaian += d;
-                    });
-                    console.log(item.domains);
-                    
+                    });                    
                     row += `<td class="text-center">${item.nilai}</td></tr>`;
                     tableBody.append(row);
                 });

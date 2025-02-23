@@ -38,6 +38,7 @@ class ApiPenilaiControllers extends BaseController
     public function getPenilaianMandiri()
     {
         $idaspek = $this->request->getVar('asp');
+        $ttahun = $this->request->getVar('thn');
         $penilaianModel = new PenilaianModel();
         $opd = $penilaianModel->getDataOpd($idaspek);
         $response = [

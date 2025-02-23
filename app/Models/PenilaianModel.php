@@ -14,27 +14,28 @@ class PenilaianModel extends Model
         $this->db = db_connect();
     }
     
-    public function getDataOpd($idasp)
+    public function getDataOpd($tahun)
     {
         // dd();
 
-        $aspek = $this->db->query("CALL View_Aspek('".$idasp."', null, null)")->getRow();
-        $tahun = $aspek->tahun;
+        // $aspek = $this->db->query("CALL View_Aspek('".$idasp."', null, null)")->getRow();
+        // $tahun = $aspek->tahun;
         if ($tahun === null) {
             $tahun = date('Y');
         }
         $data = [];
         $opd = $this->db->query("call View_Opd(null, null, null)")->getResult();
 
-        $indikator = $this->indikatorByAspek($idasp);
+        // $indikator = $this->indikatorByAspek($idasp);
+        $indikator = $this->getIndikatorTahunan($tahun);
         $jumlahIndikator = count($indikator);
 
         foreach ($opd as $key => $value) {
-            $kondisiOpd = $this->getJawabanByOPD($value->id, null, $idasp);
+            $kondisiOpd = $this->getJawabanByOPD($value->id, null, null, $tahun);
             $jumlahKondisi = count($kondisiOpd);
             $data[] = [
                 'id' => $value->id,
-                'formid' => base64_encode(json_encode(['opdid' => $value->id, 'idasp' => $aspek->id])),
+                'formid' => base64_encode(json_encode(['opdid' => $value->id, 'idasp' => null, 'tahun' => $tahun])),
                 'nama_opd' => $value->nama_opd,
                 'detail' => [
                     'jumlah_indikator' => $jumlahIndikator,
@@ -89,64 +90,72 @@ class PenilaianModel extends Model
         return $result;
     }
 
-    public function getJawabanByOPD($opd_id, $indikator_id=null, $aspek_id=null)
+    public function getJawabanByOPD($opd_id, $indikator_id=null, $aspek_id=null, $tahun=null)
     {
+        if(!$tahun){
+            $tahun = date('Y');
+        }
+
         if ($indikator_id && !$aspek_id) {
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
-                ->join('lke_user b', 'a.userid = b.uid', 'inner')
-                ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
-                ->join('lke_opd d', 'c.opdid = d.id', 'inner')
-                ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
-                ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
-                ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
-                ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
-                ->where('d.id', $opd_id)
-                ->where('e.id', $indikator_id)
-                ->get()
-                ->getResultArray();
-        }elseif(!$indikator_id && $aspek_id){
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
+            ->join('lke_user b', 'a.userid = b.uid', 'inner')
+            ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
+            ->join('lke_opd d', 'c.opdid = d.id', 'inner')
+            ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
+            ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
+            ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
+            ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->where('d.id', $opd_id)
+            ->where('e.id', $indikator_id)
+            ->where('asp.tahun', $tahun)
+            ->get()
+            ->getResultArray();
+        } elseif (!$indikator_id && $aspek_id) {
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
-                ->join('lke_user b', 'a.userid = b.uid', 'inner')
-                ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
-                ->join('lke_opd d', 'c.opdid = d.id', 'inner')
-                ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
-                ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
-                ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
-                ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
-                ->where('d.id', $opd_id)
-                ->where('asp.id', $aspek_id)
-                ->get()
-                ->getResultArray();
-        }elseif($indikator_id && $aspek_id){
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
+            ->join('lke_user b', 'a.userid = b.uid', 'inner')
+            ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
+            ->join('lke_opd d', 'c.opdid = d.id', 'inner')
+            ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
+            ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
+            ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
+            ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->where('d.id', $opd_id)
+            ->where('asp.id', $aspek_id)
+            ->where('asp.tahun', $tahun)
+            ->get()
+            ->getResultArray();
+        } elseif ($indikator_id && $aspek_id) {
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
-                ->join('lke_user b', 'a.userid = b.uid', 'inner')
-                ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
-                ->join('lke_opd d', 'c.opdid = d.id', 'inner')
-                ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
-                ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
-                ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
-                ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
-                ->where('d.id', $opd_id)
-                ->where('e.id', $indikator_id)
-                ->where('asp.id', $aspek_id)
-                ->get()
-                ->getResultArray();
-        }else{
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
+            ->join('lke_user b', 'a.userid = b.uid', 'inner')
+            ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
+            ->join('lke_opd d', 'c.opdid = d.id', 'inner')
+            ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
+            ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
+            ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
+            ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->where('d.id', $opd_id)
+            ->where('e.id', $indikator_id)
+            ->where('asp.id', $aspek_id)
+            ->where('asp.tahun', $tahun)
+            ->get()
+            ->getResultArray();
+        } else {
             return $this->db->table('lke_jawaban a')
-                ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
-                ->join('lke_user b', 'a.userid = b.uid', 'inner')
-                ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
-                ->join('lke_opd d', 'c.opdid = d.id', 'inner')
-                ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
-                ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
-                ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
-                ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
-                ->where('d.id', $opd_id)
-                ->get()
-                ->getResultArray();
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket')
+            ->join('lke_user b', 'a.userid = b.uid', 'inner')
+            ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
+            ->join('lke_opd d', 'c.opdid = d.id', 'inner')
+            ->join('lke_indikator e', 'a.id_indikator = e.id', 'inner')
+            ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
+            ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
+            ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->where('d.id', $opd_id)
+            ->where('asp.tahun', $tahun)
+            ->get()
+            ->getResultArray();
         }
     }
 
@@ -241,5 +250,34 @@ class PenilaianModel extends Model
 
         $this->db->query("CALL upload_bukti_add_edit('$idOpd', '', '$idbkt', '$newName')");
         return $this->db->affectedRows();
+    }
+
+    public function getIndikatorTahunan($tahun) {
+        
+        $db = \Config\Database::connect();
+        $builder = $db->table('lke_aspek a')
+            ->select('
+                a.id AS aspek_id, 
+                a.nama_aspek, 
+                a.bobot AS aspek_bobot, 
+                a.tahun AS aspek_tahun, 
+                sa.id AS sub_aspek_id, 
+                sa.nama_sub_aspek, 
+                sa.bobot AS sub_aspek_bobot, 
+                ssa.id AS sub_sub_aspek_id, 
+                ssa.nama_sub_sub_aspek, 
+                ssa.bobot AS sub_sub_aspek_bobot, 
+                i.id AS indikator_id, 
+                i.indikator
+            ')
+            ->join('lke_sub_aspek sa', 'sa.id_aspek = a.id', 'inner')
+            ->join('lke_sub_sub_aspek ssa', 'ssa.id_sub_aspek = sa.id', 'inner')
+            ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner');
+
+        $builder->where('a.tahun', $tahun);
+
+        $query = $builder->get();
+        $result = $query->getResultArray();
+        return $result;
     }
 }
