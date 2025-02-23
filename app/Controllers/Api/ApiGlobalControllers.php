@@ -6,6 +6,7 @@ use CodeIgniter\HTTP\IncomingRequest;
 use App\Controllers\BaseController;
 use App\Models\DashboardModel;
 use Clue\React\NDJson\Decoder;
+use CodeIgniter\Commands\Utilities\Publish;
 use CodeIgniter\HTTP\Header;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -404,6 +405,10 @@ class ApiGlobalControllers extends BaseController
 
         $opd = $dashboardModel->getOpd();
         foreach ($opd as $key => $value) {
+            $opd[$key]->nilai = 0;
+            $instrumen = $dashboardModel->getInstrumen();
+            $nilaiInstrumen = [];
+
             $aspek = $dashboardModel->getAspek($tahun);
             foreach ($aspek as $k => $v) {
                 $subAspek = $dashboardModel->getSubAspek($v->id);
@@ -411,7 +416,7 @@ class ApiGlobalControllers extends BaseController
                     $subSubAspek = $dashboardModel->getSubSubAspek($vv->id);
                     $totalSubSubAspekNilai = 0;
                     foreach ($subSubAspek as $kkk => $vvv) {
-                        $nilai = $dashboardModel->nilaiSubSubAspekOpd($vvv->id, $value->id);
+                        $nilai = $dashboardModel->nilaiSubSubAspekOpd($vvv->id, $value->id)->nilai;
                         $subSubAspek[$kkk]->nilai = $nilai?? 0 ;
                         $totalSubSubAspekNilai += $nilai;
                     }
@@ -422,14 +427,25 @@ class ApiGlobalControllers extends BaseController
                 $totalSubAspekNilai = array_sum(array_column($subAspek, 'nilai'));
                 $aspek[$k]->sub_aspek = $subAspek;
                 $aspek[$k]->nilai = $totalSubAspekNilai / count($subAspek);
-            }
+                foreach ($instrumen as $ik => $iv) {
+                    if ($iv->id == $v->rb_id) {
+                        $instrumen[$ik]->nilai +=  $aspek[$k]->nilai;
+                        $instrumen[$ik]->aspek[] = $aspek[$k];
+                    } else {
+                        $instrumen[$ik]->nilai +=  0;
+                        $instrumen[$ik]->aspek = [];
+                    }
 
-            $opd[$key]->aspek = $aspek;
+                    $opd[$key]->nilai += $instrumen[$ik]->nilai;
+                }
+            }
+            $opd[$key]->instrumen = $instrumen;
+
         }
 
         $data = [
             'success' => true,
-            'data' => $opd,
+            'dt' => $opd,
             'msg' => 'Data berhasil diambil',
             'token_crs' => csrf_hash(),
         ];

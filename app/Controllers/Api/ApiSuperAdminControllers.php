@@ -11,6 +11,8 @@ use Firebase\JWT\Key;
 use Config\Services;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\Header;
+use CodeIgniter\Model;
+use stdClass;
 
 class ApiSuperAdminControllers extends BaseController
 {
@@ -258,23 +260,34 @@ class ApiSuperAdminControllers extends BaseController
 
     public function capaianOpd()
     {
-        $superAdminModel = new SuperAdminModel();
-        $list = $superAdminModel->getOpd();
-        foreach ($list as $key => $value) {
-            $list[$key]->capaian_sasaran_strategis = $capaian_sasaran_strategis = rand(65, 100);
-            $list[$key]->capaian_pelaksanaan_kebijakan_rb = $capaian_pelaksanaan_kebijakan_rb = rand(65, 100);
-            $list[$key]->capaian_strategis_pelaksanaan_rb_general = $capaian_strategis_pelaksanaan_rb_general = rand(65, 100);
-            $list[$key]->strategi_membangun_rb_tematik = $strategi_membangun_rb_tematik = rand(65, 100);
-            $list[$key]->capaian_dampak_rb_tematik = $capaian_dampak_rb_tematik = rand(65, 100);
-            $list[$key]->capaian = ($capaian_sasaran_strategis + $capaian_pelaksanaan_kebijakan_rb + $capaian_strategis_pelaksanaan_rb_general + $strategi_membangun_rb_tematik + $capaian_dampak_rb_tematik) / 5;
+        $dashboardModel = new \App\Models\DashboardModel;
+        $tahun = $this->request->getVar('tahun') ?? date('Y') ;
+        $list = [];
+        $nilaiOpd = $dashboardModel->nilaiOpd($tahun);
+        foreach($nilaiOpd as $k => $v) {
+            $opd = new stdClass();
+            $opd->id_opd = $v->id;
+            $opd->nama_opd = $v->nama_opd;
+            $opd->singkatan = $v->singkatan;
+            $opd->nilai = 0;
+            $nilaisum = 0;
+            $opd->domains = [];
+            foreach ($v->instrumen as $rb) {
+                $nilaisum += $rb->nilai;
+                foreach ($rb->aspek as $aspek) {
+                    $opd->domains[] = $aspek;
+                }
+            }
+            $opd->nilai = $nilaisum / count($v->instrumen);
+            $list[] = $opd;
         }
+        
         $data = array(
             'success'   =>  1,
             'msg'       =>  'success',
             'token_crs' => csrf_hash(),
             'dt'        => $list,
         );
-
         return $this->response->setJSON($data);
     }
 }

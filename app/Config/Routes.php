@@ -14,8 +14,6 @@ $routes->setAutoRoute(false);
 $routes->get('/','PublicPages::login');
 $routes->get('/unauthorized','PublicPages::Unauthorized');
 
-$routes->get('/coba', 'Api\ApiGlobalControllers::nilai');
-
 //login api
 $routes->group('api',  function($routes){
 	$routes->post('login','Auth\AuthControllers::auth');
@@ -86,6 +84,7 @@ $routes->group('api',['filter' => ['apiFilter:Soal,Super Admin,Penilai,User','co
 	$routes->get('get-roles', 'Api\ApiGlobalControllers::getRoles');
 	$routes->get('get-bukti-dukung', 'Api\ApiGlobalControllers::getBuktiDukung');
 	$routes->get('get-rb', 'Api\ApiGlobalControllers::getRb');
+	$routes->get('nilai-opd', 'Api\ApiGlobalControllers::nilai');
 
 	$routes->post('get-user-by-id','Api\ApiGlobalControllers::getUSerById');
 
@@ -126,4 +125,6 @@ $routes->group('api',['filter' => ['apiFilter:Penilai,Super Admin','cors']], fun
     $routes->post('penilaian/jawabanOpdIndikator', 'Api\ApiPenilaiControllers::jawabanOpdIndikator');
     $routes->post('penilaian/simpanPoint', 'Api\ApiPenilaiControllers::simpanPoint');
 	$routes->post('penilaian/uploadBuktiDukung', 'Api\ApiPenilaiControllers::uploadBuktiDukung');
+
+	$routes->get('capaian-opd', 'Api\ApiSuperAdminControllers::capaianOpd');
 });

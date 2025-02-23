@@ -31,14 +31,21 @@ class DashboardModel extends Model
         }else {
             $query = $builder->get()->getResult();
         }
-
-        return $query;
+        if ($query) {
+            return $query;
+        }else {
+            $data = new \stdClass();
+            $data->nama_opd = null;
+            $data->nama_sub_sub_aspek = null;
+            $data->nilai = 0;
+            return $data;
+        }
     }
 
     public function getAspek($tahun = null) {
 
         $aspek = $this->db->table('lke_aspek')
-                    ->select('id, nama_aspek');
+                    ->select('id, nama_aspek, tahun, rb_id');
         if ($tahun !== null) {
             $aspek->where('tahun', $tahun);
         }
@@ -64,10 +71,63 @@ class DashboardModel extends Model
 
     public function getOpd() {
         $opd = $this->db->table('lke_opd')
-                    ->select('id, nama_opd');
+                    ->select('id, nama_opd, singkatan');
         $opd = $opd->get()->getResult();
         return $opd;
     }
     
+    public function getInstrumen() {
+        $instrumen = $this->db->table('lke_rb')
+                    ->select('id, nama, 0 nilai');
+        $instrumen = $instrumen->get()->getResult();
+        return $instrumen;
+    }
+
+    public function nilaiOpd($tahun = null)
+    {
+
+        $tahun = $tahun ?? date('Y') ;
+        $opd = $this->getOpd();
+        foreach ($opd as $key => $value) {
+            $opd[$key]->nilai = 0;
+            $instrumen = $this->getInstrumen();
+            $nilaiInstrumen = [];
+
+            $aspek = $this->getAspek($tahun);
+            foreach ($aspek as $k => $v) {
+                $subAspek = $this->getSubAspek($v->id);
+                foreach ($subAspek as $kk => $vv) {
+                    $subSubAspek = $this->getSubSubAspek($vv->id);
+                    $totalSubSubAspekNilai = 0;
+                    foreach ($subSubAspek as $kkk => $vvv) {
+                        $nilai = $this->nilaiSubSubAspekOpd($vvv->id, $value->id)->nilai;
+                        $subSubAspek[$kkk]->nilai = $nilai?? 0 ;
+                        $totalSubSubAspekNilai += $nilai;
+                    }
+                    $subAspek[$kk]->sub_sub_aspek = $subSubAspek;
+                    $subAspek[$kk]->nilai = $totalSubSubAspekNilai;
+                }
+
+                $totalSubAspekNilai = array_sum(array_column($subAspek, 'nilai'));
+                $aspek[$k]->sub_aspek = $subAspek;
+                $aspek[$k]->nilai = $totalSubAspekNilai / count($subAspek);
+                foreach ($instrumen as $ik => $iv) {
+                    if ($iv->id == $v->rb_id) {
+                        $instrumen[$ik]->nilai +=  $aspek[$k]->nilai;
+                        $instrumen[$ik]->aspek[] = $aspek[$k];
+                    } else {
+                        $instrumen[$ik]->nilai +=  0;
+                        $instrumen[$ik]->aspek = [];
+                    }
+
+                    $opd[$key]->nilai += $instrumen[$ik]->nilai;
+                }
+            }
+            $opd[$key]->instrumen = $instrumen;
+
+        }
+
+        return $opd;
+    }
 
 }

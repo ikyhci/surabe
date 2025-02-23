@@ -5,12 +5,19 @@
     .verticaltext {
         writing-mode: vertical-rl;
         transform: rotate(180deg);
-        white-space: nowrap;
+        white-space: normal;
         height: 200px;
     }
     .col-nilai {
         width: 100px;
     }
+    .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
 </style>
 <?= $this->endSection() ?>
 
@@ -134,21 +141,10 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover table-bordered" id="penilaianOpd">
+                                <div class="loading"></div>
+                                <table id="penilaianOpd">
                                     <thead class="text-center">
                                         <tr>
-                                            <th rowspan="2" class="col-nilai">No</th>
-                                            <th rowspan="2">Nama OPD</th>
-                                            <th colspan="3">RB GENERAL PD</th>
-                                            <th colspan="2">RB TEMATIK PERANGKAT DAERAH</th>
-                                            <th rowspan="2" class="col-nilai" >Capaian</th>
-                                        </tr>
-                                        <tr class="text-center">
-                                            <th class="verticaltext col-nilai">Capaian Sasaran</br>Strategis</th>
-                                            <th class="verticaltext col-nilai">Capaian Pelaksanaan</br>Kebijakan RB</th>
-                                            <th class="verticaltext col-nilai">Capaian Strategis</br>Pelaksanaan RB General</th>
-                                            <th class="verticaltext col-nilai">Strategi Membangunan</br>RB Tematik</th>
-                                            <th class="verticaltext col-nilai">Capaian Dampak</br>RB Tematik</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -201,53 +197,61 @@
 
 <script {csp-script-nonce} type="text/javascript" >
     $(document).ready(function() {
-        $('#penilaianOpd').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "order": [[, 'desc']],
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "scrollX": true,
-            "language": {
-                "emptyTable": "Tidak ada data yang tersedia pada tabel ini",
-                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                "infoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
-                "infoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-                "loadingRecords": "Memuat...",
-                "processing": "Sedang memproses...",
-                "search": "Cari:",
-                "zeroRecords": "Tidak ditemukan data yang sesuai",
-                "paginate": {
-                    "first": "Pertama",
-                    "last": "Terakhir",
-                    "next": "Selanjutnya",
-                    "previous": "Sebelumnya"
-                }
+        $.ajax({
+            url: "<?= base_url('api/capaian-opd') ?>",
+            type: "GET",
+            headers: { "Authorization": "Bearer <?= $token ?>" },
+            success: function(response) {
+                loading('.loading', 'hide');
+                let dt = response.dt;
+                
+                let tableHeader = $('#penilaianOpd thead tr');
+                tableHeader.empty();
+                tableHeader.append('<th class="col-nilai" >No</th>');
+                tableHeader.append('<th>OPD</th>');
+                $.each(dt[0].domains, function(index, item) {
+                    tableHeader.append(`<th class="verticaltext col-nilai" >${item.nama_aspek}</th>`);``
+                });
+                tableHeader.append('<th>Capaian</th>');
+                let tableBody = $('#penilaianOpd tbody');
+                tableBody.empty();
+                $.each(dt, function(index, item) {
+                    let capaian = 0;
+                    let row = `<tr>
+                        <td>${index + 1}</td>
+                        <td>${item.singkatan}</td>`;
+                    $.each(item.domains, function(index, d) {
+                        row += `<td class="text-center">${d.nilai}</td>`;
+                        capaian += d;
+                    });                    
+                    row += `<td class="text-center">${item.nilai}</td></tr>`;
+                    tableBody.append(row);
+                });
+                
+                let table = $("#penilaianOpd")
+                table.addClass('table table-hover table-bordered');
+                table.DataTable();
             },
-            "ajax": {
-                "url": "<?= base_url('api/capaian-opd') ?>",
-                "type": "GET",
-                "headers": { "Authorization": "Bearer <?= $token ?>" },
-                "dataSrc": function(response) {
-                    console.log(response);
-                    return response.dt;
-                }
-            },
-            "columns": [
-                { data: function(data, type, row, meta) { return meta.row + 1; } },
-                { data: 'singkatan' },
-                { data: 'capaian_sasaran_strategis' },
-                { data: 'capaian_pelaksanaan_kebijakan_rb' },
-                { data: 'capaian_strategis_pelaksanaan_rb_general' },
-                { data: 'strategi_membangun_rb_tematik' },
-                { data: 'capaian_dampak_rb_tematik' },
-                { data: 'capaian' }
-            ]
+            error: function(xhr, status, error) {
+                console.error("AJAX Error: ", status, error);
+            }
         });
     });
+
+    function loading(elTarget, togle) {
+        let eLoading = `<img src="assets/vendors/svg-loaders/audio.svg" class="me-4" style="width: 3rem" alt="audio">`;
+        switch (togle) {
+            case 'show':
+                $(elTarget).append(
+                    `<div class="d-flex justify-content-center align-items-center">${eLoading} Loading...</div>`
+                );
+                break;
+            case 'hide':
+                $(elTarget).html('');
+                break;
+        }
+    }
+    loading('.loading', 'show');
 </script>
 
 <?= $this->endSection() ?>
