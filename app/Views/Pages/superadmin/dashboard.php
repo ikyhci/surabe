@@ -196,12 +196,14 @@
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript" >
+    let csrf_hash = "<?= csrf_hash() ?>";
     $(document).ready(function() {
         $.ajax({
             url: "<?= base_url('api/capaian-opd') ?>",
             type: "GET",
             headers: { "Authorization": "Bearer <?= $token ?>" },
             success: function(response) {
+                csrf_hash=response.token_crs;
                 loading('.loading', 'hide');
                 let dt = response.dt;
                 
