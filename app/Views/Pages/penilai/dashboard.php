@@ -196,7 +196,7 @@
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript" >
-    console.log('Dashboard Penilai');
+    let csrf_hash = "<?= csrf_hash() ?>";
     
     $(document).ready(function() {
         $.ajax({
@@ -204,9 +204,10 @@
             type: "GET",
             headers: { "Authorization": "Bearer <?= $token ?>" },
             success: function(response) {
+                csrf_hash=response.token_crs;
                 loading('.loading', 'hide');
                 let dt = response.dt;
-                
+
                 let tableHeader = $('#penilaianOpd thead tr');
                 tableHeader.empty();
                 tableHeader.append('<th class="col-nilai" >No</th>');
@@ -225,10 +226,7 @@
                     $.each(item.domains, function(index, d) {
                         row += `<td class="text-center">${d.nilai}</td>`;
                         capaian += d;
-                    });
-                    console.log(item.domains);
-                    
-                    row += `<td class="text-center">${item.nilai}</td></tr>`;
+                    });                    row += `<td class="text-center">${item.nilai}</td></tr>`;
                     tableBody.append(row);
                 });
                 
