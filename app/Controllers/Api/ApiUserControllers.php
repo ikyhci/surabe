@@ -30,6 +30,33 @@ class ApiUserControllers extends BaseController
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
+
+    // public function getDashboardTable()
+    // {
+    //     try {
+    //         if (!empty($this->decoded->aud)) {
+    //             $IDX = null;
+    //             $LIMIT = null;
+    //             $OFFSET =null;
+
+    //         }else{
+    //            $data = array(
+    //                 'token_crs' =>  csrf_hash(),
+    //                 'success'   =>  0,
+    //                 'msg'       =>  'error invalid token'
+    //             );
+    //             return $this->response->setJSON($data); 
+    //         }
+            
+    //     } catch (Exception $e) {
+    //         $data = array(
+    //                 'token_crs' =>  csrf_hash(),
+    //                 'success'   =>  0,
+    //                 'msg'       =>  'error in : '.$e,
+    //         );
+    //         return $this->response->setJSON($data);
+    //     }
+    // }
     
     public function getDashboard()
     {
@@ -40,8 +67,9 @@ class ApiUserControllers extends BaseController
                 $LIMIT = null;
                 $OFFSET =null;
                 $thn = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+      
 
-                $usr = $this->decoded->rln;
+                // $usr = $this->decoded->rln;
                 $tahun = array();
                 foreach ($thn as $key ) {
                     $tahun[] = $key->tahun;
@@ -77,7 +105,20 @@ class ApiUserControllers extends BaseController
         // 
         try {
             if (!empty($this->decoded->aud)) {
-                // code...
+
+                $nlx = $this->db->query("CALL View_Dashboard_User('".
+                    $this->decoded->ids."','".
+                    $this->request->getVar('thn')."','".
+                    $this->request->getVar('apv')."')")->getResult();
+                
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'dt'        => $nlx,
+                    'msg'       =>  'success',
+                     );
+                return $this->response->setJSON($data);
+
             }else{
                 $data = array(
                     'token_crs' =>  csrf_hash(),

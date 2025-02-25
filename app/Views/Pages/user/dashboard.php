@@ -140,7 +140,7 @@
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
                         <label class="form-check-label" for="flexRadioDefault1">
                           Hasil Penilaian Mandiri
                         </label>
@@ -158,7 +158,7 @@
               </div>
             </div>   
             <!--  -->
-            <div class="table-responsive">
+            <!-- <div class="table-responsive">
               <table class="table mb-0">
                 <tbody>
                   <tr>
@@ -183,7 +183,7 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div> -->
             <!--  -->
             <!-- Cahrt Radar -->
             <!-- <h4>Hasil Evaluasi SPBE 2025</h4>
@@ -194,7 +194,7 @@
 
             <!--  -->
 
-            <div class="table-responsive">
+           <!--  <div class="table-responsive">
               <table class="table mb-0">
                 <tbody>
                   <tr>
@@ -267,15 +267,23 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div> -->
             <!-- Datatable Indikator Level -->
             <div class="table-responsive">
               <table class="table table-sm" id="datatable">
                 <thead>
                   <tr>
                     <th>No.</th>
+                     <th>Nama RB</th>
+                    <th>Nama Aspek</th>
+                    <th>Nama Sub Aspek</th>
+                    <th>Nama Sub Sub Aspek</th> 
                     <th>Indikator</th>
-                    <th>Level</th>
+                    <th>Bobot Nilai</th>
+                    <th>Parameter</th>
+                    <th>Jawaban</th>
+                    <th>Nilai</th>
+                    <th>Penanggung Jawab</th>
                   </tr>
                   
                 </thead>
@@ -292,10 +300,13 @@
 <?= $this->section('script') ?>
 <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/choices.js/choices.min.js"></script>    
     <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
-    <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
-    <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap5.min.js"></script>
+    <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.min.js"></script>
+    <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/dataTables.rowGroup.js"></script>
+     <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/rowGroup.dataTables.js"></script>
     <script {csp-script-nonce} type="text/javascript">
       $(document).ready(function(){
+
         loadTahun()
 
         function loadTahun(){
@@ -397,11 +408,92 @@
     </script>
 
   <script {csp-script-nonce} type="text/javascript">
+    var token = document.getElementById('token').value;
     LoadDatatable()
 
-    function LoadDatatable(){
+    $(document).change('#pilih-tahun', function(){
+      
+      var optionSelected = $(this).find("option:selected");
+      var valueSelected  = optionSelected.val();
+      if (document.getElementById('flexRadioDefault1').checked == true) {
+        LoadDatatable(valueSelected, 'yes');
+      }else{
+        LoadDatatable(valueSelected, '');
+      }
+       
+    })
+
+    function LoadDatatable(thn, apv){
+      var csrf = document.getElementById('<?= csrf_token() ?>').value;
+      // 
       var t = $('#datatable').DataTable({
-        "dom": 'rtip'
+        "dom": 'rtip',
+        "scrollX": false,
+        "processing": true,
+        "destroy": true,
+        "language": {
+          "processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+        },
+        "ajax": {
+          "url": "<?php echo base_url(); ?>api/get-dashboard-table",
+          "contentType": 'application/json',
+          "headers": {
+            'Authorization': 'Bearer '+token
+          },
+          "data":{
+            "<?= csrf_token() ?>": csrf,
+            "thn": thn,
+            "apv": apv,
+
+          },
+          "method": "GET",
+          "dataSrc": function(data){
+            console.log(data)
+            $('input#<?= csrf_token() ?>').val(data.token_crs)
+            return data.dt;
+          },
+        },
+        "columns":[
+          {"data": null, defaultContent: ''},
+          {"data": "nama_rb"},
+          {"data": "nama_aspek"},
+          {"data": "nama_sub_aspek"},
+          {"data": "nama_sub_sub_aspek"},
+          {"data": "indikator"},
+          {"data": "bobot_subAspek"},
+          {"data": "parameter"},
+          {"data": "Jawabanx"},
+          {"data": "nilaix"},
+          {"data": null,defaultContent: ''},
+        ],
+        "columnDefs":[
+          {
+            // "className": "dt-center",
+            "targets": [1,2,3,4],
+            visible: false,
+          },
+          {
+            "className": "dt-center",
+            "targets":[5,6]
+          }
+        ],
+        rowGroup: {
+          // 
+          dataSrc: ['nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek'],
+          // startRender: function(rows, group){
+          //   // console.log(rows.data().pluck('nama_rb')[0])
+          //   if (rows.data().pluck('nama_aspek')[0]== group) {
+          //     return $('<tr/>')
+          //                   .append('<td>' + group + '</td>')
+          //                   .append('<td></td>')
+          //                   .append('<td>'+ rows.data().pluck('bobot_aspek')[0] + '</td>')
+          //                   .append('<td></td>')
+          //                   .append('<td>' + rows.data().pluck('bobot_aspek')[0] + '</td>')
+          //                   .append('<td></td>');
+          //   }
+          // },
+             
+          }
       });
     }
     

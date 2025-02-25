@@ -76,6 +76,7 @@
     })
     
     LoadDatatable(); 
+    
     function reloadTable(){
       var t = $("#datatable").DataTable();
       t.ajax.reload(null, false);

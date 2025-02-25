@@ -39,6 +39,8 @@ $routes->group('dashboard',['filter' => ['roles:User','cors']],  function($route
 $routes->group('api', ['filter' => ['apiFilter:User','cors']], function($routes){
 	$routes->get('get-penilaian-mandiri', 'Api\ApiUserControllers::getPenilaianMandiri');
 	$routes->get('get-dashboard-user','Api\ApiUserControllers::getDashboard');
+	$routes->get('get-dashboard-table', 'Api\ApiUserControllers::getDataPenilaianMandiri');
+	
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
 	$routes->post('save-jawaban','Api\ApiUserControllers::saveJawaban');
