@@ -40,7 +40,7 @@ $routes->group('api', ['filter' => ['apiFilter:User','cors']], function($routes)
 	$routes->get('get-penilaian-mandiri', 'Api\ApiUserControllers::getPenilaianMandiri');
 	$routes->get('get-dashboard-user','Api\ApiUserControllers::getDashboard');
 	$routes->get('get-dashboard-table', 'Api\ApiUserControllers::getDataPenilaianMandiri');
-	
+
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
 	$routes->post('save-jawaban','Api\ApiUserControllers::saveJawaban');
@@ -87,6 +87,7 @@ $routes->group('api',['filter' => ['apiFilter:Soal,Super Admin,Penilai,User','co
 	$routes->get('get-roles', 'Api\ApiGlobalControllers::getRoles');
 	$routes->get('get-bukti-dukung', 'Api\ApiGlobalControllers::getBuktiDukung');
 	$routes->get('get-rb', 'Api\ApiGlobalControllers::getRb');
+	$routes->get('get-form', 'Api\ApiGlobalControllers::getForms');
 	$routes->get('nilai-opd', 'Api\ApiGlobalControllers::nilai');
 
 	$routes->post('get-user-by-id','Api\ApiGlobalControllers::getUSerById');

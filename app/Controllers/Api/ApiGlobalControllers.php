@@ -137,6 +137,31 @@ class ApiGlobalControllers extends BaseController
     }
 
 
+    public function getForms()
+    {
+        if (!empty($this->decoded->aud)) {
+            $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+            $LIMIT = null;
+            $OFFSET =null;
+            $list = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+            $data = array(
+                    'token_crs' => csrf_hash(),
+                    'dt'        => $list,
+                    );
+
+            return $this->response->setJSON($data);
+        }else{
+            $data = array(
+                    'token_crs'     =>  csrf_hash(),
+                    'success'       =>  0,
+                    'msg'           =>  'Access denied cntrl',
+                    'StatusCode'    =>  '401',
+                    );
+            return  json_encode($data);
+        }
+    }
+
+
     public function getRb()
     {
         if (!empty($this->decoded->aud)) {
