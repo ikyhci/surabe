@@ -24,7 +24,7 @@
 <?= $this->section('content') ?>
 <!-- Content -->
 <div class="page-heading">
-    <h3>Dashboard Soal</h3>
+    <h3>Dashboard</h3>
 </div>
 <div class="page-content">
     <section class="row">
@@ -133,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -151,11 +151,11 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- <div id="chart-profile-visit"></div> -->
+                            
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
         <div class="col-12 col-lg-3">
@@ -183,6 +183,29 @@
 
 
         </div>
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Capaian OPD</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div class="loading"></div>
+                                <table id="penilaianOpd">
+                                    <thead class="text-center">
+                                        <tr>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
     </section>
 </div>
 
@@ -196,7 +219,7 @@
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript" >
-    console.log('Dashboard Penilai');
+    // console.log('Dashboard Penilai');
     
     $(document).ready(function() {
         $.ajax({
@@ -204,6 +227,7 @@
             type: "GET",
             headers: { "Authorization": "Bearer <?= $token ?>" },
             success: function(response) {
+                // console.log(response)
                 loading('.loading', 'hide');
                 let dt = response.dt;
                 

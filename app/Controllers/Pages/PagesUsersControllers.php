@@ -33,10 +33,16 @@ class PagesUsersControllers extends BaseController
             $OFFSET =null;
             $thn = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
 
+
+
             $usr = $this->decoded->rln;
+            $tahun = array();
+                foreach ($thn as $key ) {
+                    $tahun[] = $key->tahun;
+                }
             $data = array(
                 'usr'  => $usr,
-                'thn'       => $thn,
+                'thn'  => array_unique($tahun),
                  );
             return view('Pages/user/penilaian_mandiri',$data);
         }else{

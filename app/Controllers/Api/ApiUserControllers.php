@@ -9,6 +9,7 @@ use Firebase\JWT\Key;
 use Config\Services;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\Header;
+use Exception;
 
 class ApiUserControllers extends BaseController
 {
@@ -30,9 +31,95 @@ class ApiUserControllers extends BaseController
         $this->db = db_connect();
     }
     
-    public function index()
+    public function getDashboard()
     {
         //
+        try {
+            if (!empty($this->decoded->aud)) {
+                $IDX = null;
+                $LIMIT = null;
+                $OFFSET =null;
+                $thn = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+
+                $usr = $this->decoded->rln;
+                $tahun = array();
+                foreach ($thn as $key ) {
+                    $tahun[] = $key->tahun;
+                }
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'dt'        => array_unique($tahun),
+                    'msg'       =>  'success',
+                     );
+                return $this->response->setJSON($data);
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+            
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+        }
+    }
+
+    public function getDataPenilaianMandiri()
+    {
+        // 
+        try {
+            if (!empty($this->decoded->aud)) {
+                // code...
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+            
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+        }
+    }
+
+    public function getDataPenilainAkhir()
+    {
+        //
+        try {
+            if (!empty($this->decoded->aud)) {
+                // code...
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+            
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+        } 
     }
 
     public function getPenilaianMandiri()

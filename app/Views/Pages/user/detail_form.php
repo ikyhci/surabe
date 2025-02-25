@@ -235,7 +235,7 @@
               contentType: false,
               cache: false,
               success: function(data){
-                // console.log(data)
+                console.log(data)
               
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
@@ -285,6 +285,7 @@
             var plh = '';
             var upl = '';
             var flx = '<ol type="*">';
+            
 
              for (var i = 0; i < data.length; i++) {
                str += '<li>'+data[i].nama_parameter+'</li>'
@@ -314,8 +315,8 @@
              
 
               str += '</ol>';
-              str += '<form id="formdata" enctype="multipart/form-data">'+
-                        '<input type="hidden" name="indikator" value="'+dkn[0].id_indikator+'">'+
+                 str += '<form id="formdata" enctype="multipart/form-data">'+
+                        '<input type="hidden" name="indikator" value="'+data[0].id_indikator+'">'+
                         '<div class="col-md-12 mb-6">'+
                           '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
                           '<select class=" form-select" name="jwbn" id="jwb" required>'+
@@ -340,6 +341,7 @@
             document.getElementById('content-upload').innerHTML = flx;
             $("#jwb").val(jwb.jwbx).trigger('change')
           }
+
 
           function loadLinear(data,dkn,jwb, fls){
             var str = '<ol type="A">'
@@ -372,11 +374,13 @@
               
               }
             }
+            
              
 
               str += '</ol>';
-              str += '<form id="formdata" enctype="multipart/form-data">'+
-                        '<input type="hidden" name="indikator" value="'+dkn[0].id_indikator+'">'+
+             
+                str += '<form id="formdata" enctype="multipart/form-data">'+
+                        '<input type="hidden" name="indikator" value="'+data[0].id_indikator+'">'+
                         '<div class="col-md-12 mb-6">'+
                           '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
                           '<input type="range" class="form-range" name="jwbn" value="0" min="0" max="100" id="customRange2" required>'+
@@ -390,6 +394,8 @@
                           '</div>'+
                         
                       '</form>';
+       
+              
 
                 flx += '</ol>';
 
@@ -407,7 +413,7 @@
             var slider = document.getElementById("customRange2");
             var output = document.getElementById("ranges");
             output.innerHTML = 'Value : '+slider.value;
-            // console.log(slider.value)
+           
             slider.oninput = function() {
               output.innerHTML = 'Value : '+this.value;
             }
@@ -451,8 +457,9 @@
 
 
               str += '</ol>';
-              str += '<form id="formdata" enctype="multipart/form-data">'+
-                        '<input type="hidden" name="indikator" id="indikator" value="'+dkn[0].id_indikator+'">'+
+              if (dkn[0].id_indikator !== null) {
+                 str += '<form id="formdata" enctype="multipart/form-data">'+
+                        '<input type="hidden" name="indikator" id="indikator" value="'+data[0].id_indikator+'">'+
                         '<div class="col-md-12 mb-6">'+
                           '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
                             '<div class="form-check">'+
@@ -470,6 +477,8 @@
                           '</div>'+
                         
                       '</form>';
+              }
+             
 
             flx += '</ol>';
 

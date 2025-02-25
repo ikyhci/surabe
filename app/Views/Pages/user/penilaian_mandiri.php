@@ -19,10 +19,15 @@
         </div> -->
         <div class="card-body">
             <div class="form-group">
+           
                   <select class="choices form-select" id="pilih-tahun">
                       <option value="" selected disabled>-- Pilih Tahun Form --</option>
-                      <?php foreach ($thn as $key ): ?>
-                        <option value="<?=$key->tahun;?>"><?=$key->tahun;?></option>
+                      <?php 
+
+                      foreach ($thn as $key ): 
+                        ?>
+
+                        <option value="<?=$key;?>"><?=$key;?></option>
                       <?php endforeach ?>
                   </select>
                 </div>   

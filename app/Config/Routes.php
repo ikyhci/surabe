@@ -38,6 +38,7 @@ $routes->group('dashboard',['filter' => ['roles:User','cors']],  function($route
 //Api Users 
 $routes->group('api', ['filter' => ['apiFilter:User','cors']], function($routes){
 	$routes->get('get-penilaian-mandiri', 'Api\ApiUserControllers::getPenilaianMandiri');
+	$routes->get('get-dashboard-user','Api\ApiUserControllers::getDashboard');
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
 	$routes->post('save-jawaban','Api\ApiUserControllers::saveJawaban');
@@ -112,7 +113,7 @@ $routes->group('api',['filter' => ['apiFilter:Super Admin','cors']], function($r
 	$routes->post('save-opd', 'Api\ApiSuperAdminControllers::saveOPD');
 	$routes->post('del-opd', 'Api\ApiSuperAdminControllers::delOPD');
 
-	$routes->get('capaian-opd', 'Api\ApiSuperAdminControllers::capaianOpd');
+	// $routes->get('capaian-opd', 'Api\ApiSuperAdminControllers::capaianOpd');
 });
 
 // route Penilai

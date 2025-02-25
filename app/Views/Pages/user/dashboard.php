@@ -23,7 +23,7 @@
     <!-- Progress-->
     <div class="steps">
         <div class="steps-body">
-            <div class="step step-completed">
+           <!--  <div class="step step-completed">
               <span class="step-indicator">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -35,8 +35,8 @@
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </span>Penilaian Mandiri
-            </div>
-            <div class="step step-completed">
+            </div> -->
+           <!--  <div class="step step-completed">
               <span class="step-indicator">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -48,8 +48,8 @@
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </span>Penilaian Dokument
-            </div>
-            <div class="step step-completed">
+            </div> -->
+            <!-- <div class="step step-completed">
               <span class="step-indicator">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -61,8 +61,8 @@
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </span>Penilaian Interview
-            </div>
-            <div class="step step-completed">
+            </div> -->
+           <!--  <div class="step step-completed">
               <span class="step-indicator">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -74,18 +74,18 @@
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </span>Penilaian Visitasi
-            </div>
+            </div> -->
             <!--  -->
-            <div class="step step-active">
+            <!-- <div class="step step-active">
               <span class="step-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award">
                   <circle cx="12" cy="8" r="7"></circle>
                   <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
                 </svg>
               </span>Harmonisasi
-            </div>
+            </div> -->
             <!--  -->
-            <div class="step">
+            <!-- <div class="step">
               <span class="step-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck">
                   <rect x="1" y="3" width="15" height="13"></rect>
@@ -94,9 +94,9 @@
                   <circle cx="18.5" cy="18.5" r="2.5"></circle>
                 </svg>
               </span>Final
-            </div>
+            </div> -->
 
-             <div class="step">
+             <!-- <div class="step">
               <span class="step-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck">
                   <rect x="1" y="3" width="15" height="13"></rect>
@@ -105,7 +105,7 @@
                   <circle cx="18.5" cy="18.5" r="2.5"></circle>
                 </svg>
               </span>Selesai
-            </div>
+            </div> -->
             
             
 
@@ -131,14 +131,8 @@
             <div class="row">
               <div class=" col-sm-6">
                 <div class="form-group">
-                  <select class="choices form-select" id="pilih-tahun">
-                      <option value="square">Square</option>
-                      <option value="rectangle">Rectangle</option>
-                      <option value="rombo">Rombo</option>
-                      <option value="romboid">Romboid</option>
-                      <option value="trapeze">Trapeze</option>
-                      <option value="traible">Triangle</option>
-                      <option value="polygon">Polygon</option>
+                  <select class=" form-controll" id="pilih-tahun">
+                    <option value="" selected disabled>-- Pilih Tahun Form --</option>
                   </select>
                 </div> 
               </div>
@@ -192,11 +186,11 @@
             </div>
             <!--  -->
             <!-- Cahrt Radar -->
-            <h4>Hasil Evaluasi SPBE 2025</h4>
+            <!-- <h4>Hasil Evaluasi SPBE 2025</h4>
             <script {csp-script-nonce} src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <div class="container">
               <canvas id="myChart"></canvas>
-            </div>
+            </div> -->
 
             <!--  -->
 
@@ -300,59 +294,106 @@
     <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap5.min.js"></script>
+    <script {csp-script-nonce} type="text/javascript">
+      $(document).ready(function(){
+        loadTahun()
+
+        function loadTahun(){
+          let httpProtocol = window.location.protocol;
+          let host = window.location.host;
+          let urlx = httpProtocol+'//'+host;
+          var token = document.getElementById('token').value;
+          var csrf = document.getElementById('csrf_token')
+          
+          var opt = document.getElementById("pilih-tahun");
+          var pilih = new Choices(opt)
+          $.ajax({
+            url: urlx+'/api/get-dashboard-user',
+            type: 'GET',
+            headers: {
+              'Authorization': 'Bearer '+token
+            },
+            // data: {
+            //   csrf_token: csrf.value
+            // },
+            dataType: 'JSON',
+            success: function(res){
+              $.each(res.dt, function(index,item){
+                if (index) {}
+                pilih.setValue([
+                  {value: item, label: item}
+                ])
+              })
+              pilih.setChoiceByValue('');
+            },
+          })
+        }
+
+        $(document).change('#pilih-tahun', function(){
+      
+          var optionSelected = $(this).find("option:selected");
+          var valueSelected  = optionSelected.val();
+          // LoadDatatable(valueSelected); 
+          console.log(valueSelected)
+        })
+
+      })
+    </script>
     
     <script {csp-script-nonce} type="text/javascript">
+
       
-      const ctx = document.getElementById('myChart');
-      const data = {
-        labels: [
-          'Kebijakan Internal Terkait Tatakelola SPBE',
-          'Kebijakan Internal Layanan SPBE',
-          'Kelembagaan',
-          // 'Strategi Dan Perencanaan',
-          // 'Teknologi Informasi Dan komunikasi',
-          // 'Layanan AdPem Berbasis Elektronik',
-          // 'Aplikasi Publik Berbasis Elektronik'
-        ],
-        datasets: [{
-          label: 'Aplikasi SPBE Target',
-          data: [2, 2.5, 4],//, 2, 3, 2.3, 1],
-          fill: true,
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgb(255, 99, 132)',
-          pointBackgroundColor: 'rgb(255, 99, 132)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgb(255, 99, 132)'
-        }, {
-          label: 'Aplikasi SPBE Index',
-          data: [1, 3.5, 2.4],//, 1, 4.5, 3, 2],
-          fill: true,
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgb(54, 162, 235)',
-          pointBackgroundColor: 'rgb(54, 162, 235)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgb(54, 162, 235)'
-        }]
-      };
-new Chart(ctx, {
-    type: 'radar',
-    data: data,
-    options: {
-      scales: {
-            r: {
-                suggestedMin: 1,
-                suggestedMax: 5.0
-            }
-        },
-    elements: {
-      line: {
-        borderWidth: 3
-      }
-    }
-  },
-  });
+      
+//       const ctx = document.getElementById('myChart');
+//       const data = {
+//         labels: [
+//           'Kebijakan Internal Terkait Tatakelola SPBE',
+//           'Kebijakan Internal Layanan SPBE',
+//           'Kelembagaan',
+//           // 'Strategi Dan Perencanaan',
+//           // 'Teknologi Informasi Dan komunikasi',
+//           // 'Layanan AdPem Berbasis Elektronik',
+//           // 'Aplikasi Publik Berbasis Elektronik'
+//         ],
+//         datasets: [{
+//           label: 'Aplikasi SPBE Target',
+//           data: [2, 2.5, 4],//, 2, 3, 2.3, 1],
+//           fill: true,
+//           backgroundColor: 'rgba(255, 99, 132, 0.2)',
+//           borderColor: 'rgb(255, 99, 132)',
+//           pointBackgroundColor: 'rgb(255, 99, 132)',
+//           pointBorderColor: '#fff',
+//           pointHoverBackgroundColor: '#fff',
+//           pointHoverBorderColor: 'rgb(255, 99, 132)'
+//         }, {
+//           label: 'Aplikasi SPBE Index',
+//           data: [1, 3.5, 2.4],//, 1, 4.5, 3, 2],
+//           fill: true,
+//           backgroundColor: 'rgba(54, 162, 235, 0.2)',
+//           borderColor: 'rgb(54, 162, 235)',
+//           pointBackgroundColor: 'rgb(54, 162, 235)',
+//           pointBorderColor: '#fff',
+//           pointHoverBackgroundColor: '#fff',
+//           pointHoverBorderColor: 'rgb(54, 162, 235)'
+//         }]
+//       };
+// new Chart(ctx, {
+//     type: 'radar',
+//     data: data,
+//     options: {
+//       scales: {
+//             r: {
+//                 suggestedMin: 1,
+//                 suggestedMax: 5.0
+//             }
+//         },
+//     elements: {
+//       line: {
+//         borderWidth: 3
+//       }
+//     }
+//   },
+//   });
     </script>
 
   <script {csp-script-nonce} type="text/javascript">
