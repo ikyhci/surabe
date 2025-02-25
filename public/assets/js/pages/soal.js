@@ -3,7 +3,7 @@ $(document).ready(function(){
 	let host = window.location.host;
 	let urlx = httpProtocol+'//'+host;
 	//global variable
-	// var urlx = 'http://' + window.location.host;
+	// var urlx = 'http://localhost:8080/';
 	var token = document.getElementById('token').value;
 	var csrf = document.getElementById('csrf_token')
 
@@ -83,82 +83,6 @@ $(document).ready(function(){
     	$('#add-data').modal('show');
     })
 
-
-    // function Load Ajax data 
-	//////////////////////////////////////////////////////////
-
-	function loadrb() {
-    	// var csrf = document.getElementById('<?= csrf_token() ?>').value
-    	$.ajax({
-    		url: urlx+'/api/get-rb',
-    		type: 'GET',
-    		headers: {
-    			'Authorization': 'Bearer '+token
-    		},
-    		data: {
-    			csrf_token: csrf.value
-    		},
-    		dataType: 'JSON',
-    		success: function(res){
-    			csrf.value = res.token_crs
-    			$('#rb').find('option').remove()
-    			$('#rb').append('<option value="" selected disabled>Choose...</option>');
-    			$('#rb').val("").trigger('change')
-    			for (var i = res.dt.length - 1; i >= 0; i--) {
-    				$("#rb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
-    			}
-    		},
-    	})
-    }
-
-    function loadaspek(idx) {
-    	$.ajax({
-			url: urlx+'/api/get-aspek',
-			type:'GET',
-			headers: {
-		        'Authorization': 'Bearer '+token
-		    },
-		    data:{
-				csrf_token: csrf.value,
-				idx : idx
-			},
-			dataType: 'json',
-			success: function(res){	
-				csrf.value = res.token_crs	
-				$("#aspek").find('option').remove();
-				$("#aspek").append('<option value="" selected disabled>Choose...</option>');
-				$("#aspek").val("").trigger('change')
-				for (var i = res.dt.length - 1; i >= 0; i--) {
-					$("#aspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_aspek + '</option>');
-				}
-			}
-		});
-    }
-
-    function loadJawaban(){
-    	// var csrf = document.getElementById('<?= csrf_token() ?>').value
-    	$.ajax({
-				url: urlx+'/api/get-jenis-jawaban',
-				type:'GET',
-				headers: {
-		            'Authorization': 'Bearer '+token
-		         },
-		        data:{
-					csrf_token: csrf.value
-				},
-				dataType: 'json',
-				success: function(res){
-					csrf.value = res.token_crs
-					$("#jjwb").find('option').remove();
-					$("#jjwb").append('<option value="" selected disabled>Choose...</option>');
-					$("#jjwb").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
-						$("#jjwb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].jenis_jawaban + '</option>');
-					}
-				}
-			});
-    }
-
     // function on change combobox
     /////////////////////////////////////
     $(document).on('change','#rb', function(){
@@ -166,12 +90,33 @@ $(document).ready(function(){
 		var valueSelected  = optionSelected.val();
 		var textSelected   = optionSelected.text();
 		if (valueSelected != '') {
-			loadaspek(valueSelected) 
+			$.ajax({
+				url: urlx+'/api/get-aspek',
+				type:'GET',
+				headers: {
+			        'Authorization': 'Bearer '+token
+			    },
+			    data:{
+					csrf_token: csrf.value,
+					idx : valueSelected
+				},
+				dataType: 'json',
+				success: function(res){	
+					
+					csrf.value = res.token_crs	
+					$("#aspek").find('option').remove();
+					$("#aspek").append('<option value="" selected disabled>Choose...</option>');
+					$("#aspek").val("").trigger('change')
+					for (var i = res.dt.length - 1; i >= 0; i--) {
+						$("#aspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_aspek + '</option>');
+					}
+				}
+			});
+
 		}
 	})
 
 	$(document).on('change', '#aspek', function(){
-		// var csrf = document.getElementById('<?= csrf_token() ?>').value
     	var optionSelected = $(this).find("option:selected");
 		var valueSelected  = optionSelected.val();
 		var textSelected   = optionSelected.text();
@@ -201,7 +146,7 @@ $(document).ready(function(){
     });
 
     $(document).on('change', '#subaspek', function(){
-    	// var csrf = document.getElementById('<?= csrf_token() ?>').value
+    	
     	var optionSelected = $(this).find("option:selected");
 		var valueSelected  = optionSelected.val();
 		var textSelected   = optionSelected.text();
@@ -231,7 +176,7 @@ $(document).ready(function(){
     });
 
     $(document).on('change', '#subsubaspek', function(){
-    	// var csrf = document.getElementById('<?= csrf_token() ?>').value
+    	
     	var optionSelected = $(this).find("option:selected");
 		var valueSelected  = optionSelected.val();
 		var textSelected   = optionSelected.text();
@@ -260,6 +205,57 @@ $(document).ready(function(){
 		}
     	
     });
+
+    // function Load Ajax data 
+	//////////////////////////////////////////////////////////
+
+	function loadrb() {
+    	// var csrf = document.getElementById('<?= csrf_token() ?>').value
+    	$.ajax({
+    		url: urlx+'/api/get-rb',
+    		type: 'GET',
+    		headers: {
+    			'Authorization': 'Bearer '+token
+    		},
+    		data: {
+    			csrf_token: csrf.value
+    		},
+    		dataType: 'JSON',
+    		success: function(res){
+    			csrf.value = res.token_crs
+    			$('#rb').find('option').remove()
+    			$('#rb').append('<option value="" selected disabled>Choose...</option>');
+    			$('#rb').val("").trigger('change')
+    			for (var i = res.dt.length - 1; i >= 0; i--) {
+    				$("#rb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
+    			}
+    		},
+    	})
+    }
+
+    function loadJawaban(){
+    	// var csrf = document.getElementById('<?= csrf_token() ?>').value
+    	$.ajax({
+				url: urlx+'/api/get-jenis-jawaban',
+				type:'GET',
+				headers: {
+		            'Authorization': 'Bearer '+token
+		         },
+		        data:{
+					csrf_token: csrf.value
+				},
+				dataType: 'json',
+				success: function(res){
+					csrf.value = res.token_crs
+					$("#jjwb").find('option').remove();
+					$("#jjwb").append('<option value="" selected disabled>Choose...</option>');
+					$("#jjwb").val("").trigger('change')
+					for (var i = res.dt.length - 1; i >= 0; i--) {
+						$("#jjwb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].jenis_jawaban + '</option>');
+					}
+				}
+			});
+    }
 
 
     // function View data 

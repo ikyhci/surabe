@@ -235,7 +235,6 @@
               contentType: false,
               cache: false,
               success: function(data){
-                console.log(data)
               
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
@@ -258,6 +257,7 @@
                 '</button>';
 
                 }
+                document.getElementById('rb').innerHTML = ': '+data.dt.indk.rb 
                 document.getElementById('aspk').innerHTML = ': '+data.dt.indk.aspek
                 document.getElementById('indk').innerHTML = ': '+data.dt.indk.indikator
                 if (data.dt.indk.num == 1 ) {
@@ -457,7 +457,6 @@
 
 
               str += '</ol>';
-              if (dkn[0].id_indikator !== null) {
                  str += '<form id="formdata" enctype="multipart/form-data">'+
                         '<input type="hidden" name="indikator" id="indikator" value="'+data[0].id_indikator+'">'+
                         '<div class="col-md-12 mb-6">'+
@@ -477,7 +476,7 @@
                           '</div>'+
                         
                       '</form>';
-              }
+             
              
 
             flx += '</ol>';

@@ -11,8 +11,8 @@
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <tr>
-                            <td>Domain</td>
-                            <td>: </td>
+                            <td>RB</td>
+                            <td id="rb">: </td>
                         </tr>
                         <tr>
                             <td>Aspek</td>
