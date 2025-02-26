@@ -35,7 +35,7 @@
               </tr>
               <tr>
                 <td>Nama Form</td>
-                <td>: <?= $dt->nama_form;?></td>
+                <td>: <?= $dt->nama;?></td>
               </tr>
               <tr>
                 <td>Deskripsi</td>
@@ -44,6 +44,10 @@
               <tr>
                 <td>Status Evaluasi</td>
                 <td>: <?= $dt->evaluasi;?></td>
+              </tr>
+              <tr>
+                <td>Batas Waktu</td>
+                <td>: <?= date_format(date_create($dt->bataswaktu),"d - m - Y");?></td>
               </tr>
             </tbody>
           </table>

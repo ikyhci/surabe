@@ -66,7 +66,7 @@ class ApiUserControllers extends BaseController
                 $IDX = null;
                 $LIMIT = null;
                 $OFFSET =null;
-                $thn = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $thn = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
       
 
                 // $usr = $this->decoded->rln;

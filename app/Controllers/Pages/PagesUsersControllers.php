@@ -31,7 +31,7 @@ class PagesUsersControllers extends BaseController
             $IDX = null;
             $LIMIT = null;
             $OFFSET =null;
-            $thn = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+            $thn = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
 
 
 
@@ -60,9 +60,9 @@ class PagesUsersControllers extends BaseController
             $OFFSET =null;
             $encode = base64_encode($IDX);
 
-            $asp = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
-            
-            if ($asp->id != null) {
+            $asp = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
+
+            if (!is_null($asp)) {
                  $data = array(
                     'usr'       => $usr,
                     'token_crs' => csrf_hash(),
@@ -97,8 +97,8 @@ class PagesUsersControllers extends BaseController
             $LIMIT = 1;
             $OFFSET =null;
 
-            $asp = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
-            if ($asp->id != null) {
+            $asp = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
+            if (!is_null($asp)) {
                  $data = array(
                     'usr'       => $usr,
                     'token_crs' => csrf_hash(),
