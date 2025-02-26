@@ -54,6 +54,44 @@ class ApiSoalControllers extends BaseController
         }
     }
 
+    public function saveForm()
+    {
+        try {
+            if (!empty($this->decoded->aud)) {
+                $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+                $nama   = $this->request->getVar('nama');
+                $desk  = $this->request->getVar('desk');
+                $eval  = $this->request->getVar('eval');
+                $btswkt  = $this->request->getVar('wkt');
+                $tahun  = $this->request->getVar('tahun');
+                $userid = $this->decoded->ids;
+
+                $save = $this->db->query("CALL Form_add_edit('".
+                    $userid."','".
+                    $id."','".
+                    $nama."','".
+                    $tahun."','".
+                    $desk."','".
+                    $eval."','".
+                    $btswkt."')")->getRow();
+
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $save->res,
+                        'msg'       =>  $save->msg,
+                    );
+                return $this->response->setJSON($data);
+            }
+            
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+        }
+    }
 
     public function saveRb()
     {
@@ -104,15 +142,8 @@ class ApiSoalControllers extends BaseController
 
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $nama   = $this->request->getVar('nama');
-                $tahun  = $this->request->getVar('tahun');
                 $bobot  = $this->request->getVar('bobot');
-                $nmform  = $this->request->getVar('namaform');
-                $desk  = $this->request->getVar('desk');
-                $eval  = $this->request->getVar('eval');
-                $btswkt  = $this->request->getVar('wkt');
                 $rb = $this->request->getVar('rb');
-                //
-                $thpn  = null;
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Aspek_add_edit('".
@@ -120,12 +151,6 @@ class ApiSoalControllers extends BaseController
                     $id."','".
                     $nama."','".
                     $bobot."','".
-                    $tahun."','".
-                    $nmform."','".
-                    $desk."','".
-                    $eval."','".
-                    $btswkt."','".
-                    $thpn."','".
                     $rb."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
@@ -377,8 +402,8 @@ class ApiSoalControllers extends BaseController
             
         }
     } 
-
-    public function delAspek()
+    
+    public function delForm()
     {
         try {
 
@@ -387,7 +412,7 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Aspek_delete('".
+                $del = $this->db->query("CALL Form_delete('".
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
@@ -430,6 +455,47 @@ class ApiSoalControllers extends BaseController
                 $userid = $this->decoded->ids;
 
                 $del = $this->db->query("CALL Rb_delete('".
+                    $userid."','".
+                    $idx."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $del->res,
+                        'msg'       =>  $del->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
+    }
+
+    public function delAspek()
+    {
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $userid = $this->decoded->ids;
+
+                $del = $this->db->query("CALL Aspek_delete('".
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(

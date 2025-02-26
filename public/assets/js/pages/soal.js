@@ -87,7 +87,7 @@ $(document).ready(function(){
     	document.getElementById('title-input').innerHTML = 'Tambah Data Parameter'
     	inputs.innerHTML = '';
     	inputs.innerHTML = inputParameter();
-    	loadForm()
+    	loadForms()
     	$('#add-data').modal('show');
     })
 
@@ -245,7 +245,7 @@ $(document).ready(function(){
     // function Load Ajax data 
 	//////////////////////////////////////////////////////////
 
-	function loadForm(){
+	function loadForms(){
 		$.ajax({
 			url: urlx+'/api/get-form',
     		type: 'GET',
@@ -319,8 +319,14 @@ $(document).ready(function(){
 
     // function View data 
 	//////////////////////////////////////////////////////////
-	$(document).on('click','view-form', function(){
-
+	$(document).on('click','.view-form', function(){
+		let tabls = document.getElementById('content-views');
+		document.getElementById('title-views').innerHTML = 'List Data Form'
+		$('#parameter').modal('hide');
+		$('#view-data').modal('show');
+		tabls.innerHTML ='';
+		tabls.innerHTML = formatForm()
+		loadForm()
 	})
 
 	$(document).on('click', '.view-rb', function(){
@@ -389,11 +395,42 @@ $(document).ready(function(){
 	// function Edit Data 
 	//////////////////////////////////////////////////////////
 
+	$(document).on('click', '.form-edit', function(){
+		var t = $('#tbl-form').DataTable();
+		var data = t.row($(this).closest('tr')).data();
+
+		var idx = $(this).data('id_form')
+		let inputs = document.getElementById('content-input');
+	    document.getElementById('title-input').innerHTML = 'Edit Data Form'
+	    inputs.innerHTML = '';
+	    inputs.innerHTML = editDataform(idx, 
+	    	data[Object.keys(data)[1]], 
+	    	data[Object.keys(data)[2]], 
+	    	data[Object.keys(data)[4]],
+	    	data[Object.keys(data)[3]], 
+	    	data[Object.keys(data)[5]]);
+	   
+	    // console.log()
+	    // console.log()
+	    // console.log()
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
+	    // console.log(data[Object.keys(data)[10]])
+	    // console.log(data[Object.keys(data)[11]])
+	    // console.log(data[Object.keys(data)[12]])
+
+
+	    $('#view-data').modal('hide');
+	    $('#add-data').modal('show');
+	})
+
 	$(document).on('click', '.rb-edit', function() {
 	    var t = $('#tbl-rb').DataTable();
   		var data = t.row($(this).closest('tr')).data();
 
-  		var idx = $(this).data('id')
+  		var idx = $(this).data('id_rb')
 	    let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data RB'
 	    inputs.innerHTML = '';
@@ -511,12 +548,21 @@ $(document).ready(function(){
 	// function Delete data 
 	//////////////////////////////////////////////////////////
 
+	$(document).on('click', '.form-delete', function(){
+		var idx = $(this).data('id_form');
+		var url = urlx+'/api/del-form';
+		var nmx = 'FORM';
+  		var fd = new FormData();
+  		fd.append('csrf_token', csrf.value)
+  		fd.append('idx', idx)
+		deleteData(fd, url, nmx, '0')
+	})
+
 
 	$(document).on('click', '.rb-delete' , function(){
 		var idx = $(this).data('id_rb');
 		var url = urlx+'/api/del-rb';
 		var nmx = 'RB';
-		// var csrf = document.getElementById('<?= csrf_token() ?>').value
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idx', idx)
@@ -527,7 +573,6 @@ $(document).ready(function(){
 		var idx = $(this).data('id_aspek');
 		var url = urlx+'/api/del-aspek';
 		var nmx = 'Aspek';
-		// var csrf = document.getElementById('<?= csrf_token() ?>').value
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idx', idx)
@@ -538,7 +583,6 @@ $(document).ready(function(){
 		var idx = $(this).data('id_sub_aspek');
 		var url = urlx+'/api/del-sub-aspek';
 		var nmx = 'Sub Aspek';
-		// var csrf = document.getElementById('<?= csrf_token() ?>').value
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idx', idx)
@@ -549,7 +593,6 @@ $(document).ready(function(){
 		var idx = $(this).data('id_sub_sub_aspek');
 		var url = urlx+'/api/del-sub-sub-aspek';
 		var nmx = 'Sub Sub Aspek';
-		// var csrf = document.getElementById('<?= csrf_token() ?>').value
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idx', idx)
@@ -560,7 +603,6 @@ $(document).ready(function(){
 		var idx = $(this).data('id_indikator');
 		var url = urlx+'/api/del-indikator';
 		var nmx = 'Indikator Dan Bukti Dukung';
-		// var csrf = document.getElementById('<?= csrf_token() ?>').value
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idx', idx)
@@ -571,7 +613,6 @@ $(document).ready(function(){
 	$(document).on('click', '.bukti-delete', function(){
 		var idx = $(this).data('bukti');
 		var url = urlx+'/api/del-bukti-dukung';
-  		// var csrf = document.getElementById('<?= csrf_token() ?>').value
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idx', idx)
@@ -584,7 +625,6 @@ $(document).ready(function(){
 		var url = urlx+'/api/del-parameter';
 		var idk = $(this).data('indk');
   		var idp = $(this).data('prmt');
-  		// var csrf = document.getElementById('<?= csrf_token() ?>').value
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idp', idp)
@@ -603,6 +643,11 @@ $(document).ready(function(){
     	var inputs = document.getElementById('datainput').value;
     	var url ='';
     	var text ='';
+
+    	if (inputs == 0 ) {
+    		 url = urlx+'/api/save-form'
+    		 text = 'Simpan Data From Baru ?'
+    	}
 
     	if (inputs == 1 ) {
     		 url = urlx+'/api/save-rb'
@@ -744,12 +789,12 @@ $(document).ready(function(){
 	function inputForms(){
 		var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" value="0" id="datainput">'+
 
-                    '<div class="form-group">'+
+						'<div class="form-group">'+
+                        '<h6>Nama Form <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Form" required></div>'+
+                    	'<div class="form-group">'+
                         '<h6>Tahun <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="tahun" name="tahun" placeholder="Tahun" required></div>'+
-                         '<div class="form-group">'+
-                        '<h6>Nama Form <span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="namaform" name="namaform" placeholder="Nama Form" required></div>'+
                         '<div class="form-group">'+
                         '<h6>Evaluasi <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="eval" name="eval" placeholder="Evaluasi" required></div>'+
@@ -1008,6 +1053,30 @@ $(document).ready(function(){
     // Template Edit Data 
 	//////////////////////////////////////////////////////////
 
+	function editDataform(idx, nmx, thn, evl, dsk, wkt ){
+		var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
+					'<input type="hidden" value="0" id="datainput">'+
+					'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+						'<div class="form-group">'+
+                        '<h6>Nama Form <span class="text-danger">*</span></h6>'+
+                        '<input type="text" value="'+nmx+'" class="form-control" id="nama" name="nama" placeholder="Nama Form" required></div>'+
+                    	'<div class="form-group">'+
+                        '<h6>Tahun <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" value="'+thn+'" id="tahun" name="tahun" placeholder="Tahun" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Evaluasi <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" value="'+evl+'" id="eval" name="eval" placeholder="Evaluasi" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Deskripsi <span class="text-danger">*</span></h6>'+
+                        '<textarea type="text" class="form-control" id="desk" name="desk" placeholder="Deskripsi" required>'+dsk+'</textarea></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Batas Waktu <span class="text-danger">*</span></h6>'+
+                        '<input type="datetime-local" class="form-control" value="'+wkt+'" id="wkt" name="wkt" placeholder="Batas Waktu" required></div>'+
+
+                        '</form>';
+        return inpx;
+	}
+
 	function editDataRB(idx, nmx, bbt){
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="1">'+
@@ -1023,7 +1092,7 @@ $(document).ready(function(){
         return inpx;
 	}
 
-	function editDataAspek(idr, idx, nmx, bbt,){
+	function editDataAspek(idr, idx, nmx, bbt){
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="2">'+
 	    				'<input type="hidden" name="rb" value="'+idr+'" id="rb">'+
@@ -1125,6 +1194,25 @@ $(document).ready(function(){
 
     // Template View Data 
 	//////////////////////////////////////////////////////////
+
+	function formatForm(){
+		var tblx = '<div class="table-responsive">'+
+                       '<table class="table mb-0" id="tbl-form">'+
+                           '<thead>'+
+                               '<tr>'+
+                                   '<th>No</th>'+
+                                   '<th>Nama Form</th>'+
+                                   '<th>Deskripsi</th>'+
+                                   '<th>Evaluasi</th>'+
+                                   '<th>Batas Waktu</th>'+
+                                   '<th>Tahun</th>'+
+                                   '<th>Aksi</th>'+
+                               '</tr>'+
+                           '</thead>'+
+                           '<tbody></tbody>'+ 
+                       '</table></div>';
+        return tblx;
+	}
 
 	function formatRB(){
 		var tblx = '<div class="table-responsive">'+
@@ -1235,6 +1323,70 @@ $(document).ready(function(){
 	//  Load Data Datatable
 	//////////////////////////////////////////////////////////
 
+	function loadForm(){
+		var t = $('#tbl-form').DataTable({
+			"dom": 'rtip',
+			"destroy": true,
+	        "scrollX": false,
+			"processing": true,
+			"language": {
+				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+			},
+			"ajax": {
+				"url": urlx+"/api/get-form",
+				"contentType": 'application/json',
+				"headers": {
+					'Authorization': 'Bearer '+token
+				},
+				"data":{
+					csrf_token: csrf.value
+				},
+				"method": "GET",
+				"dataSrc": function(data){
+					csrf.value = data.token_crs
+					return data.dt;
+				},
+			},
+			"columns":[
+				{"data" : null, defaultContent: ''},
+				{"data" : "nama"},
+				{"data" : "deskripsi"},
+				{"data" : "evaluasi"},
+				{"data" : "bataswaktu"},
+				{"data" : "tahun"},
+				{
+					"render": function(data, type, JsonResultRow, meta) {
+						var btn = '';
+									
+						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
+									
+						"<button class='btn icon btn-outline-warning form-edit' data-id_form='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+
+						"<button class='btn icon btn-outline-danger form-delete' data-id_form='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
+						+"</div>"
+						return btn;
+					}
+				}
+			],
+			"columnDefs":[
+				{
+					"className": "dt-center",
+					"targets": [0,1,2,3,4,5,6]
+				}
+			],
+
+		});
+		t.on('order.dt search.dt', function() {
+			t.column(0, {
+				search: 'applied',
+				order: 'applied'
+			}).nodes().each(function(cell, i) {
+				cell.innerHTML = i + 1;
+			});
+		}).draw();
+
+	}
+
 	function loadRB(){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-rb').DataTable({
@@ -1286,6 +1438,14 @@ $(document).ready(function(){
 			],
 
 		});
+		t.on('order.dt search.dt', function() {
+			t.column(0, {
+				search: 'applied',
+				order: 'applied'
+			}).nodes().each(function(cell, i) {
+				cell.innerHTML = i + 1;
+			});
+		}).draw();
 	}
 
 	function loadaspek() {
@@ -1646,6 +1806,9 @@ $(document).ready(function(){
 	//////////////////////////////////////////////////////////
 
 	function ReloadData(ket) {
+		if (ket == 0) {
+			var t = $('#tbl-form').DataTable();
+		}
 		if (ket == 1) {
 			var t = $('#tbl-rb').DataTable();
 		}

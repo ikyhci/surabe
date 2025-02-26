@@ -63,6 +63,7 @@ $routes->group('dashboard',['filter' => ['roles:Soal,Super Admin','cors']], func
 	$routes->post('save-indikator', 'Api\ApiSoalControllers::saveIndikator');
 	$routes->post('save-bukti-dukung', 'Api\ApiSoalControllers::saveBuktiDukung');
 	$routes->post('save-rb', 'Api\ApiSoalControllers::saveRb');
+	$routes->post('save-form', 'Api\ApiSoalControllers::saveForm');
 
 	$routes->post('del-parameter', 'Api\ApiSoalControllers::delParameter');
 	$routes->post('del-aspek', 'Api\ApiSoalControllers::delAspek');
@@ -71,6 +72,7 @@ $routes->group('dashboard',['filter' => ['roles:Soal,Super Admin','cors']], func
 	$routes->post('del-indikator', 'Api\ApiSoalControllers::delIndikator');
 	$routes->post('del-bukti-dukung', 'Api\ApiSoalControllers::delBuktiDukung');
 	$routes->post('del-rb', 'Api\ApiSoalControllers::delRb');
+	$routes->post('del-form', 'Api\ApiSoalControllers::delForm');
 
 	$routes->get('get-dashboard-data', 'Api\ApiSoalControllers::getDashboard');
  });
