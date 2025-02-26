@@ -45,8 +45,12 @@ class DashboardModel extends Model
     public function getAspek($tahun = null) {
 
         $aspek = $this->db->table('lke_aspek')
-                    ->select('id, nama_aspek, tahun, rb_id');
-        if ($tahun !== null) {
+                    // ->select('id, nama_aspek, rb_id');
+                    ->select('lke_aspek.id, nama_aspek, tahun, rb_id')
+                    ->join('lke_rb', 'lke_rb.id = lke_aspek.rb_id', 'left')
+                    ->join('lke_form', 'lke_form.id = lke_rb.form_id', 'left');
+
+        if ($tahun !== null && false ) {
             $aspek->where('tahun', $tahun);
         }
         $aspek = $aspek->get()->getResult();
@@ -110,7 +114,11 @@ class DashboardModel extends Model
 
                 $totalSubAspekNilai = array_sum(array_column($subAspek, 'nilai'));
                 $aspek[$k]->sub_aspek = $subAspek;
-                $aspek[$k]->nilai = $totalSubAspekNilai / count($subAspek);
+                if (count($subAspek) == 0) {
+                    $aspek[$k]->nilai = 0;
+                }else {
+                    $aspek[$k]->nilai = $totalSubAspekNilai / count($subAspek);
+                }
                 foreach ($instrumen as $ik => $iv) {
                     if ($iv->id == $v->rb_id) {
                         $instrumen[$ik]->nilai +=  $aspek[$k]->nilai;

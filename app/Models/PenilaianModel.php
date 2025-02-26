@@ -48,17 +48,34 @@ class PenilaianModel extends Model
         return $data;
     }
 
-    public function getAspek($tahun=null)
-    {
-        $aspek = $this->db->query("CALL View_Aspek(null, null, null)")->getResult();
-        if ($tahun) {
+    // public function getAspek($tahun=null)
+    // {
+    //     $aspek = $this->db->query("CALL View_Aspek(null, null, null)")->getResult();
+    //     if ($tahun) {
             
-            $aspek = array_filter($aspek, function ($x) use ($tahun) {
-                return isset($x->tahun) && $x->tahun === $tahun;
-            });
+    //         $aspek = array_filter($aspek, function ($x) use ($tahun) {
+    //             return isset($x->tahun) && $x->tahun === $tahun;
+    //         });
+    //     }
+    //     return $aspek;
+    // }
+
+
+    public function getAspek($tahun = null) {
+
+        $aspek = $this->db->table('lke_aspek')
+                    // ->select('id, nama_aspek, rb_id');
+                    ->select('lke_aspek.id, nama_aspek, tahun, rb_id')
+                    ->join('lke_rb', 'lke_rb.id = lke_aspek.rb_id', 'left')
+                    ->join('lke_form', 'lke_form.id = lke_rb.form_id', 'left');
+
+        if ($tahun !== null && false ) {
+            $aspek->where('tahun', $tahun);
         }
+        $aspek = $aspek->get()->getResult();
         return $aspek;
     }
+    
 
     public function indikatorByAspek($idAspek)
     {
@@ -106,9 +123,11 @@ class PenilaianModel extends Model
             ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
             ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
             ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->join('lke_rb rb', 'asp.rb_id = rb.id', 'inner')
+            ->join('lke_form f', 'rb.form_id = f.id', 'inner')
             ->where('d.id', $opd_id)
             ->where('e.id', $indikator_id)
-            ->where('asp.tahun', $tahun)
+            ->where('f.tahun', $tahun)
             ->get()
             ->getResultArray();
         } elseif (!$indikator_id && $aspek_id) {
@@ -121,9 +140,11 @@ class PenilaianModel extends Model
             ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
             ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
             ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->join('lke_rb rb', 'asp.rb_id = rb.id', 'inner')
+            ->join('lke_form f', 'rb.form_id = f.id', 'inner')
             ->where('d.id', $opd_id)
             ->where('asp.id', $aspek_id)
-            ->where('asp.tahun', $tahun)
+            ->where('f.tahun', $tahun)
             ->get()
             ->getResultArray();
         } elseif ($indikator_id && $aspek_id) {
@@ -136,10 +157,12 @@ class PenilaianModel extends Model
             ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
             ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
             ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->join('lke_rb rb', 'asp.rb_id = rb.id', 'inner')
+            ->join('lke_form f', 'rb.form_id = f.id', 'inner')
             ->where('d.id', $opd_id)
             ->where('e.id', $indikator_id)
             ->where('asp.id', $aspek_id)
-            ->where('asp.tahun', $tahun)
+            ->where('f.tahun', $tahun)
             ->get()
             ->getResultArray();
         } else {
@@ -152,8 +175,10 @@ class PenilaianModel extends Model
             ->join('lke_sub_sub_aspek ssa', 'e.id_sub_sub_aspek = ssa.id', 'inner')
             ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id', 'inner')
             ->join('lke_aspek asp', 'sa.id_aspek = asp.id', 'inner')
+            ->join('lke_rb rb', 'asp.rb_id = rb.id', 'inner')
+            ->join('lke_form f', 'rb.form_id = f.id', 'inner')
             ->where('d.id', $opd_id)
-            ->where('asp.tahun', $tahun)
+            ->where('f.tahun', $tahun)
             ->get()
             ->getResultArray();
         }
@@ -260,7 +285,7 @@ class PenilaianModel extends Model
                 a.id AS aspek_id, 
                 a.nama_aspek, 
                 a.bobot AS aspek_bobot, 
-                a.tahun AS aspek_tahun, 
+                f.tahun AS aspek_tahun, 
                 sa.id AS sub_aspek_id, 
                 sa.nama_sub_aspek, 
                 sa.bobot AS sub_aspek_bobot, 
@@ -270,11 +295,13 @@ class PenilaianModel extends Model
                 i.id AS indikator_id, 
                 i.indikator
             ')
+            ->join('lke_rb rb', 'rb.id = a.rb_id', 'inner')
+            ->join('lke_form f', 'f.id = rb.form_id', 'inner')
             ->join('lke_sub_aspek sa', 'sa.id_aspek = a.id', 'inner')
             ->join('lke_sub_sub_aspek ssa', 'ssa.id_sub_aspek = sa.id', 'inner')
             ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner');
 
-        $builder->where('a.tahun', $tahun);
+        $builder->where('f.tahun', $tahun);
 
         $query = $builder->get();
         $result = $query->getResultArray();

@@ -59,7 +59,9 @@ class PagesPenilaiControllers extends BaseController
         } catch (\Exception $e) {
             return redirect()->to('/dashboard/penilaian');
         }
-        // dd($this->data['form']);    
+        // dd($this->data['form']);
+        $lke_form = $this->db->table('lke_form')->where('tahun', $this->data['form']['tahun'])->get()->getRowArray();
+        $this->data['form']['nama_form'] = $lke_form['nama'];
         $penilaianModel = new PenilaianModel();
         $data = $penilaianModel->nestedData( $this->data['form']['idasp'], $this->data['form']['opdid'] );
         // pd($data);
