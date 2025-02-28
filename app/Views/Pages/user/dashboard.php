@@ -4,6 +4,9 @@
     <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/choices.js/choices.min.css" />
     <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/css/costum.css">
     <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.min.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+    <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.5.1/css/rowGroup.dataTables.css" />
     
 <?= $this->endSection() ?>
 
@@ -453,6 +456,11 @@
             return data.dt;
           },
         },
+        "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+            var index = iDisplayIndex +1;
+            $('td:eq(0)',nRow).html(index);
+            return nRow;
+          },
         "columns":[
           {"data": null, defaultContent: ''},
           {"data": "nama_rb"},
@@ -480,18 +488,6 @@
         rowGroup: {
           // 
           dataSrc: ['nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek'],
-          // startRender: function(rows, group){
-          //   // console.log(rows.data().pluck('nama_rb')[0])
-          //   if (rows.data().pluck('nama_aspek')[0]== group) {
-          //     return $('<tr/>')
-          //                   .append('<td>' + group + '</td>')
-          //                   .append('<td></td>')
-          //                   .append('<td>'+ rows.data().pluck('bobot_aspek')[0] + '</td>')
-          //                   .append('<td></td>')
-          //                   .append('<td>' + rows.data().pluck('bobot_aspek')[0] + '</td>')
-          //                   .append('<td></td>');
-          //   }
-          // },
              
           }
       });

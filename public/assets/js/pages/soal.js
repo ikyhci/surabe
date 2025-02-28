@@ -384,12 +384,16 @@ $(document).ready(function(){
 		let tabls = document.getElementById('content-views');
 		document.getElementById('title-views').innerHTML = 'List Data Bukti Dukung'
 		$('#view-data').modal('hide');
+		
 		setTimeout(function(){
 			tabls.innerHTML ='';
 			tabls.innerHTML = formatbuktidukung()
-			loadbuktidukung(idx)
+			setTimeout(function(){
+				loadbuktidukung(idx)
+			},100)
 			$('#view-data').modal('show');
-		},500)
+			
+		},100)
 	})
 
 	// function Edit Data 
@@ -1347,6 +1351,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama"},
@@ -1376,15 +1385,6 @@ $(document).ready(function(){
 			],
 
 		});
-		t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
-
 	}
 
 	function loadRB(){
@@ -1412,6 +1412,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama"},
@@ -1436,16 +1441,11 @@ $(document).ready(function(){
 					"targets": [0,2,3]
 				}
 			],
+			"rowGroup": {
+			    dataSrc: ['nama_form']
+			}
 
 		});
-		t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
 	}
 
 	function loadaspek() {
@@ -1473,15 +1473,15 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_aspek"},
 				{"data" : "bobot"},
-				// {"data" : "nama_form"},
-				// {"data" : "deskripsi"},
-				// {"data" : "evaluasi"},
-				// {"data" : "batas_waktu"},
-				// {"data" : "tahun"},
 				{"data" : "sub_aspek"},
 				{
 					"render": function(data, type, JsonResultRow, meta) {
@@ -1497,6 +1497,9 @@ $(document).ready(function(){
 					}
 				}
 			],
+			"rowGroup": {
+			    dataSrc: ['rb']
+			},
 			"columnDefs":[
 				{
 					"className": "dt-center",
@@ -1504,14 +1507,6 @@ $(document).ready(function(){
 				}
 			],
 		});
-		t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
 	}
 
 	function loadsubaspek() {
@@ -1540,6 +1535,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_sub_aspek"},
@@ -1557,16 +1557,11 @@ $(document).ready(function(){
 						return btn;
 					}
 				}
-			]
+			],
+			"rowGroup": {
+			    dataSrc: ['rb','aspek']
+			}
 		});
-		t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
 	}
 
 	function loadsubsubaspek() {
@@ -1594,6 +1589,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_sub_sub_aspek"},
@@ -1612,16 +1612,11 @@ $(document).ready(function(){
 						return btn;
 					}
 				}
-			]
+			],
+			"rowGroup": {
+			    dataSrc: ['rb','aspek','nama_sub_aspek']
+			}
 		});
-		t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
 	}
 
 	function loadindikator(){
@@ -1649,6 +1644,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "indikator"},
@@ -1670,16 +1670,13 @@ $(document).ready(function(){
 						return btn;
 					}
 				}
-			]
+			],
+			"rowGroup": {
+			    dataSrc: ['rb','aspek','nama_sub_aspek','nama_sub_sub_aspek']
+			}
 		});
-		t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
+
+		// t.ajax.reload();
 	}
 
 	function loadbuktidukung(idx){
@@ -1693,7 +1690,7 @@ $(document).ready(function(){
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
 			},
 			"ajax": {
-				"url": urlx+"api/get-bukti-dukung",
+				"url": urlx+"/api/get-bukti-dukung",
 				"contentType": 'application/json',
 				"headers": {
 					'Authorization': 'Bearer '+token
@@ -1708,6 +1705,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "bukti_dukung"},
@@ -1723,16 +1725,12 @@ $(document).ready(function(){
 						return btn;
 					}
 				}
-			]
+			],
+			"rowGroup": {
+			    dataSrc: ['indikator']
+			}
 		});
-		t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
+
 	}
 
 	function LoadParameter(){
@@ -1743,63 +1741,56 @@ $(document).ready(function(){
 			"language": {
 						"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
 			},
-					"ajax": {
-						"url": urlx+'/api/get-penilaian-spbe',
-						"contentType": 'application/json',
-						"headers": {
-							'Authorization': 'Bearer '+token
-						},
-						"data":{
-							csrf_token: csrf.value
-						},
-						"method": "GET",
-						"dataSrc": function(data){
-
-							csrf.value = data.token_crs
-							return data.dt;
-
-						},
+			"ajax": {
+				"url": urlx+'/api/get-penilaian-spbe',
+				"contentType": 'application/json',
+				"headers": {
+					'Authorization': 'Bearer '+token
+				},
+				"data":{
+					csrf_token: csrf.value
+				},
+				"method": "GET",
+				"dataSrc": function(data){
+					csrf.value = data.token_crs
+					return data.dt;
 					},
-					"columns":[
-						{"data": null, defaultContent: ''},
-						
-						{"data": "nama_parameter"},
-						{"data": "tahun"},
-						{"data": "res"},
-						{"data": "create_at"},
-						{
-							"render": function(data, type, JsonResultRow, meta) {
-									var btn = '';
-									
-									btn +="<div class='btn-group mb-3 btn-group-sm'>"+
-									
-										"<button class='btn icon btn-outline-warning edit-parameter' data-indk='" + JsonResultRow.id + "' data-ind='"+JsonResultRow.indikator+"' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
-										"<button class='btn icon btn-outline-danger hapus-parameter' data-indk='" + JsonResultRow.id + "' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
+			},
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                var index = iDisplayIndex +1;
+                $('td:eq(0)',nRow).html(index);
+                return nRow;
+          	},
+			"columns":[
+				{"data": null, defaultContent: ''},	
+				{"data": "nama_parameter"},
+				{"data": "tahun"},
+				{"data": "active"},
+				{"data": "create_at"},
+				{
+					"render": function(data, type, JsonResultRow, meta) {
+						var btn = '';	
+						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
+							
+							"<button class='btn icon btn-outline-warning edit-parameter' data-indk='" + JsonResultRow.id_ind + "' data-ind='"+JsonResultRow.indikator+"' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+							"<button class='btn icon btn-outline-danger hapus-parameter' data-indk='" + JsonResultRow.id_ind + "' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 
-									+"</div>"
-									return btn;
-								}
-						},
-					],
-					"columnDefs":[
-						{
-							"className": "dt-center",
-							"targets": [0,2,3,4,5]
-						}
-					],
+							+"</div>"
+							return btn;
+					}
+				},
+			],
+			"columnDefs":[
+				{
+					"className": "dt-center",
+					"targets": [0,2,3,4,5]
+				}
+			],
 					// order: [[2, 'asc']],
-					"rowGroup": {
-			        	dataSrc: 'indikator'
-			    	}
+			"rowGroup": {
+			    dataSrc: ['nama_form','nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek','indikator']
+			}
 	    });
-      t.on('order.dt search.dt', function() {
-			t.column(0, {
-				search: 'applied',
-				order: 'applied'
-			}).nodes().each(function(cell, i) {
-				cell.innerHTML = i + 1;
-			});
-		}).draw();
     }
 
     // Reload Data Datatable
