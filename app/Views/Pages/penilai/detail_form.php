@@ -29,11 +29,11 @@
           </tr>
           <tr>
             <td>Tahun</td>
-            <td>: <?= $dt->tahun; ?></td>
+            <td>: <?= $form['tahun']; ?></td>
           </tr>
           <tr>
             <td>Nama Form</td>
-            <td>: <?= $dt->nama_form; ?></td>
+            <td>: <?= $form['nama_form']; ?></td>
           </tr>
           <!-- <tr>
             <td>Aspek</td>
@@ -108,7 +108,7 @@
 
 <div class="modal fade text-left" id="detail_indikator" tabindex="-1" role="dialog"
   aria-labelledby="myModalLabel17" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
     role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">

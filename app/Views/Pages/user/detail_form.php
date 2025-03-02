@@ -237,6 +237,7 @@
               contentType: false,
               cache: false,
               success: function(data){
+                console.log(data)
               
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
@@ -291,7 +292,7 @@
 
              for (var i = 0; i < data.length; i++) {
                str += '<li>'+data[i].nama_parameter+'</li>'
-               plh += '<option value="'+String.fromCharCode(65+i)+'">'+String.fromCharCode(65+i)+'</option>'
+               plh += '<option value="'+data[i].id+'">'+String.fromCharCode(65+i)+'</option>'
              }
 
              if (jwb.tombol == 0) {

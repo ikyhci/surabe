@@ -320,6 +320,7 @@
           var csrf = document.getElementById('csrf_token')
           
           var opt = document.getElementById("pilih-tahun");
+          
           var pilih = new Choices(opt)
           $.ajax({
             url: urlx+'/api/get-dashboard-user',
