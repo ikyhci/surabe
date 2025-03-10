@@ -14,19 +14,49 @@ class SuperAdminModel extends Model
         $this->db = db_connect();
     }
 
+    public function EncPass($pass)
+    {
+        return $this->db->query("SELECT EncPass(?) as pass", [$pass])->getRow()->pass;
+    }
+
+    // public function getUsers($uid = null, $role = null, $offset = null, $limit = null)
+    // {
+    //     $query = $this->db->query("CALL View_Users(?, ?, ?)", [$uid, $offset, $limit]);
+
+    //     $users = $query->getResult();
+        
+    //     if (!is_null($role)) {
+    //         $users = array_filter($users, function ($user) use ($role) {
+    //             return isset($user->RoleName) && $user->RoleName === $role;
+    //         });
+    //     }
+
+    //     return $users;
+    // }
     public function getUsers($uid = null, $role = null, $offset = null, $limit = null)
     {
-        $query = $this->db->query("CALL View_Users(?, ?, ?)", [$uid, $offset, $limit]);
-
-        $users = $query->getResult();
+        $builder = $this->db->table('lke_user u')
+            ->select('u.uid, u.UserName, u.FullName, u.Phone, u.EmailAdds,rl.RoleId, rl.RoleName, d.opdid, u.actv')
+            ->join('lke_role r', 'r.Uid = u.uid', 'left')
+            ->join('lke_roles rl', 'rl.RoleId = r.RoleId', 'left')
+            ->join('lke_detail_opd d', 'd.userid = u.uid', 'left')
+            ->groupBy('u.uid, rl.RoleId, rl.RoleName, d.opdid');
         
-        if (!is_null($role)) {
-            $users = array_filter($users, function ($user) use ($role) {
-                return isset($user->RoleName) && $user->RoleName === $role;
-            });
+        if (!is_null($uid)) {
+            $builder->where('u.uid', $uid);
         }
 
-        return $users;
+        if (!is_null($role)) {
+            $builder->where('rl.RoleId', $role);
+        }
+
+        if (!is_null($offset) && !is_null($limit)) {
+            $builder->limit($limit, $offset);
+        }
+        
+        $query = $builder->get();
+
+        return $query->getResult();
     }
 
     public function getUser($uid)
