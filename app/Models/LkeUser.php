@@ -57,4 +57,23 @@ class LkeUser extends Model
         return $user;
     }
 
+    public function UserInfo($id)
+    {
+        $userInfo = $this->db->table('lke_user')
+                    ->select('lke_user.uid, lke_user.UserName, lke_user.FullName, lke_user.Phone, lke_user.EmailAdds, lke_roles.RoleName, lke_roles.acs, ')
+                    ->join('lke_role', 'lke_role.Uid = lke_user.uid', 'inner')
+                    ->join('lke_roles', 'lke_role.RoleId = lke_roles.RoleId', 'inner')
+                    ->where('lke_user.uid', $id)
+                    ->where('lke_user.actv', 'TRUE')
+                    ->limit(1)
+                    ->get()
+                    ->getRow();
+        if ($userInfo->acs == '2') {
+            $aspek = $this->db->query(" SELECT lsa.* from lke_role lr INNER JOIN lke_sub_aspek lsa ON lsa.id=lr.aspek WHERE lr.Uid = '$id' ")->getResult();
+            $userInfo->aspek = $aspek;
+        } else {
+            $userInfo->aspek = null;
+        }
+        return $userInfo;
+    }
 }

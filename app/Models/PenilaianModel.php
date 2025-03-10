@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\LkeSubAspek;
 
 class PenilaianModel extends Model
 {
@@ -14,7 +15,7 @@ class PenilaianModel extends Model
         $this->db = db_connect();
     }
     
-    public function getDataOpd($tahun)
+    public function getDataOpd($tahun, $idSubASpek = null)
     {
         // dd();
 
@@ -27,7 +28,7 @@ class PenilaianModel extends Model
         $opd = $this->db->query("call View_Opd(null, null, null)")->getResult();
 
         // $indikator = $this->indikatorByAspek($idasp);
-        $indikator = $this->getIndikatorTahunan($tahun);
+        $indikator = $this->getIndikatorTahunan($tahun, $idSubASpek);
         $jumlahIndikator = count($indikator);
 
         foreach ($opd as $key => $value) {
@@ -184,7 +185,7 @@ class PenilaianModel extends Model
         }
     }
 
-    public function nestedData($id_asp, $id_opd = null)
+    public function nestedData($id_asp, $id_opd = null, $ids_aspek = null)
     {
         // $sql = "CALL View_Aspek('".$id_asp."', null, null)";
         $aspek = $this->db->query("CALL View_Aspek('".$id_asp."', null, null)")->getRow();
@@ -192,7 +193,11 @@ class PenilaianModel extends Model
             return null;
         }
         // dd([$aspek, $id_asp, $id_opd, 'sql' => $sql]);
-        $aspek->subaspek = $this->db->table('lke_sub_aspek')->where('id_aspek', $aspek->id)->get()->getResult();
+        if ($ids_aspek !== null) {
+            $aspek->subaspek = $this->db->table('lke_sub_aspek')->whereIn('id', $ids_aspek)->get()->getResult();
+        } else {
+            $aspek->subaspek = $this->db->table('lke_sub_aspek')->where('id_aspek', $aspek->id)->get()->getResult();
+        }
 
         foreach ($aspek->subaspek as $subaspek) {
             $subaspek->subsubaspek = $this->db->table('lke_sub_sub_aspek')->where('id_sub_aspek', $subaspek->id)->get()->getResult();
@@ -277,7 +282,7 @@ class PenilaianModel extends Model
         return $this->db->affectedRows();
     }
 
-    public function getIndikatorTahunan($tahun) {
+    public function getIndikatorTahunan($tahun, $idSubASpek = null) {
         
         $db = \Config\Database::connect();
         $builder = $db->table('lke_aspek a')
@@ -302,9 +307,31 @@ class PenilaianModel extends Model
             ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner');
 
         $builder->where('f.tahun', $tahun);
-
+        if($idSubASpek !== null){
+            $builder->whereIn('sa.id', $idSubASpek);
+        }
         $query = $builder->get();
         $result = $query->getResultArray();
         return $result;
+    }
+
+    public function UserInfo($id)
+    {
+        $userInfo = $this->db->table('lke_user')
+                    ->select('lke_user.uid, lke_user.UserName, lke_user.FullName, lke_user.Phone, lke_user.EmailAdds, lke_roles.RoleName, lke_roles.acs, ')
+                    ->join('lke_role', 'lke_role.Uid = lke_user.uid', 'inner')
+                    ->join('lke_roles', 'lke_role.RoleId = lke_roles.RoleId', 'inner')
+                    ->where('lke_user.uid', $id)
+                    ->where('lke_user.actv', 'TRUE')
+                    ->limit(1)
+                    ->get()
+                    ->getRow();
+        if ($userInfo->acs == '2') {
+            $aspek = $this->db->query(" SELECT lsa.* from lke_role lr INNER JOIN lke_sub_aspek lsa ON lsa.id=lr.aspek WHERE lr.Uid = '$id' ")->getResult();
+            $userInfo->aspek = $aspek;
+        } else {
+            $userInfo->aspek = null;
+        }
+        return $userInfo;
     }
 }

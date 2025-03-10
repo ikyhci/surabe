@@ -185,12 +185,57 @@ class ApiSuperAdminControllers extends BaseController
             'FullName'  => $fname,
             'Phone'     => $phn,
             'EmailAdds' => $eml,
+            'Create_at' => date('Y-m-d H:i:s'),
             'actv'      => 'TRUE',
         ];
 
         try {
             $lke_user->insert($user_data);
             // $lke_user->query("CALL User_Cretae_new(?, ?, ?, ?, ?, ?, ?, ?)", [$uidx, $uname, $fname, $pswd, $phn, $eml, $rlid, $opid]);
+            
+            if ($lke_user->affectedRows() > 0) {
+                $user_id = $uidx;
+                $lke_detail_opd->insert([
+                    'id' => sha1(random_bytes(20)),
+                    'userid' => $user_id,
+                    'opdid' => $opid,
+                    'create_at' => date('Y-m-d H:i:s'),
+                ]);
+                // $lke_role->where('Uid', $user_id)->delete();
+                // $lke_user->query("UPDATE lke_user SET PassEnc = EncPass(?) WHERE Uid = ?", [$pswd, $user_id]);
+                $lke_user->query("CALL User_update_password(?, ?)", [ $user_id, $pswd ]);
+                if (!empty($aspek_penilai)) {
+                    $aspek = new \App\Models\LkeAspek();
+                    // $aspek->whereIn('id', $aspek_penilai)->update(['penilaiid' => $user_id]);
+                    foreach ($aspek_penilai as $asp) {
+                        $lke_role->save([
+                            'Uid' => $user_id,
+                            'RoleId' => $rlid,
+                            'aspek' => $asp,
+                            'Create_at' => date('Y-m-d H:i:s'),
+                        ]);
+                    }
+                }else {
+                    $lke_role->save([
+                        'Uid' => $user_id,
+                        'RoleId' => $rlid,
+                    ]);
+                }
+                
+                return $this->response->setJSON([
+                    'token_crs' => csrf_hash(),
+                    'res' => true,
+                    'msg' => 'User berhasil ditambahkan'
+                ]);
+            } else {
+                return $this->response->setJSON([
+                    'token_crs' => csrf_hash(),
+                    'res' => false,
+                    'msg' => 'User gagal ditambahkan',
+                    'data' => $user_data,
+                    'last_query' => $lke_user->getLastQuery()->getQuery()
+                ]);
+            }
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -200,48 +245,7 @@ class ApiSuperAdminControllers extends BaseController
                 'data' => $user_data
             ]);
         }
-        
-        if ($lke_user->affectedRows() > 0) {
-            $user_id = $uidx;
-            $lke_detail_opd->insert([
-                'id' => sha1(random_bytes(20)),
-                'userid' => $user_id,
-                'opdid' => $opid,
-                'create_at' => date('Y-m-d H:i:s'),
-            ]);
-            // $lke_role->where('Uid', $user_id)->delete();
-            $lke_user->query("UPDATE lke_user SET PassEnc = EncPass(?) WHERE Uid = ?", [$hashPass, $user_id]);
-            if (!empty($aspek_penilai)) {
-                $aspek = new \App\Models\LkeAspek();
-                // $aspek->whereIn('id', $aspek_penilai)->update(['penilaiid' => $user_id]);
-                foreach ($aspek_penilai as $asp) {
-                    $lke_role->save([
-                        'Uid' => $user_id,
-                        'RoleId' => $rlid,
-                        'aspek' => $asp,
-                    ]);
-                }
-            }else {
-                $lke_role->save([
-                    'Uid' => $user_id,
-                    'RoleId' => $rlid,
-                ]);
-            }
-            
-            return $this->response->setJSON([
-                'token_crs' => csrf_hash(),
-                'res' => true,
-                'msg' => 'User berhasil ditambahkan'
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'token_crs' => csrf_hash(),
-                'res' => false,
-                'msg' => 'User gagal ditambahkan',
-                'data' => $user_data,
-                'last_query' => $lke_user->getLastQuery()->getQuery()
-            ]);
-        }
+
     }
 
     public function deleteUser($uid)
