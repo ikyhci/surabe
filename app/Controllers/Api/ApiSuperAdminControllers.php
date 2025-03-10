@@ -43,6 +43,7 @@ class ApiSuperAdminControllers extends BaseController
         $limit = $this->request->getVar('limit') ? $this->request->getVar('limit') : null;
 
         $users = $this->superAdminModel->getUsers($uid, $role, $offset, $limit);
+
         $data = array(
             'token_crs' => csrf_hash(),
             'dt'        =>  $users,
@@ -64,6 +65,10 @@ class ApiSuperAdminControllers extends BaseController
         );
         $user = $this->superAdminModel->getUsers($uid, null, null);
         if (count($user)===1) {
+            $aspek_penilai = [];
+            $lke_role = new \App\Models\LkeRole();
+            $aspek_penilai = $lke_role->select('aspek as aspek_id')->where('Uid', $uid)->findAll();
+            $user[0]->aspek_penilai = $aspek_penilai;
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        =>  $user[0],
@@ -97,14 +102,38 @@ class ApiSuperAdminControllers extends BaseController
         $fname  = $this->request->getPost('FullName');
         $phn    = $this->request->getPost('Phone');
         $eml    = $this->request->getPost('EmailAdds');
+
+        $rlid = $this->request->getPost('RoleName');
+        $opid = $this->request->getPost('nama_opd');
+        $aspek_penilai = $this->request->getPost('aspek_penilai');
     
         $result = $this->superAdminModel->updateUser($uid, $uname, $fname, $phn, $eml);
-    
+
         if ($result['res'] == 1) {
+            $lke_detail_opd = new \App\Models\LkeDetailOpd();
+            $lke_detail_opd->where('userid', $uid)->set(['opdid' => $opid])->update();
+            $lke_role = new \App\Models\LkeRole();
+            $lke_role->where('Uid', $uid)->delete();
+            if (!empty($aspek_penilai)) {
+                foreach ($aspek_penilai as $key => $value) {
+                    $lke_role->insert([
+                        'Uid' => $uid,
+                        'RoleId' => $rlid,
+                        'aspek' => $value,
+                    ]);
+                }
+            }else {
+                $lke_role->insert([
+                    'Uid' => $uid,
+                    'RoleId' => $rlid,
+                ]);
+            }
+            
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
                 'res' => true,
-                'msg' => $result['msg']
+                'msg' => $result['msg'],
+                'uid' => $uid
             ]);
         } else {
             return $this->response->setJSON([
@@ -134,7 +163,7 @@ class ApiSuperAdminControllers extends BaseController
                 'msg' => $validation->getErrors()
             ]);
         }
-        $uidx = '';
+        $uidx = sha1(random_bytes(20));
         $uname = $this->request->getPost('UserName');
         $fname = $this->request->getPost('FullName');
         $pswd = $this->request->getPost('Password');
@@ -142,20 +171,75 @@ class ApiSuperAdminControllers extends BaseController
         $eml = $this->request->getPost('EmailAdds');
         $rlid = $this->request->getPost('RoleName');
         $opid = $this->request->getPost('nama_opd');
-    
-        $result = $this->superAdminModel->addUser($uidx, $uname, $fname, $pswd, $phn, $eml, $rlid, $opid);
-    
-        if ($result['res'] == 1) {
+        $aspek_penilai = $this->request->getPost('aspek_penilai');
+        // $result = $this->superAdminModel->addUser($uidx, $uname, $fname, $pswd, $phn, $eml, $rlid, $opid);
+        
+        $lke_user = new \App\Models\LkeUser();
+        $lke_role = new \App\Models\LkeRole();
+        $lke_detail_opd = new \App\Models\LkeDetailOpd();
+        $hashPass = null;//$this->superAdminModel->EncPass($pswd);
+        $user_data = [
+            'uid'       => $uidx,
+            'UserName'  => $uname,
+            'PassEnc'   => $hashPass,
+            'FullName'  => $fname,
+            'Phone'     => $phn,
+            'EmailAdds' => $eml,
+            'actv'      => 'TRUE',
+        ];
+
+        try {
+            $lke_user->insert($user_data);
+            // $lke_user->query("CALL User_Cretae_new(?, ?, ?, ?, ?, ?, ?, ?)", [$uidx, $uname, $fname, $pswd, $phn, $eml, $rlid, $opid]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => false,
+                'msg' => 'Error: ' . $e->getMessage(),
+                'last_query' => $lke_user->getLastQuery()->getQuery(),
+                'data' => $user_data
+            ]);
+        }
+        
+        if ($lke_user->affectedRows() > 0) {
+            $user_id = $uidx;
+            $lke_detail_opd->insert([
+                'id' => sha1(random_bytes(20)),
+                'userid' => $user_id,
+                'opdid' => $opid,
+                'create_at' => date('Y-m-d H:i:s'),
+            ]);
+            // $lke_role->where('Uid', $user_id)->delete();
+            $lke_user->query("UPDATE lke_user SET PassEnc = EncPass(?) WHERE Uid = ?", [$hashPass, $user_id]);
+            if (!empty($aspek_penilai)) {
+                $aspek = new \App\Models\LkeAspek();
+                // $aspek->whereIn('id', $aspek_penilai)->update(['penilaiid' => $user_id]);
+                foreach ($aspek_penilai as $asp) {
+                    $lke_role->save([
+                        'Uid' => $user_id,
+                        'RoleId' => $rlid,
+                        'aspek' => $asp,
+                    ]);
+                }
+            }else {
+                $lke_role->save([
+                    'Uid' => $user_id,
+                    'RoleId' => $rlid,
+                ]);
+            }
+            
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
                 'res' => true,
-                'msg' => $result['msg']
+                'msg' => 'User berhasil ditambahkan'
             ]);
         } else {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
                 'res' => false,
-                'msg' => $result['msg']
+                'msg' => 'User gagal ditambahkan',
+                'data' => $user_data,
+                'last_query' => $lke_user->getLastQuery()->getQuery()
             ]);
         }
     }
@@ -288,6 +372,30 @@ class ApiSuperAdminControllers extends BaseController
             'token_crs' => csrf_hash(),
             'dt'        => $list,
         );
+        return $this->response->setJSON($data);
+    }
+
+    public function getSubAspekByForm()
+    {
+        $form_id = $this->request->getVar('FormId');
+        if (!$form_id) {
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'success'   => 0,
+                'msg'       => 'Form ID tidak boleh kosong'
+            );
+            return $this->response->setJSON($data);
+        }
+        $lke_sub_aspek = new \App\Models\LkeSubAspek();
+        $subAspek = $lke_sub_aspek->getSubAspekByFormId($form_id);
+        $data = array(
+            'token_crs' => csrf_hash(),
+            'dt'        => $subAspek,
+            'success'   => 1,
+            'msg'       => 'Data berhasil diambil'
+        );
+        
+
         return $this->response->setJSON($data);
     }
 }
