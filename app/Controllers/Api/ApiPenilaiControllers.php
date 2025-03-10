@@ -3,13 +3,14 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
+use App\Models\LkeUser;
+use App\Models\PenilaianModel;
+use CodeIgniter\HTTP\Header;
+use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Services;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
-use App\Models\PenilaianModel;
 
 class ApiPenilaiControllers extends BaseController
 {
@@ -37,14 +38,27 @@ class ApiPenilaiControllers extends BaseController
 
     public function getPenilaianMandiri()
     {
+        $lke_user = new LkeUser();
+
+        $userInfo = $lke_user->UserInfo($this->decoded->ids);
+        
+        if ($userInfo->acs == '2') {
+            $ids_aspek = array_map(function($aspek) {
+                return $aspek->id;
+            }, $userInfo->aspek);
+        } else {
+            $ids_aspek = null;
+        }
+
         $idaspek = $this->request->getVar('asp');
-        $ttahun = $this->request->getVar('thn');
+        $tahun = $this->request->getVar('thn');
         $penilaianModel = new PenilaianModel();
-        $opd = $penilaianModel->getDataOpd($idaspek);
+        $opd = $penilaianModel->getDataOpd($idaspek, $ids_aspek);
         $response = [
             'status' => 200,
             'message' => 'Data berhasil diambil',
-            'data' => $opd
+            'data' => $opd,
+            'userInfo' => $userInfo
         ];
         return $this->response->setJSON($response);
     }
