@@ -10,6 +10,7 @@ use CodeIgniter\Commands\Utilities\Publish;
 use CodeIgniter\HTTP\Header;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\App;
 use Config\Services;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -364,14 +365,28 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $RoleName = $this->request->getVar('RoleName') ? $this->request->getVar('RoleName') : null;
+            $RoleId = $this->request->getVar('RoleId') ? $this->request->getVar('RoleId') : null;
             // $LIMIT = null;
             // $OFFSET = null;
             // $list = $this->db->query("call View_Roles('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             $list = $this->db->query("call View_Roles()")->getResult();
-            if($RoleName){
-                $i = array_search($RoleName, array_column($list, 'RoleName'));
+            if($RoleName && !$RoleId){
+                $i = array_search($RoleId, array_column($list, 'RoleId'));
+                $list = array($list[$i]);
+            } elseif($RoleName && $RoleId){
+                
+                $i1 = array_search($RoleId, array_column($list, 'RoleId'));
+                $list1 = array($list[$i1]);
+
+                $i2 = array_search($RoleId, array_column($list, 'RoleId'));
+                $list2 = array($list[$i2]);
+
+                $list = array_merge($list1, $list2);
+            } elseif(!$RoleName && $RoleId) {
+                $i = array_search($RoleId, array_column($list, 'RoleId'));
                 $list = array($list[$i]);
             }
+
             $data = array(
                     'token_crs' => csrf_hash(),
                     'dt'        => $list,
@@ -417,8 +432,6 @@ class ApiGlobalControllers extends BaseController
             return $this->response->setJSON($data);
         }
     }
-
-
 
     public function nilai()
     {
@@ -478,4 +491,18 @@ class ApiGlobalControllers extends BaseController
         return $this->response->setJSON($data);
     }
     
+    public function getTahun()
+    {
+        $lke_form = new \App\Models\LkeForm();
+        $tahun = $lke_form->findAll();
+        $data = array(
+            'token_crs' => csrf_hash(),
+            'dt'        => $tahun,
+            'success'   => 1,
+            'msg'       => 'Data berhasil diambil'
+        );
+
+        return $this->response->setJSON($data);
+    }
+
 }

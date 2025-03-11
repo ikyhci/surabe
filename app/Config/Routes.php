@@ -89,6 +89,7 @@ $routes->group('api', ['filter' => ['apiFilter:Soal,Super Admin,Penilai,User', '
 	$routes->get('get-rb', 'Api\ApiGlobalControllers::getRb');
 	$routes->get('get-form', 'Api\ApiGlobalControllers::getForms');
 	$routes->get('nilai-opd', 'Api\ApiGlobalControllers::nilai');
+	$routes->get('get-tahun', 'Api\ApiGlobalControllers::getTahun');
 
 	$routes->post('get-user-by-id', 'Api\ApiGlobalControllers::getUSerById');
 
@@ -112,10 +113,11 @@ $routes->group('api', ['filter' => ['apiFilter:Super Admin', 'cors']], function 
 	$routes->get('get-users', 'Api\ApiSuperAdminControllers::getUsers');
 	$routes->get('get-user/(:segment)', 'Api\ApiSuperAdminControllers::getUser/$1');
 	$routes->POST('put-user/(:any)', 'Api\ApiSuperAdminControllers::updateUser/$1');
-	$routes->POST('post-user', 'Api\ApiSuperAdminControllers::addUser');
+	$routes->POST('add-user', 'Api\ApiSuperAdminControllers::addUser');
 	$routes->delete('delete-user/(:any)', 'Api\ApiSuperAdminControllers::deleteUser/$1');
 	$routes->post('save-opd', 'Api\ApiSuperAdminControllers::saveOPD');
 	$routes->post('del-opd', 'Api\ApiSuperAdminControllers::delOPD');
+	$routes->get('get-aspek-by-form', 'Api\ApiSuperAdminControllers::getSubAspekByForm');
 
 
 });
