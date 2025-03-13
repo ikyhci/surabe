@@ -26,6 +26,7 @@ $(document).ready(function(){
     	$('#parameter').modal('hide');
     	inputs.innerHTML = '';
     	inputs.innerHTML = inputrb();
+    	loadForms()
     	$('#add-data').modal('show');
     })
 
@@ -719,9 +720,9 @@ $(document).ready(function(){
 					                	text: data.msg,
 					                	type: "success"
 					              	}, function(){
-					              		$('#add-data').modal('hide');
+					              		// $('#add-data').modal('hide');
 					              		// $('#parameter').modal('show');
-					                	ReloadData(7);
+					                	ReloadData(inputs);
 					              	});
 				             	}else{
 				             		swal({
@@ -729,7 +730,7 @@ $(document).ready(function(){
 				                		text: data.msg,
 				                		type: "error"
 				              			}, function(){
-				                			ReloadData();
+				                			ReloadData(inputs);
 				              			});
 				             	}
 		            		},1000);
@@ -817,6 +818,15 @@ $(document).ready(function(){
 
 	function inputrb(){
     	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate><input type="hidden" value="1" id="datainput">'+
+
+
+    				'<div class="col-md-12 mb-6">'+
+
+                       '<h6>Nama Form <span class="text-danger">*</span></h6>'+
+                        '<div class="input-group mb-3">'+
+                           '<select class=" form-select" name="forms" id="forms" required></select>'+
+                            '</div>'+
+                    '</div>'+
 
                     '<div class="form-group">'+
                         '<h6>Nama RB <span class="text-danger">*</span></h6>'+

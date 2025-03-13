@@ -237,7 +237,7 @@
               contentType: false,
               cache: false,
               success: function(data){
-                console.log(data)
+                // console.log(data)
               
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
@@ -322,7 +322,7 @@
                         '<input type="hidden" name="indikator" value="'+data[0].id_indikator+'">'+
                         '<div class="col-md-12 mb-6">'+
                           '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
-                          '<select class=" form-select" name="jwbn" id="jwb" required>'+
+                          '<select class=" form-select" name="jwbn" id="jwbn" required>'+
                             '<option selected disabled value="">Choose...</option>'+ 
                             plh+              
                           '</select>'+

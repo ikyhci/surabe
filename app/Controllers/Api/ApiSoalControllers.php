@@ -100,12 +100,13 @@ class ApiSoalControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
+                $fmx  = $this->request->getVar('forms');
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Rb_add_edit('".
                     $userid."','".
                     $id."','".
-                    $nama."','".$bobot."')")->getRow();
+                    $nama."','".$bobot."','".$fmx."')")->getRow();
 
                 $data = array(
                         'token_crs' =>  csrf_hash(),
