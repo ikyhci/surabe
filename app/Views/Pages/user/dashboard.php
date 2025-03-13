@@ -452,7 +452,7 @@
           },
           "method": "GET",
           "dataSrc": function(data){
-            console.log(data)
+            // console.log(data)
             $('input#<?= csrf_token() ?>').val(data.token_crs)
             return data.dt;
           },
