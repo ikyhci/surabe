@@ -64,7 +64,7 @@
 <!-- popup -->
 <?= $this->include('Pages/user/popup') ?>
 <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/choices.js/choices.min.js"></script>
-    <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
+    <script {csp-script-nonce} src="<?= base_url('assets/vendors/jquery/jquery.min.js'); ?>"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/dataTables/dataTables.min.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/sweetalert/sweetalert.min.js"></script>
     <script {csp-script-nonce} type="text/javascript">

@@ -79,12 +79,12 @@
 <?= $this->include('Pages/soal/popup') ?>
 
 <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/choices.js/choices.min.js"></script>
-    <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
-    <script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/dataTables/dataTables.min.js"></script>
+    <script {csp-script-nonce} src="<?= base_url('assets/vendors/jquery/jquery.min.js'); ?>"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/dataTables/dataTables.min.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/dataTables.rowGroup.js"></script>
      <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/rowGroup.dataTables.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/sweetalert/sweetalert.min.js"></script>
-    <script {csp-script-nonce} src="<?php echo base_url();?>/assets/js/pages/soal.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/soal.js"></script>
 
 <?= $this->include('Pages/soal/add_scr') ?>
 

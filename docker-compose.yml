@@ -39,8 +39,8 @@ services:
     volumes:
       - .:/var/www/html
       - ./docker/apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
-    # ports:
-    #   - 8080:80
+    ports:
+      - 7890:80
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
@@ -49,15 +49,15 @@ services:
       - redis
     labels:
       - custom.domain=${APPNAME}.localhost
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 50M
-        reservations:
-          cpus: "0.05"
-          memory: 20M
+    # deploy:
+    #   replicas: 2
+    #   resources:
+    #     limits:
+    #       cpus: "0.1"
+    #       memory: 50M
+    #     reservations:
+    #       cpus: "0.05"
+    #       memory: 20M
 
   mariadb:
     # image: mariadb:latest
@@ -82,7 +82,7 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     container_name: ${APPNAME}_phpmyadmin
     ports:
-      - "8081:80"
+      - "7891:80"
     environment:
       PMA_HOST: mariadb
     depends_on:

@@ -58,7 +58,7 @@
         </div>
 
     </div>
-    <script {csp-script-nonce} src="<?= base_url('/assets/vendors/jquery/jquery.min.js'); ?>"></script>
+    <script {csp-script-nonce} src="<?= base_url('assets/vendors/jquery/jquery.min.js'); ?>"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/toastify/toastify.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/bootstrap.bundle.min.js"></script>
     <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/auth.js"></script>

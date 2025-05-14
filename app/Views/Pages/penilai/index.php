@@ -68,9 +68,9 @@
 
 <?= $this->section('script') ?>
 
-<script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/jquery/jquery.min.js"></script>
-<link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>/assets/vendors/dataTables/dataTables.min.css">
-<script {csp-script-nonce} src="<?php echo base_url();?>/assets/vendors/dataTables/dataTables.min.js"></script>
+<script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/jquery/jquery.min.js"></script>
+<link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url();?>assets/vendors/dataTables/dataTables.min.css">
+<script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/dataTables/dataTables.min.js"></script>
 
 <link {csp-script-nonce} rel="stylesheet" href="/assets/vendors/choices.js/choices.min.css" />
 <script {csp-script-nonce} src="/assets/vendors/choices.js/choices.min.js"></script>
