@@ -299,6 +299,7 @@ class ApiUserControllers extends BaseController
                 $indkt  = $this->request->getVar('indikator');
                 $nama   = $this->request->getVar('jwbn');
                 $userid = $this->decoded->ids;//$this->decoded->userid
+                // $idjwb  = $this->request->getVar('jwbxid'): null;
 
                 $save = $this->db->query("CALL Jawaban_add_edit('".
                     $userid."','".
@@ -326,7 +327,7 @@ class ApiUserControllers extends BaseController
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  1,
-                        'msg'       =>  'Tambah Data Berhasil',
+                        'msg'       =>  'Tambah Data Berhasil :'.$save->msg,
                     );
                 return $this->response->setJSON($data);
                 // 

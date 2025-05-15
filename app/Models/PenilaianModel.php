@@ -260,7 +260,7 @@ class PenilaianModel extends Model
         return $query->getResultArray();
     }
     
-    public function updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban)
+    public function updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban) //
     {
         $builder = $this->db->table('lke.lke_jawaban');
         $builder->where('id', $id_jawaban);
@@ -268,7 +268,7 @@ class PenilaianModel extends Model
             'nilai' => $point, 
             'aprove' => $aprv, 
             'ket' => $keterangan, 
-            'Jawaban' => $jawaban
+            // 'Jawaban' => $jawaban
         ]);
         return $this->db->affectedRows();
         // return true;

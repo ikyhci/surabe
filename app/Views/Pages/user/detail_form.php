@@ -129,10 +129,13 @@
                   contentType: false,
                   cache: false,
                   success:function(data){
+                    
                     $('input#<?= csrf_token() ?>').val(data.token_crs)
                     setTimeout(function(){
                       if (data.success == 1) {
                         swal('success','Data Berhasil Di Simpan','success');
+                        ReloadTable()
+                        $('#Detailparameter').modal('hide');
                       }else{
                         swal({
                           title:"Error",
@@ -149,6 +152,11 @@
           }
           
          })
+
+         function ReloadTable(){
+         var t = $('#datatable').DataTable();
+         t.ajax.reload(null, false);
+         }
 
           function LoadDatatable(){
             var form = document.getElementById('form').value
@@ -237,7 +245,7 @@
               contentType: false,
               cache: false,
               success: function(data){
-                // console.log(data)
+                
               
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
@@ -288,6 +296,7 @@
             var plh = '';
             var upl = '';
             var flx = '<ol type="*">';
+            console.log(jwb)
             
 
              for (var i = 0; i < data.length; i++) {
@@ -320,6 +329,7 @@
               str += '</ol>';
                  str += '<form id="formdata" enctype="multipart/form-data">'+
                         '<input type="hidden" name="indikator" value="'+data[0].id_indikator+'">'+
+                        '<input type="hidden" name="idx" value="'+jwb.idjwbx+'">'+
                         '<div class="col-md-12 mb-6">'+
                           '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
                           '<select class=" form-select" name="jwbn" id="jwbn" required>'+
@@ -342,7 +352,8 @@
 
             document.getElementById('content-form').innerHTML = str;
             document.getElementById('content-upload').innerHTML = flx;
-            $("#jwb").val(jwb.jwbx).trigger('change')
+            console.log(jwb.jwbx)
+            $("#jwbn").val(jwb.jwbx).trigger('change')
           }
 
 
@@ -384,6 +395,7 @@
              
                 str += '<form id="formdata" enctype="multipart/form-data">'+
                         '<input type="hidden" name="indikator" value="'+data[0].id_indikator+'">'+
+                        '<input type="hidden" name="idx" value="'+jwb.idjwbx+'">'+
                         '<div class="col-md-12 mb-6">'+
                           '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
                           '<input type="range" class="form-range" name="jwbn" value="0" min="0" max="100" id="customRange2" required>'+
@@ -462,6 +474,7 @@
               str += '</ol>';
                  str += '<form id="formdata" enctype="multipart/form-data">'+
                         '<input type="hidden" name="indikator" id="indikator" value="'+data[0].id_indikator+'">'+
+                        '<input type="hidden" name="idx" value="'+jwb.idjwbx+'">'+
                         '<div class="col-md-12 mb-6">'+
                           '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
                             '<div class="form-check">'+
