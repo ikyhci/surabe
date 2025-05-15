@@ -91,7 +91,7 @@ class ApiPenilaiControllers extends BaseController
 
         $id_jawaban = json_decode(base64_decode($data))->kondisiOpd[0]->id_jawaban;
         $penilaianModel = new PenilaianModel();
-        $update = $penilaianModel->updatePoint($id_jawaban, $point, $keterangan, $aprv,$jawaban);//,
+        $update = $penilaianModel->updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban, $this->decoded->ids);
         if ($update === false) {
             $response = [
                 'status' => 400,

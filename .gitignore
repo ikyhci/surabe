@@ -58,3 +58,5 @@ phpunit.xml.dist
 build/
 tests/_output/
 *.sql
+.user.ini
+*.log

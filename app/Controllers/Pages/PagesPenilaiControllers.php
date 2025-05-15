@@ -91,10 +91,10 @@ class PagesPenilaiControllers extends BaseController
         // ];
         $this->data['usr']          = $this->decoded->rln;
         $this->data['token_crs']    = csrf_hash() ;
-        $this->data['success']      = $asp->res ;
-        $this->data['msg']          = $asp->msg ;
+        $this->data['success']      = ($asp)? $asp->res : null ;
+        $this->data['msg']          = ($asp)? $asp->msg : null ;
         $this->data['idx']          = base64_encode($IDX)  ;
-        $this->data['dt']           = $asp ;
+        $this->data['dt']           = ($asp)? $asp : null ;
         $this->data['aspek']        = $data ;
         
         // $penilaianModel = new PenilaianModel();

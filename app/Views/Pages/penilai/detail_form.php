@@ -335,7 +335,7 @@
           });
 
         } else if (jenis_jawaban_num == 2) {
-            // Jika jenis jawaban == 2 atau 4, tampilkan radio button
+            // Jika jenis jawaban == 2 tampilkan radio button
             let ol = document.createElement("ol");
             let options = [];
             let jawabanOpd = (data.kondisiOpd[0]) ? data.kondisiOpd[0].Jawaban : "";
@@ -374,17 +374,18 @@
           let ol = document.createElement("ol");
           ol.setAttribute("type", "A");
           let jawabanOpd = (data.kondisiOpd[0]) ? data.kondisiOpd[0].Jawaban : "";
-          let options = ["A", "B", "C", "D"];
+          // let options = ["A", "B", "C", "D"];
           parameter.forEach((p, i) => {
             let li = document.createElement("li");
 
             let radio = document.createElement("input");
             radio.setAttribute("type", "radio");
             radio.setAttribute("name", "jawaban");
-            radio.setAttribute("value", options[i]);
+            // radio.setAttribute("value", options[i]);
+            radio.setAttribute("value", p.id);
             radio.setAttribute("id", "jawaban" + i);
             radio.setAttribute("class", "form-check-input");
-            if (p.nama_parameter == jawabanOpd) {
+            if (p.id == jawabanOpd) {
               radio.setAttribute("checked", "checked");
             }
             radio.setAttribute('disabled', 'disabled');
@@ -414,23 +415,29 @@
           } else if (jenis_jawaban_num == 2) {
             pointInput.val((inputJawaban.filter(':checked').val() === 'YA') ? 100 : 0);
           } else if (jenis_jawaban_num == 4) {
-            switch (inputJawaban.filter(':checked').val()) {
-              case 'A':
-                pointInput.val(100);
-                break;
-              case 'B':
-                pointInput.val(65);
-                break;
-              case 'C':
-                pointInput.val(35);
-                break;
-              case 'D':
-                pointInput.val(0);
-                break;
-              default:
-                pointInput.val(0);
-                break;
-            }
+            let point = [100, 65, 35, 0];
+            let parameterId = inputJawaban.filter(':checked').val();
+            let idx = parameter.findIndex(p => p.id == parameterId);
+            pointInput.val(point[idx] !== undefined ? point[idx] : 0);
+            console.log(parameterId);
+            
+            // switch (inputJawaban.filter(':checked').val()) {
+            //   case 'A':
+            //     pointInput.val(100);
+            //     break;
+            //   case 'B':
+            //     pointInput.val(65);
+            //     break;
+            //   case 'C':
+            //     pointInput.val(35);
+            //     break;
+            //   case 'D':
+            //     pointInput.val(0);
+            //     break;
+            //   default:
+            //     pointInput.val(0);
+            //     break;
+            // }
           } else {
             pointInput.val(0);
           }

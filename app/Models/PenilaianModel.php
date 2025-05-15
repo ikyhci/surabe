@@ -226,7 +226,11 @@ class PenilaianModel extends Model
     public function indikatorAndJawabanOpd($id_ind, $id_opd) {
         $indikator = $this->db->table('lke_indikator')->where('id', $id_ind)->get()->getRow();
         $indikator->jenis_jawaban = $this->db->table('lke_Jenis_Jawaban')->where('id', $indikator->jenis_jawaban)->get()->getRow();
-        $indikator->parameter = $this->db->table('lke_parameter')->where('id_indikator', $indikator->id)->get()->getResult();
+        $indikator->parameter = $this->db->table('lke_parameter')
+            ->where('id_indikator', $indikator->id)
+            ->orderBy('create_at', 'ASC')
+            ->get()
+            ->getResult();
         $indikator->kondisiOpd = $this->getJawabanByOPD($id_opd, $id_ind, null);
         $indikator->bukti_dukung = $this->db->table('lke_bukti_dukung')->where('id_indikator', $indikator->id)->get()->getResult();
         foreach($indikator->kondisiOpd as $s => $kondisi){
@@ -260,7 +264,7 @@ class PenilaianModel extends Model
         return $query->getResultArray();
     }
     
-    public function updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban) //
+    public function updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban, $ids = null)
     {
         $builder = $this->db->table('lke.lke_jawaban');
         $builder->where('id', $id_jawaban);
@@ -269,6 +273,9 @@ class PenilaianModel extends Model
             'aprove' => $aprv, 
             'ket' => $keterangan, 
             // 'Jawaban' => $jawaban
+            'aproveby'  => $ids,
+            'update_at' => date('Y-m-d H:i:s')
+
         ]);
         return $this->db->affectedRows();
         // return true;
