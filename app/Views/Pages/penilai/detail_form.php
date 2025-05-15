@@ -180,6 +180,7 @@
 
 
 <?= $this->section('script') ?>
+<?= csrf_field() ?>
 <input type="hidden" name="form" id="form" value="<?= $idx; ?>">
 <!-- popup -->
 <script {csp-script-nonce} src="<?= base_url('assets/vendors/jquery/jquery.min.js'); ?>"></script>
@@ -220,6 +221,7 @@
         },
         success: function(res) {
           xYz = res.csrf_token
+          $('input[name="<?= csrf_token() ?>"]').val(xYz);
           if (res.status) {
             swal({
               icon: 'success',
@@ -261,6 +263,7 @@
         },
         success: function(res) {
           xYz = res.csrf_token
+          $('input[name="<?= csrf_token() ?>"]').val(xYz);
           $('#detail_indikator #ssa').text(': ' + ssa);
           $('#detail_indikator #indk').text(': ' + res.data.indikator);
           $('#detail_indikator #param ol').html('');
@@ -498,6 +501,7 @@
           processData: false,
           success: function(res) {
             xYz = res.csrf_token
+            $('input[name="<?= csrf_token() ?>"]').val(xYz);
             // generateBuktiDukung(res.data);
             // console.log(res);
             
