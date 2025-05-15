@@ -227,8 +227,12 @@
               icon: 'success',
               title: 'Berhasil',
               text: res.message,
+            }, function() {
+              location.reload();
             });
+            
             $('#detail_indikator').modal('hide');
+            
           } else {
             swal({
               icon: 'error',
@@ -270,8 +274,7 @@
           res.data.parameter.forEach((p, i) => {
             $('#detail_indikator #param ol').append("<li>"+ p.nama_parameter +"</li>");
           });
-          generateBuktiDukung(res.data);
-
+          
           $('input[name="point"]').val((res.data.kondisiOpd[0])? res.data.kondisiOpd[0].nilai : "");
           $('input[name="data"]').val(dataOpd);
           $('textarea[name="keterangan"]').val((res.data.kondisiOpd[0])? res.data.kondisiOpd[0].ket : "");
@@ -446,8 +449,27 @@
           }
         }
 
-        updatePointInput(jenis_jawaban_num, inputJawaban);
-            
+        // updatePointInput(jenis_jawaban_num, inputJawaban);
+        
+        if (data.kondisiOpd[0].aprove == 'no') {
+          $('#point').val(0);
+        }
+        else if (data.kondisiOpd[0].nilai > 0) {
+          $('#point').val(data.kondisiOpd[0].nilai);
+        }
+        else {
+          updatePointInput(jenis_jawaban_num, inputJawaban);
+        }
+
+
+        $('#approval_no').on('click', function() {
+          let pointInput = $('#point');
+          pointInput.val(0);
+        });
+        $('#approval_yes').on('click', function() {
+          updatePointInput(jenis_jawaban_num, inputJawaban);
+        });
+
     }
 
     function generateBuktiDukung(data){
