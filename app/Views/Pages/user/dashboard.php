@@ -139,7 +139,8 @@
                   </select>
                 </div> 
               </div>
-              <div class="col-sm-6">
+             <!--  <div class="col-sm-6">
+                
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="form-check">
@@ -158,7 +159,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>   
             <!--  -->
             <!-- <div class="table-responsive">
@@ -277,7 +278,7 @@
                 <thead>
                   <tr>
                     <th>No.</th>
-                     <th>Nama RB</th>
+                    <th>Nama RB</th>
                     <th>Nama Aspek</th>
                     <th>Nama Sub Aspek</th>
                     <th>Nama Sub Sub Aspek</th> 
@@ -419,15 +420,17 @@
       
       var optionSelected = $(this).find("option:selected");
       var valueSelected  = optionSelected.val();
-      if (document.getElementById('flexRadioDefault1').checked == true) {
-        LoadDatatable(valueSelected, 'yes');
-      }else{
-        LoadDatatable(valueSelected, '');
-      }
+      // if (document.getElementById('flexRadioDefault1').checked == true) {
+      //   LoadDatatable(valueSelected, 'yes');
+      // }else{
+      //   LoadDatatable(valueSelected, '');
+      // }
+       LoadDatatable(valueSelected);
        
     })
 
-    function LoadDatatable(thn, apv){
+    // function LoadDatatable(thn, apv){
+    function LoadDatatable(thn){
       var csrf = document.getElementById('<?= csrf_token() ?>').value;
       // 
       var t = $('#datatable').DataTable({
@@ -447,12 +450,12 @@
           "data":{
             "<?= csrf_token() ?>": csrf,
             "thn": thn,
-            "apv": apv,
+            // "apv": apv,
 
           },
           "method": "GET",
           "dataSrc": function(data){
-            // console.log(data)
+            console.log(data)
             $('input#<?= csrf_token() ?>').val(data.token_crs)
             return data.dt;
           },
@@ -473,7 +476,7 @@
           {"data": "parameter"},
           {"data": "Jawabanx"},
           {"data": "nilaix"},
-          {"data": null,defaultContent: ''},
+          {"data": "penilaix"},
         ],
         "columnDefs":[
           {
