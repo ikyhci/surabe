@@ -22,6 +22,7 @@
       <div class="card">
 
         <div class="card-body">
+          
           <table class="table  mb-0">
             <tbody>
               <tr>
@@ -201,7 +202,11 @@
                         var btncl = '';
                         if (JsonResultRow.tombol == 1) {
                           btncl = 'btn-outline-primary'
-                        }else{
+                        }
+                        if (JsonResultRow.tombol == 0) {
+                          btncl = 'btn-outline-danger'
+                        }
+                        else{
                           btncl = 'btn-outline-warning'
                         }
                         
@@ -245,11 +250,12 @@
               contentType: false,
               cache: false,
               success: function(data){
+                console.log(data)
                 
               
                 $('input#<?= csrf_token() ?>').val(data.token_crs)
               
-                if (data.dt.indk.tombol == 0) {
+                if (data.dt.indk.tombol == null || data.dt.indk.tombol == 0) {
                   document.getElementById('tblfoot').innerHTML = 
                   '<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+
                     '<i class="bx bx-x d-block d-sm-none"></i>'+
@@ -260,6 +266,8 @@
                   '<span class="d-none d-sm-block">Save</span>'+
                 '</button>';
                 }
+               
+
                 if (data.dt.indk.tombol == 1) {
                   document.getElementById('tblfoot').innerHTML = 
                   '<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+
@@ -268,6 +276,12 @@
                 '</button>';
 
                 }
+          //       <div class="alert alert-danger">
+          //   <h4 class="alert-heading">Danger</h4>
+          //     <p>This is a danger alert.</p>
+          // </div>
+
+
                 document.getElementById('rb').innerHTML = ': '+data.dt.indk.rb 
                 document.getElementById('aspk').innerHTML = ': '+data.dt.indk.aspek
                 document.getElementById('indk').innerHTML = ': '+data.dt.indk.indikator
@@ -296,7 +310,15 @@
             var plh = '';
             var upl = '';
             var flx = '<ol type="*">';
-            console.log(jwb)
+            var ket = '';
+
+            if (jwb.tolak == 1) {
+              ket += '<div class="alert alert-danger"><h4 class="alert-heading">Di Tolak</h4>'+
+                      '<p>'+jwb.ketsx+'.</p></div>'
+            }else{
+              ket = '';
+            }
+            
             
 
              for (var i = 0; i < data.length; i++) {
@@ -304,7 +326,7 @@
                plh += '<option value="'+data[i].id+'">'+String.fromCharCode(65+i)+'</option>'
              }
 
-             if (jwb.tombol == 0) {
+             if (jwb.tombol == 0|| jwb.tombol == null) {
               for (var i = 0; i < dkn.length; i++) {
                   upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
               
@@ -352,7 +374,8 @@
 
             document.getElementById('content-form').innerHTML = str;
             document.getElementById('content-upload').innerHTML = flx;
-            console.log(jwb.jwbx)
+            document.getElementById('content-info').innerHTML = ket;
+            console.log(jwb)
             $("#jwbn").val(jwb.jwbx).trigger('change')
           }
 
@@ -362,6 +385,15 @@
             // var plh = '';
             var upl = '';
             var flx = '<ol type="*">';
+            var ket = '';
+
+            if (jwb.tolak == 1) {
+              ket += '<div class="alert alert-danger"><h4 class="alert-heading">Di Tolak</h4>'+
+                      '<p>'+jwb.ketsx+'.</p></div>'
+            }else{
+              ket = '';
+            }
+
 
              for (var i = 0; i < data.length; i++) {
                str += '<li>'+data[i].nama_parameter+'</li>'
@@ -418,6 +450,7 @@
 
             document.getElementById('content-form').innerHTML = str;
             document.getElementById('content-upload').innerHTML = flx;
+            document.getElementById('content-info').innerHTML = ket;
 
             $('#customRange2').val(jwb.jwbx)
             var output = document.getElementById("ranges");
@@ -440,6 +473,14 @@
             var plh = '';
             var upl = '';
             var flx = '<ol type="*">';
+            var ket = '';
+
+            if (jwb.tolak == 1) {
+              ket += '<div class="alert alert-danger"><h4 class="alert-heading">Di Tolak</h4>'+
+                      '<p>'+jwb.ketsx+'.</p></div>'
+            }else{
+              ket = '';
+            }
 
              for (var i = 0; i < data.length; i++) {
                str += '<li>'+data[i].nama_parameter+'</li>'
@@ -499,6 +540,7 @@
 
             document.getElementById('content-form').innerHTML = str;
             document.getElementById('content-upload').innerHTML = flx;
+            document.getElementById('content-info').innerHTML = ket;
 
             if (jwb.jwbx === 'YA') {
               document.getElementById('jwb1').checked = true;

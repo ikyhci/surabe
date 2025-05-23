@@ -32,6 +32,7 @@
                 <div id="content-upload">
                     
                 </div>
+                <div id="content-info"></div>
 
             </div>
             <div class="modal-footer" id="tblfoot">
