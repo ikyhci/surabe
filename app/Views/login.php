@@ -49,7 +49,8 @@
                 <div id="auth-right">
                     <div class="container text-center d-flex justify-content-center">
                         <div class="vertical-center">
-                            <h2 class="text-white">SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK<br>(SURABE)</h2>
+                            <img src="<?php echo base_url();?>/assets/images/surabe.png" class="logo-imgs" >
+                            <h2 class="text-white">S  I  S  T  E  M <br>PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK<br> BERINTEGRITAS DAN MANDIRI<br>(SURABE BERANI)</h2>
                             <h4 class="text-white">Pemerintah Provinsi Sulawesi Tengah</h4>
                         </div>
                     </div>
