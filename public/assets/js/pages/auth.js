@@ -27,13 +27,14 @@
                         {
                             $.ajax({
                                 type:"POST",
-                                url: url+'/api/login',//url.replace(/\/[^\/]*$/, '/api/login'),
+                                url: url+'api/login',//url.replace(/\/[^\/]*$/, '/api/login'),
                                 data:fd,
                                 dataType: 'JSON',
                                 processData : false,
                                 contentType: false,
                                 cache: false,
                                  success:function(data) {
+                                    console.log(data)
                                      setTimeout(function(){
                                         if (data.success === 1) {
                                             date.setTime(date.getTime() + data.exp);

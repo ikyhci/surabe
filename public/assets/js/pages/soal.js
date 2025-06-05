@@ -407,17 +407,23 @@ $(document).ready(function(){
 		var idx = $(this).data('id_form')
 		let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data Form'
+	    // console.log(data)
 	    inputs.innerHTML = '';
 	    inputs.innerHTML = editDataform(idx, 
-	    	data[Object.keys(data)[1]], 
-	    	data[Object.keys(data)[2]], 
-	    	data[Object.keys(data)[4]],
 	    	data[Object.keys(data)[3]], 
-	    	data[Object.keys(data)[5]]);
+	    	data[Object.keys(data)[4]], 
+	    	data[Object.keys(data)[5]],
+	    	data[Object.keys(data)[6]], 
+	    	data[Object.keys(data)[7]]);
 	   
 	    // console.log()
 	    // console.log()
 	    // console.log()
+	    // console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
 	    // console.log(data[Object.keys(data)[6]])
 	    // console.log(data[Object.keys(data)[7]])
 	    // console.log(data[Object.keys(data)[8]])
@@ -439,7 +445,16 @@ $(document).ready(function(){
 	    let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data RB'
 	    inputs.innerHTML = '';
-	    inputs.innerHTML = editDataRB(idx,data[Object.keys(data)[3]],data[Object.keys(data)[4]]);
+	    inputs.innerHTML = editDataRB(idx,data[Object.keys(data)[5]],data[Object.keys(data)[6]]);
+	    // console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
 	    $('#view-data').modal('hide');
 	    $('#add-data').modal('show');
 	})
@@ -455,10 +470,23 @@ $(document).ready(function(){
 	    inputs.innerHTML = '';
 	    inputs.innerHTML = editDataAspek(idr, idx,
 	  
-	    	data[Object.keys(data)[3]],
-	    	data[Object.keys(data)[6]],
+	    	data[Object.keys(data)[4]],
+	    	data[Object.keys(data)[7]],
 	    )
-	  
+	  	//  console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
+	    // console.log(data[Object.keys(data)[10]])
+	    // console.log(data[Object.keys(data)[11]])
+	    // console.log(data[Object.keys(data)[12]])
+	    // console.log(data[Object.keys(data)[13]])
+
 	    $('#view-data').modal('hide');
 	    $('#add-data').modal('show');
 	})
@@ -473,9 +501,22 @@ $(document).ready(function(){
 	    document.getElementById('title-input').innerHTML = 'Edit Data Sub Aspek'
 	    inputs.innerHTML = '';
 	    inputs.innerHTML = editDataSubAspek(ids, idx,
-	    	data[Object.keys(data)[6]],
-	    	data[Object.keys(data)[3]]
+	    	data[Object.keys(data)[8]],
+	    	data[Object.keys(data)[5]]
 	    )
+	    //  console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
+	    // console.log(data[Object.keys(data)[10]])
+	    // console.log(data[Object.keys(data)[11]])
+	    // console.log(data[Object.keys(data)[12]])
+	    // console.log(data[Object.keys(data)[13]])
 	    $('#view-data').modal('hide');
 	    $('#add-data').modal('show');
 	})
@@ -491,9 +532,22 @@ $(document).ready(function(){
 	    document.getElementById('title-input').innerHTML = 'Edit Data Sub Sub Aspek'
 	    inputs.innerHTML = '';
 	    inputs.innerHTML = editDataSubSubAspek(ids, idx,
-	    	data[Object.keys(data)[3]],
-	    	data[Object.keys(data)[8]]
+	    	data[Object.keys(data)[6]],
+	    	data[Object.keys(data)[11]]
 	    )
+	    //  console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
+	    // console.log(data[Object.keys(data)[10]])
+	    // console.log(data[Object.keys(data)[11]])
+	    // console.log(data[Object.keys(data)[12]])
+	    // console.log(data[Object.keys(data)[13]])
 	    $('#view-data').modal('hide');
 	    $('#add-data').modal('show');
 	})
@@ -510,8 +564,21 @@ $(document).ready(function(){
 	    	document.getElementById('title-input').innerHTML = 'Edit Data Indikator'
 	    	inputs.innerHTML = '';
 	    	inputs.innerHTML = editDataIndikator(ids, idx,
-	    		data[Object.keys(data)[6]],
+	    		data[Object.keys(data)[8]],
 	    		)
+	    // 	 console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
+	    // console.log(data[Object.keys(data)[10]])
+	    // console.log(data[Object.keys(data)[11]])
+	    // console.log(data[Object.keys(data)[12]])
+	    // console.log(data[Object.keys(data)[13]])
 	    	$('#view-data').modal('hide');
 	    	$('#add-data').modal('show');
 	    	loadJawaban()
@@ -529,7 +596,21 @@ $(document).ready(function(){
 	    let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data Bukti Dukung'
 	    inputs.innerHTML = '';
-	    inputs.innerHTML = editBuktiDukung(idx,ind,data[Object.keys(data)[4]]);
+	    inputs.innerHTML = editBuktiDukung(idx,ind,data[Object.keys(data)[5]]);
+
+	    //  console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
+	    // console.log(data[Object.keys(data)[10]])
+	    // console.log(data[Object.keys(data)[11]])
+	    // console.log(data[Object.keys(data)[12]])
+	    // console.log(data[Object.keys(data)[13]])
 	    $('#view-data').modal('hide');
 	   	$('#add-data').modal('show');
 	})
@@ -543,7 +624,20 @@ $(document).ready(function(){
 	    let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data Parameter'
 	    inputs.innerHTML = '';
-	    inputs.innerHTML = editDataparameter(ind, idx, data[Object.keys(data)[3]], data[Object.keys(data)[5]]);
+	    inputs.innerHTML = editDataparameter(ind, idx, data[Object.keys(data)[11]], data[Object.keys(data)[13]]);
+	    // console.log(data[Object.keys(data)[1]])
+	    // console.log(data[Object.keys(data)[2]])
+	    // console.log(data[Object.keys(data)[3]])
+	    // console.log(data[Object.keys(data)[4]])
+	    // console.log(data[Object.keys(data)[5]])
+	    // console.log(data[Object.keys(data)[6]])
+	    // console.log(data[Object.keys(data)[7]])
+	    // console.log(data[Object.keys(data)[8]])
+	    // console.log(data[Object.keys(data)[9]])
+	    // console.log(data[Object.keys(data)[10]])
+	    // console.log(data[Object.keys(data)[11]])
+	    // console.log(data[Object.keys(data)[12]])
+	    // console.log(data[Object.keys(data)[13]])
 	    $('#view-data').modal('hide');
 	    $('#add-data').modal('show');
 	})

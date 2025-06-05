@@ -17,6 +17,7 @@ $routes->get('/unauthorized', 'PublicPages::Unauthorized');
 //login api
 $routes->group('api',  function ($routes) {
 	$routes->post('login', 'Auth\AuthControllers::auth');
+	
 });
 
 //global page 
