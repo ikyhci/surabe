@@ -20,8 +20,8 @@
                 </div>
                 <div class="card-body">
                     <div id="chart-profile-visit">
-                        Jika Mengalami Masalah silahkan hubungi <b>jimmy</b> komionfo: kontak person : <b>0822-5926-3752</b> <br>
-                        atau AAn kominfo , kontak Person : 
+                        <!-- Jika Mengalami Masalah silahkan hubungi <b>jimmy</b> komionfo: kontak person : <b>0822-5926-3752</b> <br>
+                        atau AAn kominfo , kontak Person :  -->
                     </div>
                 </div>
             </div>

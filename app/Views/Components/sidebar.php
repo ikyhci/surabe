@@ -72,7 +72,7 @@ $first_part = $components[1];
 
       <?php if ($usr == 'Super Admin') {
        ?>
-       <li class="sidebar-item  has-sub">
+       <!-- <li class="sidebar-item  has-sub">
           <a href="#" class='sidebar-link'>
             <i class="bi bi-pen-fill"></i>
             <span>Report</span>
@@ -82,7 +82,7 @@ $first_part = $components[1];
               <a href="#">tess menu</a>
             </li>
           </ul>
-        </li>
+        </li> -->
 
 
         <li class="sidebar-title">Management</li>
