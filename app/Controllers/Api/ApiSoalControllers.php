@@ -100,13 +100,17 @@ class ApiSoalControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
-                $fmx  = $this->request->getVar('forms');
+                $fmx    = $this->request->getVar('forms');
+                $nox    = $this->request->getVar('nourut'); 
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Rb_add_edit('".
                     $userid."','".
                     $id."','".
-                    $nama."','".$bobot."','".$fmx."')")->getRow();
+                    $nama."','".
+                    $bobot."','".
+                    $fmx."','".
+                    $nox."')")->getRow();
 
                 $data = array(
                         'token_crs' =>  csrf_hash(),
@@ -144,7 +148,8 @@ class ApiSoalControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
-                $rb = $this->request->getVar('rb');
+                $rb     = $this->request->getVar('rb');
+                $nox    = $this->request->getVar('nourut'); 
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Aspek_add_edit('".
@@ -152,7 +157,8 @@ class ApiSoalControllers extends BaseController
                     $id."','".
                     $nama."','".
                     $bobot."','".
-                    $rb."')")->getRow();
+                    $rb."','".
+                    $nox."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  $save->res,
@@ -190,6 +196,7 @@ class ApiSoalControllers extends BaseController
                 $aspk   = $this->request->getVar('aspek');
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
+                $nox    = $this->request->getVar('nourut'); 
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Sub_Aspek_add_edit('".
@@ -197,7 +204,8 @@ class ApiSoalControllers extends BaseController
                     $id."','".
                     $nama."','".
                     $aspk."','".
-                    $bobot."')")->getRow();
+                    $bobot."','".
+                    $nox."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  $save->res,
@@ -235,6 +243,7 @@ class ApiSoalControllers extends BaseController
                 $aspk   = $this->request->getVar('subaspek');
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
+                $nox    = $this->request->getVar('nourut'); 
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Sub_Sub_Aspek_add_edit('".
@@ -282,6 +291,7 @@ class ApiSoalControllers extends BaseController
                 $ssasp  = $this->request->getVar('subsubaspek');
                 $nama   = $this->request->getVar('nama');
                 $jjwb   = $this->request->getVar('jjwb');
+                $nox    = $this->request->getVar('nourut'); 
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Indikator_add_edit('".
@@ -289,7 +299,8 @@ class ApiSoalControllers extends BaseController
                     $id."','".
                     $ssasp."','".
                     $nama."','".
-                    $jjwb."')")->getRow();
+                    $jjwb."','".
+                    $nox."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  $save->res,
@@ -327,6 +338,7 @@ class ApiSoalControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indkt');
                 $nama   = $this->request->getVar('nama');
+                $nox    = $this->request->getVar('nourut'); 
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Bukti_dukung_add_edit('".
@@ -370,13 +382,17 @@ class ApiSoalControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indikator');
                 $nama   = $this->request->getVar('nama');
+                $nox    = $this->request->getVar('nourut'); 
+                $nilaix = $this->request->getVar('nilai');
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Parameter_add_edit('".
                     $userid."','".
                     $id."','".
                     $nama."','".
-                    $indkt."')")->getRow();
+                    $indkt."','".
+                    ."','".
+                    ."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  $save->res,

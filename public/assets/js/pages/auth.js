@@ -34,7 +34,7 @@
                                 contentType: false,
                                 cache: false,
                                  success:function(data) {
-                                    console.log(data)
+                                   
                                      setTimeout(function(){
                                         if (data.success === 1) {
                                             date.setTime(date.getTime() + data.exp);
