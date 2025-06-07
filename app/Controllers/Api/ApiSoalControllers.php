@@ -197,6 +197,7 @@ class ApiSoalControllers extends BaseController
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
                 $nox    = $this->request->getVar('nourut'); 
+                $btswkt = $this->request->getVar('wkt');
                 $userid = $this->decoded->ids;
 
                 $save = $this->db->query("CALL Sub_Aspek_add_edit('".
@@ -205,7 +206,8 @@ class ApiSoalControllers extends BaseController
                     $nama."','".
                     $aspk."','".
                     $bobot."','".
-                    $nox."')")->getRow();
+                    $nox."','".
+                    $btswkt."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  $save->res,
@@ -391,7 +393,7 @@ class ApiSoalControllers extends BaseController
                     $id."','".
                     $nama."','".
                     $indkt."','".
-                    ."','".
+                    $nox."','".
                     ."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),

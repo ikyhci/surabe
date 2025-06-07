@@ -1019,6 +1019,11 @@ $(document).ready(function(){
                     '</div>'+
 
                     // tambahan
+
+                    '<div class="form-group">'+
+                        '<h6>Batas Waktu <span class="text-danger">*</span></h6>'+
+                        '<input type="datetime-local" class="form-control" id="wkt" name="wkt" placeholder="Batas Waktu" required></div>'+
+                        
                     '<div class="form-group">'+
                         '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
