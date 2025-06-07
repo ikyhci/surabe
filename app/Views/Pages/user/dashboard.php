@@ -307,58 +307,11 @@
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
     <script {csp-script-nonce} src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.min.js"></script>
     <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/dataTables.rowGroup.js"></script>
-     <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/rowGroup.dataTables.js"></script>
-    <script {csp-script-nonce} type="text/javascript">
-      $(document).ready(function(){
-
-        loadTahun()
-
-        function loadTahun(){
-          let httpProtocol = window.location.protocol;
-          let host = window.location.host;
-          let urlx = httpProtocol+'//'+host;
-          var token = document.getElementById('token').value;
-          var csrf = document.getElementById('csrf_token')
-          
-          var opt = document.getElementById("pilih-tahun");
-          
-          var pilih = new Choices(opt)
-          $.ajax({
-            url: urlx+'/api/get-dashboard-user',
-            type: 'GET',
-            headers: {
-              'Authorization': 'Bearer '+token
-            },
-            // data: {
-            //   csrf_token: csrf.value
-            // },
-            dataType: 'JSON',
-            success: function(res){
-              $.each(res.dt, function(index,item){
-                if (index) {}
-                pilih.setValue([
-                  {value: item, label: item}
-                ])
-              })
-              pilih.setChoiceByValue('');
-            },
-          })
-        }
-
-        $(document).change('#pilih-tahun', function(){
-      
-          var optionSelected = $(this).find("option:selected");
-          var valueSelected  = optionSelected.val();
-          // LoadDatatable(valueSelected); 
-          console.log(valueSelected)
-        })
-
-      })
-    </script>
+    <script {csp-script-nonce} src="https://cdn.datatables.net/rowgroup/1.5.1/js/rowGroup.dataTables.js"></script>
+    <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/user.js"></script>
+    
     
     <script {csp-script-nonce} type="text/javascript">
-
-      
       
 //       const ctx = document.getElementById('myChart');
 //       const data = {
@@ -412,91 +365,6 @@
 //   });
     </script>
 
-  <script {csp-script-nonce} type="text/javascript">
-    var token = document.getElementById('token').value;
-    LoadDatatable()
-
-    $(document).change('#pilih-tahun', function(){
-      
-      var optionSelected = $(this).find("option:selected");
-      var valueSelected  = optionSelected.val();
-      // if (document.getElementById('flexRadioDefault1').checked == true) {
-      //   LoadDatatable(valueSelected, 'yes');
-      // }else{
-      //   LoadDatatable(valueSelected, '');
-      // }
-       LoadDatatable(valueSelected);
-       
-    })
-
-    // function LoadDatatable(thn, apv){
-    function LoadDatatable(thn){
-      var csrf = document.getElementById('<?= csrf_token() ?>').value;
-      // 
-      var t = $('#datatable').DataTable({
-        "dom": 'rtip',
-        "scrollX": false,
-        "processing": true,
-        "destroy": true,
-        "language": {
-          "processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
-        },
-        "ajax": {
-          "url": "<?php echo base_url(); ?>api/get-dashboard-table",
-          "contentType": 'application/json',
-          "headers": {
-            'Authorization': 'Bearer '+token
-          },
-          "data":{
-            "<?= csrf_token() ?>": csrf,
-            "thn": thn,
-            // "apv": apv,
-
-          },
-          "method": "GET",
-          "dataSrc": function(data){
-            console.log(data)
-            $('input#<?= csrf_token() ?>').val(data.token_crs)
-            return data.dt;
-          },
-        },
-        "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-            var index = iDisplayIndex +1;
-            $('td:eq(0)',nRow).html(index);
-            return nRow;
-          },
-        "columns":[
-          {"data": null, defaultContent: ''},
-          {"data": "nama_rb"},
-          {"data": "nama_aspek"},
-          {"data": "nama_sub_aspek"},
-          {"data": "nama_sub_sub_aspek"},
-          {"data": "indikator"},
-          {"data": "bobot_subAspek"},
-          {"data": "parameter"},
-          {"data": "Jawabanx"},
-          {"data": "nilaix"},
-          {"data": "penilaix"},
-        ],
-        "columnDefs":[
-          {
-            // "className": "dt-center",
-            "targets": [1,2,3,4],
-            visible: false,
-          },
-          {
-            "className": "dt-center",
-            "targets":[5,6]
-          }
-        ],
-        rowGroup: {
-          // 
-          dataSrc: ['nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek'],
-             
-          }
-      });
-    }
-    
-  </script>
+  
     
 <?= $this->endSection() ?>

@@ -212,8 +212,7 @@ $(document).ready(function(){
 		}
     });
 
-    $(document).on('change', '#subsubaspek', function(){
-    	
+    $(document).on('change', '#subsubaspek', function(){   	
     	var optionSelected = $(this).find("option:selected");
 		var valueSelected  = optionSelected.val();
 		var textSelected   = optionSelected.text();
@@ -242,6 +241,42 @@ $(document).ready(function(){
 		}
     	
     });
+
+    $(document).on('change', '#indikator', function(){
+    	var optionSelected = $(this).find("option:selected");
+		var valueSelected  = optionSelected.val();
+		var textSelected   = optionSelected.text();
+		if (valueSelected != '') {
+			$.ajax({
+				headers: {
+			    	'Authorization': 'Bearer '+token
+			    },
+				url: urlx+'/api/get-indikator',
+				data:{
+					idx :valueSelected,
+					csrf_token: csrf.value,
+				},
+				type:'GET',
+				dataType: 'json',
+				success: function(res){
+					csrf.value = res.token_crs
+					if (res.jenis_jawaban = 'Pilihan Ganda') {
+						$('#pilihan-ganda').removeClass('d-none');
+						$('#nox1').attr('required', 'true');
+		            	$('#nox2').attr('required', 'true');
+
+					}else{
+						$('#pilihan-ganda').addClass('d-none');
+						$('#nox1').removeAttr('required');
+		            	$('#nox2').removeAttr('required');
+		            	$('#nox1').val('');
+		            	$('#nox2').val('');
+					}
+
+				}
+			});
+		}
+    })
 
     // function Load Ajax data 
 	//////////////////////////////////////////////////////////
@@ -705,7 +740,7 @@ $(document).ready(function(){
   		var fd = new FormData();
   		fd.append('csrf_token', csrf.value)
   		fd.append('idx', idx)
-  		console.log(idx)
+  		// console.log(idx)
 		deleteData(fd, url, nmx, '5')
 	})
 
@@ -929,6 +964,11 @@ $(document).ready(function(){
                         '<h6>Bobot <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
 
+                        // tambahan
+                        '<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
+
                         '</form>';
         return inpx;
     }
@@ -947,6 +987,11 @@ $(document).ready(function(){
                         '<div class="form-group">'+
                         '<h6>Bobot <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
+
+                        // tambahan
+                        '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
                         
                         '</form>';
         return inpx;
@@ -971,7 +1016,14 @@ $(document).ready(function(){
                     '<div class="form-group">'+
                         '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama sub sub aspek" required>'+
-                    '</div></form>';
+                    '</div>'+
+
+                    // tambahan
+                    '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
+
+                    '</form>';
         return inpx;
     }
 
@@ -1000,7 +1052,14 @@ $(document).ready(function(){
                     '<div class="form-group">'+
                         '<h6>Nama Sub Sub Aspek <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama sub sub aspek" required>'+
-                    '</div></form>';
+                    '</div>'+
+
+                    // tambahan
+                    '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
+
+                    '</form>';
         return inpx;
     }
 
@@ -1035,7 +1094,13 @@ $(document).ready(function(){
                        '<h6>Jenis Jawaban <span class="text-danger">*</span></h6>'+
                         '<div class="input-group mb-3">'+
                             '<select class=" form-select" name="jjwb" id="jjwb" required></select>'+
-                        '</div></div></form>';
+                        '</div></div>'+
+                        // tambahan
+                    '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
+
+                        '</form>';
         return inpx;
     }
 
@@ -1153,6 +1218,21 @@ $(document).ready(function(){
                         '<h6>Nama Parameter <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Parameter" required>'+
                     '</div>'+
+
+                    '<div class="row d-none" id="pilihan-ganda">'+
+					    '<div class="col-sm-6">'+
+					        '<div class="form-group">'+
+					            '<label for="nourut">Nomor Urut</label>'+
+					            '<input type="text" name="nourut" id="nox1" class="form-control" placeholder="No Urut">'+
+					        '</div> '+ 
+					    '</div>'+
+					    '<div class="col-sm-6">'+
+					        '<div class="form-group">'+
+					            '<label for="nilai">Nilai</label>'+
+					            '<input type="text" name="nilai" id="nox2" class="form-control" placeholder="Nilai">'+
+					        '</div>'+  
+					    '</div>'+
+					'</div>'+
             	'</form>';
 
         return inpx;
@@ -1893,7 +1973,8 @@ $(document).ready(function(){
 					// order: [[2, 'asc']],
 			"rowGroup": {
 			    dataSrc: ['nama_form','nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek','indikator']
-			}
+			},
+			// order: [[3, 'desc']]
 	    });
     }
 

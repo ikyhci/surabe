@@ -11,7 +11,7 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 05/06/2025 11:10:58
+ Date: 05/06/2025 12:22:01
 */
 
 SET NAMES utf8mb4;
@@ -226,6 +226,7 @@ INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `statu
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('4d4f27e635fa30663f33746ddc70980ec4d280b5', 'ba314087a5f23dca7e4c4abc3e55fc74bb3c341a', 'MADANI', '2025-06-05 10:43:19', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('57c324cf68ef87818a648f154fc53b4ef3b9fc37', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 10:43:52', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('6740442e773ad5064c34d479b823ddb8f7d46995', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 10:56:14', '::1', 'LOGOUT');
+INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('73d4805366579128a414736eccadfcbdd534ac77', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 12:02:06', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('85e593570011808434799931af54349799fecf90', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 10:42:49', '::1', 'LOGIN');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('ad064dc874511b06aa5da35fe2708d055d144d8e', '08a62fdb70f816447cbb4488ed1626653233851f', 'super admin', '2025-06-05 10:42:41', '::1', 'LOGOUT');
 INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('b29965f2190f8fe2808cc4073da5bbfdf0a56a74', '08a62fdb70f816447cbb4488ed1626653233851f', 'super admin', '2025-06-04 16:38:19', '::1', 'LOGOUT');
@@ -256,9 +257,11 @@ INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VAL
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('07438eb73ff191bd410ee9e6b1cffac47d233d51', '2025-06-05 11:00:13', 'INSERT', 'admin', 'Tambah Data Form : PENILAIAN 2025 Tahun : 2025', '2025-06-05 11:00:13');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('0e78cb2f778f239080a0fb3ba75e6b3eb1240664', '2025-06-05 10:56:28', 'LOGIN', 'USER', 'User Login :super admin', '2025-06-05 10:56:28');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('283f587a68e89431ae2b131e7a37b1bee0d465d6', '2025-06-05 10:42:28', 'LOGIN', 'USER', 'User Login :super admin', '2025-06-05 10:42:28');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('875b7297ae9828971cde4d6bd6cd6aa28de65918', '2025-06-05 12:02:50', 'INSERT', 'soal', 'Tambah Data Sub Sub Aspek : 1.1 tes Bobot : 100', '2025-06-05 12:02:50');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('945aff414a6bb38279d23c0f483bb324f9edd7f1', '2025-06-05 10:43:52', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:43:52');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('a740b5c18bf237fa4145701dad3294ccd4d2aee6', '2025-06-05 10:43:10', 'LOGIN', 'USER', 'User Login :MADANI', '2025-06-05 10:43:10');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b2299abc6541e22d26475418e965dbccc155c643', '2025-06-05 10:42:49', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:42:49');
+INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b28a1e3a36fd74b8dd7c06ac599b4119e87aa6fc', '2025-06-05 12:02:06', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 12:02:06');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b31cccf86b47ff052e320669c4211a84a517cada', '2025-06-05 10:43:02', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:43:02');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b434639de0828f6b353179df5cb2e5d158ec54d0', '2025-06-05 10:43:19', 'LOGIN', 'USER', 'User Login :MADANI', '2025-06-05 10:43:19');
 INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('e2676c80e7cc59f6c38cc7f653443a2f04987943', '2025-06-05 10:56:14', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:56:14');
@@ -466,7 +469,8 @@ CREATE TABLE `lke_sub_sub_aspek` (
 -- Records of lke_sub_sub_aspek
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('051d12e3ad56c4a8b87415df29add04a3ae69802', 'Tingkat Kematangan Kapabilitas Proses', '2025-03-13 11:28:49', NULL, '05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', '50');
+INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('051d12e3ad56c4a8b87415df29add04a3ae69802', '1.3 Tingkat Kematangan Kapabilitas Proses', '2025-03-13 11:28:49', NULL, '05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', '50');
+INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('e62320bab8b040a8051d52ce116a2ca95249e4fe', '1.1 tes', '2025-06-05 12:02:50', NULL, '05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', '100');
 COMMIT;
 
 -- ----------------------------
@@ -2531,7 +2535,7 @@ BEGIN
 			INNER JOIN lke_sub_sub_aspek AS e ON d.id = e.id_sub_aspek
 			INNER JOIN lke_indikator AS f ON e.id = f.id_sub_sub_aspek
 			INNER JOIN lke_parameter AS g ON f.id = g.id_indikator
-			ORDER BY g.create_at DESC LIMIT lmtx OFFSET ofset;
+			ORDER BY g.create_at, nama_sub_aspek ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET res = 1;
 		SET msg = 'success';
@@ -2562,7 +2566,7 @@ BEGIN
 				INNER JOIN lke_indikator AS f ON e.id = f.id_sub_sub_aspek
 				INNER JOIN lke_parameter AS g ON f.id = g.id_indikator
 				WHERE f.id = idx
-				ORDER BY f.create_at DESC LIMIT lmtx OFFSET ofset;
+				ORDER BY f.create_at, nama_sub_aspek ASC LIMIT lmtx OFFSET ofset;
 	END IF;
 END
 ;;
