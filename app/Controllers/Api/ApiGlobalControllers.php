@@ -118,9 +118,11 @@ class ApiGlobalControllers extends BaseController
         //
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
+            $THN = $this->request->getVar('thn') ? $this->request->getVar('thn') : null;
             $LIMIT = null;
             $OFFSET =null;
-            $list = $this->db->query("call View_Data_List_Soal('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+            $list = $this->db->query("call View_Data_List_Soal('".$IDX."','".$LIMIT."','".$OFFSET."','".
+                $THN."')")->getResult();
             $data = array(
                     'token_crs' => csrf_hash(),
                     'dt'        => $list,

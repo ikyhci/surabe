@@ -12,11 +12,6 @@ $(document).ready(function(){
 	loadTahun()
 
     function loadTahun(){
-         // let httpProtocol = window.location.protocol;
-         // let host = window.location.host;
-         //  let urlx = httpProtocol+'//'+host;
-         //  var token = document.getElementById('token').value;
-         //  var csrf = document.getElementById('csrf_token')
           
         var opt = document.getElementById("pilih-tahun");  
         var pilih = new Choices(opt)
@@ -31,6 +26,7 @@ $(document).ready(function(){
             },
             dataType: 'JSON',
             success: function(res){
+              // console.log(res)
             $.each(res.dt, function(index,item){
                 if (index) {}
                 pilih.setValue([
@@ -54,7 +50,7 @@ $(document).ready(function(){
         // console.log(valueSelected)
     })
 
-    function LoadDatatable(thnx){
+  function LoadDatatable(thnx){
       
     var t = $('#datatable').DataTable({
         "dom": 'rtip',

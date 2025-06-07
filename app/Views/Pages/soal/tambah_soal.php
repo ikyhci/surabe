@@ -35,17 +35,13 @@
 		    </div>
 		  </div>
         <div class="card-body">
-            <!-- <div class="form-group">
-                  <select class="choices form-select">
-                      <option value="square">Square</option>
-                      <option value="rectangle">Rectangle</option>
-                      <option value="rombo">Rombo</option>
-                      <option value="romboid">Romboid</option>
-                      <option value="trapeze">Trapeze</option>
-                      <option value="traible">Triangle</option>
-                      <option value="polygon">Polygon</option>
-                  </select>
-                </div>  -->   
+
+          <div class="form-group">
+            <select class=" form-controll" id="pilih-tahun">
+              <option value="" selected disabled>-- Pilih Tahun Form --</option>
+            </select>
+          </div> 
+
             <!-- Data Table  -->
             <div class="table-responsive">
               <table class="table table-sm" id="tbl-parameter">

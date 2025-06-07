@@ -9,6 +9,47 @@ $(document).ready(function(){
 
 	LoadParameter()
 
+	// Pilih Tahun
+
+	loadTahun()
+
+	function loadTahun(){
+          
+        var opt = document.getElementById("pilih-tahun");  
+        var pilih = new Choices(opt)
+        $.ajax({
+            url: urlx+'/api/get-tahun-form-data',
+            type: 'GET',
+            headers: {
+              'Authorization': 'Bearer '+token
+            },
+            data: {
+              csrf_token: csrf.value
+            },
+            dataType: 'JSON',
+            success: function(res){
+            	csrf.value = res.token_crs
+	            $.each(res.dt, function(index,item){
+	                if (index) {}
+	                	
+	                pilih.setValue([
+	                  	{value: item, label: item}
+	                ])
+	            })
+	           	pilih.setChoiceByValue('');
+            },
+        })
+    }
+
+    $(document).change('#pilih-tahun', function(){
+      
+        var optionSelected = $(this).find("option:selected");
+        var valueSelected  = optionSelected.val();
+        LoadParameter(valueSelected);
+        // LoadDatatable(valueSelected); 
+        // console.log(valueSelected)
+    })
+
 	// function add data 
 	//////////////////////////////////////////////////////////
 	$(document).on('click','.add-form', function(){
@@ -1023,7 +1064,7 @@ $(document).ready(function(){
                     '<div class="form-group">'+
                         '<h6>Batas Waktu <span class="text-danger">*</span></h6>'+
                         '<input type="datetime-local" class="form-control" id="wkt" name="wkt" placeholder="Batas Waktu" required></div>'+
-                        
+
                     '<div class="form-group">'+
                         '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
@@ -1922,11 +1963,12 @@ $(document).ready(function(){
 
 	}
 
-	function LoadParameter(){
+	function LoadParameter(thnx){
       	var t = $('#tbl-parameter').DataTable({
 	        "dom": 'rtip',
 	        "scrollX": false,
 			"processing": true,
+			"destroy": true,
 			"language": {
 						"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
 			},
@@ -1937,10 +1979,12 @@ $(document).ready(function(){
 					'Authorization': 'Bearer '+token
 				},
 				"data":{
-					csrf_token: csrf.value
+					csrf_token: csrf.value,
+					thn: thnx,
 				},
 				"method": "GET",
 				"dataSrc": function(data){
+					// console.log(data)
 					csrf.value = data.token_crs
 					return data.dt;
 					},

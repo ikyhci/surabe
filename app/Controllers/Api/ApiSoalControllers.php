@@ -31,6 +31,34 @@ class ApiSoalControllers extends BaseController
     }
 
 
+    public function getTahun()
+    {
+        if (!empty($this->decoded->aud)) {
+            $thn = $this->db->query('SELECT tahun FROM lke_form group by tahun')->getResult();
+
+            $tahun = array();
+                foreach ($thn as $key ) {
+                    $tahun[] = $key->tahun;
+                }
+                
+            $data = array(
+                    'token_crs' => csrf_hash(),
+                    'dt'        => array_unique($tahun),
+                );
+            return $this->response->setJSON($data);
+        }else{
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+            return $this->response->setJSON($data);
+        }
+        
+
+    }
+
+
     public function getDashboard()
     {
         if (!empty($this->decoded->aud)) {
@@ -41,7 +69,7 @@ class ApiSoalControllers extends BaseController
             $data = array(
                     'token_crs' => csrf_hash(),
                     'dt'        => $list,
-                    );
+                );
 
             return $this->response->setJSON($data);
         }else{
@@ -394,7 +422,7 @@ class ApiSoalControllers extends BaseController
                     $nama."','".
                     $indkt."','".
                     $nox."','".
-                    ."')")->getRow();
+                    $nilaix."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  $save->res,

@@ -74,6 +74,7 @@ $routes->group('api', ['filter' => ['apiFilter:Soal,Super Admin', 'cors']], func
 	$routes->post('del-form', 'Api\ApiSoalControllers::delForm');
 
 	$routes->get('get-dashboard-data', 'Api\ApiSoalControllers::getDashboard');
+	$routes->get('get-tahun-form-data', 'Api\ApiSoalControllers::getTahun');
 });
 
 // Global API 
