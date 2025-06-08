@@ -230,9 +230,14 @@
                     document.getElementById('newpas').required = false;
                     document.getElementById('reppas').disabled = true;
                     document.getElementById('reppas').required = false;
+                    
                     var chk = document.getElementById('edtpas')
                     if (chk.checked == true) {
                         chk.checked = false
+                        $('#showpass').addClass('d-none');
+                        $('#tampilpass').prop( "checked", false )
+                        $('#newpas').attr('type', 'password'); 
+                        $('#reppas').attr('type', 'password'); 
                     }
 
                     $('#edit-data').modal('show');
@@ -243,19 +248,37 @@
         $(document).on('change', '#edtpas', function(){
             var chk = document.getElementById('edtpas')
             if (chk.checked == true) {
-                
                 document.getElementById('newpas').disabled = false;
                 document.getElementById('newpas').required = true;
                 document.getElementById('reppas').disabled = false;
                 document.getElementById('reppas').required = true;
+                // showpass
+                $('#showpass').removeClass('d-none');
+                $('#tampilpass').prop( "checked", false )
             }else{
-                
+                $('#showpass').addClass('d-none');
+                $('#tampilpass').prop( "checked", false )
+                $('#newpas').attr('type', 'password'); 
+                $('#reppas').attr('type', 'password'); 
+                $('#newpas').val(''); 
+                $('#reppas').val(''); 
                 document.getElementById('newpas').disabled = true;
                 document.getElementById('newpas').required = false;
                 document.getElementById('reppas').disabled = true;
                 document.getElementById('reppas').required = false;
             }
         })
+
+         $(document).on('change', '#tampilpass', function(){
+            var show = document.getElementById('tampilpass')
+            if (show.checked == true) {
+                $('#newpas').attr('type', 'text'); 
+                $('#reppas').attr('type', 'text'); 
+            }else{
+                $('#newpas').attr('type', 'password'); 
+                $('#reppas').attr('type', 'password'); 
+            }
+         })
 
         // function save data 
         $(document).on('click', '#updates', function(){

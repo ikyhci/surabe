@@ -31,7 +31,7 @@ class AuthControllers extends BaseController
         
         if ($this->validate([
             'username'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[4]',
-            'password'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[8]'
+            'password'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[4]'
         ]))
         {
             $unm = $this->request->getVar('username');

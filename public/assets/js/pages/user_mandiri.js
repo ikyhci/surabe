@@ -32,6 +32,7 @@ $(document).ready(function(){
           	"destroy": true,
           	"language": {
             	"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+              "emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
           	},
           	"ajax": {
             	"url": urlx+"/api/get-penilaian-mandiri",

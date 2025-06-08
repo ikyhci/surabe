@@ -22,6 +22,7 @@ $(document).ready(function(){
             "processing": true,
             "language": {
                 "processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+                "emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
             },
             "ajax": {
                 "url": urlx+"/api/get-indikator-penilaian",
@@ -48,6 +49,11 @@ $(document).ready(function(){
             "columns":[
                 {"data": null, defaultContent: ''},
                 {"data": "indikator"},
+
+                // {"data": "nama_sub_aspek"},
+                // {"data": "bataswaktu"},
+                // {"data": "nama_sub_sub_aspek"},
+
                 {
                     "render": function(data, type, JsonResultRow, meta) {
                         var btn = '';
@@ -73,12 +79,28 @@ $(document).ready(function(){
             "columnDefs":[
                 {
                     "className": "dt-center",
+                    // "targets": [0,5]
                     "targets": [0,2]
-                }
+                },
+                // {
+                //     "visible": false,
+                //     "targets": [2,3,4]
+                // },
             ],
                 // order: [[2, 'asc']],
             "rowGroup": {
-                dataSrc: ['nama_sub_aspek','nama_sub_sub_aspek']
+                dataSrc: ['nama_sub_aspek2','nama_sub_sub_aspek'],
+                // dataSrc: 2,
+                // startRender: function (rows, nama_sub_aspek, bataswaktu) {
+                //     let dates = rows.data().pluck('bataswaktu')[0]; // Date column
+                //     // let fixdate = dates.toString().replace(" ", "T");
+                    
+
+                //     console.log( dates)
+                //     return nama_sub_aspek + ' (Batas Waktu: ' +dates+ ')';
+                //   },
+                // endRender: null,
+                
             }
         });
             
