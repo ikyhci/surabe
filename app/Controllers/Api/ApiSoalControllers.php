@@ -375,7 +375,8 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $id."','".
                     $indkt."','".
-                    $nama."')")->getRow();
+                    $nama."','".
+                    $nox."')")->getRow();
                 $data = array(
                         'token_crs' =>  csrf_hash(),
                         'success'   =>  $save->res,

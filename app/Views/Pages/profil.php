@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title white" id="title-edit">
-                   Edit Data
+                   Edit Data 
                 </h5>
                 
             </div>
@@ -31,19 +31,32 @@
                         </div>
                         <div class="form-group">
                             <h6>Password Baru<span class="text-danger">*</span></h6>
-                            <input type="text" min="6" max="15" class="form-control" id="newpas" name="newpas" placeholder="Password Baru" disabled>
+                            <input type="password" minlength="8"  maxlength="15" class="form-control" id="newpas" name="newpas" placeholder="Password Baru" disabled>
+                            <small class="text-danger">Min 8 Karakter</small>
                         </div>
                         <div class="form-group">
                             <h6>Ulangi Password<span class="text-danger">*</span></h6>
-                            <input type="text" min="6" max="15" class="form-control" id="reppas" name="reppas" placeholder="Ulangi Password" disabled>
+                            <input type="password" minlength="8"  maxlength="15" class="form-control" id="reppas" name="reppas" placeholder="Ulangi Password" disabled>
+                            <small class="text-danger">Min 8 Karakter</small>
                         </div>
                         <div class="form-check">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="form-check-input form-check-info" 
-                                                name="customCheck" id="edtpas">
-                                <label class="form-check-label" for="edtpas">Edit Password</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="form-check-input form-check-info" name="customCheck" id="edtpas">
+                                        <label class="form-check-label" for="edtpas">Edit Password</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-checkbox d-none" id="showpass">
+                                        <input type="checkbox" class="form-check-input form-check-info" name="customCheck" id="tampilpass">
+                                        <label class="form-check-label" for="tampilpass">Tampilkan Password</label>
+                                    </div>
+                                </div>
                             </div>
+                            
                         </div>
+
                    </form>
 
                </div>

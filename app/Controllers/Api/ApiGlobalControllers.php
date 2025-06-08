@@ -54,18 +54,7 @@ class ApiGlobalControllers extends BaseController
             $psw ='';
             $udt = '';
 
-
-
-            $upddata = $this->db->query("CALL User_Update_data('".
-                $idx."','".
-                $uname."','".
-                $fname."','".
-                $uphon."','".
-                $umail."')")->getRow();
-
-            $udt = $upddata->res;
-
-            if ($upass != null) {
+            if (!is_null($upass)) {
                 if ($upass == $reppas) {
                     $uppass = $this->db->query("CALL User_update_password('".
                     $idx."','".
@@ -82,6 +71,15 @@ class ApiGlobalControllers extends BaseController
                     );
                 }
                 
+            }else{
+                $upddata = $this->db->query("CALL User_Update_data('".
+                        $idx."','".
+                        $uname."','".
+                        $fname."','".
+                        $uphon."','".
+                        $umail."')")->getRow();
+
+                $udt = $upddata->res;
             }
 
             if ($udt == 1 && $psw == 1) {

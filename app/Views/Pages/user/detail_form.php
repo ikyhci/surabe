@@ -63,6 +63,9 @@
                   <tr>
                     <th>No.</th>
                     <th>Nama Indikator</th>
+                    <!-- <th>Sub Aspek</th>
+                    <th>Waktu</th>
+                    <th>Sub Sub Aspek</th> -->
                     <th>Aksi</th>
                   </tr>
                   

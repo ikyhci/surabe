@@ -459,18 +459,27 @@ $(document).ready(function(){
 	$(document).on('click', '.indikator-view', function(){
 		var idx = $(this).data('id_indikator')
 		let tabls = document.getElementById('content-views');
-		document.getElementById('title-views').innerHTML = 'List Data Bukti Dukung'
-		$('#view-data').modal('hide');
+		document.getElementById('title-views').innerHTML = 'Memuat Data..'
+		// $('#view-data').modal('hide');
+		tabls.innerHTML ='';
+		tabls.innerHTML = 
+			'<div class="text-center">'+
+			  '<div class="spinner-grow text-info" role="status">'+
+			    '<span class="visually-hidden">Loading...</span>'+
+			  '</div>'+
+			  '<p>Sedang Memuat..<p>'+
+			'</div>';
 		
 		setTimeout(function(){
+			document.getElementById('title-views').innerHTML = 'List Data Bukti Dukung'
 			tabls.innerHTML ='';
 			tabls.innerHTML = formatbuktidukung()
-			setTimeout(function(){
-				loadbuktidukung(idx)
-			},100)
-			$('#view-data').modal('show');
+			loadbuktidukung(idx)
+			// setTimeout(function(){
+			// 	loadbuktidukung(idx)
+			// },100)
 			
-		},100)
+		},800)
 	})
 
 	// function Edit Data 
@@ -1157,7 +1166,14 @@ $(document).ready(function(){
     			'<div class="form-group">'+
                 '<h6>Nama Bukti Dukung <span class="text-danger">*</span></h6>'+
                 '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Bukti Dukung" required>'+
-               '</div></form>';
+               '</div>'+
+
+               '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
+
+
+               '</form>';
 
        return inpx;
     }
@@ -1565,6 +1581,7 @@ $(document).ready(function(){
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+				"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+"/api/get-form",
@@ -1626,6 +1643,7 @@ $(document).ready(function(){
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+				"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+"/api/get-rb",
@@ -1687,6 +1705,7 @@ $(document).ready(function(){
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+				"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+"/api/get-aspek",
@@ -1749,6 +1768,7 @@ $(document).ready(function(){
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+				"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+"/api/get-sub-aspek",
@@ -1803,6 +1823,7 @@ $(document).ready(function(){
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+				"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+"/api/get-sub-sub-aspek",
@@ -1858,6 +1879,7 @@ $(document).ready(function(){
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+				"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+"/api/get-indikator",
@@ -1918,6 +1940,7 @@ $(document).ready(function(){
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+				"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+"/api/get-bukti-dukung",
@@ -1964,13 +1987,14 @@ $(document).ready(function(){
 	}
 
 	function LoadParameter(thnx){
-      	var t = $('#tbl-parameter').DataTable({
-	        "dom": 'rtip',
-	        "scrollX": false,
+    var t = $('#tbl-parameter').DataTable({
+	    "dom": 'rtip',
+	    "scrollX": false,
 			"processing": true,
 			"destroy": true,
 			"language": {
 						"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
+						"emptyTable": "Tidak Ada Data Untuk Di Tampilkan",
 			},
 			"ajax": {
 				"url": urlx+'/api/get-penilaian-spbe',
