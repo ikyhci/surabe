@@ -42,6 +42,8 @@ Additionally, make sure that the following extensions are enabled in your PHP:
  - Perbaikan View Data Pertahun [Hanya Yang ada Data Yang Tampil] (User)
  - Login Page Responsive
  - CI/CD menggunakan Pipelines Bitbucket
+ - menggunakan base url dari file .env (BASE_URL)
+ - perbaikan CorsFilters.php
 
 
 ## What is CodeIgniter?
