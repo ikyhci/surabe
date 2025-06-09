@@ -6,17 +6,27 @@ use CodeIgniter\Config\BaseConfig;
 
 class App extends BaseConfig
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (isset($_ENV['BASE_URL'])) {
+            $this->baseURL = $_ENV['BASE_URL'];
+        } else {
+            $this->baseURL = rtrim(base_url(), '/') . '/';
+        }
+
+    }
     /**
      * --------------------------------------------------------------------------
      * Base Site URL
      * --------------------------------------------------------------------------
-     *
+     * 
      * URL to your CodeIgniter root. Typically, this will be your base URL,
      * WITH a trailing slash:
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = BASE;
+    public string $baseURL = '';
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
