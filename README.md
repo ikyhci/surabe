@@ -31,7 +31,6 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 ## Last Update
 
  > [09-06-2025]
- 
  - Tambahan Nomor Urut Dari Rb Sanpai Parameter [Khusus Pilihan Ganda] (Soal)
  - Tambahan Batas Waktu Sub Aspek (Soal, User)
  - Perbaikan View Urutan Berdasarkan Nomor Urut (Soal, User)
@@ -40,6 +39,8 @@ Additionally, make sure that the following extensions are enabled in your PHP:
  - Tambahan Filter File Upload ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx'] (User)
  - Tambahan Stop Upload Bila Batas Waktu Sudah Lewat (User) 
  - Perbaikan View Data Pertahun [Hanya Yang ada Data Yang Tampil] (User)
+ - Login Page Responsive
+ - CI/CD menggunakan Pipelines Bitbucket
 
 
 ## What is CodeIgniter?
