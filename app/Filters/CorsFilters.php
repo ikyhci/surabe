@@ -33,10 +33,7 @@ class CorsFilters implements FilterInterface
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Max-Age: 86400');
         header('Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization');
-        
-        // header('Strict-Transport-Security: max-age=10886400; includeSubDomains; preload');
-        // bisa diaktifkan jika menggunakan HTTPS
-        
+        header('Strict-Transport-Security: max-age=10886400; includeSubDomains; preload');
         header('Content-Security-Policy: upgrade-insecure-requests');
         header('X-XSS-Protection: 1; mode=block');
         header('X-Frame-Options: SAMEORIGIN');
