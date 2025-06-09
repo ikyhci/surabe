@@ -51,6 +51,8 @@ body {
     padding-left: 2rem;
     padding-right: 2rem;
     background: url(../../images/bg/bg.jpg), linear-gradient(90deg, #2d499d, #3f5491);
+    background-size: auto 100%;
+    background-repeat: no-repeat;
     height: 100vh;
   }
 
