@@ -1,5 +1,5 @@
 # CodeIgniter 4 Framework
-
+# -CodeIgniter v4.5.7-
 ## What is CodeIgniter?
 
 CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
@@ -46,6 +46,7 @@ PHP version 8.1 or higher is required, with the following extensions installed:
 
 - [intl](http://php.net/manual/en/intl.requirements.php)
 - [mbstring](http://php.net/manual/en/mbstring.installation.php)
+- [mysqli](https://www.php.net/manual/en/mysqli.installation.php)
 
 > [!WARNING]
 > - The end of life date for PHP 7.4 was November 28, 2022.
