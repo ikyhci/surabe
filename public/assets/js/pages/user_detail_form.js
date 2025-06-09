@@ -51,23 +51,29 @@ $(document).ready(function(){
                 {"data": null, defaultContent: ''},
                 {"data": "indikator"},
 
-                // {"data": "nama_sub_aspek"},
-                // {"data": "bataswaktu"},
-                // {"data": "nama_sub_sub_aspek"},
 
                 {
                     "render": function(data, type, JsonResultRow, meta) {
                         var btn = '';
                         var btncl = '';
-                        if (JsonResultRow.tombol == 1) {
-                          btncl = 'btn-outline-primary'
+                         
+                        
+                        if (JsonResultRow.jwbx == 0 ) {
+                            btncl = 'btn-outline-warning'
                         }
-                        if (JsonResultRow.tombol == 0) {
-                          btncl = 'btn-outline-danger'
+
+                        if (JsonResultRow.jwbx != 0 ) {
+                            btncl = 'btn-outline-info'
+
+                            if (JsonResultRow.tombol == 1) {
+                                btncl = 'btn-outline-primary'
+                            }
+                            if (JsonResultRow.tombol == 0) {
+                                btncl = 'btn-outline-danger'
+                            }
+                            
                         }
-                        else{
-                          btncl = 'btn-outline-warning'
-                        }
+                        
                         
                         btn +="<div class='btn-group mb-3 btn-group-sm'>"+
                         
@@ -132,32 +138,38 @@ $(document).ready(function(){
             contentType: false,
             cache: false,
             success: function(data){
+                // console.log(data)
                 
                 csrf.value = data.token_crs
-              
-                if (data.dt.indk.tombol == null || data.dt.indk.tombol == 0) {
-                  	document.getElementById('tblfoot').innerHTML = 
-                  	'<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+
-                    	'<i class="bx bx-x d-block d-sm-none"></i>'+
-                    	'<span class="d-none d-sm-block">Close</span>'+
-                	'</button>'+
-                	'<button type="button" class="btn btn-primary ml-1" id="savedata">'+
-                  		'<i class="bx bx-check d-block d-sm-none"></i>'+
-                  		'<span class="d-none d-sm-block">Save</span>'+
-                	'</button>';
+                if(data.dt.indk.wktsubasp == 0 || data.dt.indk.wktsubasp == null){
+                    if (data.dt.indk.tombol == null || data.dt.indk.tombol == 0) {
+                        document.getElementById('tblfoot').innerHTML = 
+                        '<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+
+                            '<i class="bx bx-x d-block d-sm-none"></i>'+
+                            '<span class="d-none d-sm-block">Close</span>'+
+                        '</button>'+
+                        '<button type="button" class="btn btn-primary ml-1" id="savedata">'+
+                            '<i class="bx bx-check d-block d-sm-none"></i>'+
+                            '<span class="d-none d-sm-block">Save</span>'+
+                        '</button>';
+                    }
+                   
+                    if (data.dt.indk.tombol == 1) {
+                        document.getElementById('tblfoot').innerHTML = 
+                        '<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+
+                            '<i class="bx bx-x d-block d-sm-none"></i>'+
+                            '<span class="d-none d-sm-block">Close</span>'+
+                        '</button>';
+                    }
                 }
-               
-                if (data.dt.indk.tombol == 1) {
-                  	document.getElementById('tblfoot').innerHTML = 
-                  	'<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+
-                    	'<i class="bx bx-x d-block d-sm-none"></i>'+
-                    	'<span class="d-none d-sm-block">Close</span>'+
-                	'</button>';
+
+                if (data.dt.indk.wktsubasp == 1) {
+                    document.getElementById('tblfoot').innerHTML = 
+                        '<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">'+
+                            '<i class="bx bx-x d-block d-sm-none"></i>'+
+                            '<span class="d-none d-sm-block">Close</span>'+
+                        '</button>';
                 }
-          //       <div class="alert alert-danger">
-          //   <h4 class="alert-heading">Danger</h4>
-          //     <p>This is a danger alert.</p>
-          // </div>
 
 
                 document.getElementById('rb').innerHTML = ': '+data.dt.indk.rb 
@@ -199,6 +211,7 @@ $(document).ready(function(){
     // Pilihan Ganda Template
 
     function loadPilihanGanda(data, dkn, jwb, fls){
+        // console.log(jwb)
         var str = '<ol type="A">'
         var plh = '';
         var upl = '';
@@ -217,18 +230,31 @@ $(document).ready(function(){
             plh += '<option value="'+data[i].id+'">'+String.fromCharCode(65+i)+'</option>'
         }
 
-        if (jwb.tombol == 0|| jwb.tombol == null) {
-            for (var i = 0; i < dkn.length; i++) {
-                upl +='<li><div class="form-group"><label>'+
-                  	dkn[i].bukti_dukung+'</label><input id="file'+i+
-                  	'" type="file" name="'+dkn[i].id+
-                  	'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
-            }
+        if (jwb.wktsubasp == 0 || jwb.wktsubasp == null) {
+            //
+            if (jwb.tombol == 0 || jwb.tombol == null) {
+                for (var i = 0; i < dkn.length; i++) {
+                    upl +='<li><div class="form-group"><label>'+
+                        dkn[i].bukti_dukung+'</label><input id="file'+i+
+                        '" type="file" name="'+dkn[i].id+
+                        '" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+                }
 
-            for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
-            }
+                for (var i = 0; i < fls.length; i++) {
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+                }
 
+            }else{
+                for (var i = 0; i < dkn.length; i++) {
+                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                }
+
+                for (var i = 0; i < fls.length; i++) {
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                  
+                }
+            }
+            //
         }else{
             for (var i = 0; i < dkn.length; i++) {
                 upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
@@ -236,9 +262,11 @@ $(document).ready(function(){
 
             for (var i = 0; i < fls.length; i++) {
                 flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
-              
+                  
             }
         }
+
+        
              
 
         str += '</ol>';
@@ -268,8 +296,12 @@ $(document).ready(function(){
         document.getElementById('content-form').innerHTML = str;
         document.getElementById('content-upload').innerHTML = flx;
         document.getElementById('content-info').innerHTML = ket;
-        // console.log(jwb)
         $("#jwbn").val(jwb.jwbx).trigger('change')
+
+        if (jwb.wktsubasp > 0 || jwb.tombol > 0 || jwb.tombol != null) {
+            var input =  document.getElementById('jwbn');
+            input.disabled = true;
+        }
     }
 
     // Linear Template
@@ -292,27 +324,44 @@ $(document).ready(function(){
             str += '<li>'+data[i].nama_parameter+'</li>'
             // plh += '<option value="'+String.fromCharCode(65+i)+'">'+String.fromCharCode(65+i)+'</option>'
         }
-             
-        if (jwb.tombol == 0) {
-            for (var i = 0; i < dkn.length; i++) {
-                upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
-              
-            }
+        
 
-            for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+        if (jwb.wktsubasp == 0 || jwb.wktsubasp == null) {
+            //
+            if (jwb.tombol == 0) {
+                for (var i = 0; i < dkn.length; i++) {
+                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+                  
+                }
+
+                for (var i = 0; i < fls.length; i++) {
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+                }
+
+            }else{
+                for (var i = 0; i < dkn.length; i++) {
+                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                }
+
+                for (var i = 0; i < fls.length; i++) {
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                  
+                }
             }
+            //
 
         }else{
-              for (var i = 0; i < dkn.length; i++) {
-                  upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+            for (var i = 0; i < dkn.length; i++) {
+                upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
-                  flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
-              
+                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                  
             }
         }
+
+        
             
              
 
@@ -348,6 +397,11 @@ $(document).ready(function(){
         $('#customRange2').val(jwb.jwbx)
         var output = document.getElementById("ranges");
         output.innerHTML = 'Value : '+jwb.jwbx
+
+        if (jwb.wktsubasp > 0 || jwb.tombol > 0 || jwb.tombol != null) {
+            var input =  document.getElementById('ranges');
+            input.disabled = true;
+        }
     }
 
     // Yes No Template
@@ -370,26 +424,40 @@ $(document).ready(function(){
             str += '<li>'+data[i].nama_parameter+'</li>'
         }
 
-        if (jwb.tombol == 0) {
-            for (var i = 0; i < dkn.length; i++) {
-                upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
-              
-            }
+        if (jwb.wktsubasp == 0 || jwb.wktsubasp == null) {
+            //
+            if (jwb.tombol == 0) {
+                for (var i = 0; i < dkn.length; i++) {
+                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+                  
+                }
 
-            for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
-            }
+                for (var i = 0; i < fls.length; i++) {
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+                }
 
+            }else{
+                for (var i = 0; i < dkn.length; i++) {
+                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                }
+
+                for (var i = 0; i < fls.length; i++) {
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                  
+                }
+            }
+            //
         }else{
             for (var i = 0; i < dkn.length; i++) {
-               	upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
                 flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
-              
+                  
             }
         }
+        
 
         str += '</ol>';
         str += '<form id="formdata" enctype="multipart/form-data">'+
@@ -423,6 +491,13 @@ $(document).ready(function(){
         }
         if (jwb.jwbx === 'TIDAK') {
             document.getElementById('jwb2').checked = true;
+        }
+
+        if (jwb.wktsubasp > 0 || jwb.tombol > 0 || jwb.tombol != null) {
+            var input =  document.getElementById('jwb1');
+            var input2 =  document.getElementById('jwb2');
+            input.disabled = true;
+            input2.disabled = true;
         }
     }
 
