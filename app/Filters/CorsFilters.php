@@ -29,25 +29,25 @@ class CorsFilters implements FilterInterface
         $thisServer = $_SERVER['HTTP_HOST']?? 'localhost:8080';
         header("Access-Control-Allow-Origin: http://$thisServer");
         header("Access-Control-Allow-Origin: https://$thisServer");
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-        header("Access-Control-Allow-Credentials: true");
-        header("Access-Control-Max-Age: 86400");
-        header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400');
+        header('Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization');
         
-        header('Strict-Transport-Security "max-age=10886400; includeSubDomains; preload"');
-        header('Content-Security-Policy "upgrade-insecure-requests"');
-        header('X-XSS-Protection "1; mode=block"');
-        header('X-Frame-Options "SAMEORIGIN"');
-        header('X-Content-Type-Options "nosniff"');
-        header('Referrer-Policy "strict-origin-when-cross-origin"');
-        header('Permissions-Policy "geolocation=self"');
+        // header('Strict-Transport-Security: max-age=10886400; includeSubDomains; preload');
+        // bisa diaktifkan jika menggunakan HTTPS
         
-        if ( $request->getMethod() == 'options')
-        {
+        header('Content-Security-Policy: upgrade-insecure-requests');
+        header('X-XSS-Protection: 1; mode=block');
+        header('X-Frame-Options: SAMEORIGIN');
+        header('X-Content-Type-Options: nosniff');
+        header('Referrer-Policy: strict-origin-when-cross-origin');
+        header('Permissions-Policy: geolocation=self');
+        
+        if ($request->getMethod() === 'options') {
             $response = service('response');
             $response->setJSON(['method' => 'OPTIONS']);
             return $response;
-            die();
         }
     }
 
