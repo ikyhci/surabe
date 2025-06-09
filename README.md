@@ -38,6 +38,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
  - Perbaikan Backdrop Modal di View Data Upload Bukti Dukung (Soal)
  - Tambahan Filter Data Per Tahun (Soal)
  - Tambahan Filter File Upload ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx'] (User) 
+ - Perbaikan View Data Pertahun [Hanya Yang ada Data Yang Tampil] (User)
 
 
 ## What is CodeIgniter?
