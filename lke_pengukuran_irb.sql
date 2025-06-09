@@ -11,11 +11,12 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 05/06/2025 12:22:01
+ Date: 09/06/2025 12:54:22
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+SET GLOBAL log_bin_trust_function_creators = 1;
 
 -- ----------------------------
 -- Table structure for lke_aspek
@@ -29,6 +30,7 @@ CREATE TABLE `lke_aspek` (
   `bobot` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `penilaiid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rb_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nums` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -36,8 +38,7 @@ CREATE TABLE `lke_aspek` (
 -- Records of lke_aspek
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_aspek` (`id`, `nama_aspek`, `create_at`, `update_at`, `bobot`, `penilaiid`, `rb_id`) VALUES ('5a6bd3bb04881db622fbacfd4222bb12ebe16cc4', 'nama Aspek', '2025-06-04 14:22:52', NULL, '100', NULL, '3f8d9cfabaf2a28135dacdc942f6513f0c725652');
-INSERT INTO `lke_aspek` (`id`, `nama_aspek`, `create_at`, `update_at`, `bobot`, `penilaiid`, `rb_id`) VALUES ('e4f5574bb633fe896a42d7f75d57bbb0a947894a', 'Capaian Sasaran Strategis', '2025-03-13 11:27:22', NULL, '36', NULL, '8cf0440082c809805dbc45976a8e9bf65e7b4cb3');
+INSERT INTO `lke_aspek` (`id`, `nama_aspek`, `create_at`, `update_at`, `bobot`, `penilaiid`, `rb_id`, `nums`) VALUES ('e4f5574bb633fe896a42d7f75d57bbb0a947894a', 'Capaian Sasaran Strategis', '2025-03-13 11:27:22', NULL, '36', NULL, '8cf0440082c809805dbc45976a8e9bf65e7b4cb3', '1');
 COMMIT;
 
 -- ----------------------------
@@ -69,6 +70,7 @@ CREATE TABLE `lke_bukti_dukung` (
   `bukti_dukung` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `create_at` datetime DEFAULT NULL,
   `update_at` datetime DEFAULT NULL,
+  `nums` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -76,12 +78,12 @@ CREATE TABLE `lke_bukti_dukung` (
 -- Records of lke_bukti_dukung
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('0665675915f6dab5d875f7f229f7acd906f15b23', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Infrastruktur (optional/wajib bagi yang memiliki infrastruktur sendiri dan memanfaatkan Pusat Data Nasional)', '2025-03-13 11:38:06', NULL);
-INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('089b2bd74d106ef34028d6bd1dd70f2efc238838', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Data dan Informasi (selaras dengan Aplikasi layanan, Aplikasi Satu Data/Satu Peta, dan Sistem Penghubung Layanan/SPL ataupun API)', '2025-03-13 11:37:48', NULL);
-INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('1dbb0abcd298b6c9eb7bd73a5952d6477772fc5f', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Proses Bisnis (sampai level n dan kelengkapan metadata)', '2025-03-13 11:33:58', NULL);
-INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('5063552ad731cd4f4e539c3a7983b9670b44e5c6', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Aplikasi (selaras dengan Layanan dan data/informasi-nya)', '2025-03-13 11:34:43', NULL);
-INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('7dae0b13cc5cc2e0eea1ce0b22bd7d966ef85970', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Layanan (selaras dengan Standar Pelayanan Minimal/SPM dan/atau Standar Pelayanan/SP)', '2025-03-13 11:34:20', NULL);
-INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`) VALUES ('9b8e9c13774632cff36e912434164de3b415fde2', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Keamanan Informasi (optional/wajib bagi yang telah menerapkan Sistem Manajemen Keamanan Informasi/ISO 27001)', '2025-03-13 11:38:21', NULL);
+INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`, `nums`) VALUES ('0665675915f6dab5d875f7f229f7acd906f15b23', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Infrastruktur (optional/wajib bagi yang memiliki infrastruktur sendiri dan memanfaatkan Pusat Data Nasional)', '2025-03-13 11:38:06', NULL, '5');
+INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`, `nums`) VALUES ('089b2bd74d106ef34028d6bd1dd70f2efc238838', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Data dan Informasi (selaras dengan Aplikasi layanan, Aplikasi Satu Data/Satu Peta, dan Sistem Penghubung Layanan/SPL ataupun API)', '2025-03-13 11:37:48', NULL, '4');
+INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`, `nums`) VALUES ('1dbb0abcd298b6c9eb7bd73a5952d6477772fc5f', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Proses Bisnis (sampai level n dan kelengkapan metadata)', '2025-03-13 11:33:58', NULL, '1');
+INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`, `nums`) VALUES ('5063552ad731cd4f4e539c3a7983b9670b44e5c6', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Aplikasi (selaras dengan Layanan dan data/informasi-nya)', '2025-03-13 11:34:43', NULL, '3');
+INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`, `nums`) VALUES ('7dae0b13cc5cc2e0eea1ce0b22bd7d966ef85970', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Layanan (selaras dengan Standar Pelayanan Minimal/SPM dan/atau Standar Pelayanan/SP)', '2025-03-13 11:34:20', NULL, '2');
+INSERT INTO `lke_bukti_dukung` (`id`, `id_indikator`, `bukti_dukung`, `create_at`, `update_at`, `nums`) VALUES ('9b8e9c13774632cff36e912434164de3b415fde2', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', 'Domain Keamanan Informasi (optional/wajib bagi yang telah menerapkan Sistem Manajemen Keamanan Informasi/ISO 27001)', '2025-03-13 11:38:21', NULL, '6');
 COMMIT;
 
 -- ----------------------------
@@ -130,7 +132,7 @@ CREATE TABLE `lke_form` (
 -- Records of lke_form
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_form` (`id`, `nama`, `tahun`, `deskripsi`, `evaluasi`, `bataswaktu`, `create_at`, `active`, `update_at`) VALUES ('14daacb695c4f79a944928f39bd5290e6eeb1d80', 'PENILAIAN 2025', '2025', '-', 'Evaluasi LKE 2025', '2025-08-30 00:00:00', '2025-06-05 11:00:13', '1', NULL);
+INSERT INTO `lke_form` (`id`, `nama`, `tahun`, `deskripsi`, `evaluasi`, `bataswaktu`, `create_at`, `active`, `update_at`) VALUES ('14daacb695c4f79a944928f39bd5290e6eeb1d80', 'PENILAIAN 2025', '2026', 'Evaluasi LKE 2025', '-', '2025-08-30 02:05:00', '2025-06-05 11:00:13', '1', '2025-06-07 22:47:18');
 INSERT INTO `lke_form` (`id`, `nama`, `tahun`, `deskripsi`, `evaluasi`, `bataswaktu`, `create_at`, `active`, `update_at`) VALUES ('51497dab24601984f92267a5600070e96b8ddfa7', 'F-SPBE-01', '2025', 'Penilaian SPBE 2025', 'Evaluasi SPBE', '2025-07-16 00:00:00', '2025-03-13 11:17:14', '1', NULL);
 INSERT INTO `lke_form` (`id`, `nama`, `tahun`, `deskripsi`, `evaluasi`, `bataswaktu`, `create_at`, `active`, `update_at`) VALUES ('fd145710314504e3075a2c7894e89659b75f811c', 'FOM 2', '2025', 'Deskripsi', 'SPBE', '2025-06-30 00:00:00', '2025-06-04 14:21:45', '1', NULL);
 COMMIT;
@@ -146,6 +148,7 @@ CREATE TABLE `lke_indikator` (
   `create_at` datetime DEFAULT NULL,
   `update_at` datetime DEFAULT NULL,
   `jenis_jawaban` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nums` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -153,7 +156,7 @@ CREATE TABLE `lke_indikator` (
 -- Records of lke_indikator
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_indikator` (`id`, `id_sub_sub_aspek`, `indikator`, `create_at`, `update_at`, `jenis_jawaban`) VALUES ('9ee30bb303b521b35f6a1b177df2d7b7888a744b', '051d12e3ad56c4a8b87415df29add04a3ae69802', 'Telah Memiliki Dokumen Arsitektur SPBE Perangkat Daerah', '2025-03-13 11:30:59', NULL, 'b7be0e8c9a91dc2bfe3fd36e915731a0e32a1307');
+INSERT INTO `lke_indikator` (`id`, `id_sub_sub_aspek`, `indikator`, `create_at`, `update_at`, `jenis_jawaban`, `nums`) VALUES ('9ee30bb303b521b35f6a1b177df2d7b7888a744b', '051d12e3ad56c4a8b87415df29add04a3ae69802', 'Telah Memiliki Dokumen Arsitektur SPBE Perangkat Daerah', '2025-03-13 11:30:59', NULL, 'b7be0e8c9a91dc2bfe3fd36e915731a0e32a1307', '1');
 COMMIT;
 
 -- ----------------------------
@@ -220,19 +223,6 @@ CREATE TABLE `lke_log_user` (
 -- Records of lke_log_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('36c160f45ce3e6ee22b8c63e013149923781de9a', 'ba314087a5f23dca7e4c4abc3e55fc74bb3c341a', 'MADANI', '2025-06-05 10:43:10', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('4ce276b9ec1f07d6f1acffd348bcd5c23bf8582f', '08a62fdb70f816447cbb4488ed1626653233851f', 'super admin', '2025-06-05 10:56:28', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('4d115066f47d267908688697fd92b148e5e304a9', '08a62fdb70f816447cbb4488ed1626653233851f', 'super admin', '2025-06-05 10:42:28', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('4d4f27e635fa30663f33746ddc70980ec4d280b5', 'ba314087a5f23dca7e4c4abc3e55fc74bb3c341a', 'MADANI', '2025-06-05 10:43:19', '::1', 'LOGOUT');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('57c324cf68ef87818a648f154fc53b4ef3b9fc37', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 10:43:52', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('6740442e773ad5064c34d479b823ddb8f7d46995', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 10:56:14', '::1', 'LOGOUT');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('73d4805366579128a414736eccadfcbdd534ac77', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 12:02:06', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('85e593570011808434799931af54349799fecf90', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 10:42:49', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('ad064dc874511b06aa5da35fe2708d055d144d8e', '08a62fdb70f816447cbb4488ed1626653233851f', 'super admin', '2025-06-05 10:42:41', '::1', 'LOGOUT');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('b29965f2190f8fe2808cc4073da5bbfdf0a56a74', '08a62fdb70f816447cbb4488ed1626653233851f', 'super admin', '2025-06-04 16:38:19', '::1', 'LOGOUT');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('bd22371a138f2f650cea8fc4789a086dbd4451e7', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-04 16:38:28', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('e866bb04518ae25f40ac6e0cf3881c6737e5a47e', '08a62fdb70f816447cbb4488ed1626653233851f', 'super admin', '2025-06-04 15:57:29', '::1', 'LOGIN');
-INSERT INTO `lke_log_user` (`id`, `userid`, `fullname`, `loged_at`, `ip`, `status`) VALUES ('f5563ec02c805aad1e65355ea3ac3bdb57164508', 'cc8f678d9dcc320d8a60cb307b6304564f5b7f33', 'Pengisi Soal', '2025-06-05 10:43:02', '::1', 'LOGOUT');
 COMMIT;
 
 -- ----------------------------
@@ -253,18 +243,29 @@ CREATE TABLE `lke_logs` (
 -- Records of lke_logs
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('03640e76546bde0834469640065a608ac9b84cff', '2025-06-05 10:42:41', 'LOGIN', 'USER', 'User Login :super admin', '2025-06-05 10:42:41');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('07438eb73ff191bd410ee9e6b1cffac47d233d51', '2025-06-05 11:00:13', 'INSERT', 'admin', 'Tambah Data Form : PENILAIAN 2025 Tahun : 2025', '2025-06-05 11:00:13');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('0e78cb2f778f239080a0fb3ba75e6b3eb1240664', '2025-06-05 10:56:28', 'LOGIN', 'USER', 'User Login :super admin', '2025-06-05 10:56:28');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('283f587a68e89431ae2b131e7a37b1bee0d465d6', '2025-06-05 10:42:28', 'LOGIN', 'USER', 'User Login :super admin', '2025-06-05 10:42:28');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('875b7297ae9828971cde4d6bd6cd6aa28de65918', '2025-06-05 12:02:50', 'INSERT', 'soal', 'Tambah Data Sub Sub Aspek : 1.1 tes Bobot : 100', '2025-06-05 12:02:50');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('945aff414a6bb38279d23c0f483bb324f9edd7f1', '2025-06-05 10:43:52', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:43:52');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('a740b5c18bf237fa4145701dad3294ccd4d2aee6', '2025-06-05 10:43:10', 'LOGIN', 'USER', 'User Login :MADANI', '2025-06-05 10:43:10');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b2299abc6541e22d26475418e965dbccc155c643', '2025-06-05 10:42:49', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:42:49');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b28a1e3a36fd74b8dd7c06ac599b4119e87aa6fc', '2025-06-05 12:02:06', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 12:02:06');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b31cccf86b47ff052e320669c4211a84a517cada', '2025-06-05 10:43:02', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:43:02');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('b434639de0828f6b353179df5cb2e5d158ec54d0', '2025-06-05 10:43:19', 'LOGIN', 'USER', 'User Login :MADANI', '2025-06-05 10:43:19');
-INSERT INTO `lke_logs` (`id`, `log`, `info`, `user`, `content`, `create_at`) VALUES ('e2676c80e7cc59f6c38cc7f653443a2f04987943', '2025-06-05 10:56:14', 'LOGIN', 'USER', 'User Login :Pengisi Soal', '2025-06-05 10:56:14');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for lke_nilai_jawaban_user
+-- ----------------------------
+DROP TABLE IF EXISTS `lke_nilai_jawaban_user`;
+CREATE TABLE `lke_nilai_jawaban_user` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `IdJawaban` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `PenilaiId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Nilai` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Aproved` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Ket` text COLLATE utf8mb4_unicode_ci,
+  `AproveBy` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `create_at` datetime DEFAULT NULL,
+  `update` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of lke_nilai_jawaban_user
+-- ----------------------------
+BEGIN;
 COMMIT;
 
 -- ----------------------------
@@ -345,6 +346,8 @@ CREATE TABLE `lke_parameter` (
   `id_indikator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `create_at` datetime DEFAULT NULL,
   `update_at` datetime DEFAULT NULL,
+  `nums` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nilai` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -352,10 +355,10 @@ CREATE TABLE `lke_parameter` (
 -- Records of lke_parameter
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`) VALUES ('1d8486743ebfc9ed52c240082e4c3e5cfa7ef0ad', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:33:07', NULL);
-INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`) VALUES ('73beda09404211b0a1d7257e9a117d681c747953', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis, Layanan, Data dan Informasi, dan Aplikasi', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:31:33', NULL);
-INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`) VALUES ('9d2a1dfcbc89b0fc46cae6c8c3918bbe4855c9df', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis, Layanan dan Data dan Informasi', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:32:06', NULL);
-INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`) VALUES ('ebf4d93e29de2125b7f2c52c4274dfd1d81da0b7', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis dan Layanan ', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:32:40', NULL);
+INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`, `nums`, `nilai`) VALUES ('1d8486743ebfc9ed52c240082e4c3e5cfa7ef0ad', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:33:07', NULL, '4', '0');
+INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`, `nums`, `nilai`) VALUES ('73beda09404211b0a1d7257e9a117d681c747953', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis, Layanan, Data dan Informasi, dan Aplikasi', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:31:33', NULL, '1', '100');
+INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`, `nums`, `nilai`) VALUES ('9d2a1dfcbc89b0fc46cae6c8c3918bbe4855c9df', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis, Layanan dan Data dan Informasi', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:32:06', NULL, '2', '65');
+INSERT INTO `lke_parameter` (`id`, `nama_parameter`, `id_indikator`, `create_at`, `update_at`, `nums`, `nilai`) VALUES ('ebf4d93e29de2125b7f2c52c4274dfd1d81da0b7', 'Sudah Menyusun Arsitektur SPBE Domain Proses Bisnis dan Layanan ', '9ee30bb303b521b35f6a1b177df2d7b7888a744b', '2025-03-13 11:32:40', NULL, '3', '35');
 COMMIT;
 
 -- ----------------------------
@@ -369,6 +372,7 @@ CREATE TABLE `lke_rb` (
   `create_at` datetime DEFAULT NULL,
   `update_at` datetime DEFAULT NULL,
   `form_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nums` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -376,9 +380,8 @@ CREATE TABLE `lke_rb` (
 -- Records of lke_rb
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_rb` (`id`, `nama`, `bobot`, `create_at`, `update_at`, `form_id`) VALUES ('3f8d9cfabaf2a28135dacdc942f6513f0c725652', 'NAMA RB 1', '100', '2025-06-04 14:22:23', NULL, 'fd145710314504e3075a2c7894e89659b75f811c');
-INSERT INTO `lke_rb` (`id`, `nama`, `bobot`, `create_at`, `update_at`, `form_id`) VALUES ('8cf0440082c809805dbc45976a8e9bf65e7b4cb3', 'RB GENERAL PD', '65', '2025-03-13 11:23:46', NULL, '51497dab24601984f92267a5600070e96b8ddfa7');
-INSERT INTO `lke_rb` (`id`, `nama`, `bobot`, `create_at`, `update_at`, `form_id`) VALUES ('a6979d740d638761d21c34fe319e75d13fa4a6b8', 'RB TEMATIK PERANGKAT DAERAH', '35', '2025-03-13 11:24:17', NULL, '51497dab24601984f92267a5600070e96b8ddfa7');
+INSERT INTO `lke_rb` (`id`, `nama`, `bobot`, `create_at`, `update_at`, `form_id`, `nums`) VALUES ('8cf0440082c809805dbc45976a8e9bf65e7b4cb3', 'RB GENERAL PD', '65', '2025-03-13 11:23:46', NULL, '51497dab24601984f92267a5600070e96b8ddfa7', '1');
+INSERT INTO `lke_rb` (`id`, `nama`, `bobot`, `create_at`, `update_at`, `form_id`, `nums`) VALUES ('a6979d740d638761d21c34fe319e75d13fa4a6b8', 'RB TEMATIK PERANGKAT DAERAH', '35', '2025-03-13 11:24:17', NULL, '51497dab24601984f92267a5600070e96b8ddfa7', '2');
 COMMIT;
 
 -- ----------------------------
@@ -440,6 +443,8 @@ CREATE TABLE `lke_sub_aspek` (
   `update_at` datetime DEFAULT NULL,
   `id_aspek` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `bobot` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nums` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `batas_waktu` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -447,8 +452,7 @@ CREATE TABLE `lke_sub_aspek` (
 -- Records of lke_sub_aspek
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_sub_aspek` (`id`, `nama_sub_aspek`, `create_at`, `update_at`, `id_aspek`, `bobot`) VALUES ('05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', 'Tingkat Kematangan SPBE Perangkat Daerah', '2025-03-13 11:28:00', NULL, 'e4f5574bb633fe896a42d7f75d57bbb0a947894a', '6');
-INSERT INTO `lke_sub_aspek` (`id`, `nama_sub_aspek`, `create_at`, `update_at`, `id_aspek`, `bobot`) VALUES ('95084fddd944b9680938ae42f216e9755f1abf60', 'nama sub aspelk', '2025-06-04 14:23:41', NULL, '5a6bd3bb04881db622fbacfd4222bb12ebe16cc4', '100');
+INSERT INTO `lke_sub_aspek` (`id`, `nama_sub_aspek`, `create_at`, `update_at`, `id_aspek`, `bobot`, `nums`, `batas_waktu`) VALUES ('05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', 'Tingkat Kematangan SPBE Perangkat Daerah', '2025-03-13 11:28:00', NULL, 'e4f5574bb633fe896a42d7f75d57bbb0a947894a', '100', '1', '2025-06-11 11:36:05');
 COMMIT;
 
 -- ----------------------------
@@ -462,6 +466,7 @@ CREATE TABLE `lke_sub_sub_aspek` (
   `update_at` datetime DEFAULT NULL,
   `id_sub_aspek` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `bobot` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nums` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -469,8 +474,7 @@ CREATE TABLE `lke_sub_sub_aspek` (
 -- Records of lke_sub_sub_aspek
 -- ----------------------------
 BEGIN;
-INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('051d12e3ad56c4a8b87415df29add04a3ae69802', '1.3 Tingkat Kematangan Kapabilitas Proses', '2025-03-13 11:28:49', NULL, '05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', '50');
-INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`) VALUES ('e62320bab8b040a8051d52ce116a2ca95249e4fe', '1.1 tes', '2025-06-05 12:02:50', NULL, '05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', '100');
+INSERT INTO `lke_sub_sub_aspek` (`id`, `nama_sub_sub_aspek`, `create_at`, `update_at`, `id_sub_aspek`, `bobot`, `nums`) VALUES ('051d12e3ad56c4a8b87415df29add04a3ae69802', 'Tingkat Kematangan Kapabilitas Proses', '2025-03-13 11:28:49', NULL, '05c3a4feeca1677fc6efe39a7efa9d37bb3db84a', '50', '1');
 COMMIT;
 
 -- ----------------------------
@@ -545,7 +549,12 @@ COMMIT;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Aspek_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Aspek_add_edit`(uidx VARCHAR(255),idx VARCHAR(255),nmas VARCHAR(255), bbt VARCHAR(255), rbx VARCHAR(255))
+CREATE PROCEDURE `Aspek_add_edit`(uidx VARCHAR(255),
+idx VARCHAR(255),
+nmas VARCHAR(255), 
+bbt VARCHAR(255), 
+rbx VARCHAR(255),
+numsx VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE ada VARCHAR(255);
@@ -569,7 +578,7 @@ BEGIN
 	IF (ada IS NULL) THEN
 		SET ada = (SELECT nama_aspek FROM lke_aspek WHERE nama_aspek = nmas AND bobot = bbt LIMIT 1);
 		IF (ada IS NULL) THEN
-			INSERT INTO lke_aspek VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmas, NOW(), null, bbt, NULL, rbx);
+			INSERT INTO lke_aspek VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmas, NOW(), null, bbt, NULL, rbx, numsx);
 			SET res = 1;
 			SET msg = 'Tambah Data Berhasil';
 			INSERT INTO lke_logs VALUES(SHA(CONCAT(NOW(),RAND(),uidx)),NOW(), 'INSERT', 
@@ -649,7 +658,11 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Bukti_dukung_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Bukti_dukung_add_edit`(uidx VARCHAR(255), idx VARCHAR(255), idindk VARCHAR(255), bkdk VARCHAR(255))
+CREATE PROCEDURE `Bukti_dukung_add_edit`(uidx VARCHAR(255), 
+idx VARCHAR(255), 
+idindk VARCHAR(255), 
+bkdk VARCHAR(255),
+nox VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	
@@ -674,7 +687,7 @@ BEGIN
 		SET ada = (SELECT id FROM lke_indikator WHERE id = idindk LIMIT 1);
 		IF(ada IS NOT NULL)THEN
 -- 			SET ada = (SELECT bukti_dukung WHERE );
-				INSERT INTO lke_bukti_dukung VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), idindk, bkdk, NOW(), NULL);
+				INSERT INTO lke_bukti_dukung VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), idindk, bkdk, NOW(), NULL, nox);
 				SET res = 1;
 				SET msg = 'Tambah Data Berhasil';
 				INSERT INTO lke_logs VALUES(SHA(CONCAT(NOW(),RAND(),uidx)),NOW(), 'INSERT', 
@@ -776,8 +789,13 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Form_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Form_add_edit`(uidx VARCHAR(255), idx VARCHAR(255),nmx VARCHAR(255), thnx VARCHAR(255), desk VARCHAR(255), evls VARCHAR(255),
- btwkt DATETIME)
+CREATE PROCEDURE `Form_add_edit`(uidx VARCHAR(255), 
+idx VARCHAR(255),
+nmx VARCHAR(255), 
+thnx VARCHAR(255), 
+desk VARCHAR(255), 
+evls VARCHAR(255),
+btwkt DATETIME)
 BEGIN
   #Routine body goes here...
 	DECLARE ada VARCHAR(255);
@@ -932,7 +950,12 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Indikator_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Indikator_add_edit`(uidx VARCHAR(255), idx VARCHAR(255), idssa VARCHAR(255), nmind VARCHAR(255), jjwb VARCHAR(255))
+CREATE PROCEDURE `Indikator_add_edit`(uidx VARCHAR(255), 
+idx VARCHAR(255), 
+idssa VARCHAR(255), 
+nmind VARCHAR(255), 
+jjwb VARCHAR(255),
+numsx VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE ada VARCHAR(255);
@@ -957,7 +980,7 @@ BEGIN
 		IF (ada IS NOT NULL) THEN
 			SET ada = (SELECT indikator FROM lke_indikator WHERE id_sub_sub_aspek= idssa AND indikator= nmind);
 			IF(ada IS NULL)THEN
-				INSERT INTO lke_indikator VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), idssa, nmind, NOW(), NULL, jjwb);
+				INSERT INTO lke_indikator VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), idssa, nmind, NOW(), NULL, jjwb, numsx);
 				INSERT INTO lke_logs VALUES(SHA(CONCAT(NOW(),RAND(),uidx)),NOW(), 'INSERT', 
 				(SELECT UserName FROM lke_user WHERE uid = uidx LIMIT 1), 
 				CONCAT('Tambah Data Indikator : ',nmind), NOW());
@@ -1409,7 +1432,12 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Parameter_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Parameter_add_edit`(uidx VARCHAR(255), idx VARCHAR(255), nmpar TEXT, idind VARCHAR(255))
+CREATE PROCEDURE `Parameter_add_edit`(uidx VARCHAR(255), 
+idx VARCHAR(255), 
+nmpar TEXT, 
+idind VARCHAR(255),
+numsx VARCHAR(255),
+nilx VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE ada VARCHAR(255);
@@ -1434,7 +1462,7 @@ BEGIN
 		IF(ada IS NOT NULL)THEN
 			SET ada= (SELECT nama_parameter FROM lke_parameter WHERE id_indikator = idind AND nama_parameter = nmpar LIMIT 1);
 			IF(ada IS NULL)THEN
-				INSERT INTO lke_parameter VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmpar, idind, NOW(), NULL);
+				INSERT INTO lke_parameter VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmpar, idind, NOW(), NULL, numsx, nilx);
 				SET res = 1;
 				SET msg = 'Tambah Data Berhasil';
 				INSERT INTO lke_logs VALUES(SHA(CONCAT(NOW(),RAND(),uidx)),NOW(), 'INSERT', 
@@ -1526,7 +1554,12 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Rb_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Rb_add_edit`(uidx VARCHAR(255), idx VARCHAR(255), nmx VARCHAR(255), bbt VARCHAR(255),frmx VARCHAR(255))
+CREATE PROCEDURE `Rb_add_edit`(uidx VARCHAR(255), 
+idx VARCHAR(255), 
+nmx VARCHAR(255), 
+bbt VARCHAR(255),
+frmx VARCHAR(255),
+numsx VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE ada VARCHAR(255);
@@ -1550,7 +1583,7 @@ BEGIN
 	IF (ada IS NULL) THEN
 		SET ada = (SELECT nama FROM lke_rb WHERE nama = nmx LIMIT 1);
 		IF(ada IS NULL) THEN
-			INSERT INTO lke_rb VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmx, bbt, NOW(), NULL, frmx);
+			INSERT INTO lke_rb VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmx, bbt, NOW(), NULL, frmx, numsx);
 			SET res = 1;
 			SET msg = 'Tambah Data Berhasil';
 			INSERT INTO lke_logs VALUES(SHA(CONCAT(NOW(),RAND(),uidx)),NOW(), 'INSERT', 
@@ -1633,7 +1666,13 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Sub_Aspek_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Sub_Aspek_add_edit`(uidx VARCHAR(255), idx VARCHAR(255),nmsub VARCHAR(255), idasp VARCHAR(255), bbt VARCHAR(255))
+CREATE PROCEDURE `Sub_Aspek_add_edit`(uidx VARCHAR(255), 
+idx VARCHAR(255),
+nmsub VARCHAR(255), 
+idasp VARCHAR(255), 
+bbt VARCHAR(255),
+numsx VARCHAR(255),
+btswkt DATETIME)
 BEGIN
   #Routine body goes here...
 	DECLARE ada VARCHAR(255);
@@ -1659,7 +1698,7 @@ BEGIN
 		IF (ada IS NOT NULL ) THEN
 			SET ada = (SELECT nama_sub_aspek FROM lke_sub_aspek WHERE id_aspek=idasp AND nama_sub_aspek=nmsub LIMIT 1);
 			IF(ada IS NULL)THEN
-				INSERT INTO lke_sub_aspek VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmsub, NOW(), NULL, idasp, bbt);
+				INSERT INTO lke_sub_aspek VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmsub, NOW(), NULL, idasp, bbt, numsx, btswkt);
 				SET res = 1;
 				SET msg = 'Tambah Data Berhasil';
 				INSERT INTO lke_logs VALUES(SHA(CONCAT(NOW(),RAND(),uidx)),NOW(), 'INSERT', 
@@ -1749,7 +1788,12 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `Sub_Sub_Aspek_add_edit`;
 delimiter ;;
-CREATE PROCEDURE `Sub_Sub_Aspek_add_edit`(uidx VARCHAR(255), idx VARCHAR(255),nmsub VARCHAR(255), idasp VARCHAR(255), bbt VARCHAR(255))
+CREATE PROCEDURE `Sub_Sub_Aspek_add_edit`(uidx VARCHAR(255), 
+idx VARCHAR(255),
+nmsub VARCHAR(255), 
+idasp VARCHAR(255), 
+bbt VARCHAR(255),
+numsx VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE ada VARCHAR(255);
@@ -1774,7 +1818,7 @@ BEGIN
 		IF(ada IS NOT NULL)THEN
 			SET ada = (SELECT nama_sub_sub_aspek FROM lke_sub_sub_aspek WHERE id_sub_aspek = idasp AND nama_sub_sub_aspek = nmsub);
 			IF(ada IS NULL )THEN
-				INSERT INTO lke_sub_sub_aspek VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmsub, NOW(), NULL, idasp, bbt);
+				INSERT INTO lke_sub_sub_aspek VALUES(SHA(CONCAT(NOW(),RAND(),uidx)), nmsub, NOW(), NULL, idasp, bbt, numsx);
 				SET res = 1;
 				SET msg = 'Tambah Data Berhasil.';
 				INSERT INTO lke_logs VALUES(SHA(CONCAT(NOW(),RAND(),uidx)),NOW(), 'INSERT', 
@@ -2170,7 +2214,7 @@ BEGIN
 				(SELECT id FROM lke_rb WHERE id = a.rb_id) AS rb_id
 			FROM
 				lke_aspek AS a
-				ORDER BY a.nama_aspek ASC LIMIT lmtx OFFSET ofset;
+				ORDER BY a.nama_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET ada = (SELECT nama FROM lke_rb WHERE id = idx);
 		IF (ada IS NOT NULL) THEN
@@ -2195,7 +2239,7 @@ BEGIN
 				FROM
 					lke_aspek AS a
 					WHERE a.rb_id = idx
-					ORDER BY a.nama_aspek ASC LIMIT lmtx OFFSET ofset;
+					ORDER BY a.nama_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 		ELSE
 			SET res = 1;
 			SET msg = 'success';
@@ -2217,7 +2261,7 @@ BEGIN
 			FROM
 				lke_aspek AS a
 				WHERE a.id = idx
-				ORDER BY a.nama_aspek ASC LIMIT lmtx OFFSET ofset;
+				ORDER BY a.nama_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 				
 		END IF;
 	END IF;
@@ -2261,7 +2305,7 @@ BEGIN
 			a.update_at
 		FROM
 			lke_bukti_dukung AS a
-			ORDER BY a.bukti_dukung ASC LIMIT lmtx OFFSET ofset;
+			ORDER BY a.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET ada = (SELECT id FROM lke_bukti_dukung WHERE id = idx);
 		IF(ada IS NOT NULL)THEN
@@ -2279,7 +2323,7 @@ BEGIN
 			FROM
 				lke_bukti_dukung AS a
 				WHERE a.id = idx
-				ORDER BY a.bukti_dukung ASC LIMIT lmtx OFFSET ofset;
+				ORDER BY a.nums ASC LIMIT lmtx OFFSET ofset;
 		ELSE
 			SET ada = (SELECT id from lke_indikator WHERE id = idx);
 			IF(ada IS NOT NULL) THEN
@@ -2297,7 +2341,7 @@ BEGIN
 				FROM
 					lke_bukti_dukung AS a
 					WHERE a.id_indikator = idx
-					ORDER BY a.bukti_dukung ASC LIMIT lmtx OFFSET ofset;
+					ORDER BY a.nums ASC LIMIT lmtx OFFSET ofset;
 			ELSE
 				SET res = 0;
 				SET msg = 'Data Tidak Ditemukan.';
@@ -2488,7 +2532,10 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `View_Data_List_Soal`;
 delimiter ;;
-CREATE PROCEDURE `View_Data_List_Soal`(idx VARCHAR(255),lmt VARCHAR(255), ofst VARCHAR(255))
+CREATE PROCEDURE `View_Data_List_Soal`(idx VARCHAR(255),
+lmt VARCHAR(255), 
+ofst VARCHAR(255),
+thnx VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE lmtx INT;
@@ -2496,6 +2543,14 @@ BEGIN
 	DECLARE ada VARCHAR(255);
 	DECLARE res VARCHAR(255);
 	DECLARE msg VARCHAR(255);
+	DECLARE tahunx VARCHAR(255);
+	
+	IF (thnx IS NULL OR thnx = '') THEN
+		SET tahunx = '%%';
+	ELSE
+		SET tahunx = thnx;
+	END IF;
+
 	IF (lmt REGEXP '^-?[0-9]+$') THEN
 		SET lmtx = lmt;
 	ELSE
@@ -2535,7 +2590,8 @@ BEGIN
 			INNER JOIN lke_sub_sub_aspek AS e ON d.id = e.id_sub_aspek
 			INNER JOIN lke_indikator AS f ON e.id = f.id_sub_sub_aspek
 			INNER JOIN lke_parameter AS g ON f.id = g.id_indikator
-			ORDER BY g.create_at, nama_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+			WHERE a.tahun LIKE(tahunx)
+			ORDER BY g.create_at, b.nums, c.nums, d.nums, e.nums, f.nums, g.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET res = 1;
 		SET msg = 'success';
@@ -2565,8 +2621,8 @@ BEGIN
 				INNER JOIN lke_sub_sub_aspek AS e ON d.id = e.id_sub_aspek
 				INNER JOIN lke_indikator AS f ON e.id = f.id_sub_sub_aspek
 				INNER JOIN lke_parameter AS g ON f.id = g.id_indikator
-				WHERE f.id = idx
-				ORDER BY f.create_at, nama_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+				WHERE f.id = idx AND a.tahun LIKE(tahunx)
+				ORDER BY f.create_at, b.nums, c.nums, d.nums, e.nums, f.nums, g.nums ASC LIMIT lmtx OFFSET ofset;
 	END IF;
 END
 ;;
@@ -2674,7 +2730,7 @@ BEGIN
 			a.update_at
 		FROM
 			lke_form AS a
-			ORDER BY a.nama ASC LIMIT lmtx OFFSET ofset;
+			ORDER BY a.nama, a.tahun ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SELECT
 			res,msg,
@@ -2690,7 +2746,7 @@ BEGIN
 		FROM
 			lke_form AS a
 			WHERE a.id = idx
-			ORDER BY a.nama ASC LIMIT lmtx OFFSET ofset;
+			ORDER BY a.nama ,a.tahun ASC LIMIT lmtx OFFSET ofset;
 	END IF;
 END
 ;;
@@ -2701,7 +2757,10 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `View_Indikator`;
 delimiter ;;
-CREATE PROCEDURE `View_Indikator`(idx VARCHAR(255),uidx VARCHAR(255),lmt VARCHAR(255), ofst VARCHAR(255))
+CREATE PROCEDURE `View_Indikator`(idx VARCHAR(255),
+uidx VARCHAR(255),
+lmt VARCHAR(255), 
+ofst VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE lmtx INT;
@@ -2756,8 +2815,8 @@ BEGIN
 			a.indikator,
 			a.create_at,
 			a.update_at,
-			( SELECT GROUP_CONCAT( nama_parameter SEPARATOR ',<br> ' ) FROM lke_parameter WHERE id_indikator = a.id ) AS parameter,
-			( SELECT GROUP_CONCAT( bukti_dukung SEPARATOR ',<br> ' ) FROM lke_bukti_dukung WHERE id_indikator = a.id ) AS bukti_dukung,
+			( SELECT GROUP_CONCAT( nama_parameter ORDER BY nums ASC SEPARATOR ',<br> ' ) FROM lke_parameter WHERE id_indikator = a.id ) AS parameter,
+			( SELECT GROUP_CONCAT( bukti_dukung ORDER BY nums ASC SEPARATOR ',<br> ' ) FROM lke_bukti_dukung WHERE id_indikator = a.id ) AS bukti_dukung,
 			IF(uidx IS NULL, 0 ,
 				IF((SELECT Jawaban FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) IS NULL,0,(SELECT Jawaban FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx))
 			) AS jwbx,
@@ -2779,14 +2838,44 @@ BEGIN
 				 ) > DATE(NOW()),IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no','0',NULL), '1') tombol
 				 , IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no','1',NULL) as tolak
 				 ,IF((SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no',
-				 null,(SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx)) AS ketsx
+				 null,(SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx)) AS ketsx,
+				 
+				 (SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id) AS wktsubasp1,
+				 
+				 IF((
+				 SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id
+				 ) IS NOT NULL,
+				 IF((
+				 SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id
+				  ) <= NOW()
+				 
+				 ,1,0)
+				 ,0) AS wktsubasp
 				 
 				 
 				 
 		FROM
 			lke_indikator AS a
 			INNER JOIN lke_Jenis_Jawaban AS b ON a.jenis_jawaban = b.id
-			ORDER BY a.indikator ASC LIMIT lmtx OFFSET ofset;
+			ORDER BY a.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET ada = (SELECT id FROM lke_indikator WHERE id =idx LIMIT 1);
 		IF(ada IS NOT NULL)THEN
@@ -2825,8 +2914,8 @@ BEGIN
 				a.indikator,
 				a.create_at,
 				a.update_at,
-				( SELECT GROUP_CONCAT( nama_parameter SEPARATOR ',<br> ' ) FROM lke_parameter WHERE id_indikator = a.id ) AS parameter,
-				( SELECT GROUP_CONCAT(bukti_dukung SEPARATOR ',<br> ' ) FROM lke_bukti_dukung WHERE id_indikator = a.id ) AS bukti_dukung,
+				( SELECT GROUP_CONCAT( nama_parameter ORDER BY nums ASC SEPARATOR ',<br> ' ) FROM lke_parameter WHERE id_indikator = a.id ) AS parameter,
+				( SELECT GROUP_CONCAT( bukti_dukung ORDER BY nums ASC SEPARATOR ',<br> ' ) FROM lke_bukti_dukung WHERE id_indikator = a.id ) AS bukti_dukung,
 				IF(uidx IS NULL, 0 ,
 					IF((SELECT Jawaban FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) IS NULL,0,(SELECT Jawaban FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx))
 				) AS jwbx,
@@ -2848,12 +2937,43 @@ BEGIN
 				 ) > DATE(NOW()),IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no','0',NULL), '1') tombol
 				 , IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no','1',NULL) as tolak
 				 ,IF((SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no',
-				 null,(SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx)) AS ketsx
+				 null,(SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx)) AS ketsx,
+				 
+				 (SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id) AS wktsubasp1,
+				 
+				 IF((
+				 SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id
+				 ) IS NOT NULL,
+				 IF((
+				 SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id
+				  ) <= NOW()
+				 
+				 ,1,0)
+				 ,0) AS wktsubasp
+				 
 			FROM
 				lke_indikator AS a
 				INNER JOIN lke_Jenis_Jawaban AS b ON a.jenis_jawaban = b.id
 				WHERE a.id = idx
-				ORDER BY a.indikator ASC LIMIT lmtx OFFSET ofset;
+				ORDER BY  a.nums ASC LIMIT lmtx OFFSET ofset;
 		ELSE
 			SET ada = (SELECT id FROM lke_sub_sub_aspek WHERE id = idx);
 			IF(ada IS NOT NULL)THEN
@@ -2891,8 +3011,8 @@ BEGIN
 					a.indikator,
 					a.create_at,
 					a.update_at,
-					( SELECT GROUP_CONCAT( nama_parameter SEPARATOR ',<br>' ) FROM lke_parameter WHERE id_indikator = a.id ) AS parameter,
-					( SELECT GROUP_CONCAT(bukti_dukung SEPARATOR ',<br>' ) FROM lke_bukti_dukung WHERE id_indikator = a.id ) AS bukti_dukung,
+					( SELECT GROUP_CONCAT( nama_parameter ORDER BY nums ASC SEPARATOR ',<br> ' ) FROM lke_parameter WHERE id_indikator = a.id) AS parameter,
+					( SELECT GROUP_CONCAT( bukti_dukung ORDER BY nums ASC SEPARATOR ',<br> ' ) FROM lke_bukti_dukung WHERE id_indikator = a.id) AS bukti_dukung,
 					IF(uidx IS NULL, 0 ,
 						IF((SELECT Jawaban FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) IS NULL,0,(SELECT Jawaban FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx))
 					) AS jwbx,
@@ -2914,13 +3034,43 @@ BEGIN
 				 ) > DATE(NOW()),IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no','0',NULL), '1') tombol
 				 , IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no','1',NULL) as tolak
 				 ,IF((SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx) = 'no',
-				 null,(SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx)) AS ketsx
+				 null,(SELECT ket FROM lke_jawaban WHERE id_indikator = a.id AND userid = uidx)) AS ketsx,
+				 
+				 (SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id) AS wktsubasp1,
+				 
+				 IF((
+				 SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id
+				 ) IS NOT NULL,
+				 IF((
+				 SELECT
+						lke_sub_aspek.batas_waktu 
+					FROM
+						lke_indikator
+						INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+						INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+					WHERE lke_indikator.id = a.id
+				  ) <= NOW()
+				 
+				 ,1,0)
+				 ,0) AS wktsubasp
 				 
 				FROM
 					lke_indikator AS a
 					INNER JOIN lke_Jenis_Jawaban AS b ON a.jenis_jawaban = b.id
 					WHERE id_sub_sub_aspek = idx
-					ORDER BY a.indikator ASC LIMIT lmtx OFFSET ofset;
+					ORDER BY a.nums ASC LIMIT lmtx OFFSET ofset;
 			ELSE
 				SET res = 0;
 				SET msg = 'Data Tidak Ditemukan.';
@@ -3149,7 +3299,10 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `View_List_Data_Soal_User`;
 delimiter ;;
-CREATE PROCEDURE `View_List_Data_Soal_User`(idx VARCHAR(255),lmt VARCHAR(255), ofst VARCHAR(255), uidx VARCHAR(255))
+CREATE PROCEDURE `View_List_Data_Soal_User`(idx VARCHAR(255),
+lmt VARCHAR(255), 
+ofst VARCHAR(255), 
+uidx VARCHAR(255))
 BEGIN
   #Routine body goes here...
 	DECLARE lmtx INT;
@@ -3180,6 +3333,10 @@ BEGIN
 			b.nama AS nama_rb,
 			c.nama_aspek,
 			d.nama_sub_aspek,
+			IF(d.batas_waktu IS NULL,d.nama_sub_aspek,CONCAT(d.nama_sub_aspek ,' (Batas Waktu : ', d.batas_waktu, ')')) AS nama_sub_aspek2,
+-- 			d.batas_waktu AS wktAsp,
+			IF(d.batas_waktu <= NOW(),1,0) AS wktAsp,
+			 
 			(SELECT COUNT(*) FROM lke_sub_sub_aspek WHERE lke_sub_sub_aspek.id_sub_aspek = d.id) AS jum_subSubaspek,
 			e.nama_sub_sub_aspek,
 			f.indikator,
@@ -3194,7 +3351,12 @@ BEGIN
 					' / ',
 				( SELECT COUNT(*) FROM lke_bukti_dukung WHERE lke_bukti_dukung.id_indikator = f.id ) 
 						) AS kemajuan  
-						, IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = idx AND userid = uidx) = 'no','0',NULL) as tolak
+						, IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = idx AND userid = uidx) = 'no','0',NULL) as tolak,
+			
+			IF(uidx IS NULL, 0 ,
+				IF((SELECT Jawaban FROM lke_jawaban WHERE id_indikator = f.id AND userid = uidx) IS NULL,0,(SELECT Jawaban FROM lke_jawaban WHERE id_indikator = f.id AND userid = uidx))
+			) AS jwbx
+			
 		FROM
 			lke_form AS a
 			INNER JOIN lke_rb AS b ON a.id = b.form_id
@@ -3202,7 +3364,7 @@ BEGIN
 			INNER JOIN lke_sub_aspek AS d ON c.id = d.id_aspek
 			INNER JOIN lke_sub_sub_aspek AS e ON d.id = e.id_sub_aspek
 			INNER JOIN lke_indikator AS f ON e.id = f.id_sub_sub_aspek
-			ORDER BY f.create_at DESC LIMIT lmtx OFFSET ofset;
+			ORDER BY f.create_at, b.nums, c.nums, d.nums, e.nums, f.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET res = 1;
 		SET msg = 'success';
@@ -3216,6 +3378,9 @@ BEGIN
 			b.nama AS nama_rb,
 			c.nama_aspek,
 			d.nama_sub_aspek,
+			IF(d.batas_waktu IS NULL,d.nama_sub_aspek,CONCAT(d.nama_sub_aspek ,' (Batas Waktu : ', d.batas_waktu, ')')) AS nama_sub_aspek2,
+-- 			d.batas_waktu AS wktAsp,
+			IF(d.batas_waktu <= NOW(),1,0) AS wktAsp,
 			e.nama_sub_sub_aspek,
 			f.indikator,
 			f.id AS ind_id,
@@ -3228,7 +3393,11 @@ BEGIN
 					' / ',
 				( SELECT COUNT(*) FROM lke_bukti_dukung WHERE lke_bukti_dukung.id_indikator = f.id ) 
 						) AS kemajuan  
-						, IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = f.id AND userid = uidx) = 'no','0',NULL) as tolak
+						, IF((SELECT aprove FROM lke_jawaban WHERE id_indikator = f.id AND userid = uidx) = 'no','0',NULL) as tolak,
+						
+			IF(uidx IS NULL, 0 ,
+				IF((SELECT Jawaban FROM lke_jawaban WHERE id_indikator = f.id AND userid = uidx) IS NULL,0,(SELECT Jawaban FROM lke_jawaban WHERE id_indikator = f.id AND userid = uidx))
+			) AS jwbx
 		FROM
 			lke_form AS a
 			INNER JOIN lke_rb AS b ON a.id = b.form_id
@@ -3237,7 +3406,7 @@ BEGIN
 			INNER JOIN lke_sub_sub_aspek AS e ON d.id = e.id_sub_aspek
 			INNER JOIN lke_indikator AS f ON e.id = f.id_sub_sub_aspek
 			WHERE a.id = idx AND f.id IN (SELECT id_indikator FROM lke_parameter)
-			ORDER BY f.create_at DESC LIMIT lmtx OFFSET ofset;
+			ORDER BY f.create_at, b.nums, c.nums, d.nums, e.nums, f.nums LIMIT lmtx OFFSET ofset;
 			
 	END IF;
 END
@@ -3332,7 +3501,7 @@ BEGIN
 			a.update_at
 		FROM
 			lke_parameter AS a
-			ORDER BY a.create_at ASC LIMIT lmtx OFFSET ofset;
+			ORDER BY a.create_at, a.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET ada = (SELECT id FROM lke_parameter WHERE id = idx);
 		IF(ada IS NOT NULL)THEN
@@ -3349,7 +3518,7 @@ BEGIN
 			FROM
 				lke_parameter AS a
 				WHERE a.id = idx
-				ORDER BY a.create_at ASC LIMIT lmtx OFFSET ofset;
+				ORDER BY a.create_at, a.nums ASC LIMIT lmtx OFFSET ofset;
 		ELSE
 			SET ada = (SELECT id FROM lke_indikator WHERE id = idx);
 			IF(ada IS NOT NULL)THEN
@@ -3366,7 +3535,7 @@ BEGIN
 				FROM
 					lke_parameter AS a
 					WHERE a.id_indikator = idx
-					ORDER BY a.create_at ASC LIMIT lmtx OFFSET ofset;
+					ORDER BY a.create_at, a.nums ASC LIMIT lmtx OFFSET ofset;
 			ELSE
 				SET res = 0;
 				SET msg = 'Data Tidak Ditemukan.';
@@ -3385,9 +3554,11 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `View_Penilaian_Mandiri`;
 delimiter ;;
-CREATE PROCEDURE `View_Penilaian_Mandiri`(thn VARCHAR(255), uidx VARCHAR(255))
+CREATE PROCEDURE `View_Penilaian_Mandiri`(thn VARCHAR(255), 
+uidx VARCHAR(255))
 BEGIN
   #Routine body goes here...
+	
 	SELECT
 	a.id,
 	a.nama, 
@@ -3424,7 +3595,18 @@ BEGIN
 	a.active
 FROM
 	lke_form AS a
-	WHERE a.tahun = thn AND a.active = 1
+	WHERE a.tahun = thn AND a.active = 1 AND 
+	( 
+			SELECT
+				COUNT(*) AS jum 
+			FROM
+				lke_indikator
+				INNER JOIN lke_sub_sub_aspek ON lke_indikator.id_sub_sub_aspek = lke_sub_sub_aspek.id
+				INNER JOIN lke_sub_aspek ON lke_sub_sub_aspek.id_sub_aspek = lke_sub_aspek.id
+				INNER JOIN lke_aspek ON lke_sub_aspek.id_aspek = lke_aspek.id
+				INNER JOIN lke_rb ON lke_rb.id = lke_aspek.rb_id
+				WHERE lke_rb.form_id = a.id  AND lke_indikator.id IN (SELECT id_indikator FROM lke_parameter)
+			 )  > 0
 	ORDER BY a.create_at;
 END
 ;;
@@ -3576,7 +3758,7 @@ BEGIN
 			a.id_aspek
 		FROM
 			lke_sub_aspek AS a
-			ORDER BY a.nama_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+			ORDER BY a.nama_sub_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET ada = (SELECT id from lke_sub_aspek WHERE id = idx LIMIT 1);
 		IF (ada IS NOT NULL)THEN
@@ -3603,7 +3785,7 @@ BEGIN
 			FROM
 				lke_sub_aspek AS a
 				WHERE id = idx
-				ORDER BY a.nama_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+				ORDER BY a.nama_sub_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 		ELSE
 			SET ada = (SELECT id from lke_aspek WHERE id = idx LIMIT 1);
 			IF(ada IS NOT NULL)THEN
@@ -3630,7 +3812,7 @@ BEGIN
 				FROM
 					lke_sub_aspek AS a
 					WHERE a.id_aspek = idx
-					ORDER BY a.nama_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+					ORDER BY a.nama_sub_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 			ELSE
 				SET res = 0;
 				SET msg = 'Data Tidak Ditemukan.';
@@ -3700,7 +3882,7 @@ BEGIN
 			a.bobot
 		FROM
 			lke_sub_sub_aspek AS a
-			ORDER BY a.nama_sub_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+			ORDER BY a.nama_sub_sub_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 	ELSE
 		SET ada = (SELECT id from lke_sub_sub_aspek WHERE id = idx LIMIT 1);
 		IF(ada IS NOT NULL)THEN
@@ -3735,7 +3917,7 @@ BEGIN
 			FROM
 				lke_sub_sub_aspek AS a
 				WHERE id = idx
-				ORDER BY a.nama_sub_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+				ORDER BY a.nama_sub_sub_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 		ELSE
 			SET ada = (SELECT id FROM lke_sub_aspek WHERE id = idx LIMIT 1);
 			IF (ada IS NOT NULL) THEN
@@ -3770,7 +3952,7 @@ BEGIN
 				FROM
 					lke_sub_sub_aspek AS a
 					WHERE a.id_sub_aspek = idx
-					ORDER BY a.nama_sub_sub_aspek ASC LIMIT lmtx OFFSET ofset;
+					ORDER BY a.nama_sub_sub_aspek, a.nums ASC LIMIT lmtx OFFSET ofset;
 			ELSE
 				SET res = 0;
 				SET msg = 'Data Tidak Ditemukan.';
@@ -3836,7 +4018,7 @@ BEGIN
 					INNER JOIN lke_bukti_dukung AS b ON a.id_bukti = b.id
 					INNER JOIN lke_indikator AS c ON b.id_indikator = c.id
 					WHERE a.userid = uidx AND c.id = idind
-					ORDER BY a.Create_at ASC LIMIT lmtx OFFSET ofset;
+					ORDER BY c.nums, b.nums ASC LIMIT lmtx OFFSET ofset;
 			END IF;
 		END IF;
 	ELSE
@@ -3877,7 +4059,7 @@ BEGIN
 						INNER JOIN lke_bukti_dukung AS b ON a.id_bukti = b.id
 						INNER JOIN lke_indikator AS c ON b.id_indikator = c.id
 						WHERE a.id = idx AND a.userid = uidx
-						ORDER BY a.Create_at ASC LIMIT lmtx OFFSET ofset;
+						ORDER BY c.nums, b.nums ASC LIMIT lmtx OFFSET ofset;
 			
 				END IF;
 			END IF;
