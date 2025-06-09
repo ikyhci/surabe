@@ -37,13 +37,10 @@ Additionally, make sure that the following extensions are enabled in your PHP:
  - Perbaikan View Urutan Berdasarkan Nomor Urut (Soal, User)
  - Perbaikan Backdrop Modal di View Data Upload Bukti Dukung (Soal)
  - Tambahan Filter Data Per Tahun (Soal)
-<<<<<<< HEAD
  - Tambahan Filter File Upload ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx'] (User)
  - Tambahan Stop Upload Bila Batas Waktu Sudah Lewat (User)
-=======
  - Tambahan Filter File Upload ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx'] (User) 
  - Perbaikan View Data Pertahun [Hanya Yang ada Data Yang Tampil] (User)
->>>>>>> remotes/origin/main
 
 
 ## What is CodeIgniter?
