@@ -300,6 +300,8 @@ class ApiUserControllers extends BaseController
                 $nama   = $this->request->getVar('jwbn');
                 $userid = $this->decoded->ids;//$this->decoded->userid
                 // $idjwb  = $this->request->getVar('jwbxid'): null;
+                // $valFile = [];
+                // $valFile2 = [];
 
                 $save = $this->db->query("CALL Jawaban_add_edit('".
                     $userid."','".
@@ -310,9 +312,36 @@ class ApiUserControllers extends BaseController
                 $getFl = $this->db->query("CALL View_File_For_Upload('".$indkt."','".$userid."',null,null)")->getResult();
 
                 foreach ($getFl as $key) {
+
+                    // $validationRule = [
+                    //     $key->id => [
+                    //         // 'label' => 'Image File',
+                    //         'rules' => [
+                    //             'uploaded['.$key->id.']',
+                    //             // 'is_image[userfile]',
+                    //             'ext_in['.$key->id.',jpg,jpeg,png,pdf,doc,docx,xls,xlsx]',
+                    //             'max_size['.$key->id.',100024]',
+                    //             // 'max_dims['.$key->id.',1024,768]',
+                    //         ],
+                    //     ],
+                    // ];
+
+                    // // if (!$this->validateData([], $validationRule)) {
+                    // //         // $data = ['errors' => $this->validator->getErrors()];
+
+                    // //         // return view('upload_form', $data);
+                    // //     $valFile[] = $key->id;
+                    // // }
+                    
                     if ($this->request->getFile($key->id) != null) {
+                        
+
+                        // $valFile2[] = $key->id;
+
                         if ($this->request->getFile($key->id)->isValid() && ! $this->request->getFile($key->id)->hasMoved()) {
+
                             $newName = $this->request->getFile($key->id)->getRandomName();
+                            // $valFile[] = $key->id;
                             $this->request->getFile($key->id)->move('uploadfile', $newName);
                             $savebukti = $this->db->query("CALL upload_bukti_add_edit('".
                                 $userid."','".
@@ -325,9 +354,11 @@ class ApiUserControllers extends BaseController
                 }
 
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  1,
-                        'msg'       =>  'Tambah Data Berhasil :'.$save->msg,
+                        'token_crs' => csrf_hash(),
+                        'success'   => 1,
+                        'msg'       => 'Tambah Data Berhasil :'.$save->msg,
+                        // 'filesx'    => $valFile,
+                        // 'filex2'    => $valFile2,
                     );
                 return $this->response->setJSON($data);
                 // 

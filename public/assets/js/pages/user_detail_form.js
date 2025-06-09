@@ -6,6 +6,7 @@ $(document).ready(function(){
     var token = document.getElementById('token').value;
     var csrf = document.getElementById('csrf_token');
     var form = document.getElementById('form').value
+    let validExt = ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx']
 	// Penilaian Mandiri Detail Form
 	//====================================
 
@@ -131,7 +132,6 @@ $(document).ready(function(){
             contentType: false,
             cache: false,
             success: function(data){
-            	// console.log(data)
                 
                 csrf.value = data.token_crs
               
@@ -178,6 +178,16 @@ $(document).ready(function(){
                 }
                 
                 $('#Detailparameter').modal('show');
+                $('input[type="file"]').change(function(){
+                    const fileName = $(this).val().split("\\").pop();
+                    var ext = fileName.split('.').pop();//this.files[0].type.split('.')[1]
+                    const idx = $(this).attr("id")
+                    if(validExt.indexOf(ext) == -1){
+                        
+                        document.getElementById(idx).value =''
+                        swal("Ops..", "File Yang Di Upload Tidak Sesuai ,\n Pastikan File Berformat [jpeg, jpg, png, pdf, docx, doc, xls, xlsx]", "error");
+                    }
+                })
             },
         })
 
