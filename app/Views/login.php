@@ -19,30 +19,36 @@
         <div class="row h-100">
             <div class="col-sm-5 col-12">
                 <div id="auth-left">
+                    
                     <div class="auth-logo">
                         <!-- <a href="/"><img src="assets/images/logo/logo.png" alt="Logo"></a> -->
-                        
+
+                            <img src="<?php echo base_url();?>/assets/images/surabe.png" class="logo-imgs" >
+
+                            <h2 class="text-white">S  I  S  T  E  M <br>PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK<br> BERINTEGRITAS DAN MANDIRI<br>(SURABE BERANI)</h2>
+                            <!-- <h4 class="text-white">Pemerintah Provinsi Sulawesi Tengah</h4> -->
                     </div>
-                    <h1 class="auth-title">Log in.</h1>
-
-                    <form id="login" method="POST" class="needs-validations login-form" novalidate>
-                        <div class="form-group position-relative has-icon-left mb-4">
-
-                            <input type="text" name="username" class="form-control form-control" placeholder="Username" required>
-                            <div class="form-control-icon">
-                                <i class="bi bi-person"></i>
+                    <div class="login-card">
+                        <h1 class="auth-title">Log in.</h1>
+                        <form id="login" method="POST" class="needs-validations login-form" novalidate>
+                            <div class="form-group position-relative has-icon-left mb-4">
+    
+                                <input type="text" name="username" class="form-control form-control" placeholder="Username" required>
+                                <div class="form-control-icon">
+                                    <i class="bi bi-person"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" name="password" class="form-control form-control" placeholder="Password" required>
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
+                            <div class="form-group position-relative has-icon-left mb-4">
+                                <input type="password" name="password" class="form-control form-control" placeholder="Password" required>
+                                <div class="form-control-icon">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
                             </div>
-                        </div>
-                        <!-- capcha -->
-                        <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
-                        <button type="submit" id="btnLogin"class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
-                    </form>
+                            <!-- capcha -->
+                            <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                            <button type="submit" id="btnLogin"class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">
