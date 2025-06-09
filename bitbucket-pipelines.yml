@@ -7,15 +7,13 @@ pipelines:
           name: Pull Kode Terbaru dari Git
           script:
             - echo "Pulling latest code..."
-            - ssh -o StrictHostKeyChecking=no -p 22131 aptika@103.148.29.68 << 'EOF'
-                sudo -u www-data git -C /var/www/html/pengukuran_spbe_opd pull
-EOF
+            - ssh -o StrictHostKeyChecking=no -p 22131 aptika@103.148.29.68 \
+              "sudo -u www-data git -C /var/www/html/pengukuran_spbe_opd pull"
 
       - step:
           name: Update Database
           script:
             - echo "Mengupdate database..."
-            - ssh -o StrictHostKeyChecking=no -p 22131 aptika@103.148.29.68 << 'EOF'
-                mysql -u "$DB_USER" -p"$DB_PASSWD" -e "DROP DATABASE IF EXISTS pengukuran_spbe_opd; CREATE DATABASE pengukuran_spbe_opd CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
-                mysql -u "$DB_USER" -p"$DB_PASSWD" pengukuran_spbe_opd < /var/www/html/pengukuran_spbe_opd/lke_pengukuran_irb.sql
-EOF
+            - ssh -o StrictHostKeyChecking=no -p 22131 aptika@103.148.29.68 \
+              "mysql -u $DB_USER -p$DB_PASSWD -e 'DROP DATABASE IF EXISTS pengukuran_spbe_opd; CREATE DATABASE pengukuran_spbe_opd CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;' && \
+               mysql -u $DB_USER -p$DB_PASSWD pengukuran_spbe_opd < /var/www/html/pengukuran_spbe_opd/lke_pengukuran_irb.sql"
