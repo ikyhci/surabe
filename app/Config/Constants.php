@@ -94,8 +94,8 @@ define('EVENT_PRIORITY_NORMAL', 100);
 define('EVENT_PRIORITY_HIGH', 10);
 
 // Dynamic Server 
-$server_name = !empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost';
-$port = !empty($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '';
-$base = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $server_name. $port . '/';
+// $server_name = !empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost';
+// $port = !empty($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '';
+// $base = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $server_name. $port . '/';
 
-defined('BASE') || define('BASE', $base);
+// defined('BASE') || define('BASE', $base);
