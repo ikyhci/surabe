@@ -1987,6 +1987,7 @@ $(document).ready(function(){
 	}
 
 	function LoadParameter(thnx){
+		let groupCounter = 0;
     var t = $('#tbl-parameter').DataTable({
 	    "dom": 'rtip',
 	    "scrollX": false,
@@ -2013,11 +2014,14 @@ $(document).ready(function(){
 					return data.dt;
 					},
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-          	},
+			// "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+      //           var index = iDisplayIndex +1;
+      //           $('td:eq(0)',nRow).html(index);
+      //           return nRow;
+      //     	},
+      drawCallback: function (settings) {
+          groupCounter = 0; // Reset counter each draw to keep numbering consistent
+        },
 			"columns":[
 				{"data": null, defaultContent: ''},	
 				{"data": "nama_parameter"},
@@ -2045,8 +2049,54 @@ $(document).ready(function(){
 			],
 					// order: [[2, 'asc']],
 			"rowGroup": {
-			    dataSrc: ['nama_form','nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek','indikator']
+			    dataSrc: ['nama_form','nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek','indikator'],
+			    startRender: function (rows, group, index) {
+			    	
+			    	if (index == 0) {
+			    		return $('<tr/>')
+              .addClass('dtrg-group dtrg-start dtrg-level-0')
+              .append('<th colspan="6" scope="row"> ' + group + '</th>');
+			    	}
+			    	if (index == 1) {
+			    		return $('<tr/>')
+              .addClass('dtrg-group dtrg-start dtrg-level-1')
+              .append('<th colspan="6" scope="row"> ' + group + ' </th>');
+			    	}
+			    	if (index == 2) {
+			    		return $('<tr/>')
+              .addClass('dtrg-group dtrg-start dtrg-level-2')
+              .append('<th colspan="6" scope="row">' + group + ' </th>');
+			    	}
+			    	if (index == 3) {
+			    		return $('<tr/>')
+              .addClass('dtrg-group dtrg-start dtrg-level-3')
+              .append('<th colspan="6" scope="row">' + group + ' </th>');
+			    	}
+			    	if (index == 4) {
+			    		return $('<tr/>')
+              .addClass('dtrg-group dtrg-start dtrg-level-4')
+              .append('<th colspan="6" scope="row">' + group + '</th>');
+			    	}
+
+			    	if (index == 5) {
+			    		groupCounter++;
+          		return $('<tr/>')
+              .addClass('dtrg-group dtrg-start dtrg-level-5')
+              .append('<th colspan="6" scope="row">' + groupCounter + '. ' + group + ' (Total Parameter : ' + rows.count() + ')</th>');
+			    	}
+          
+      	},
+      	endRender: function (rows, group, level) {
+      		// console.log(level)
+            if(level === 5) {
+              return $('<tr/>')
+                .addClass('dtrg-group dtrg-start dtrg-level-5')
+                .append('<th colspan="6" scope="row">End of ' + group + '</th>');
+            }
+            // return null; // No end row for level 0 or others
+          }
 			},
+			
 			// order: [[3, 'desc']]
 	    });
     }
