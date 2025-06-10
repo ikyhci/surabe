@@ -11,7 +11,12 @@ pipelines:
 
     update-db:
       - step:
+          name: backup Database
+          script:
+            - echo "Backing up database..."
+            - ssh -o StrictHostKeyChecking=no -p 22131 aptika@103.148.29.68 "mysqldump -u $DB_USER -p$DB_PASSWD surabe > /var/www/db_backup/surabe_$(date +%Y%m%d%H%M%S).sql"
+      - step:
           name: Update Database
           script:
             - echo "Mengupdate database..."
-            - ssh -o StrictHostKeyChecking=no -p 22131 aptika@103.148.29.68 "mysql -u $DB_USER -p$DB_PASSWD -e 'DROP DATABASE IF EXISTS pengukuran_spbe_opd; CREATE DATABASE pengukuran_spbe_opd CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;' && mysql -u $DB_USER -p$DB_PASSWD pengukuran_spbe_opd < /var/www/html/pengukuran_spbe_opd/lke_pengukuran_irb.sql"
+            - ssh -o StrictHostKeyChecking=no -p 22131 aptika@103.148.29.68 "mysql -u $DB_USER -p$DB_PASSWD -e 'DROP DATABASE IF EXISTS surabe; CREATE DATABASE surabe CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;' && mysql -u $DB_USER -p$DB_PASSWD surabe < /var/www/html/pengukuran_spbe_opd/lke_pengukuran_irb.sql"
