@@ -32,6 +32,11 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 
 ## Last Update
 
+ > [10-06-2025]
+
+ - Perubahan nomor Urut RowGroup (Soal)
+ - Fix Bug save Sub Sub Aspek
+
  > [09-06-2025]
  
  - Tambahan Nomor Urut Dari Rb Sanpai Parameter [Khusus Pilihan Ganda] (Soal)
