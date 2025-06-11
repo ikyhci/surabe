@@ -72,6 +72,7 @@ $routes->group('api', ['filter' => ['apiFilter:Soal,Super Admin', 'cors']], func
 	$routes->post('del-bukti-dukung', 'Api\ApiSoalControllers::delBuktiDukung');
 	$routes->post('del-rb', 'Api\ApiSoalControllers::delRb');
 	$routes->post('del-form', 'Api\ApiSoalControllers::delForm');
+	$routes->post('sts-form', 'Api\ApiSoalControllers::stsForm');
 
 	$routes->get('get-dashboard-data', 'Api\ApiSoalControllers::getDashboard');
 	$routes->get('get-tahun-form-data', 'Api\ApiSoalControllers::getTahun');
