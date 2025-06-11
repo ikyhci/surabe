@@ -530,7 +530,8 @@ $(document).ready(function(){
 	    let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data RB'
 	    inputs.innerHTML = '';
-	    inputs.innerHTML = editDataRB(idx,data[Object.keys(data)[5]],data[Object.keys(data)[6]]);
+	    inputs.innerHTML = editDataRB(idx,data[Object.keys(data)[9]],data[Object.keys(data)[6]], 
+	    	data[Object.keys(data)[8]]);
 	    // console.log(data[Object.keys(data)[1]])
 	    // console.log(data[Object.keys(data)[2]])
 	    // console.log(data[Object.keys(data)[3]])
@@ -555,8 +556,9 @@ $(document).ready(function(){
 	    inputs.innerHTML = '';
 	    inputs.innerHTML = editDataAspek(idr, idx,
 	  
-	    	data[Object.keys(data)[4]],
+	    	data[Object.keys(data)[11]],
 	    	data[Object.keys(data)[7]],
+	    	data[Object.keys(data)[10]]
 	    )
 	  	//  console.log(data[Object.keys(data)[1]])
 	    // console.log(data[Object.keys(data)[2]])
@@ -587,7 +589,10 @@ $(document).ready(function(){
 	    inputs.innerHTML = '';
 	    inputs.innerHTML = editDataSubAspek(ids, idx,
 	    	data[Object.keys(data)[8]],
-	    	data[Object.keys(data)[5]]
+	    	data[Object.keys(data)[12]],
+	    	data[Object.keys(data)[11]],
+	    	data[Object.keys(data)[13]],
+	    	// wktx
 	    )
 	    //  console.log(data[Object.keys(data)[1]])
 	    // console.log(data[Object.keys(data)[2]])
@@ -617,8 +622,9 @@ $(document).ready(function(){
 	    document.getElementById('title-input').innerHTML = 'Edit Data Sub Sub Aspek'
 	    inputs.innerHTML = '';
 	    inputs.innerHTML = editDataSubSubAspek(ids, idx,
-	    	data[Object.keys(data)[6]],
-	    	data[Object.keys(data)[11]]
+	    	data[Object.keys(data)[12]],
+	    	data[Object.keys(data)[11]],
+	    	data[Object.keys(data)[13]]
 	    )
 	    //  console.log(data[Object.keys(data)[1]])
 	    // console.log(data[Object.keys(data)[2]])
@@ -649,7 +655,8 @@ $(document).ready(function(){
 	    	document.getElementById('title-input').innerHTML = 'Edit Data Indikator'
 	    	inputs.innerHTML = '';
 	    	inputs.innerHTML = editDataIndikator(ids, idx,
-	    		data[Object.keys(data)[8]],
+	    		data[Object.keys(data)[24]],
+	    		data[Object.keys(data)[23]]
 	    		)
 	    // 	 console.log(data[Object.keys(data)[1]])
 	    // console.log(data[Object.keys(data)[2]])
@@ -664,6 +671,17 @@ $(document).ready(function(){
 	    // console.log(data[Object.keys(data)[11]])
 	    // console.log(data[Object.keys(data)[12]])
 	    // console.log(data[Object.keys(data)[13]])
+	    // console.log(data[Object.keys(data)[14]])
+	    // console.log(data[Object.keys(data)[15]])
+	    // console.log(data[Object.keys(data)[16]])
+	    // console.log(data[Object.keys(data)[17]])
+	    // console.log(data[Object.keys(data)[18]])
+	    // console.log(data[Object.keys(data)[19]])
+	    // console.log(data[Object.keys(data)[20]])
+	    // console.log(data[Object.keys(data)[21]])
+	    // console.log(data[Object.keys(data)[22]])
+	    // console.log(data[Object.keys(data)[23]])
+	    // console.log(data[Object.keys(data)[24]])
 	    	$('#view-data').modal('hide');
 	    	$('#add-data').modal('show');
 	    	loadJawaban()
@@ -681,7 +699,10 @@ $(document).ready(function(){
 	    let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data Bukti Dukung'
 	    inputs.innerHTML = '';
-	    inputs.innerHTML = editBuktiDukung(idx,ind,data[Object.keys(data)[5]]);
+	    inputs.innerHTML = editBuktiDukung(idx,ind,
+	    	data[Object.keys(data)[9]], 
+	    	data[Object.keys(data)[8]],
+	    	);
 
 	    //  console.log(data[Object.keys(data)[1]])
 	    // console.log(data[Object.keys(data)[2]])
@@ -696,6 +717,10 @@ $(document).ready(function(){
 	    // console.log(data[Object.keys(data)[11]])
 	    // console.log(data[Object.keys(data)[12]])
 	    // console.log(data[Object.keys(data)[13]])
+	    // console.log(data[Object.keys(data)[14]])
+	    // console.log(data[Object.keys(data)[15]])
+	    // console.log(data[Object.keys(data)[16]])
+	    // console.log(data[Object.keys(data)[17]])
 	    $('#view-data').modal('hide');
 	   	$('#add-data').modal('show');
 	})
@@ -709,7 +734,12 @@ $(document).ready(function(){
 	    let inputs = document.getElementById('content-input');
 	    document.getElementById('title-input').innerHTML = 'Edit Data Parameter'
 	    inputs.innerHTML = '';
-	    inputs.innerHTML = editDataparameter(ind, idx, data[Object.keys(data)[11]], data[Object.keys(data)[13]]);
+	    inputs.innerHTML = editDataparameter(ind, idx, 
+	    	data[Object.keys(data)[11]], 
+	    	data[Object.keys(data)[17]],
+	    	data[Object.keys(data)[18]]
+
+	    	);
 	    // console.log(data[Object.keys(data)[1]])
 	    // console.log(data[Object.keys(data)[2]])
 	    // console.log(data[Object.keys(data)[3]])
@@ -723,6 +753,17 @@ $(document).ready(function(){
 	    // console.log(data[Object.keys(data)[11]])
 	    // console.log(data[Object.keys(data)[12]])
 	    // console.log(data[Object.keys(data)[13]])
+	    // console.log(data[Object.keys(data)[14]])
+	    // console.log(data[Object.keys(data)[15]])
+	    // console.log(data[Object.keys(data)[16]])
+	    // console.log(data[Object.keys(data)[17]])
+	    // console.log(data[Object.keys(data)[18]])
+	    // console.log(data[Object.keys(data)[19]])
+	    // console.log(data[Object.keys(data)[20]])
+	    // console.log(data[Object.keys(data)[21]])
+	    // console.log(data[Object.keys(data)[22]])
+	    // console.log(data[Object.keys(data)[23]])
+	    // console.log(data[Object.keys(data)[24]])
 	    $('#view-data').modal('hide');
 	    $('#add-data').modal('show');
 	})
@@ -1342,12 +1383,17 @@ $(document).ready(function(){
         return inpx;
 	}
 
-	function editDataRB(idx, nmx, bbt){
+	function editDataRB(idx, nmx, bbt, nox){
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="1">'+
 	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+	    				// 
+                    '<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" value="'+nox+'" placeholder="Ext : I, II, III,..." required></div>'+
+                        	// 
 	    				'<div class="form-group">'+
-                        '<h6>Nama RB <span class="text-danger">*</span></h6>'+
+                 '<h6>Nama RB <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama RB" required></div>'+
                         '<div class="form-group">'+
                         '<h6>Bobot <span class="text-danger">*</span></h6>'+
@@ -1357,11 +1403,16 @@ $(document).ready(function(){
         return inpx;
 	}
 
-	function editDataAspek(idr, idx, nmx, bbt){
+	function editDataAspek(idr, idx, nmx, bbt, nox){
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="2">'+
 	    				'<input type="hidden" name="rb" value="'+idr+'" id="rb">'+
 	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    				'<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" value="'+nox+'" placeholder="Ext : A, B, C,..." required></div>'+
+                        	// 
 
 	    				'<div class="form-group">'+
                         '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
@@ -1374,45 +1425,69 @@ $(document).ready(function(){
         return inpx;
 	}
 
-	function editDataSubAspek(ids, idx, bbt, nmx ){
+	function editDataSubAspek(ids, idx, bbt, nmx, nox, btwkt ){
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="3">'+
 	    				'<input type="hidden" name="aspek" value="'+ids+'" id="aspek">'+
 	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+	    				'<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" value="'+nox+'" placeholder="Ext : 1, 2, 3,..." required></div>'+
+                        	// 
 
+              '<div class="form-group">'+
+                        '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama sub sub aspek" required>'+
+                    	'</div>'+
 	    				'<div class="form-group">'+
                         '<h6>Bobot <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="bobot" value="'+bbt+'" name="bobot" placeholder="Bobot" required></div>'+
-                    	'<div class="form-group">'+
-                        '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama sub sub aspek" required>'+
-                    	'</div></form>';
+                    	 '<div class="form-group">'+
+                        '<h6>Batas Waktu <span class="text-danger">*</span></h6>'+
+                        '<input type="datetime-local" class="form-control" id="wkt" name="wkt" value="'+btwkt+'" placeholder="Batas Waktu" required></div>'+
+
+
+                    	'</form>';
         return inpx;
 
 	}
 
-	function editDataSubSubAspek(ids, idx, nmx, bbt){
+	function editDataSubSubAspek(ids, idx, nmx, bbt, nox ){
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="4">'+
 	    				'<input type="hidden" name="subaspek" value="'+ids+'" id="subaspek">'+
 	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
 
 	    				'<div class="form-group">'+
-                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="bobot" value="'+bbt+'" name="bobot" placeholder="Bobot" required></div>'+
-                    	'<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" value="'+nox+'" placeholder="Ext : 1.1, 1.2, 1.3,..." required></div>'+
+                        	// 
+
+              '<div class="form-group">'+
                         '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" value="'+nmx+'" placeholder="Nama sub sub aspek" required>'+
-                    	'</div></form>';
+                    	'</div>'+
+
+	    				'<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" value="'+bbt+'" name="bobot" placeholder="Bobot" required></div>'+
+                    	
+
+                  '</form>';
         return inpx;
 
 	}
 
-	function editDataIndikator(ids, idx, nmx){
+	function editDataIndikator(ids, idx, nmx, nox){
 	    	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="5">'+
 	    				'<input type="hidden" name="subsubaspek" value="'+ids+'" id="subsubaspek">'+
 	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    				'<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" value="'+nox+'" placeholder="Ext : a), b), c),..." required></div>'+
+                        	// 
 
 	    				'<div class="form-group">'+
                         '<h6>Nama Indikator <span class="text-danger">*</span></h6>'+
@@ -1426,11 +1501,16 @@ $(document).ready(function(){
         return inpx;       
     }
 
-    function editBuktiDukung(ids, idx, nmx){
+    function editBuktiDukung(ids, idx, nmx, nox){
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    				'<input type="hidden" id="datainput" value="6">'+
 	    				'<input type="hidden" name="indkt" value="'+ids+'" id="indkt">'+
 	    				'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
+
+	    				'<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" value="'+nox+'" placeholder="Ext : 1, 2, 3,..." required></div>'+
+                        	// 
 	    				
     			'<div class="form-group">'+
                 '<h6>Nama Bukti Dukung <span class="text-danger">*</span></h6>'+
@@ -1441,13 +1521,17 @@ $(document).ready(function(){
 	}
 
 
-	function editDataparameter(ids, idx, nmx, prmt) {
+	function editDataparameter(ids, idx, nmx, prmt, nox) {
 	    var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate>'+
 	    		'<input type="hidden" id="datainput" value="7">'+
 	    		'<input type="hidden" name="indikator" value="'+ids+'" id="indikator">'+
 	    		'<input type="hidden" name="idx" value="'+idx+'" id="idx">'+
 
 	    		'<div class="alert alert-light">'+nmx+'.</div>'+
+	    		'<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" value="'+nox+'" placeholder="Ext : A, B, C,..." required></div>'+
+                        	// 
 	    			'<div class="form-group">'+
 	                '<h6>Nama Parameter<span class="text-danger">*</span></h6>'+
 	                '<textarea type="text" class="form-control" id="nama" name="nama" placeholder="Nama Parameter" required>'+prmt+'</textarea>'+
@@ -1484,7 +1568,7 @@ $(document).ready(function(){
                        '<table class="table mb-0" id="tbl-rb">'+
                            '<thead>'+
                                '<tr>'+
-                                   '<th>No</th>'+
+                                   '<th></th>'+
                                    '<th>Nama RB</th>'+
                                    '<th>Bobot</th>'+
                                    '<th>Aksi</th>'+
@@ -1500,7 +1584,7 @@ $(document).ready(function(){
                        '<table class="table mb-0" id="tbl-aspek">'+
                            '<thead>'+
                                '<tr>'+
-                                   '<th>No</th>'+
+                                   '<th></th>'+
                                    '<th>Aspek</th>'+
                                    '<th>Bobot</th>'+
                                    // '<th>Nama Form</th>'+
@@ -1522,9 +1606,10 @@ $(document).ready(function(){
                        '<table class="table mb-0" id="tbl-sub-aspek">'+
                            '<thead>'+
                                '<tr>'+
-                                   '<th>No</th>'+
+                                   '<th></th>'+
                                    '<th>Sub Aspek</th>'+
                                    '<th>Bobot</th>'+
+                                   '<th>Batas Waktu</th>'+
                                    '<th>Sub Sub Aspek</th>'+
                                    '<th>Aksi</th>'+
                                '</tr>'+
@@ -1539,7 +1624,7 @@ $(document).ready(function(){
                        '<table class="table mb-0" id="tbl-sub-sub-aspek">'+
                            '<thead>'+
                                '<tr>'+
-                                   '<th>No</th>'+
+                                   '<th></th>'+
                                    '<th>Sub Sub Aspek</th>'+
                                    '<th>Bobot</th>'+
                                    '<th>Indikator</th>'+
@@ -1556,7 +1641,7 @@ $(document).ready(function(){
                        '<table class="table mb-0" id="tbl-indikator">'+
                            '<thead>'+
                                '<tr>'+
-                                   '<th>No</th>'+
+                                   '<th></th>'+
                                    '<th>Indikator</th>'+
                                    '<th>Parameter</th>'+
                                    '<th>Bukti Dukung</th>'+
@@ -1574,7 +1659,7 @@ $(document).ready(function(){
                        '<table class="table mb-0" id="tbl-bukti-dukung">'+
                            '<thead>'+
                                '<tr>'+
-                                   '<th>No</th>'+
+                                   '<th></th>'+
                                    // '<th>Indikator</th>'+
                                    '<th>Bukti Dukung</th>'+
                                    '<th>Aksi</th>'+
@@ -1642,7 +1727,7 @@ $(document).ready(function(){
 			"columnDefs":[
 				{
 					"className": "dt-center",
-					"targets": [0,1,2,3,4,5,6]
+					"targets": [0,2,3,4,5,6]
 				}
 			],
 
@@ -1675,11 +1760,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-          	},
+			// "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+      //           var index = iDisplayIndex +1;
+      //           $('td:eq(0)',nRow).html(index);
+      //           return nRow;
+      //     	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama"},
@@ -1701,7 +1786,7 @@ $(document).ready(function(){
 			"columnDefs":[
 				{
 					"className": "dt-center",
-					"targets": [0,2,3]
+					"targets": [2,3]
 				}
 			],
 			"rowGroup": {
@@ -1737,11 +1822,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-          	},
+			// "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+      //           var index = iDisplayIndex +1;
+      //           $('td:eq(0)',nRow).html(index);
+      //           return nRow;
+      //     	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_aspek"},
@@ -1767,7 +1852,7 @@ $(document).ready(function(){
 			"columnDefs":[
 				{
 					"className": "dt-center",
-					"targets": [0,2,3,4]
+					"targets": [2,4]
 				}
 			],
 		});
@@ -1800,15 +1885,16 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-          	},
+			// "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+      //           var index = iDisplayIndex +1;
+      //           $('td:eq(0)',nRow).html(index);
+      //           return nRow;
+      //     	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_sub_aspek"},
 				{"data" : "bobot"},
+				{"data" : "batas_waktu"},
 				{"data" : "sub_sub_aspek"},
 				{
 					"render": function(data, type, JsonResultRow, meta) {
@@ -1825,7 +1911,13 @@ $(document).ready(function(){
 			],
 			"rowGroup": {
 			    dataSrc: ['rb','aspek']
-			}
+			},
+			"columnDefs":[
+				{
+					"className": "dt-center",
+					"targets": [2,3,5]
+				}
+			],
 		});
 	}
 
@@ -1855,11 +1947,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-          	},
+			// "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+      //           var index = iDisplayIndex +1;
+      //           $('td:eq(0)',nRow).html(index);
+      //           return nRow;
+      //     	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "nama_sub_sub_aspek"},
@@ -1881,7 +1973,13 @@ $(document).ready(function(){
 			],
 			"rowGroup": {
 			    dataSrc: ['rb','aspek','nama_sub_aspek']
-			}
+			},
+			"columnDefs":[
+				{
+					"className": "dt-center",
+					"targets": [2,4]
+				}
+			],
 		});
 	}
 
@@ -1908,14 +2006,15 @@ $(document).ready(function(){
 				"method": "GET",
 				"dataSrc": function(data){
 					csrf.value = data.token_crs
+					// console.log(data)
 					return data.dt;
 				},
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-          	},
+			// "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+      //           var index = iDisplayIndex +1;
+      //           $('td:eq(0)',nRow).html(index);
+      //           return nRow;
+      //     	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "indikator"},
@@ -1940,7 +2039,13 @@ $(document).ready(function(){
 			],
 			"rowGroup": {
 			    dataSrc: ['rb','aspek','nama_sub_aspek','nama_sub_sub_aspek']
-			}
+			},
+			"columnDefs":[
+				{
+					"className": "dt-center",
+					"targets": [4]
+				}
+			],
 		});
 
 		// t.ajax.reload();
@@ -1973,11 +2078,11 @@ $(document).ready(function(){
 					return data.dt;
 				},
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-          	},
+			// "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+      //           var index = iDisplayIndex +1;
+      //           $('td:eq(0)',nRow).html(index);
+      //           return nRow;
+      //     	},
 			"columns":[
 				{"data" : null, defaultContent: ''},
 				{"data" : "bukti_dukung"},
@@ -1996,17 +2101,23 @@ $(document).ready(function(){
 			],
 			"rowGroup": {
 			    dataSrc: ['indikator']
-			}
+			},
+			"columnDefs":[
+				{
+					"className": "dt-center",
+					"targets": [2]
+				}
+			],
 		});
 
 	}
 
 	function LoadParameter(thnx){
 
-		let groupCounters = [0, 0]; // Counters for each group level
-    const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-    const alPhabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r',
-    	's','t','u','v','w','x','y','z'];
+		// let groupCounters = [0, 0]; // Counters for each group level
+    // const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    // const alPhabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r',
+    // 	's','t','u','v','w','x','y','z'];
       
     var t = $('#tbl-parameter').DataTable({
 	    "dom": 'rtip',
