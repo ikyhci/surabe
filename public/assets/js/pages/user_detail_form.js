@@ -42,11 +42,11 @@ $(document).ready(function(){
                     return data.dt;
                 },
             },
-            "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                var index = iDisplayIndex +1;
-                $('td:eq(0)',nRow).html(index);
-                return nRow;
-            },
+            // "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+            //     var index = iDisplayIndex +1;
+            //     $('td:eq(0)',nRow).html(index);
+            //     return nRow;
+            // },
             "columns":[
                 {"data": null, defaultContent: ''},
                 {"data": "indikator"},

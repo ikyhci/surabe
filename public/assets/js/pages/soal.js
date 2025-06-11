@@ -1007,6 +1007,12 @@ $(document).ready(function(){
                             '</div>'+
                     '</div>'+
 
+                    // 
+                    '<div class="form-group">'+
+                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        	'<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Ext : I, II, III,..." required></div>'+
+                        	// 
+
                     '<div class="form-group">'+
                         '<h6>Nama RB <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama RB" required></div>'+
@@ -1015,9 +1021,7 @@ $(document).ready(function(){
                         '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
 
                         // tambahan
-                        '<div class="form-group">'+
-                        	'<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
-                        	'<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
+                        
 
                         '</form>';
         return inpx;
@@ -1031,6 +1035,14 @@ $(document).ready(function(){
                             '<select class=" form-select" name="rb" id="rb" required></select>'+
                         '</div></div>'+
 
+                        // 
+
+                        // tambahan
+                        '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Ext : A, B, C,..." required></div>'+
+                        
+
                     '<div class="form-group">'+
                         '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Aspek" required></div>'+
@@ -1038,10 +1050,6 @@ $(document).ready(function(){
                         '<h6>Bobot <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
 
-                        // tambahan
-                        '<div class="form-group">'+
-                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
                         
                         '</form>';
         return inpx;
@@ -1054,29 +1062,29 @@ $(document).ready(function(){
                         '<div class="input-group mb-3">'+
                             '<select class=" form-select" name="rb" id="rb" required></select>'+
                         '</div></div>'+
-
             		'<div class="col-md-12 mb-6">'+
                        '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
                         '<div class="input-group mb-3">'+
                             '<select class=" form-select" name="aspek" id="aspek" required></select>'+
                         '</div></div>'+
-                        '<div class="form-group">'+
-                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
+                        
+                        // // tambahan
+                '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Ext : 1, 2, 3,..." required></div>'+
+
+                        // 
                     '<div class="form-group">'+
                         '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama sub sub aspek" required>'+
                     '</div>'+
-
-                    // tambahan
+                    '<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+ 
 
                     '<div class="form-group">'+
                         '<h6>Batas Waktu <span class="text-danger">*</span></h6>'+
                         '<input type="datetime-local" class="form-control" id="wkt" name="wkt" placeholder="Batas Waktu" required></div>'+
-
-                    '<div class="form-group">'+
-                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
 
                     '</form>';
         return inpx;
@@ -1091,7 +1099,7 @@ $(document).ready(function(){
                         '</div></div>'+
 
             		'<div class="col-md-12 mb-6">'+
-                       '<h6>Nama Aspek <span class="text-danger">*</span></h6>'+
+                       '<h6>Nama Sub Aspek <span class="text-danger">*</span></h6>'+
                         '<div class="input-group mb-3">'+
                             '<select class=" form-select" name="aspek" id="aspek" required></select>'+
                         '</div></div>'+
@@ -1100,20 +1108,24 @@ $(document).ready(function(){
                         '<div class="input-group mb-3">'+
                             '<select class=" form-select" name="subaspek" id="subaspek" required></select>'+ 
                         '</div></div>'+
-                        '<div class="form-group">'+
-                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
-                    
+                        // tambahan
+                    '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Ext : 1.1, 1.2, 1.3,..." required></div>'+
+
+                // 
                     '<div class="form-group">'+
                         '<h6>Nama Sub Sub Aspek <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama sub sub aspek" required>'+
                     '</div>'+
 
-                    // tambahan
-                    '<div class="form-group">'+
-                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
+                        '<div class="form-group">'+
+                        '<h6>Bobot <span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="bobot" name="bobot" placeholder="Bobot" required></div>'+
+                    //
+              
 
+                    
                     '</form>';
         return inpx;
     }
@@ -1141,6 +1153,11 @@ $(document).ready(function(){
                         '<div class="input-group mb-3">'+
                             '<select class=" form-select" name="subsubaspek" id="subsubaspek" required></select>'+
                         '</div></div>'+
+                        // tambahan
+                    '<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Ext : a), b), c),..." required></div>'+
+                    //
                     '<div class="form-group">'+
                         '<h6>Nama Indikator <span class="text-danger">*</span></h6>'+
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Indikator" required>'+
@@ -1150,11 +1167,7 @@ $(document).ready(function(){
                         '<div class="input-group mb-3">'+
                             '<select class=" form-select" name="jjwb" id="jjwb" required></select>'+
                         '</div></div>'+
-                        // tambahan
-                    '<div class="form-group">'+
-                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
-
+                        
                         '</form>';
         return inpx;
     }
@@ -1163,15 +1176,17 @@ $(document).ready(function(){
     	var inpx = '<form method="POST" id="formdata" class="needs-validation" novalidate> <input type="hidden" value="6" id="datainput"><input type="hidden" value="'+idx+'" name="indkt" id="indkt"><h6>Indikator :</h6>'+
 
     		'<div class="alert alert-light">'+nmx+'.</div>'+
+    		/// Tambahan
+    		'<div class="form-group">'+
+                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
+                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Ext : 1, 2, 3,..." required></div>'+
+                        ///
     			'<div class="form-group">'+
                 '<h6>Nama Bukti Dukung <span class="text-danger">*</span></h6>'+
                 '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Bukti Dukung" required>'+
                '</div>'+
 
-               '<div class="form-group">'+
-                        '<h6>Nomor Urut<span class="text-danger">*</span></h6>'+
-                        '<input type="text" class="form-control" id="nourut" name="nourut" placeholder="Nomor Urut" required></div>'+
-
+               
 
                '</form>';
 
@@ -1281,17 +1296,17 @@ $(document).ready(function(){
                         '<input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Parameter" required>'+
                     '</div>'+
 
-                    '<div class="row d-none" id="pilihan-ganda">'+
+             '<div class="row d-none" id="pilihan-ganda">'+
 					    '<div class="col-sm-6">'+
 					        '<div class="form-group">'+
 					            '<label for="nourut">Nomor Urut</label>'+
-					            '<input type="text" name="nourut" id="nox1" class="form-control" placeholder="No Urut">'+
+					            '<input type="text" name="nourut" id="nox1" class="form-control" placeholder="Ext : A, B, C,...">'+
 					        '</div> '+ 
 					    '</div>'+
 					    '<div class="col-sm-6">'+
 					        '<div class="form-group">'+
 					            '<label for="nilai">Nilai</label>'+
-					            '<input type="text" name="nilai" id="nox2" class="form-control" placeholder="Nilai">'+
+					            '<input type="text" name="nilai" id="nox2" class="form-control" placeholder="Ext : 100, 65, 35, 0">'+
 					        '</div>'+  
 					    '</div>'+
 					'</div>'+
@@ -1987,9 +2002,16 @@ $(document).ready(function(){
 	}
 
 	function LoadParameter(thnx){
-		let groupCounter = 0;
+
+		let groupCounters = [0, 0]; // Counters for each group level
+    const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    const alPhabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r',
+    	's','t','u','v','w','x','y','z'];
+      
     var t = $('#tbl-parameter').DataTable({
 	    "dom": 'rtip',
+	    'iDisplayLength': 1000,
+	    // lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 	    "scrollX": false,
 			"processing": true,
 			"destroy": true,
@@ -2050,55 +2072,114 @@ $(document).ready(function(){
 					// order: [[2, 'asc']],
 			"rowGroup": {
 			    dataSrc: ['nama_form','nama_rb','nama_aspek','nama_sub_aspek','nama_sub_sub_aspek','indikator'],
-			    startRender: function (rows, group, index) {
-			    	
-			    	if (index == 0) {
-			    		return $('<tr/>')
-              .addClass('dtrg-group dtrg-start dtrg-level-0')
-              .append('<th colspan="6" scope="row"> ' + group + '</th>');
-			    	}
-			    	if (index == 1) {
-			    		return $('<tr/>')
-              .addClass('dtrg-group dtrg-start dtrg-level-1')
-              .append('<th colspan="6" scope="row"> ' + group + ' </th>');
-			    	}
-			    	if (index == 2) {
-			    		return $('<tr/>')
-              .addClass('dtrg-group dtrg-start dtrg-level-2')
-              .append('<th colspan="6" scope="row">' + group + ' </th>');
-			    	}
-			    	if (index == 3) {
-			    		return $('<tr/>')
-              .addClass('dtrg-group dtrg-start dtrg-level-3')
-              .append('<th colspan="6" scope="row">' + group + ' </th>');
-			    	}
-			    	if (index == 4) {
-			    		return $('<tr/>')
-              .addClass('dtrg-group dtrg-start dtrg-level-4')
-              .append('<th colspan="6" scope="row">' + group + '</th>');
-			    	}
+			    // startRender: function (rows, group, index) {
 
-			    	if (index == 5) {
-			    		groupCounter++;
-          		return $('<tr/>')
-              .addClass('dtrg-group dtrg-start dtrg-level-5')
-              .append('<th colspan="6" scope="row">' + groupCounter + '. ' + group + ' (Total Parameter : ' + rows.count() + ')</th>');
-			    	}
+			    // 	// setTimeout(function(){
+
+			    // 	// },100)
+
+			    // 	// Reset counters for levels deeper than current level
+          //   for (let i = index + 1; i < groupCounters.length; i++) {
+          //     groupCounters[i] = 0;
+          //   }
+
+          //   groupCounters[index]++;
+
+          //   let numbering = '';
+
+          //   switch (index) {
+          //     case 1:
+          //       numbering = romanNumerals[groupCounters[index] - 1] + '. ';
+                
+          //       break;
+          //     case 2:
+          //       numbering = String.fromCharCode(64 + groupCounters[index]) + '. '; // A, B, C...
+          //       // console.log(alPhabet[groupCounters[index] - 1]+'.')
+          //       // console.log(index)
+          //       // console.log(groupCounters)
+          //       // console.log(groupCounters[index])
+          //       break;
+          //     case 3:
+          //       numbering = groupCounters[index] + '. ';
+          //       break;
+          //     case 4:
+          //       numbering = groupCounters[3] + '.' + groupCounters[index] + '. ';
+          //       break;
+          //     // default:
+          //     //   numbering = groupCounters[level] + '. ';
+          //     //   break;
+          //   }
+
+			    // 	// for (let i = index; i < groupCounters.length; i++) {
+          //   //   groupCounters[i] = 0;
+          //   // }
+
+          //   // groupCounters[index]++;
+
+          //   // let numbering = '';
+
+          //   // for (let i = 0; i <= index; i++) {
+          //   //   if (groupCounters[i] > 0) {
+          //   //     numbering += groupCounters[i] + '.';
+          //   //   }
+          //   // }
+			    	
+			    // 	if (index == 0) {
+			    // 		return $('<tr/>')
+          //     .addClass('dtrg-group dtrg-start dtrg-level-0')
+          //     .append('<th colspan="6" scope="row"> '+ group + '</th>');
+			    // 	}
+			    // 	if (index == 1) {
+			    // 		return $('<tr/>')
+          //     .addClass('dtrg-group dtrg-start dtrg-level-1')
+          //     .append('<th colspan="6" scope="row"> '+ numbering  + group + ' </th>');
+			    // 	}
+			    // 	if (index == 2) {
+			    // 		return $('<tr/>')
+          //     .addClass('dtrg-group dtrg-start dtrg-level-2')
+          //     .append('<th colspan="6" scope="row">'+ numbering  + group + ' </th>');
+			    // 	}
+			    // 	if (index == 3) {
+			    // 		return $('<tr/>')
+          //     .addClass('dtrg-group dtrg-start dtrg-level-3')
+          //     .append('<th colspan="6" scope="row">'+ numbering  + group + ' </th>');
+			    // 	}
+			    // 	if (index == 4) {
+			    // 		return $('<tr/>')
+          //     .addClass('dtrg-group dtrg-start dtrg-level-4')
+          //     .append('<th colspan="6" scope="row">'+ numbering  + group + '</th>');
+			    // 	}
+
+			    // 	if (index == 5) {
+			    // 		groupCounter++;
+          // 		return $('<tr/>')
+          //     .addClass('dtrg-group dtrg-start dtrg-level-5')
+          //     .append('<th colspan="6" scope="row">' + alPhabet[groupCounters[index] - 1] + '). ' + group + ' (Total Parameter : ' + rows.count() + ')</th>');
+			    // 	}
+			    	// else{
+			    	// 		return $('<tr/>')
+            //   .addClass('dtrg-group dtrg-start dtrg-level-3')
+            //   .append('<th colspan="6" scope="row">'+ numbering  + group + ' </th>');
+			    	// }
           
-      	},
-      	endRender: function (rows, group, level) {
-      		// console.log(level)
-            if(level === 5) {
-              return $('<tr/>')
-                .addClass('dtrg-group dtrg-start dtrg-level-5')
-                .append('<th colspan="6" scope="row">End of ' + group + '</th>');
-            }
-            // return null; // No end row for level 0 or others
-          }
+      	// },
+      	// endRender: function (rows, group, level) {
+      	// 	// console.log(level)
+        //     if(level === 5) {
+        //       return $('<tr/>')
+        //         .addClass('dtrg-group dtrg-start dtrg-level-5')
+        //         .append('<th colspan="6" scope="row">End of ' + group + '</th>');
+        //     }
+        //     // return null; // No end row for level 0 or others
+        //   }
 			},
 			
 			// order: [[3, 'desc']]
 	    });
+			// setTimeout(function(){
+			// 	ReloadData(7)
+			// },100)
+
     }
 
     // Reload Data Datatable
