@@ -51,7 +51,7 @@
                     <!-- <th>Indikator</th> -->
                     <th>Parameter</th>
                     <th>Tahun</th>
-                    <th>Active</th>
+                    <!-- <th>Active</th> -->
                     <th>Dibuat</th>
                     <th>Aksi</th>
                   </tr>

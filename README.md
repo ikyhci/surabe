@@ -35,6 +35,8 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 
  - Fix Penomoran (Soal, User)
  - Fix Edit data Soal(Soal)
+ - Remove colom active di parameter
+ - Tambahan tombol Enable/Disable Di Tabel Form
 
 
  > [10-06-2025]

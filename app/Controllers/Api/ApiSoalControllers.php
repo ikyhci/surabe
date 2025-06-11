@@ -451,6 +451,49 @@ class ApiSoalControllers extends BaseController
             
         }
     } 
+
+    public function stsForm()
+    {
+        try {
+
+            if (!empty($this->decoded->aud)) {
+
+                $idx     = $this->request->getVar('idx');
+                $sts     = $this->request->getVar('stsx');
+                $userid = $this->decoded->ids;
+
+                $sts = $this->db->query("CALL Form_Enb_Dsb('".
+                    $userid."','".
+                    $idx."','".
+                    $sts."')")->getRow();
+                $data = array(
+                        'token_crs' =>  csrf_hash(),
+                        'success'   =>  $sts->res,
+                        'msg'       =>  $sts->msg,
+                    );
+                return $this->response->setJSON($data);
+
+
+            }else{
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error invalid token'
+                );
+                return $this->response->setJSON($data);
+            }
+
+
+        } catch (Exception $e) {
+            $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error in : '.$e,
+            );
+            return $this->response->setJSON($data);
+            
+        }
+    }
     
     public function delForm()
     {
@@ -783,6 +826,5 @@ class ApiSoalControllers extends BaseController
             
         }
     }
-
 
 }
