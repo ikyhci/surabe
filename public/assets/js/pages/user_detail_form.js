@@ -328,7 +328,7 @@ $(document).ready(function(){
 
         if (jwb.wktsubasp == 0 || jwb.wktsubasp == null) {
             //
-            if (jwb.tombol == 0) {
+            if (jwb.tombol == 0 || jwb.tombol == null) {
                 for (var i = 0; i < dkn.length; i++) {
                     upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
                   
@@ -424,9 +424,9 @@ $(document).ready(function(){
             str += '<li>'+data[i].nama_parameter+'</li>'
         }
 
-        if (jwb.wktsubasp == 0 || jwb.wktsubasp == null) {
+        if (jwb.wktsubasp == '0' || jwb.wktsubasp == null) {
             //
-            if (jwb.tombol == 0) {
+            if (jwb.tombol == 0|| jwb.tombol == null) {
                 for (var i = 0; i < dkn.length; i++) {
                     upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
                   
