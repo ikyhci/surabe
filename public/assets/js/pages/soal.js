@@ -687,7 +687,7 @@ $(document).ready(function(){
 	    	loadJawaban()
 	    	setTimeout(function(){
 	    		$('#jjwb').val(jwb).trigger('change')
-	    	},100)
+	    	},300)
 	})
 
 	$(document).on('click', '.bukti-edit', function(){
