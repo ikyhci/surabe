@@ -31,6 +31,10 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 
 
 ## Last Update
+ > [10-06-2025]
+
+ - Fix Penomoran
+
 
  > [10-06-2025]
 
