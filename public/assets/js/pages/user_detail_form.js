@@ -170,11 +170,11 @@ $(document).ready(function(){
                             '<span class="d-none d-sm-block">Close</span>'+
                         '</button>';
                 }
+                
 
-
-                document.getElementById('rb').innerHTML = ': '+data.dt.indk.rb 
-                document.getElementById('aspk').innerHTML = ': '+data.dt.indk.aspek
-                document.getElementById('indk').innerHTML = ': '+data.dt.indk.indikator
+                document.getElementById('rb').innerHTML = ': '+data.dt.indk.nmrb 
+                document.getElementById('aspk').innerHTML = ': '+data.dt.indk.nmaspek
+                document.getElementById('indk').innerHTML = ': '+data.dt.indk.nmindk
                 if (data.dt.indk.num == 1 ) {
                   // linear
                   loadLinear(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
@@ -235,7 +235,7 @@ $(document).ready(function(){
             if (jwb.tombol == 0 || jwb.tombol == null) {
                 for (var i = 0; i < dkn.length; i++) {
                     upl +='<li><div class="form-group"><label>'+
-                        dkn[i].bukti_dukung+'</label><input id="file'+i+
+                        dkn[i].nmbukti+'</label><input id="file'+i+
                         '" type="file" name="'+dkn[i].id+
                         '" class="form-control" ><small>Max file size 6 MB</small></div></li>'
                 }
@@ -246,7 +246,7 @@ $(document).ready(function(){
 
             }else{
                 for (var i = 0; i < dkn.length; i++) {
-                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                    upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
                 }
 
                 for (var i = 0; i < fls.length; i++) {
@@ -257,11 +257,11 @@ $(document).ready(function(){
             //
         }else{
             for (var i = 0; i < dkn.length; i++) {
-                upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
                   
             }
         }
@@ -330,21 +330,21 @@ $(document).ready(function(){
             //
             if (jwb.tombol == 0 || jwb.tombol == null) {
                 for (var i = 0; i < dkn.length; i++) {
-                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+                    upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
                   
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>';
                 }
 
             }else{
                 for (var i = 0; i < dkn.length; i++) {
-                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                    upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
                   
                 }
             }
@@ -352,11 +352,11 @@ $(document).ready(function(){
 
         }else{
             for (var i = 0; i < dkn.length; i++) {
-                upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
                   
             }
         }
@@ -428,32 +428,32 @@ $(document).ready(function(){
             //
             if (jwb.tombol == 0|| jwb.tombol == null) {
                 for (var i = 0; i < dkn.length; i++) {
-                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
+                    upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
                   
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>';
                 }
 
             }else{
                 for (var i = 0; i < dkn.length; i++) {
-                    upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                    upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
                   
                 }
             }
             //
         }else{
             for (var i = 0; i < dkn.length; i++) {
-                upl +='<li><div class="form-group"><label>'+dkn[i].bukti_dukung+'</label></div></li>'
+                upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
+                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
                   
             }
         }

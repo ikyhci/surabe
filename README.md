@@ -38,6 +38,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
  - Remove colom active di parameter
  - Tambahan tombol Enable/Disable Di Tabel Form
  - Fix bug Upload File Jawaban Yes No Dan Linear
+ - Fix Detail Indikator (User)
 
 
  > [10-06-2025]
