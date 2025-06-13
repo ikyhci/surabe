@@ -89,7 +89,7 @@ class AuthControllers extends BaseController
                     // '__Secure-Authorization',
                         '__LKE-Authorization',
                         $token,[
-                            'expires'=>time() +3600,
+                            'expires'=>time() +3600 * 6,
                             //'prefix' => '__Secure-',
                             // 'prefix' => '__LKE-',
                             'path'=>'/',
