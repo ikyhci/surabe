@@ -49,7 +49,10 @@ class ApiPenilaiControllers extends BaseController
         } else {
             $ids_aspek = null;
         }
-
+        if (empty($ids_aspek)) {
+            $ids_aspek = null;
+        }
+        
         $idaspek = $this->request->getVar('asp');
         $tahun = $this->request->getVar('thn');
         $penilaianModel = new PenilaianModel();

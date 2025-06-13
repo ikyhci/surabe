@@ -118,8 +118,15 @@
           <tr class="bg-light">
             <td class="text-center opd-index">${index + 1}</td>
             <td colspan="2" class="opd_name " data-opdid="${opd.id}">${opd.nama_opd}</td>
+            <td class="text-end">
+              <span class="badge bg-primary">${opd.detail.jumlah_kondisi} / ${opd.detail.jumlah_indikator}</span>
+            </td>
+            <td class="text-end">
+                      <a href="<?= base_url('dashboard/penilaian/detail-form?form=') ?>${opd.formid}" class="btn btn-sm icon btn-info"><i class="bi bi-pencil"></i></a>
+
+            </td>
           </tr>
-          <tr class="opd-detail d-none" data-opdid="${opd.id}">
+          <tr class="opd-details d-none" data-opdid="${opd.id}">
             <td></td>
             <td class="ml-4">
           Jumlah Indikator: ${opd.detail.jumlah_indikator} <br>

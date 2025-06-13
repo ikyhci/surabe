@@ -187,40 +187,59 @@ class PenilaianModel extends Model
 
     public function nestedData($id_asp, $id_opd = null, $ids_aspek = null)
     {
+        
         // $sql = "CALL View_Aspek('".$id_asp."', null, null)";
-        $aspek = $this->db->query("CALL View_Aspek('".$id_asp."', null, null)")->getRow();
-        if (!$aspek) {
+        if ($id_asp) {
+            $aspeks[] = $this->db->query("CALL View_Aspek('".$id_asp."', null, null)")->getRow();
+        } else {
+            $aspeks = $this->db->query("CALL View_Aspek(null, null, null)")->getResult();
+        }
+
+        if (!$aspeks) {
             return null;
         }
-        // dd([$aspek, $id_asp, $id_opd, 'sql' => $sql]);
-        if ($ids_aspek !== null) {
-            $aspek->subaspek = $this->db->table('lke_sub_aspek')->whereIn('id', $ids_aspek)->get()->getResult();
-        } else {
-            $aspek->subaspek = $this->db->table('lke_sub_aspek')->where('id_aspek', $aspek->id)->get()->getResult();
-        }
+        foreach ($aspeks as $aspek) {
 
-        foreach ($aspek->subaspek as $subaspek) {
-            $subaspek->subsubaspek = $this->db->table('lke_sub_sub_aspek')->where('id_sub_aspek', $subaspek->id)->get()->getResult();
-
-            foreach ($subaspek->subsubaspek as $subsubaspek) {
-                $subsubaspek->indikator = $this->db->table('lke_indikator')->where('id_sub_sub_aspek', $subsubaspek->id)->get()->getResult();
-                foreach ($subsubaspek->indikator as $indikator) {
-                    $indikator->jenis_jawaban = $this->db->table('lke_Jenis_Jawaban')->where('id', $indikator->jenis_jawaban)->get()->getRow();
-                    $indikator->parameter = $this->db->table('lke_parameter')->where('id_indikator', $indikator->id)->get()->getResult();
-                    $indikator->kondisiOpd = $this->getJawabanByOPD($id_opd, $indikator->id, $id_asp);
-                    $indikator->bukti_dukung = $this->db->table('lke_bukti_dukung')->where('id_indikator', $indikator->id)->get()->getResult();
-                    foreach($indikator->kondisiOpd as $s => $kondisi){
-                        $indikator->kondisiOpd[$s]['bukti'] = $this->getUploadBukti(null, $indikator->id, $id_opd);
+            if ( is_array($ids_aspek) ) {
+                $aspek->subaspek = $this->db->table('lke_sub_aspek')->whereIn('id_aspek', $ids_aspek)->orderBy('nums', 'ASC')->get()->getResult();
+            } elseif (is_string($ids_aspek)) {
+                $aspek->subaspek = $this->db->table('lke_sub_aspek')->where('id_aspek', $ids_aspek)->orderBy('nums', 'ASC')->get()->getResult();
+            } else {
+                if(is_array($aspek)){
+                    
+                    foreach ($aspek as $key => $_aspek) {
+                        $ids = $_aspek->id;
+                        $_aspek->subaspek = $this->db->table('lke_sub_aspek')->where('id_aspek', $ids)->orderBy('nums', 'ASC')->get()->getResult();
                     }
-
+                }
+                if (isset($aspek->id)) {
+                    $ids = $aspek->id;
+                    $aspek->subaspek = $this->db->table('lke_sub_aspek')->where('id_aspek', $ids)->orderBy('nums', 'ASC')->get()->getResult();
                 }
             }
-        }
-        if ($id_opd) {
-            $aspek->opd = $this->db->query("call View_Opd('$id_opd', null, null)")->getResult();
+            foreach ($aspek->subaspek as $subaspek) {
+                $subaspek->subsubaspek = $this->db->table('lke_sub_sub_aspek')->where('id_sub_aspek', $subaspek->id)->get()->getResult();
+    
+                foreach ($subaspek->subsubaspek as $subsubaspek) {
+                    $subsubaspek->indikator = $this->db->table('lke_indikator')->where('id_sub_sub_aspek', $subsubaspek->id)->get()->getResult();
+                    foreach ($subsubaspek->indikator as $indikator) {
+                        $indikator->jenis_jawaban = $this->db->table('lke_Jenis_Jawaban')->where('id', $indikator->jenis_jawaban)->get()->getRow();
+                        $indikator->parameter = $this->db->table('lke_parameter')->where('id_indikator', $indikator->id)->get()->getResult();
+                        $indikator->kondisiOpd = $this->getJawabanByOPD($id_opd, $indikator->id, $id_asp);
+                        $indikator->bukti_dukung = $this->db->table('lke_bukti_dukung')->where('id_indikator', $indikator->id)->get()->getResult();
+                        foreach($indikator->kondisiOpd as $s => $kondisi){
+                            $indikator->kondisiOpd[$s]['bukti'] = $this->getUploadBukti(null, $indikator->id, $id_opd);
+                        }
+    
+                    }
+                }
+            }
+            if ($id_opd) {
+                $aspek->opd = $this->db->query("call View_Opd('$id_opd', null, null)")->getResult();
+            }
         }
         
-        return $aspek;
+        return $aspeks;
     }
 
     public function indikatorAndJawabanOpd($id_ind, $id_opd) {

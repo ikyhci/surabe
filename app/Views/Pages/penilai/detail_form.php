@@ -41,11 +41,11 @@
           </tr>
           <tr>
             <td>Sub Aspek</td>
-            <td>: <?= $aspek->subaspek[0]->nama_sub_aspek; ?></td>
+            <td>: <= $aspek->subaspek[0]->nama_sub_aspek; ?></td>
           </tr> -->
           <tr>
             <td>OPD</td>
-            <td>: <?= $aspek->opd[0]->nama_opd ?></td>
+            <td>: <?= $opd->nama_opd ?></td>
           </tr>
         </tbody>
       </table>
@@ -54,60 +54,73 @@
     </div>
 
   </div>
+  <?php if(!empty($aspek)) : ?>
+    <?php foreach( $aspek->subaspek as $key => $domain ) : ?>
+      <div class="card shadow mb-4">
+        <div class="card-header bg-primary py-2">
+          <h4 class="card-title text-white"><?= $domain->nums .". ". $domain->nama_sub_aspek ?></h4>
+        </div>
+        <div class="card-body">
 
-  <?php foreach( $aspek->subaspek as $key => $domain ) : ?>
-  <div class="card shadow mb-4">
-    <div class="card-header bg-primary py-2">
-      <h4 class="card-title text-white"><?= $domain->nama_sub_aspek ?></h4>
-    </div>
-    <div class="card-body">
-
-    <table class="table table-sm" id="datatable">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Nama Indikator</th>
-              <th>Nilai</th>
-              <th>Aksi</th>
-            </tr>
-
-          </thead>
-          <tbody>
-            <?php $no = 1;
-            foreach ($domain->subsubaspek as $a => $ssa): ?>
-              <tr id="<?= $ssa->id; ?>" class="alert alert-secondary list-ssa">
-                <td><?= $no++; ?></td>
-                <td><?= $ssa->nama_sub_sub_aspek ?></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <?php foreach ($ssa->indikator as $ind) : ?>
-                <tr class="list-indikator  <?= $ssa->id; ?>  d-none">
-                  <td></td>
-                  <td><?= $ind->indikator; ?></td>
-                  <td><?= (!empty($ind->kondisiOpd))? $ind->kondisiOpd[0]['nilai'] : "" ?></td>
-                  <td>
-                    <?php if (!empty($ind->kondisiOpd)) : ?>
-                      <button class="btn btn-success btn-sm detail" data-ssa="<?= $ssa->nama_sub_sub_aspek ?>" data-idInd="<?= $ind->id ?>" data-dataOpd="<?= base64_encode(json_encode($ind)) ?>" data-idOpd="<?= $form['opdid'] ?>" data-bs-toggle="modal_" data-bs-target="#detail_indikator"><i class="bi bi-eye"></i></button>
-                    <?php else : ?>
-                      <button class="btn btn btn-secondary btn-sm detail" data-ssa="<?= $ssa->nama_sub_sub_aspek ?>" data-idInd="<?= $ind->id ?>" data-dataOpd="<?= base64_encode(json_encode($ind)) ?>" data-idOpd="<?= $form['opdid'] ?>" data-bs-toggle="modal_" data-bs-target="#detail_indikator"><i class="bi bi-eye"></i></button>
-                    <?php endif ?>
-
-                  </td>
+        <table class="table table-sm" id="datatable">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Nama Indikator</th>
+                  <th>Nilai</th>
+                  <th>Aksi</th>
                 </tr>
-              <?php endforeach; ?>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+
+              </thead>
+              <tbody>
+                <?php $no = 1;
+                foreach ($domain->subsubaspek as $a => $ssa): ?>
+                    <?php
+                      $jumlah_terisi = 0;
+                      foreach ($ssa->indikator as $ind) {
+                        if (!empty($ind->kondisiOpd)) {
+                        $jumlah_terisi++;
+                        }
+                      }
+                    ?>
+                  <tr id="<?= $ssa->id; ?>" class="alert alert-secondary list-ssa">
+                    <td><?= $no++; ?></td>
+                    <td><?= $ssa->nama_sub_sub_aspek ?></td>
+                    <td></td>
+                    <td class="text-end"> <?= $jumlah_terisi ?> / <?= count($ssa->indikator) ?> Indikator</td>
+                  </tr>
+                  <?php foreach ($ssa->indikator as $ind) : ?>
+                    <tr class="list-indikator  <?= $ssa->id; ?>  d-none">
+                      <td></td>
+                      <td><?= $ind->indikator; ?></td>
+                      <td><?= (!empty($ind->kondisiOpd))? $ind->kondisiOpd[0]['nilai'] : "" ?></td>
+                      <td>
+                        <?php if (!empty($ind->kondisiOpd)) : ?>
+                          <button class="btn btn-success btn-sm detail" data-ssa="<?= $ssa->nama_sub_sub_aspek ?>" data-idInd="<?= $ind->id ?>" data-dataOpd="<?= base64_encode(json_encode($ind)) ?>" data-idOpd="<?= $form['opdid'] ?>" data-bs-toggle="modal_" data-bs-target="#detail_indikator"><i class="bi bi-eye"></i></button>
+                        <?php else : ?>
+                          <!-- <button class="btn btn btn-secondary btn-sm detail" data-ssa="<?= $ssa->nama_sub_sub_aspek ?>" data-idInd="<?= $ind->id ?>" data-dataOpd="<?= base64_encode(json_encode($ind)) ?>" data-idOpd="<?= $form['opdid'] ?>" data-bs-toggle="modal_" data-bs-target="#detail_indikator"><i class="bi bi-eye"></i></button> -->
+                        <?php endif ?>
+
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <div class="alert alert-warning">
+      <strong>Perhatian!</strong> Tidak ada data yang ditemukan.
     </div>
-  </div>
-  <?php endforeach; ?>
+  <?php endif; ?>
 </div>
 
 <!-- modal -->
 
 <div class="modal fade text-left" id="detail_indikator" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel17" aria-hidden="true">
+  aria-labelledby="myModalLabel17" aria-hidden="true" insert>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
     role="document">
     <div class="modal-content">
@@ -134,13 +147,14 @@
             </tbody>
           </table>
         </div>
-        <h6 class="mt-3">Parameter</h6>
-        <div id="param"><ol></ol></div>
-        <h6 class="mt-3">Jawaban</h6>
+        <!-- <h6 class="mt-3">Parameter</h6>
+        <div id="param"><ol></ol></div> -->
+        <h6 class="mt-3">Kondisi</h6>
         <div id="jawab"><ol></ol></div>
         <h6 class="mt-3">Bukti Dukung</h6>
-        <div id="buduk" class="m-3" >
-          
+        <div class="m-3" >
+          <ol id="buduk" >
+          </ol>
         </div>
         <h6 class="mt-3">Point</h6>
         <div class="input-group">
@@ -270,10 +284,10 @@
           $('input[name="<?= csrf_token() ?>"]').val(xYz);
           $('#detail_indikator #ssa').text(': ' + ssa);
           $('#detail_indikator #indk').text(': ' + res.data.indikator);
-          $('#detail_indikator #param ol').html('');
-          res.data.parameter.forEach((p, i) => {
-            $('#detail_indikator #param ol').append("<li>"+ p.nama_parameter +"</li>");
-          });
+          // $('#detail_indikator #param ol').html('');
+          // res.data.parameter.forEach((p, i) => {
+          //   $('#detail_indikator #param ol').append("<li>"+ p.nama_parameter +"</li>");
+          // });
           
           $('input[name="point"]').val((res.data.kondisiOpd[0])? res.data.kondisiOpd[0].nilai : "");
           $('input[name="data"]').val(dataOpd);
@@ -285,6 +299,7 @@
               $('input[name="aprv"][value="no"]').prop('checked', true);
             }
           }
+          generateBuktiDukung(res.data);
           generateJawaban(res.data.jenis_jawaban.num, res.data);
           $('#detail_indikator').modal('show');
         }
@@ -296,7 +311,7 @@
         let parameter= data.parameter;
         let jawabContainer = document.getElementById("jawab");
         jawabContainer.innerHTML = ""; // Kosongkan dulu sebelum mengisi ulang
-        console.log(jenis_jawaban_num);
+        // console.log(jenis_jawaban_num);
         
         if (jenis_jawaban_num == 1) {
           // Jika jenis jawaban == 1, tampilkan input range
@@ -425,7 +440,7 @@
             let parameterId = inputJawaban.filter(':checked').val();
             let idx = parameter.findIndex(p => p.id == parameterId);
             pointInput.val(point[idx] !== undefined ? point[idx] : 0);
-            console.log(parameterId);
+            // console.log(parameterId);
             
             // switch (inputJawaban.filter(':checked').val()) {
             //   case 'A':
@@ -473,14 +488,12 @@
     }
 
     function generateBuktiDukung(data){
-      console.log(idOpd);
-      
       $('#buduk').html('');
       data.bukti_dukung.forEach((b, i) => {
         $('#buduk').append(`
-          <strong>${b.bukti_dukung}</strong>
-          <ul class="list-group" id="${b.id}">
-          </ul>
+            <li><strong>${b.bukti_dukung}</strong></li>
+            <ul class="list-group" id="${b.id}">
+            </ul>
           <br>
         `);
       });
@@ -533,6 +546,9 @@
     }
 
   })
+  $('#detail_indikator').on('shown.bs.modal', function () {
+    $(this).removeAttr('aria-hidden');
+  });
 </script>
 
 

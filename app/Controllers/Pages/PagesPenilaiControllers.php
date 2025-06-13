@@ -59,6 +59,9 @@ class PagesPenilaiControllers extends BaseController
         } catch (\Exception $e) {
             return redirect()->to('/dashboard/penilaian');
         }
+        $opd_id = $this->data['form']['opdid'];
+        $opd = $this->db->query("CALL View_Opd('".$opd_id."', null, null )")->getRow();
+        
         $penilaianModel = new PenilaianModel();
         $userInfo = $penilaianModel->UserInfo($this->data['ids']);
         if ($userInfo->acs == '2') {
@@ -68,10 +71,14 @@ class PagesPenilaiControllers extends BaseController
         } else {
             $ids_aspek = null;
         }
+        if (empty($ids_aspek)) {
+            $ids_aspek = null;
+        }
         // pd($ids_aspek);
         $lke_form = $this->db->table('lke_form')->where('tahun', $this->data['form']['tahun'])->get()->getRowArray();
         $this->data['form']['nama_form'] = $lke_form['nama'];
         $penilaianModel = new PenilaianModel();
+        
         $data = $penilaianModel->nestedData( $this->data['form']['idasp'], $this->data['form']['opdid'], $ids_aspek );
         // pd($data);
         $IDX = $this->data['form']['idasp'];
@@ -95,11 +102,12 @@ class PagesPenilaiControllers extends BaseController
         $this->data['msg']          = ($asp)? $asp->msg : null ;
         $this->data['idx']          = base64_encode($IDX)  ;
         $this->data['dt']           = ($asp)? $asp : null ;
-        $this->data['aspek']        = $data ;
+        $this->data['opd']          = $opd;
+        $this->data['aspek']        = $data[0] ;
         
         // $penilaianModel = new PenilaianModel();
         // $data = $penilaianModel->getDetailForm();
-        // pd($this->data);
+        // pd($this->data['aspek']);
         return view('/Pages/penilai/detail_form', $this->data);
     }
     
