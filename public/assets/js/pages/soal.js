@@ -6,17 +6,16 @@ $(document).ready(function(){
 	// var urlx = 'http://localhost:8080/';
 	var token = document.getElementById('token').value;
 	var csrf = document.getElementById('csrf_token')
+	var opt = document.getElementById("pilih-tahun");  
+  var pilih = new Choices(opt)
 
 	
-
+// LoadParameter()
 	// Pilih Tahun
 
 	loadTahun()
 
 	function loadTahun(){
-          
-        var opt = document.getElementById("pilih-tahun");  
-        var pilih = new Choices(opt)
         $.ajax({
             url: urlx+'/api/get-tahun-form-data',
             type: 'GET',
@@ -28,7 +27,7 @@ $(document).ready(function(){
             },
             dataType: 'JSON',
             success: function(res){
-            	LoadParameter()
+            	LoadParameter();
             	csrf.value = res.token_crs
 	            $.each(res.dt, function(index,item){
 	                if (index) {}
@@ -42,13 +41,10 @@ $(document).ready(function(){
         })
     }
 
-    $(document).change('#pilih-tahun', function(){
-      
-        var optionSelected = $(this).find("option:selected");
+    $(document).on('change', '#pilih-tahun', function(){
+    	var optionSelected = $(this).find("option:selected");
         var valueSelected  = optionSelected.val();
         LoadParameter(valueSelected);
-        // LoadDatatable(valueSelected); 
-        // console.log(valueSelected)
     })
 
 	// function add data 
@@ -157,7 +153,7 @@ $(document).ready(function(){
     			$('#rb').find('option').remove()
     			$('#rb').append('<option value="" selected disabled>Choose...</option>');
     			$('#rb').val("").trigger('change')
-    			for (var i = res.dt.length - 1; i >= 0; i--) {
+    			for (var i = 0;i< res.dt.length; i++) {
     				$("#rb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
     			}
     		},
@@ -165,7 +161,7 @@ $(document).ready(function(){
 		}
     })
     $(document).on('change','#rb', function(){
-    	var optionSelected = $(this).find("option:selected");
+    var optionSelected = $(this).find("option:selected");
 		var valueSelected  = optionSelected.val();
 		var textSelected   = optionSelected.text();
 		if (valueSelected != '') {
@@ -180,13 +176,13 @@ $(document).ready(function(){
 					idx : valueSelected
 				},
 				dataType: 'json',
-				success: function(res){	
-					
+				success: function(res){
 					csrf.value = res.token_crs	
+
 					$("#aspek").find('option').remove();
 					$("#aspek").append('<option value="" selected disabled>Choose...</option>');
 					$("#aspek").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length ; i++) {
 						$("#aspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_aspek + '</option>');
 					}
 				}
@@ -216,7 +212,7 @@ $(document).ready(function(){
 					$("#subaspek").find('option').remove();
 					$("#subaspek").append('<option value="" selected disabled>Choose...</option>');
 					$("#subaspek").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length; i++) {
 						$("#subaspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_sub_aspek + '</option>');
 					}
 				}
@@ -246,7 +242,7 @@ $(document).ready(function(){
 					$("#subsubaspek").find('option').remove();
 					$("#subsubaspek").append('<option value="" selected disabled>Choose...</option>');
 					$("#subsubaspek").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length;i++) {
 						$("#subsubaspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_sub_sub_aspek + '</option>');
 					}
 				}
@@ -275,7 +271,7 @@ $(document).ready(function(){
 					$("#indikator").find('option').remove();
 					$("#indikator").append('<option value="" selected disabled>Choose...</option>');
 					$("#indikator").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length; i++) {
 						$("#indikator").append('<option value=' + res.dt[i].id + '>' + res.dt[i].indikator + '</option>');
 					}
 				}
@@ -301,11 +297,19 @@ $(document).ready(function(){
 				type:'GET',
 				dataType: 'json',
 				success: function(res){
+					// console.log(res.dt[0].jenis_jawaban)
 					csrf.value = res.token_crs
-					if (res.jenis_jawaban = 'Pilihan Ganda') {
+					if (res.dt[0].jenis_jawaban == 'Pilihan Ganda') {
 						$('#pilihan-ganda').removeClass('d-none');
 						$('#nox1').attr('required', 'true');
-		            	$('#nox2').attr('required', 'true');
+		        $('#nox2').attr('required', 'true');
+		        document.getElementById('nmxnil').innerHTML = 'Nilai'
+
+					}else if (res.dt[0].jenis_jawaban == 'Skala Linear') {
+						$('#pilihan-ganda').removeClass('d-none');
+						document.getElementById('nmxnil').innerHTML = 'Nilai Max'
+						$('#nox1').attr('required', 'true');
+		        $('#nox2').attr('required', 'true');
 
 					}else{
 						$('#pilihan-ganda').addClass('d-none');
@@ -339,7 +343,8 @@ $(document).ready(function(){
     			$('#forms').find('option').remove()
     			$('#forms').append('<option value="" selected disabled>Choose...</option>');
     			$('#forms').val("").trigger('change')
-    			for (var i = res.dt.length - 1; i >= 0; i--) {
+    			
+    			for (var i = 0; i < res.dt.length; i++) {
     				$("#forms").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
     			}
     		}, 
@@ -360,10 +365,16 @@ $(document).ready(function(){
     		dataType: 'JSON',
     		success: function(res){
     			csrf.value = res.token_crs
+
+
     			$('#rb').find('option').remove()
     			$('#rb').append('<option value="" selected disabled>Choose...</option>');
     			$('#rb').val("").trigger('change')
-    			for (var i = res.dt.length - 1; i >= 0; i--) {
+
+    			
+
+    			
+    			for (var i = 0; i< res.dt.length; i++) {
     				$("#rb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
     			}
     		},
@@ -387,7 +398,7 @@ $(document).ready(function(){
 					$("#jjwb").find('option').remove();
 					$("#jjwb").append('<option value="" selected disabled>Choose...</option>');
 					$("#jjwb").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length; i++) {
 						$("#jjwb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].jenis_jawaban + '</option>');
 					}
 				}
@@ -1408,7 +1419,7 @@ $(document).ready(function(){
 					    '</div>'+
 					    '<div class="col-sm-6">'+
 					        '<div class="form-group">'+
-					            '<label for="nilai">Nilai</label>'+
+					            '<label for="nilai" id="nmxnil">Nilai</label>'+
 					            '<input type="text" name="nilai" id="nox2" class="form-control" placeholder="Ext : 100, 65, 35, 0">'+
 					        '</div>'+  
 					    '</div>'+
@@ -1737,9 +1748,10 @@ $(document).ready(function(){
 
 	function loadForm(){
 		var t = $('#tbl-form').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	     "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1816,9 +1828,10 @@ $(document).ready(function(){
 	function loadRB(){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-rb').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1878,9 +1891,10 @@ $(document).ready(function(){
 	function loadaspek() {
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-aspek').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1941,9 +1955,10 @@ $(document).ready(function(){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 
 		var t = $('#tbl-sub-aspek').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -2003,9 +2018,10 @@ $(document).ready(function(){
 	function loadsubsubaspek() {
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-sub-sub-aspek').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -2065,9 +2081,10 @@ $(document).ready(function(){
 	function loadindikator(){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-indikator').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -2133,9 +2150,10 @@ $(document).ready(function(){
 	function loadbuktidukung(idx){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-bukti-dukung').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -2192,16 +2210,10 @@ $(document).ready(function(){
 	}
 
 	function LoadParameter(thnx){
-
-		// let groupCounters = [0, 0]; // Counters for each group level
-    // const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-    // const alPhabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r',
-    // 	's','t','u','v','w','x','y','z'];
-      
     var t = $('#tbl-parameter').DataTable({
-	    "dom": 'rtip',
-	    'iDisplayLength': 1000,
-	    // lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+	    // "dom": 'rtip',
+	    // 'iDisplayLength': 1000,
+	    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 	    "scrollX": false,
 			"processing": true,
 			"destroy": true,
@@ -2378,7 +2390,7 @@ $(document).ready(function(){
 	//////////////////////////////////////////////////////////
 
 	function ReloadData(ket) {
-		console.log(ket)
+		// console.log(ket)
 		if (ket == 0) {
 			var t = $('#tbl-form').DataTable();
 		}

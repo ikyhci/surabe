@@ -9,11 +9,11 @@ $(document).ready(function(){
 	//====================================
 
 
-	$(document).change('#pilih-tahun', function(){
-      
-      	var optionSelected = $(this).find("option:selected");
-      	var valueSelected  = optionSelected.val();
-      	LoadDatatable(valueSelected); 
+	
+  $(document).on('change', '#pilih-tahun', function(){
+      var optionSelected = $(this).find("option:selected");
+        var valueSelected  = optionSelected.val();
+        LoadDatatable(valueSelected);
     })
 
     LoadDatatable(); 
@@ -26,7 +26,8 @@ $(document).ready(function(){
 
     function LoadDatatable(thn){
       	var t = $('#datatable').DataTable({
-        	"dom": 'rtip',
+        	// "dom": 'rtip',
+          lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
           	"scrollX": false,
           	"processing": true,
           	"destroy": true,

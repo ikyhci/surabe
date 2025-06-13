@@ -109,6 +109,7 @@ $routes->group('dashboard', ['filter' => ['roles:Super Admin', 'cors']], functio
 	$routes->get('user-management', 'Pages\PagesSuperAdminControllers::manageUsers');
 	$routes->get('user-management/(:segment)', 'Pages\PagesSuperAdminControllers::manageUsersDetail/$1');
 	$routes->get('opd-management', [PagesSuperAdminControllers::class, 'manageOpd']);
+	$routes->get('log-data','Pages\PagesSuperAdminControllers::manageLogs');
 });
 
 // Super Admin API Routes 
