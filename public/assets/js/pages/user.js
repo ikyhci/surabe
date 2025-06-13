@@ -40,14 +40,10 @@ $(document).ready(function(){
 
 
     LoadDatatable()
-
-	$(document).change('#pilih-tahun', function(){
-      
-        var optionSelected = $(this).find("option:selected");
+  $(document).on('change', '#pilih-tahun', function(){
+      var optionSelected = $(this).find("option:selected");
         var valueSelected  = optionSelected.val();
         LoadDatatable(valueSelected);
-        // LoadDatatable(valueSelected); 
-        // console.log(valueSelected)
     })
 
   function LoadDatatable(thnx){

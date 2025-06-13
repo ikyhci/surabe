@@ -18,7 +18,8 @@ $(document).ready(function(){
 	function LoadDatatable(){
            
         var t = $('#datatable').DataTable({
-            "dom": 'rtip',
+            // "dom": 'rtip',
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
             "scrollX": false,
             "processing": true,
             "language": {
@@ -170,7 +171,7 @@ $(document).ready(function(){
                             '<span class="d-none d-sm-block">Close</span>'+
                         '</button>';
                 }
-                
+
 
                 document.getElementById('rb').innerHTML = ': '+data.dt.indk.nmrb 
                 document.getElementById('aspk').innerHTML = ': '+data.dt.indk.nmaspek
@@ -307,6 +308,7 @@ $(document).ready(function(){
     // Linear Template
 
     function loadLinear(data,dkn,jwb, fls){
+
         var str = '<ol type="A">'
         // var plh = '';
         var upl = '';
@@ -372,7 +374,7 @@ $(document).ready(function(){
                     '<input type="hidden" name="idx" value="'+jwb.idjwbx+'">'+
                     '<div class="col-md-12 mb-6">'+
                         '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
-                        '<input type="range" class="form-range" name="jwbn" value="0" min="0" max="100" id="customRange2" required>'+
+                        '<input type="range" class="form-range" name="jwbn" value="0" min="0" max="'+jwb.nilaiprmt+'" id="customRange2" required>'+
                         '<small id="ranges">Value : 0</small>'+
                     '</div></div>'+
                     '<h6>Bukti Dukung : </h6>'+
