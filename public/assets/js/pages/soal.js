@@ -7,7 +7,7 @@ $(document).ready(function(){
 	var token = document.getElementById('token').value;
 	var csrf = document.getElementById('csrf_token')
 
-	LoadParameter()
+	
 
 	// Pilih Tahun
 
@@ -28,6 +28,7 @@ $(document).ready(function(){
             },
             dataType: 'JSON',
             success: function(res){
+            	LoadParameter()
             	csrf.value = res.token_crs
 	            $.each(res.dt, function(index,item){
 	                if (index) {}
@@ -2377,6 +2378,7 @@ $(document).ready(function(){
 	//////////////////////////////////////////////////////////
 
 	function ReloadData(ket) {
+		console.log(ket)
 		if (ket == 0) {
 			var t = $('#tbl-form').DataTable();
 		}
