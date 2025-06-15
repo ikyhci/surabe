@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title white" id="title-edit">
-                   Edit Data 
+                   Edit Data Profil
                 </h5>
                 
             </div>
@@ -19,15 +19,17 @@
                         </div>
                         <div class="form-group">
                             <h6>Nama Pengguna <span class="text-danger">*</span></h6>
-                            <input type="text" class="form-control" id="uname" name="uname" placeholder="Nama Pengguna" required>
+                            <input type="text" class="form-control" minlength="4"  maxlength="15" id="uname" name="uname" placeholder="Nama Pengguna" required>
+                            <small class="text-danger">Min 6 Karakter</small>
                         </div>
                         <div class="form-group">
                             <h6>Email <span class="text-danger">*</span></h6>
-                            <input type="text" class="form-control" id="umail" name="umail" placeholder="Email" required>
+                            <input type="email" class="form-control" id="umail" name="umail" placeholder="Email" required>
                         </div>
                         <div class="form-group">
                             <h6>No Hp<span class="text-danger">*</span></h6>
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="No Hp" required>
+                            <input type="text" class="form-control" minlength="8"  maxlength="12" id="phone" name="phone" placeholder="No Hp" required>
+                            <small class="text-danger">Min 8 Karakter</small>
                         </div>
                         <div class="form-group">
                             <h6>Password Baru<span class="text-danger">*</span></h6>

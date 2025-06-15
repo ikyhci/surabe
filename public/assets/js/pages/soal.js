@@ -6,17 +6,16 @@ $(document).ready(function(){
 	// var urlx = 'http://localhost:8080/';
 	var token = document.getElementById('token').value;
 	var csrf = document.getElementById('csrf_token')
+	var opt = document.getElementById("pilih-tahun");  
+  var pilih = new Choices(opt)
 
-	LoadParameter()
-
+	
+// LoadParameter()
 	// Pilih Tahun
 
 	loadTahun()
 
 	function loadTahun(){
-          
-        var opt = document.getElementById("pilih-tahun");  
-        var pilih = new Choices(opt)
         $.ajax({
             url: urlx+'/api/get-tahun-form-data',
             type: 'GET',
@@ -28,6 +27,7 @@ $(document).ready(function(){
             },
             dataType: 'JSON',
             success: function(res){
+            	LoadParameter();
             	csrf.value = res.token_crs
 	            $.each(res.dt, function(index,item){
 	                if (index) {}
@@ -41,13 +41,10 @@ $(document).ready(function(){
         })
     }
 
-    $(document).change('#pilih-tahun', function(){
-      
-        var optionSelected = $(this).find("option:selected");
+    $(document).on('change', '#pilih-tahun', function(){
+    	var optionSelected = $(this).find("option:selected");
         var valueSelected  = optionSelected.val();
         LoadParameter(valueSelected);
-        // LoadDatatable(valueSelected); 
-        // console.log(valueSelected)
     })
 
 	// function add data 
@@ -156,7 +153,7 @@ $(document).ready(function(){
     			$('#rb').find('option').remove()
     			$('#rb').append('<option value="" selected disabled>Choose...</option>');
     			$('#rb').val("").trigger('change')
-    			for (var i = res.dt.length - 1; i >= 0; i--) {
+    			for (var i = 0;i< res.dt.length; i++) {
     				$("#rb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
     			}
     		},
@@ -164,7 +161,7 @@ $(document).ready(function(){
 		}
     })
     $(document).on('change','#rb', function(){
-    	var optionSelected = $(this).find("option:selected");
+    var optionSelected = $(this).find("option:selected");
 		var valueSelected  = optionSelected.val();
 		var textSelected   = optionSelected.text();
 		if (valueSelected != '') {
@@ -179,13 +176,13 @@ $(document).ready(function(){
 					idx : valueSelected
 				},
 				dataType: 'json',
-				success: function(res){	
-					
+				success: function(res){
 					csrf.value = res.token_crs	
+
 					$("#aspek").find('option').remove();
 					$("#aspek").append('<option value="" selected disabled>Choose...</option>');
 					$("#aspek").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length ; i++) {
 						$("#aspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_aspek + '</option>');
 					}
 				}
@@ -215,7 +212,7 @@ $(document).ready(function(){
 					$("#subaspek").find('option').remove();
 					$("#subaspek").append('<option value="" selected disabled>Choose...</option>');
 					$("#subaspek").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length; i++) {
 						$("#subaspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_sub_aspek + '</option>');
 					}
 				}
@@ -245,7 +242,7 @@ $(document).ready(function(){
 					$("#subsubaspek").find('option').remove();
 					$("#subsubaspek").append('<option value="" selected disabled>Choose...</option>');
 					$("#subsubaspek").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length;i++) {
 						$("#subsubaspek").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama_sub_sub_aspek + '</option>');
 					}
 				}
@@ -274,7 +271,7 @@ $(document).ready(function(){
 					$("#indikator").find('option').remove();
 					$("#indikator").append('<option value="" selected disabled>Choose...</option>');
 					$("#indikator").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length; i++) {
 						$("#indikator").append('<option value=' + res.dt[i].id + '>' + res.dt[i].indikator + '</option>');
 					}
 				}
@@ -300,11 +297,19 @@ $(document).ready(function(){
 				type:'GET',
 				dataType: 'json',
 				success: function(res){
+					// console.log(res.dt[0].jenis_jawaban)
 					csrf.value = res.token_crs
-					if (res.jenis_jawaban = 'Pilihan Ganda') {
+					if (res.dt[0].jenis_jawaban == 'Pilihan Ganda') {
 						$('#pilihan-ganda').removeClass('d-none');
 						$('#nox1').attr('required', 'true');
-		            	$('#nox2').attr('required', 'true');
+		        $('#nox2').attr('required', 'true');
+		        document.getElementById('nmxnil').innerHTML = 'Nilai'
+
+					}else if (res.dt[0].jenis_jawaban == 'Skala Linear') {
+						$('#pilihan-ganda').removeClass('d-none');
+						document.getElementById('nmxnil').innerHTML = 'Nilai Max'
+						$('#nox1').attr('required', 'true');
+		        $('#nox2').attr('required', 'true');
 
 					}else{
 						$('#pilihan-ganda').addClass('d-none');
@@ -338,7 +343,8 @@ $(document).ready(function(){
     			$('#forms').find('option').remove()
     			$('#forms').append('<option value="" selected disabled>Choose...</option>');
     			$('#forms').val("").trigger('change')
-    			for (var i = res.dt.length - 1; i >= 0; i--) {
+    			
+    			for (var i = 0; i < res.dt.length; i++) {
     				$("#forms").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
     			}
     		}, 
@@ -359,10 +365,16 @@ $(document).ready(function(){
     		dataType: 'JSON',
     		success: function(res){
     			csrf.value = res.token_crs
+
+
     			$('#rb').find('option').remove()
     			$('#rb').append('<option value="" selected disabled>Choose...</option>');
     			$('#rb').val("").trigger('change')
-    			for (var i = res.dt.length - 1; i >= 0; i--) {
+
+    			
+
+    			
+    			for (var i = 0; i< res.dt.length; i++) {
     				$("#rb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
     			}
     		},
@@ -386,7 +398,7 @@ $(document).ready(function(){
 					$("#jjwb").find('option').remove();
 					$("#jjwb").append('<option value="" selected disabled>Choose...</option>');
 					$("#jjwb").val("").trigger('change')
-					for (var i = res.dt.length - 1; i >= 0; i--) {
+					for (var i = 0; i < res.dt.length; i++) {
 						$("#jjwb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].jenis_jawaban + '</option>');
 					}
 				}
@@ -520,6 +532,67 @@ $(document).ready(function(){
 
 	    $('#view-data').modal('hide');
 	    $('#add-data').modal('show');
+	})
+
+	//Enable / Disable Form
+	$(document).on('click', '.enb-form', function(){
+		var idx = $(this).data('id_form');
+		var stsx = $(this).data('sts_form');
+		var url = urlx+'/api/sts-form';
+		var txt = '';
+  	var fd = new FormData();
+  	fd.append('csrf_token', csrf.value)
+  	fd.append('idx', idx);
+  	
+  	if (stsx == 1) {
+  		txt = 'Disable Data Form !'
+  		fd.append('stsx', 0);
+  	}else{
+  		txt = 'Enable Data Form !'
+  		fd.append('stsx', 1);
+  	}
+  	swal({
+      title: "Konfirmasi",
+      text: txt,
+      type: "warning",
+      showCancelButton: true,
+      closeOnConfirm: false,
+      showLoaderOnConfirm: true,
+        },function(){
+          $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "JSON",
+                headers: {
+                  'Authorization': 'Bearer '+token
+                },
+                data:fd,
+                processData : false,
+                contentType: false,
+                cache: false,
+                success:function(data){
+                    	csrf.value = data.token_crs
+                    	setTimeout(function(){
+                      		if (data.success == 1) {
+                        		swal('success','Data Berhasil Di Update','success');
+                        		ReloadData(0)
+                        		setTimeout(function(){
+                        			ReloadData(7)
+                        		},300)
+                      		}else{
+                        		swal({
+                          			title:"Error",
+                          			text: data.msg,
+                          			type: "error"
+                        		});
+                      		}
+                    	},1000)
+                },
+          })
+
+    });
+
+
 	})
 
 	$(document).on('click', '.rb-edit', function() {
@@ -1346,7 +1419,7 @@ $(document).ready(function(){
 					    '</div>'+
 					    '<div class="col-sm-6">'+
 					        '<div class="form-group">'+
-					            '<label for="nilai">Nilai</label>'+
+					            '<label for="nilai" id="nmxnil">Nilai</label>'+
 					            '<input type="text" name="nilai" id="nox2" class="form-control" placeholder="Ext : 100, 65, 35, 0">'+
 					        '</div>'+  
 					    '</div>'+
@@ -1675,9 +1748,10 @@ $(document).ready(function(){
 
 	function loadForm(){
 		var t = $('#tbl-form').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	     "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1712,12 +1786,29 @@ $(document).ready(function(){
 				{"data" : "tahun"},
 				{
 					"render": function(data, type, JsonResultRow, meta) {
+
+						var enb ='';
+						if (JsonResultRow.active == 0) {
+							enb +="<button class='btn icon btn-outline-success enb-form' data-id_form='" + 
+							JsonResultRow.id + "' data-sts_form='"+JsonResultRow.active+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check2-circle' viewBox='0 0 16 16'>"+
+  						"<path d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0'/>"+
+  						"<path d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z'/>"+
+							"</svg></button>";
+
+						}else{
+							enb +="<button class='btn icon btn-outline-danger enb-form' data-id_form='" + 
+							JsonResultRow.id + "' data-sts_form='"+JsonResultRow.active+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-x-circle' viewBox='0 0 16 16'>"+
+  						"<path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16'/>"+
+  						"<path d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708'/>"+
+							"</svg></button>";
+						}
+
 						var btn = '';
 									
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
 									
 						"<button class='btn icon btn-outline-warning form-edit' data-id_form='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
-
+						enb+
 						"<button class='btn icon btn-outline-danger form-delete' data-id_form='" + JsonResultRow.id + "'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 						+"</div>"
 						return btn;
@@ -1737,9 +1828,10 @@ $(document).ready(function(){
 	function loadRB(){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-rb').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1799,9 +1891,10 @@ $(document).ready(function(){
 	function loadaspek() {
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-aspek').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1862,9 +1955,10 @@ $(document).ready(function(){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 
 		var t = $('#tbl-sub-aspek').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1924,9 +2018,10 @@ $(document).ready(function(){
 	function loadsubsubaspek() {
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-sub-sub-aspek').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -1986,9 +2081,10 @@ $(document).ready(function(){
 	function loadindikator(){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-indikator').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -2054,9 +2150,10 @@ $(document).ready(function(){
 	function loadbuktidukung(idx){
 		// var csrf = document.getElementById('<?= csrf_token() ?>').value
 		var t = $('#tbl-bukti-dukung').DataTable({
-			"dom": 'rtip',
+			// "dom": 'rtip',
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
-	        "scrollX": false,
+	    "scrollX": false,
 			"processing": true,
 			"language": {
 				"processing": "<i class='fas fa-sync-alt fa-spin'></i> Sedang Memuat Data",
@@ -2113,16 +2210,10 @@ $(document).ready(function(){
 	}
 
 	function LoadParameter(thnx){
-
-		// let groupCounters = [0, 0]; // Counters for each group level
-    // const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-    // const alPhabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r',
-    // 	's','t','u','v','w','x','y','z'];
-      
     var t = $('#tbl-parameter').DataTable({
-	    "dom": 'rtip',
-	    'iDisplayLength': 1000,
-	    // lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+	    // "dom": 'rtip',
+	    // 'iDisplayLength': 1000,
+	    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 	    "scrollX": false,
 			"processing": true,
 			"destroy": true,
@@ -2159,14 +2250,16 @@ $(document).ready(function(){
 				{"data": null, defaultContent: ''},	
 				{"data": "nama_parameter"},
 				{"data": "tahun"},
-				{"data": "active"},
+				// {"data": "active"},
 				{"data": "create_at"},
 				{
 					"render": function(data, type, JsonResultRow, meta) {
+						
 						var btn = '';	
 						btn +="<div class='btn-group mb-3 btn-group-sm'>"+
 							
 							"<button class='btn icon btn-outline-warning edit-parameter' data-indk='" + JsonResultRow.id_ind + "' data-ind='"+JsonResultRow.indikator+"' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'><path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/><path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z'/></svg></button>"+
+					
 							"<button class='btn icon btn-outline-danger hapus-parameter' data-indk='" + JsonResultRow.id_ind + "' data-prmt='"+JsonResultRow.id_parameter+"'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"
 
 							+"</div>"
@@ -2177,7 +2270,7 @@ $(document).ready(function(){
 			"columnDefs":[
 				{
 					"className": "dt-center",
-					"targets": [0,2,3,4,5]
+					"targets": [0,2,3,4]
 				}
 			],
 					// order: [[2, 'asc']],
@@ -2297,6 +2390,7 @@ $(document).ready(function(){
 	//////////////////////////////////////////////////////////
 
 	function ReloadData(ket) {
+		// console.log(ket)
 		if (ket == 0) {
 			var t = $('#tbl-form').DataTable();
 		}

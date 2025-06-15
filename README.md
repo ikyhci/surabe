@@ -31,10 +31,22 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 
 
 ## Last Update
+ > [13-06-2025]
+
+ - fix bug datatable reload (soal, user)
+ - fix bug no urut combobox(soal)
+ - add entry perpage
+ - fix bug skala linear(user)
+
+
  > [10-06-2025]
 
  - Fix Penomoran (Soal, User)
  - Fix Edit data Soal(Soal)
+ - Remove colom active di parameter
+ - Tambahan tombol Enable/Disable Di Tabel Form
+ - Fix bug Upload File Jawaban Yes No Dan Linear
+ - Fix Detail Indikator (User)
 
 
  > [10-06-2025]

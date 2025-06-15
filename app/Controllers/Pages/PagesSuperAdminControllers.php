@@ -68,4 +68,12 @@ class PagesSuperAdminControllers extends BaseController
         $this->data['sub_title'] = 'Master Data OPD';
         return view('Pages/superadmin/manage-opd', $this->data);
     }
+
+    public function manageLogs()
+    {
+        $this->data['first_part'] = 'log-data';
+        $this->data['title'] = 'Data Logs';
+        $this->data['sub_title'] = 'Master Data Log';
+        return view('Pages/superadmin/manage-logs', $this->data);
+    }
 }
