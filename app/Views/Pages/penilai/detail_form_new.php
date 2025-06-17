@@ -8,6 +8,24 @@
 <link {csp-style-nonce} rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.5.1/css/rowGroup.dataTables.css" />
 <link {csp-style-nonce} rel="stylesheet" href="<?php echo base_url(); ?>assets/vendors/sweetalert/sweetalert.css">
 
+<style>
+  .clickable {
+    cursor: pointer;
+  }
+  .tr-header-1 {
+    background-color:rgb(183, 221, 255); /* Light blue */
+    /* text-transform: uppercase; */
+    font-weight: bold;
+  }
+  .tr-header-2 {
+    background-color:rgb(204, 228, 191); /* Very light gray */
+  }
+  .tr-header-3 {
+    background-color: #fcfcf0; /* Soft yellow */
+  }
+
+</style>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -35,91 +53,78 @@
             <td>Nama Form</td>
             <td>: <?= $form['nama_form']; ?></td>
           </tr>
-          <!-- <tr>
-            <td>Aspek</td>
-            <td>: <?= $dt->nama_aspek; ?></td>
-          </tr>
-          <tr>
-            <td>Sub Aspek</td>
-            <td>: <= $aspek->subaspek[0]->nama_sub_aspek; ?></td>
-          </tr> -->
           <tr>
             <td>OPD</td>
-            <td>: <?= $opd->nama_opd ?></td>
+            <td>: <?= $aspek->opd[0]->nama_opd ?></td>
           </tr>
         </tbody>
       </table>
       <br>
-
     </div>
-
   </div>
-<?php $rb_nums=null; ?>
-  <?php foreach ($aspeks as $key => $aspek) : ?>
-    <section class="mb-5">
-      <?php if($rb_nums==null || $rb_nums != $aspek->rb_nums) : ?>
-        <h3 class=""><?=$aspek->rb_nums .". ". $aspek->rb_nama ?></h3>
-      <?php endif; ?>
-      <?php $rb_nums = $aspek->rb_nums; ?>
-      <?php if(!empty($aspek->subaspek)) : ?>
-        <h5 class="ps-3"><?=$aspek->nums .". ". $aspek->nama_aspek ?></h5>
-      <?php endif; ?>
-      <?php foreach ($aspek->subaspek as $key => $domain) : ?>
-        <div class="card shadow ml-5">
-          <div class="card-header bg-primary py-2">
-            <h5 class="card-title text-white"><?=$domain->nums .". ". $domain->nama_sub_aspek ?></h5>
-          </div>
-          <div class="card-body">
+  
 
-            <table class="table table-sm" id="datatable">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Nama Indikator</th>
-                  <th>Nilai</th>
-                  <th>Aksi</th>
+  <?php foreach ($forms->rb as $key => $rb) : ?>
+    <div class="card">
+      <div class="card-header header-sm">
+        <h5 class="card-title"><?=$rb->nums .". ". $rb->nama ?></h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="table table-hover" id="table<?= $rb->id ?>" style="min-width: 600px;">
+            <thead>
+              <tr>
+                <th scope="col" colspan="4">Indikator</th>
+                <th scope="col" width="10%">Point</th>
+                <th scope="col" width="10%">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($rb->aspek as $key => $aspek) :?>
+                <tr class="<?= $rb->id ?> list-aspek tr-header-1">
+                  <td colspan="6"><?=$aspek->nums .". ". $aspek->nama_aspek ?></td>
                 </tr>
-
-              </thead>
-              <tbody>
-                <?php $no = 1;
-                foreach ($domain->subsubaspek as $a => $ssa): ?>
-                  <?php
-                    $jumlah_terisi = 0;
-                    foreach ($ssa->indikator as $ind) {
-                      if (!empty($ind->kondisiOpd)) {
-                        $jumlah_terisi++;
-                      }
-                    }
-                  ?>
-                  <tr id="<?= $ssa->id; ?>" class="alert alert-secondary list-ssa">
-                    <td><?= $ssa->nums ?></td>
-                    <td><?= $ssa->nama_sub_sub_aspek ?></td>
+                <?php foreach ($aspek->sub_aspek as $sub_aspek) : ?>
+                  <tr class="<?= $aspek->id ?> list-sa tr-header-2">
+                    <td width="1%"></td>
+                    <td colspan="3"><?=$sub_aspek->nums .". ". $sub_aspek->nama_sub_aspek ?></td>
                     <td></td>
-                    <td class="text-end"> <?= $jumlah_terisi ?> / <?= count($ssa->indikator) ?> Indikator</td>
+                    <td></td>
                   </tr>
-                  <?php foreach ($ssa->indikator as $ind) : ?>
-                    <tr class="list-indikator  <?= $ssa->id; ?>  d-none">
+                  <?php foreach($sub_aspek->sub_sub_aspek as $key => $sub_sub_aspek): ?>
+                    <tr class="list-ssa <?= $sub_aspek->id ?> list-ssa tr-header-3">
+                      <td width="1%"></td>
+                      <td width="1%"></td>
+                      <td colspan="2"><?=$sub_sub_aspek->nums .". ". $sub_sub_aspek->nama_sub_sub_aspek ?></td>
                       <td></td>
-                      <td><?= $ind->nums .". ". $ind->indikator; ?></td>
-                      <td><?= (!empty($ind->kondisiOpd)) ? $ind->kondisiOpd[0]['nilai'] : "" ?></td>
                       <td>
-                        <?php if (!empty($ind->kondisiOpd)) : ?>
-                          <button class="btn btn-success btn-sm detail" data-ssa="<?= $ssa->nama_sub_sub_aspek ?>" data-idInd="<?= $ind->id ?>" data-dataOpd="<?= base64_encode(json_encode($ind)) ?>" data-idOpd="<?= $form['opdid'] ?>" data-bs-toggle="modal_" data-bs-target="#detail_indikator"><i class="bi bi-eye"></i></button>
-                        <?php else : ?>
-                          <!-- <button class="btn btn btn-secondary btn-sm detail" data-ssa="<?= $ssa->nama_sub_sub_aspek ?>" data-idInd="<?= $ind->id ?>" data-dataOpd="<?= base64_encode(json_encode($ind)) ?>" data-idOpd="<?= $form['opdid'] ?>" data-bs-toggle="modal_" data-bs-target="#detail_indikator"><i class="bi bi-eye"></i></button> -->
-                        <?php endif ?>
-
+                        <?php if(count($sub_sub_aspek->indikator) > 0) : ?>
+                        <i id="<?= $sub_sub_aspek->id ?>" class="bi bi-plus clickable"></i>
+                        <?php endif; ?>
                       </td>
                     </tr>
+                    <?php foreach($sub_sub_aspek->indikator as $key => $indikator): ?>
+                      <tr class="<?= $sub_sub_aspek->id ?> list-ind d-none">
+                        <td width="1%"></td>
+                        <td width="1%"></td>
+                        <td width="1%"></td>
+                        <td ><?= $indikator->nums .". ". $indikator->indikator ?> </td>
+                        <td></td>
+                        <td>
+                          <?php if (!empty($indikator->kondisiOpd)) : ?>
+                            <button class="btn btn-success btn-sm detail" data-ssa="<?= $sub_sub_aspek->nama_sub_sub_aspek ?>" data-idInd="<?= $indikator->id ?>" data-dataOpd="<?= base64_encode(json_encode($form['opdid'])) ?>" data-idOpd="<?= $form['opdid'] ?>" data-bs-toggle="modal_" data-bs-target="#detail_indikator"><i class="bi bi-eye"></i></button>
+                          <?php endif; ?>
+                        </td>
+                      </tr>
+                    <?php endforeach; ?>
                   <?php endforeach; ?>
                 <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
         </div>
-      <?php endforeach; ?>
-    </section>
+      </div>
+    </div>
   <?php endforeach; ?>
 </div>
 
@@ -215,7 +220,7 @@
   const wXy = "<?= ($token) ? $token : "" ?>";
   let xYz = "<?= csrf_hash() ?>";
   let idOpd = "<?= $form['opdid'] ?>";
-
+  let xpnd = [];
   $(document).ready(function() {
     $('#point').on('keyup', function() {
       let val = $(this).val();
@@ -290,6 +295,10 @@
         },
         success: function(res) {
           xYz = res.csrf_token
+          if(res.data.kondisiOpd.length == 0) {
+            alert('Data belum diisi, silahkan isi terlebih dahulu');
+            return;
+          }
           $('input[name="<?= csrf_token() ?>"]').val(xYz);
           $('#detail_indikator #ssa').text(': ' + ssa);
           $('#detail_indikator #indk').text(': ' + res.data.indikator);
@@ -314,13 +323,29 @@
       });
     });
 
+    $('.clickable').on('click', function() {
+      let id = $(this).attr('id');
+      $('.list-ind').addClass('d-none');
+      // $('.'+id).toggleClass('d-none');
+      $('.clickable').attr('class', 'bi bi-plus clickable');
+      if (xpnd[id]) {
+        $('.' + id).addClass('d-none');
+        // xpnd.forEach((item, index) => {
+        //   xpnd[index] = false;
+        // });
+        $(this).attr('class', 'bi bi-plus clickable');
+      } else {
+        $('.' + id).removeClass('d-none');
+        $(this).attr('class', 'bi bi-dash clickable');
+      }
+      xpnd[id] = !xpnd[id];
+    });
 
     function generateJawaban(jenis_jawaban_num, data) {
       let parameter = data.parameter;
       let jawabContainer = document.getElementById("jawab");
-      jawabContainer.innerHTML = ""; // Kosongkan dulu sebelum mengisi ulang
-      console.log(jenis_jawaban_num);
-
+      jawabContainer.innerHTML = ""; 
+      
       if (jenis_jawaban_num == 1) {
         // Jika jenis jawaban == 1, tampilkan input range
         let nilai = (data.kondisiOpd[0]) ? data.kondisiOpd[0].nilai : 0;

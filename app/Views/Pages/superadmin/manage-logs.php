@@ -26,8 +26,9 @@ log konten t
 <script {csp-script-nonce} type="text/javascript">
 
   $(document).ready(function() {
+    
+  });
 
-  
 
 
 </script>
