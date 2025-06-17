@@ -12,112 +12,112 @@
     <h3>Dashboard</h3>
 </div>
 <div class="page-content">
-	 <section class="row">
-                    <div class="col-12 col-lg-9">
+  <section class="row">
+    <div class="col-12 col-lg-9">
+        <div class="row">
+            <div class="col-6 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body px-3 py-4-5">
                         <div class="row">
-                            <div class="col-6 col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                 <div class="stats-icon blue">
-                                                    <i class="iconly-boldBookmark"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Aspek</h6>
-                                                <h6 class="font-extrabold mb-0" id="asp">0</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                 <div class="stats-icon blue">
-                                                    <i class="iconly-boldBookmark"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Sub Aspek</h6>
-                                                <h6 class="font-extrabold mb-0" id="sasp">0</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                 <div class="stats-icon blue">
-                                                    <i class="iconly-boldBookmark"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Sub Sub Aspek</h6>
-                                                <h6 class="font-extrabold mb-0" id="ssasp">0</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                 <div class="stats-icon blue">
-                                                    <i class="iconly-boldBookmark"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Indikator</h6>
-                                                <h6 class="font-extrabold mb-0" id="indk">0</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                 <div class="stats-icon blue">
-                                                    <i class="iconly-boldBookmark"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Parameter</h6>
-                                                <h6 class="font-extrabold mb-0" id="prmt">0</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="card-body px-3 py-4-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="stats-icon blue">
-                                                    <i class="iconly-boldBookmark"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Bukti Dukung</h6>
-                                                <h6 class="font-extrabold mb-0" id="bktdk">0</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-md-4">
+                             <div class="stats-icon blue">
+                                <i class="iconly-boldBookmark"></i>
                             </div>
                         </div>
+                        <div class="col-md-8">
+                            <h6 class="text-muted font-semibold">Aspek</h6>
+                            <h6 class="font-extrabold mb-0" id="asp">0</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-body px-3 py-4-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                         <div class="stats-icon blue">
+                            <i class="iconly-boldBookmark"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h6 class="text-muted font-semibold">Sub Aspek</h6>
+                        <h6 class="font-extrabold mb-0" id="sasp">0</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-4 col-md-6">
+        <div class="card">
+            <div class="card-body px-3 py-4-5">
+                <div class="row">
+                    <div class="col-md-4">
+                     <div class="stats-icon blue">
+                        <i class="iconly-boldBookmark"></i>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h6 class="text-muted font-semibold">Sub Sub Aspek</h6>
+                    <h6 class="font-extrabold mb-0" id="ssasp">0</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-6 col-lg-4 col-md-6">
+    <div class="card">
+        <div class="card-body px-3 py-4-5">
+            <div class="row">
+                <div class="col-md-4">
+                 <div class="stats-icon blue">
+                    <i class="iconly-boldBookmark"></i>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h6 class="text-muted font-semibold">Indikator</h6>
+                <h6 class="font-extrabold mb-0" id="indk">0</h6>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="col-6 col-lg-4 col-md-6">
+    <div class="card">
+        <div class="card-body px-3 py-4-5">
+            <div class="row">
+                <div class="col-md-4">
+                 <div class="stats-icon blue">
+                    <i class="iconly-boldBookmark"></i>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h6 class="text-muted font-semibold">Parameter</h6>
+                <h6 class="font-extrabold mb-0" id="prmt">0</h6>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="col-6 col-lg-4 col-md-6">
+    <div class="card">
+        <div class="card-body px-3 py-4-5">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stats-icon blue">
+                        <i class="iconly-boldBookmark"></i>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h6 class="text-muted font-semibold">Bukti Dukung</h6>
+                    <h6 class="font-extrabold mb-0" id="bktdk">0</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
                         <!-- <div class="row">
                             <div class="col-12">
                                 <div class="card">
@@ -159,14 +159,14 @@
                         
                     </div>
                 </section>
-</div>
+            </div>
 
 
-<?= $this->endSection() ?>
+            <?= $this->endSection() ?>
 
-<?= $this->section('script') ?>
+            <?= $this->section('script') ?>
 
-<?= $this->include('Pages/profil') ?>
+            <?= $this->include('Pages/profil') ?>
 <!-- Script -->
 <script {csp-script-nonce} src="<?php echo base_url();?>assets/vendors/sweetalert/sweetalert.min.js"></script>
 <script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/profil.js"></script>
@@ -183,7 +183,7 @@
                 type:'GET',
                 headers: {
                     'Authorization': 'Bearer '+token
-                 },
+                },
                 data:{
                     <?= csrf_token() ?>: csrf
                 },
