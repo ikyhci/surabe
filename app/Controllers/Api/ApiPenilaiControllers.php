@@ -53,15 +53,25 @@ class ApiPenilaiControllers extends BaseController
             $ids_aspek = null;
         }
         
-        $idaspek = $this->request->getVar('asp');
-        $tahun = $this->request->getVar('thn');
+        // $idaspek = $this->request->getVar('asp');
+        // $tahun = $this->request->getVar('thn');
+        $form_id = $this->request->getVar('form');
         $penilaianModel = new PenilaianModel();
-        $opd = $penilaianModel->getDataOpd($idaspek, $ids_aspek);
+        
+        $form = $penilaianModel->getForm($form_id);
+
+        if (!empty($form)) {
+            $form = $form;
+            $form->rb = $penilaianModel->getRbForm($form->id);
+        }
+
+        $opd = $penilaianModel->getDataOpd($form_id, $ids_aspek);
         $response = [
             'status' => 200,
             'message' => 'Data berhasil diambil',
             'data' => $opd,
-            'userInfo' => $userInfo
+            'userInfo' => $userInfo,
+            'form' => $form
         ];
         return $this->response->setJSON($response);
     }

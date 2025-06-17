@@ -1,8 +1,12 @@
 <?php
 
-function pd($data)
+function pd($data, $exit = true)
 {
     echo "<pre>";
     print_r($data);
-    die;
+    if ($exit) {
+        echo "</pre>";
+        die;
+    }
+    echo "</pre>";
 }

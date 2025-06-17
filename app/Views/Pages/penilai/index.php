@@ -26,13 +26,16 @@
             <option value="<= $val->id ?>"><= $val->nama_aspek . ', ' . $val->sub_aspek . ' Tahun ' . $val->tahun ?></option>
           <php endforeach; ?> -->
             <?php
-            $currentYear = date('Y');
-            for ($i = 0; $i < 5; $i++) {
-              $year = $currentYear - $i;
-              $selected = ($i == 0) ? 'selected' : '';
-              echo "<option value=\"$year\" $selected>$year</option>";
-            }
+            // $currentYear = date('Y');
+            // for ($i = 0; $i < 5; $i++) {
+            //   $year = $currentYear - $i;
+            //   $selected = ($i == 0) ? 'selected' : '';
+            //   echo "<option value=\"$year\" $selected>$year</option>";
+            // }
             ?>
+            <?php foreach ($form as $key => $val) : ?>
+              <option value="<?= $val->id ?>" <?= ($key == 0) ? 'selected' : '' ?>><?= $val->nama . ' Tahun ' . $val->tahun ?></option>
+            <?php endforeach; ?>
         </select>
       </div>
       <br>
@@ -79,7 +82,10 @@
 <script {csp-script-nonce} type="text/javascript">
   $(document).ready(function() {
     var token = document.getElementById('token').value;
-
+    const forms = JSON.parse('<?= json_encode($form) ?>');
+    console.log(forms);
+    console.log($('#aspek').val());
+    
     getOpd($('#aspek').val());
 
     $('#aspek').change(function() {
@@ -89,7 +95,6 @@
     });
 
     
-
     function getOpd(asp) {
       var crs = document.getElementById('<?= csrf_token() ?>').value
       if (!asp) {
@@ -106,7 +111,7 @@
       // }
       let tbody = '';
       $.ajax({
-        url: '<?= base_url('api/penilaian/data-opd?asp=') ?>' + asp,
+        url: '<?= base_url('api/penilaian/data-opd?form=') ?>' + asp,
         type: 'GET',
         headers: {
           'Authorization': 'Bearer <?= $token ?>'
@@ -122,7 +127,7 @@
               <span class="badge bg-primary">${opd.detail.jumlah_kondisi} / ${opd.detail.jumlah_indikator}</span>
             </td>
             <td class="text-end">
-                      <a href="<?= base_url('dashboard/penilaian/detail-form?form=') ?>${opd.formid}" class="btn btn-sm icon btn-info"><i class="bi bi-pencil"></i></a>
+                      <a href="<?= base_url('dashboard/penilaian/detail-form') ?>?form=${opd.formid}" class="btn btn-sm icon btn-info"><i class="bi bi-pencil"></i></a>
 
             </td>
           </tr>
@@ -131,14 +136,9 @@
             <td class="ml-4">
           Jumlah Indikator: ${opd.detail.jumlah_indikator} <br>
           Jumlah Evaluasi: ${opd.detail.jumlah_kondisi} <br>
-          <!--
-          <div class="progress progress-primary  mb-4">
-              <div class="progress-bar progress-bar-width " width="${progress}%" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          --!>
             </td>
             <td class="text-end">
-          <a href="<?= base_url('dashboard/penilaian/detail-form?form=') ?>${opd.formid}" class="btn icon btn-info"><i class="bi bi-pencil"></i></a>
+          <a href="<?= base_url('dashboard/penilaian/detail-form') ?>?form=${opd.formid}" class="btn icon btn-info"><i class="bi bi-pencil"></i></a>
             </td>
           </tr>
         `;

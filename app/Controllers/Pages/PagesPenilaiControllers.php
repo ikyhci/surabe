@@ -38,19 +38,17 @@ class PagesPenilaiControllers extends BaseController
     public function index()
     {
         $penilaianModel = new PenilaianModel();
-        $this->data['opd'] = $penilaianModel->getDataOpd(null);
-        $this->data['aspek'] = $penilaianModel->getAspek();
-        // $id_asp = $this->data['aspek'][0]->id;
-        // $this->data['all_data'] = $penilaianModel->nestedData($id_asp); 
-        // echo "<pre>";
-        // print_r($this->data['all_data']);
-        // die;
+        
+        $this->data['form'] = $penilaianModel->getForm();
+        
         return view('/Pages/penilai/index', $this->data);
     }
 
     public function detailForm()
     {
         $form = $this->request->getVar('form');
+        
+        // $form_id = $this->request->getVar('idform');
         try {
             $this->data['form'] = json_decode(base64_decode($form), true);
             if (empty($this->data['form'])) {
@@ -59,6 +57,7 @@ class PagesPenilaiControllers extends BaseController
         } catch (\Exception $e) {
             return redirect()->to('/dashboard/penilaian');
         }
+        
         $penilaianModel = new PenilaianModel();
         $userInfo = $penilaianModel->UserInfo($this->data['ids']);
         if ($userInfo->acs == '2') {
@@ -68,37 +67,26 @@ class PagesPenilaiControllers extends BaseController
         } else {
             $ids_aspek = null;
         }
-        // pd($ids_aspek);
+        
         $lke_form = $this->db->table('lke_form')->where('tahun', $this->data['form']['tahun'])->get()->getRowArray();
         $this->data['form']['nama_form'] = $lke_form['nama'];
         $penilaianModel = new PenilaianModel();
-        $data = $penilaianModel->nestedData( $this->data['form']['idasp'], $this->data['form']['opdid'], $ids_aspek );
+        $data = $penilaianModel->nestedData( $this->data['form']['idasp'], $this->data['form']['opdid'], $ids_aspek , $this->data['form']['idForm'] );
         // pd($data);
         $IDX = $this->data['form']['idasp'];
         $LIMIT = 1;
         $OFFSET =null;
-
+        $idopd = $this->data['form']['opdid']; 
         $asp = $this->db->query("CALL View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
-  
-        // $this->data = [
-        //     'usr'       => $this->decoded->rln,
-        //     'token_crs' => csrf_hash(),
-        //     'success'   => $asp->res,
-        //     'msg'       => $asp->msg,
-        //     'idx'       => base64_encode($IDX) ,
-        //     'dt'        => $asp,
-        //     'aspek'      => $data,
-        // ];
+        $this->data['opd']          = $this->db->query("CALL View_Opd('$idopd','null','null')") ->getRow();
         $this->data['usr']          = $this->decoded->rln;
         $this->data['token_crs']    = csrf_hash() ;
         $this->data['success']      = ($asp)? $asp->res : null ;
         $this->data['msg']          = ($asp)? $asp->msg : null ;
         $this->data['idx']          = base64_encode($IDX)  ;
         $this->data['dt']           = ($asp)? $asp : null ;
-        $this->data['aspek']        = $data ;
-        
-        // $penilaianModel = new PenilaianModel();
-        // $data = $penilaianModel->getDetailForm();
+        $this->data['aspeks']        = $data ;
+        $this->data['forms']        = $penilaianModel->getForm($this->data['form']['idForm']);
         // pd($this->data);
         return view('/Pages/penilai/detail_form', $this->data);
     }
