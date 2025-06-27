@@ -1,5 +1,5 @@
 $(document).ready(function(){
-````/* Global Variable */
+    /* Global Variable */
 	let httpProtocol = window.location.protocol;
 	let host = window.location.host;
 	let urlx = httpProtocol+'//'+host;
