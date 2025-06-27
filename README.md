@@ -2,10 +2,10 @@
 # -CodeIgniter v4.5.7-
 
 ## PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK BERINTEGRITAS DAN MANDIRI (SURABE BERANI)
- Aplikasi Pengukuran Reformasi Birokrasi Elektronik Berintegrasi dan Mandiri 
- Pemerintah Provinsi Sulawesi Tengah
+Aplikasi Pengukuran Reformasi Birokrasi Elektronik Berintegrasi dan Mandiri 
+Pemerintah Provinsi Sulawesi Tengah
 
- versi aplikasi 1.0.2(062025)
+versi aplikasi 1.0.2(062025)
 
 ## Server Requirements
 
@@ -17,11 +17,11 @@ PHP version 8.1 or higher is required, with the following extensions installed:
 
 > [!WARNING]
 
- - The end of life date for PHP 7.4 was November 28, 2022.
- - The end of life date for PHP 8.0 was November 26, 2023.
- - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
- - The end of life date for PHP 8.1 will be December 31, 2025.
- 
+- The end of life date for PHP 7.4 was November 28, 2022.
+- The end of life date for PHP 8.0 was November 26, 2023.
+- If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
+- The end of life date for PHP 8.1 will be December 31, 2025.
+
 
 Additionally, make sure that the following extensions are enabled in your PHP:
 
@@ -31,43 +31,54 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 
 
 ## Last Update
- > [13-06-2025]
 
- - fix bug datatable reload (soal, user)
- - fix bug no urut combobox(soal)
- - add entry perpage
- - fix bug skala linear(user)
+> [27-06-2025]
 
+- add Delete File Upload (User)
+- fix bug nama file upload (user)
 
- > [10-06-2025]
+> [16-06-2025]
 
- - Fix Penomoran (Soal, User)
- - Fix Edit data Soal(Soal)
- - Remove colom active di parameter
- - Tambahan tombol Enable/Disable Di Tabel Form
- - Fix bug Upload File Jawaban Yes No Dan Linear
- - Fix Detail Indikator (User)
+- add persentase (soal, user)
 
 
- > [10-06-2025]
+> [13-06-2025]
 
- - Perubahan nomor Urut RowGroup (Soal)
- - Fix Bug save Sub Sub Aspek
+- fix bug datatable reload (soal, user)
+- fix bug no urut combobox(soal)
+- add entry perpage
+- fix bug skala linear(user)
 
- > [09-06-2025]
- 
- - Tambahan Nomor Urut Dari Rb Sanpai Parameter [Khusus Pilihan Ganda] (Soal)
- - Tambahan Batas Waktu Sub Aspek (Soal, User)
- - Perbaikan View Urutan Berdasarkan Nomor Urut (Soal, User)
- - Perbaikan Backdrop Modal di View Data Upload Bukti Dukung (Soal)
- - Tambahan Filter Data Per Tahun (Soal)
- - Tambahan Filter File Upload ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx'] (User)
- - Tambahan Stop Upload Bila Batas Waktu Sudah Lewat (User) 
- - Perbaikan View Data Pertahun [Hanya Yang ada Data Yang Tampil] (User)
- - Login Page Responsive
- - CI/CD menggunakan Pipelines Bitbucket
- - menggunakan base url dari file .env (BASE_URL)
- - perbaikan CorsFilters.php
+
+> [10-06-2025]
+
+- Fix Penomoran (Soal, User)
+- Fix Edit data Soal(Soal)
+- Remove colom active di parameter
+- Tambahan tombol Enable/Disable Di Tabel Form
+- Fix bug Upload File Jawaban Yes No Dan Linear
+- Fix Detail Indikator (User)
+
+
+> [10-06-2025]
+
+- Perubahan nomor Urut RowGroup (Soal)
+- Fix Bug save Sub Sub Aspek
+
+> [09-06-2025]
+
+- Tambahan Nomor Urut Dari Rb Sanpai Parameter [Khusus Pilihan Ganda] (Soal)
+- Tambahan Batas Waktu Sub Aspek (Soal, User)
+- Perbaikan View Urutan Berdasarkan Nomor Urut (Soal, User)
+- Perbaikan Backdrop Modal di View Data Upload Bukti Dukung (Soal)
+- Tambahan Filter Data Per Tahun (Soal)
+- Tambahan Filter File Upload ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx'] (User)
+- Tambahan Stop Upload Bila Batas Waktu Sudah Lewat (User) 
+- Perbaikan View Data Pertahun [Hanya Yang ada Data Yang Tampil] (User)
+- Login Page Responsive
+- CI/CD menggunakan Pipelines Bitbucket
+- menggunakan base url dari file .env (BASE_URL)
+- perbaikan CorsFilters.php
 
 
 ## What is CodeIgniter?

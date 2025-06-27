@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	// Global Variable
+	/* Global Variable */
 	let httpProtocol = window.location.protocol;
     let host = window.location.host;
     let urlx = httpProtocol+'//'+host;
@@ -7,13 +7,18 @@ $(document).ready(function(){
     var csrf = document.getElementById('csrf_token');
     var form = document.getElementById('form').value
     let validExt = ['jpg', 'jpeg', 'png','pdf','docx','doc','xls','xlsx']
-	// Penilaian Mandiri Detail Form
-	//====================================
+
+	/* Penilaian Mandiri Detail Form
+	============================================================================
+    */
 
     LoadDatatable() 
 
-	// Load Data
-	//====================================
+	/* Load Data
+
+	============================================================================
+
+    */
 
     function LoadDatatable(){
 
@@ -45,8 +50,6 @@ $(document).ready(function(){
             "columns":[
                 {"data": null, defaultContent: ''},
                 {"data": "indikator"},
-
-
                 {
                     "render": function(data, type, JsonResultRow, meta) {
                         var btn = '';
@@ -99,8 +102,8 @@ $(document).ready(function(){
         t.ajax.reload(null, false);
     }
 
-    // Get Detail Indikator
-    //====================================
+    /* Get Detail Indikator
+    //==================================== */
 
     $(document).on('click', '.detail-indikator', function(){
         var idx = $(this).data('idx')
@@ -119,8 +122,6 @@ $(document).ready(function(){
             contentType: false,
             cache: false,
             success: function(data){
-                console.log(data)
-
                 csrf.value = data.token_crs
                 if(data.dt.indk.wktsubasp == 0 || data.dt.indk.wktsubasp == null){
                     if (data.dt.indk.tombol == null || data.dt.indk.tombol == 0) {
@@ -153,27 +154,27 @@ $(document).ready(function(){
                 }
 
 
-                document.getElementById('rb').innerHTML = ': '+data.dt.indk.nmrb 
-                document.getElementById('aspk').innerHTML = ': '+data.dt.indk.nmaspek
-                document.getElementById('indk').innerHTML = ': '+data.dt.indk.nmindk
+                document.getElementById('rb').innerHTML = data.dt.indk.nmrb 
+                document.getElementById('aspk').innerHTML = data.dt.indk.nmaspek
+                document.getElementById('indk').innerHTML = data.dt.indk.nmindk
                 if (data.dt.indk.num == 1 ) {
-                  // linear
-                  loadLinear(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
-              }
-              if (data.dt.indk.num == 2 ) {
-                  // yesno
-                  loadYesNo(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
-              }
-              if (data.dt.indk.num == 4 ) {
-                  //pilihan ganda
-                  loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
+                    /* linear */
+                    loadLinear(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
+                }
+                if (data.dt.indk.num == 2 ) {
+                    /* yesno */
+                    loadYesNo(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
+                }
+                if (data.dt.indk.num == 4 ) {
+                    /*pilihan ganda */
+                    loadPilihanGanda(data.dt.prmt, data.dt.btdk, data.dt.indk, data.dt.flx)
 
-              }
+                }
 
-              $('#Detailparameter').modal('show');
-              $('input[type="file"]').change(function(){
-                const fileName = $(this).val().split("\\").pop();
-                    var ext = fileName.split('.').pop();//this.files[0].type.split('.')[1]
+                $('#Detailparameter').modal('show');
+                $('input[type="file"]').change(function(){
+                    const fileName = $(this).val().split("\\").pop();
+                    var ext = fileName.split('.').pop();/*this.files[0].type.split('.')[1]*/
                     const idx = $(this).attr("id")
                     if(validExt.indexOf(ext) == -1){
 
@@ -181,18 +182,18 @@ $(document).ready(function(){
                         swal("Ops..", "File Yang Di Upload Tidak Sesuai ,\n Pastikan File Berformat [jpeg, jpg, png, pdf, docx, doc, xls, xlsx]", "error");
                     }
                 })
-          },
-      })
+            },
+        })
 
     })
 
-    // Load templates
-    //====================================
+    /* Load templates
+    ============================================================================
 
-    // Pilihan Ganda Template
+     Pilihan Ganda Template */
 
     function loadPilihanGanda(data, dkn, jwb, fls){
-        // console.log(jwb)
+        /* console.log(jwb) */
         var str = '<ol type="A">'
         var plh = '';
         var upl = '';
@@ -207,8 +208,17 @@ $(document).ready(function(){
         }
 
         for (var i = 0; i < data.length; i++) {
-            str += '<li>'+data[i].nama_parameter+'</li>'
-            plh += '<option value="'+data[i].id+'">'+String.fromCharCode(65+i)+'</option>'
+
+            str += '<div class="form-check">'+
+            '<input class="form-check-input jwbnx" type="radio" name="jwbn" value="'+data[i].id+'" id="jwbn'+i+'">'+
+            '<label class="form-check-label" for="radioDefault1">'+
+            data[i].nama_parameter +
+            '</label>'+
+            '</div>'
+
+            /* 
+             str += '<li>'+data[i].nama_parameter+'</li>'
+             plh += '<option value="'+data[i].id+'">'+String.fromCharCode(65+i)+'</option>' */
         }
 
         if (jwb.wktsubasp == 0 || jwb.wktsubasp == null) {
@@ -222,7 +232,11 @@ $(document).ready(function(){
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>';
+                    flx += '<li><div class="row"><div class="col-sm-11"><div class="form-group"><a href="'+
+                    urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+
+                    fls[i].bukti_dukung+'</a></div></div><div class="col-sm-1 align-self-center">'+
+                    "<button class='btn icon btn-outline-danger filesx-delete' data-filesx='" + fls[i].files + "' ><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"+
+                    '</div></div></li>';
                 }
 
             }else{
@@ -231,66 +245,63 @@ $(document).ready(function(){
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
-
+                    flx += '<li><div class="form-group"><a href="'+
+                    urlx+'/uploadfile/'+fls[i].files+
+                    '" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
                 }
             }
-            //
         }else{
             for (var i = 0; i < dkn.length; i++) {
                 upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
+                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
 
             }
         }
-
-
-
 
         str += '</ol>';
         str += '<form id="formdata" enctype="multipart/form-data">'+
         '<input type="hidden" name="indikator" value="'+data[0].id_indikator+'">'+
         '<input type="hidden" name="idx" value="'+jwb.idjwbx+'">'+
-        '<div class="col-md-12 mb-6">'+
+
+        /*'<div class="col-md-12 mb-6">'+
         '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
         '<select class=" form-select" name="jwbn" id="jwbn" required>'+
         '<option selected disabled value="">Choose...</option>'+ 
         plh+              
         '</select>'+
         '</div></div>'+
+        */
         '<h6>Bukti Dukung : </h6>'+
         '<div class="row">'+
         '<div class="col-sm-12"><ol>'+
         upl+
         '</ol></div>'+
         '</div>'+
-
         '</form>';
 
         flx += '</ol>';
 
-
-
         document.getElementById('content-form').innerHTML = str;
         document.getElementById('content-upload').innerHTML = flx;
         document.getElementById('content-info').innerHTML = ket;
-        $("#jwbn").val(jwb.jwbx).trigger('change')
+        $('input[name="jwbn"][value="'+jwb.jwbx+'"]').prop('checked', true);
 
         if (jwb.wktsubasp > 0 || jwb.tombol > 0 || jwb.tombol != null) {
-            var input =  document.getElementById('jwbn');
-            input.disabled = true;
+            /* var input =  document.getElementById('jwbn');
+             input.disabled = true; */
+            $('input[name="jwbn"]').prop('disabled', true);
         }
     }
 
-    // Linear Template
+    /* Linear Template */
 
     function loadLinear(data,dkn,jwb, fls){
 
         var str = '<ol type="A">'
-        // var plh = '';
+        /* var plh = ''; */
         var upl = '';
         var flx = '<ol type="*">';
         var ket = '';
@@ -304,12 +315,11 @@ $(document).ready(function(){
 
         for (var i = 0; i < data.length; i++) {
             str += '<li>'+data[i].nama_parameter+'</li>'
-            // plh += '<option value="'+String.fromCharCode(65+i)+'">'+String.fromCharCode(65+i)+'</option>'
+            /* plh += '<option value="'+String.fromCharCode(65+i)+'">'+String.fromCharCode(65+i)+'</option>' */
         }
 
 
         if (jwb.wktsubasp == 0 || jwb.wktsubasp == null) {
-            //
             if (jwb.tombol == 0 || jwb.tombol == null) {
                 for (var i = 0; i < dkn.length; i++) {
                     upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
@@ -317,7 +327,12 @@ $(document).ready(function(){
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>';
+                    /* flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'; */
+                    flx += '<li><div class="row"><div class="col-sm-11"><div class="form-group"><a href="'+
+                    urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+
+                    fls[i].bukti_dukung+'</a></div></div><div class="col-sm-1 align-self-center">'+
+                    "<button class='btn icon btn-outline-danger filesx-delete' data-filesx='" + fls[i].files + "' ><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"+
+                    '</div></div></li>';
                 }
 
             }else{
@@ -326,29 +341,20 @@ $(document).ready(function(){
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
 
                 }
             }
-            //
-
         }else{
             for (var i = 0; i < dkn.length; i++) {
                 upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
+                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
 
             }
         }
-
-        
-        
-
-
-
-
 
         str += '</ol>';
 
@@ -358,7 +364,7 @@ $(document).ready(function(){
         '<input type="hidden" id="typelinear" value="'+jwb.jenis_jawaban+'">'+
         '<div class="col-md-12 mb-6">'+
         '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
-        '<input type="range" class="form-range" name="jwbn" value="0" min="0" max="'+jwb.nilaiprmt+'" id="customRange2" required>'+
+        '<input type="range" class="form-range jwbnx" name="jwbn" value="0" min="0" max="'+jwb.nilaiprmt+'" id="customRange2" required>'+
         '<small id="ranges"></small>'+
         '</div></div>'+
         '<h6>Bukti Dukung : </h6>'+
@@ -367,14 +373,9 @@ $(document).ready(function(){
         upl+
         '</ol></div>'+
         '</div>'+
-
         '</form>';
 
-
-
         flx += '</ol>';
-
-
 
         document.getElementById('content-form').innerHTML = str;
         document.getElementById('content-upload').innerHTML = flx;
@@ -382,7 +383,7 @@ $(document).ready(function(){
 
         $('#customRange2').val(jwb.jwbx)
         var output = document.getElementById("ranges");
-        
+
         if (jwb.jenis_jawaban == "Persentase (%)") {
 
             $('#ranges').html = 'Value : 0 %'
@@ -392,16 +393,13 @@ $(document).ready(function(){
             $('#ranges').html = 'Value : 0'
             output.innerHTML = 'Value : '+jwb.jwbx
         }
-
-        
-
         if (jwb.wktsubasp > 0 || jwb.tombol > 0 || jwb.tombol != null) {
             var input =  document.getElementById('ranges');
             input.disabled = true;
         }
     }
 
-    // Yes No Template
+    /* Yes No Template */
 
     function loadYesNo(data,dkn,jwb, fls) {
         var str = '<ol type="*">'
@@ -422,7 +420,6 @@ $(document).ready(function(){
         }
 
         if (jwb.wktsubasp == '0' || jwb.wktsubasp == null) {
-            //
             if (jwb.tombol == 0|| jwb.tombol == null) {
                 for (var i = 0; i < dkn.length; i++) {
                     upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label><input id="file'+i+'" type="file" name="'+dkn[i].id+'" class="form-control" ><small>Max file size 6 MB</small></div></li>'
@@ -430,7 +427,12 @@ $(document).ready(function(){
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>';
+                    /* flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'; */
+                    flx += '<li><div class="row"><div class="col-sm-11"><div class="form-group"><a href="'+
+                    urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+
+                    fls[i].bukti_dukung+'</a></div></div><div class="col-sm-1 align-self-center">'+
+                    "<button class='btn icon btn-outline-danger filesx-delete' data-filesx='" + fls[i].files + "' ><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash3-fill' viewBox='0 0 16 16'><path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'/></svg></button>"+
+                    '</div></div></li>';
                 }
 
             }else{
@@ -439,18 +441,17 @@ $(document).ready(function(){
                 }
 
                 for (var i = 0; i < fls.length; i++) {
-                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
+                    flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
 
                 }
             }
-            //
         }else{
             for (var i = 0; i < dkn.length; i++) {
                 upl +='<li><div class="form-group"><label>'+dkn[i].nmbukti+'</label></div></li>'
             }
 
             for (var i = 0; i < fls.length; i++) {
-                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].nmbukti+'</a></div></li>'
+                flx += '<li><div class="form-group"><a href="'+urlx+'/uploadfile/'+fls[i].files+'" target="_blank">'+fls[i].bukti_dukung+'</a></div></li>'
 
             }
         }
@@ -463,10 +464,10 @@ $(document).ready(function(){
         '<div class="col-md-12 mb-6">'+
         '<div class="form-group"><h6>Jawaban <span class="text-danger">*</span></h6>'+
         '<div class="form-check">'+
-        '<input class="form-check-input" value="YA" type="radio" name="jwbn" id="jwb1" required>'+
+        '<input class="form-check-input jwbnx" value="YA" type="radio" name="jwbn" id="jwb1" required>'+
         '<label class="form-check-label" for="flexRadioDefault1">YA</label></div>'+
         '<div class="form-check">'+
-        '<input class="form-check-input" value="TIDAK" type="radio" name="jwbn" id="jwb2" required>'+
+        '<input class="form-check-input jwbnx" value="TIDAK" type="radio" name="jwbn" id="jwb2" required>'+
         '<label class="form-check-label" for="flexRadioDefault1">TIDAK</label></div>'+
         '</div></div>'+
         '<h6>Bukti Dukung : </h6>'+
@@ -498,17 +499,21 @@ $(document).ready(function(){
         }
     }
 
-
     function loadPersentase(){
 
     }
 
-    // On Change Value Range
+    /* End Template 
+    ============================================================================
+
+    */
+
+    /* On Change Value Range */
 
     $(document).on('change', '#customRange2',function(){
         var slider = document.getElementById("customRange2");
         var output = document.getElementById("ranges");
-        
+
 
         if (document.getElementById('typelinear').value == 'Persentase (%)') {
             output.innerHTML = 'Value : '+slider.value+' %'
@@ -521,17 +526,62 @@ $(document).ready(function(){
                 output.innerHTML = 'Value : '+this.value;
             }
         }
-
-        
     })
 
-    //  Save Data Mandiri
+    $(document).on('click' , '.filesx-delete', function(){
+        var flx = $(this).data('filesx')
+        swal({
+            title: "Konfirmasi",
+            text: 'Hapus Berkas!',
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+        }, function(){
+            $.ajax({
+                url: urlx+'/api/del-berkas',
+                type: "POST",
+                dataType: "JSON",
+                headers: {'Authorization': 'Bearer '+token},
+                data: {csrf_token: csrf.value, filesx: flx},
+                success:function(data){
+                    csrf.value = data.token_crs
+                    console.log(data)
+                    setTimeout(function(){
+                        if (data.success == 1) {
+                            swal({
+                                title:"success",
+                                text: 'Berkas Berhasil Di Hapus.',
+                                type: "success",
+                            }, function(){
+                                window.location.reload()
+                            });
+                            
+                        }else{
+                            swal({
+                                title:"Error",
+                                text: data.msg,
+                                type: "error"
+                            });
+                        }
+
+                    },1000)
+
+                }
+            })
+
+        })
+    })
+
+    /*  Save Data Mandiri */
 
     $(document).on('click' , '#savedata', function(){ 
         var fd = new FormData($('#formdata')[0]);
         var form = document.getElementById('formdata');
-        fd.append('csrf_token', csrf.value,);
-
+        fd.append('csrf_token', csrf.value);
+        if ($('.jwbnx:checked').val()) {
+            fd.append('jwbn', $('.jwbnx:checked').val())
+        }
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
@@ -541,43 +591,41 @@ $(document).ready(function(){
             event.stopPropagation();
             form.classList.add('was-validated');
             swal({
-             title: "Konfirmasi",
-             text: 'Simpan Jawaban!',
-             type: "info",
-             showCancelButton: true,
-             closeOnConfirm: false,
-             showLoaderOnConfirm: true,
-         }, function(){
-           $.ajax({
-            url: urlx+'/api/save-jawaban',
-            type: "POST",
-            dataType: "JSON",
-            headers: {
-              'Authorization': 'Bearer '+token
-          },
-          data: fd,
-          processData : false,
-          contentType: false,
-          cache: false,
-          success:function(data){
-              csrf.value = data.token_crs
-              setTimeout(function(){
-               if (data.success == 1) {
-                 swal('success','Data Berhasil Di Simpan','success');
-                 ReloadTable()
-                 $('#Detailparameter').modal('hide');
-             }else{
-                 swal({
-                   title:"Error",
-                   text: data.msg,
-                   type: "error"
-               });
-             }
+                title: "Konfirmasi",
+                text: 'Simpan Jawaban!',
+                type: "info",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+            }, function(){
+                $.ajax({
+                    url: urlx+'/api/save-jawaban',
+                    type: "POST",
+                    dataType: "JSON",
+                    headers: {'Authorization': 'Bearer '+token},
+                    data: fd,
+                    processData : false,
+                    contentType: false,
+                    cache: false,
+                    success:function(data){
+                        csrf.value = data.token_crs
+                        setTimeout(function(){
+                            if (data.success == 1) {
+                                swal('success','Data Berhasil Di Simpan','success');
+                                ReloadTable()
+                                $('#Detailparameter').modal('hide');
+                            }else{
+                                swal({
+                                    title:"Error",
+                                    text: data.msg,
+                                    type: "error"
+                                });
+                            }
 
-         },1000)
-          },
-      })
-       })
+                        },1000)
+                    },
+                })
+            })
         } 
     });
 
