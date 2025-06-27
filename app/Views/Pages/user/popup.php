@@ -12,22 +12,25 @@
                     <table class="table mb-0">
                         <tr>
                             <td>RB</td>
-                            <td id="rb">: </td>
+                            <td>:</td>
+                            <td id="rb"> </td>
                         </tr>
                         <tr>
                             <td>Aspek</td>
-                            <td id="aspk">: </td>
+                            <td>:</td>
+                            <td id="aspk"></td>
                         </tr>
                         <tr>
                             <td>Indikator</td>
-                            <td id="indk">: </td>
+                            <td>:</td>
+                            <td id="indk"> </td>
                         </tr>
                     </table>      
                 </div>
                 <h6>Parameter</h6>
-            	<div id="content-form">
+                <div id="content-form">
 
-            	</div>
+                </div>
                 <h6>File Yang Telah Di Upload</h6>
                 <div id="content-upload">
                     

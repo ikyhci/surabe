@@ -44,6 +44,7 @@ $routes->group('api', ['filter' => ['apiFilter:User', 'cors']], function ($route
 	$routes->get('get-indikator-penilaian', 'Api\ApiUserControllers::getSoalData');
 	$routes->post('get-detail-indikator', 'Api\ApiUserControllers::getDetailIndikator');
 	$routes->post('save-jawaban', 'Api\ApiUserControllers::saveJawaban');
+	$routes->post('del-berkas', 'Api\ApiUserControllers::delBerkas');
 });
 
 

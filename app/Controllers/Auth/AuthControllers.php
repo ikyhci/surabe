@@ -39,11 +39,11 @@ class AuthControllers extends BaseController
             $chek = $this->db->query("CALL User_Auth('".$unm."','".$psw."')")->getRow();
             if ($chek->res == 0 ) {
                 $data = array(
-                        'token'     =>  '',
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  0,
-                        'msg'       =>  $chek->msg
-                    );
+                    'token'     =>  '',
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  $chek->msg
+                );
 
                 return $this->response->setJSON($data); 
             }
@@ -52,7 +52,7 @@ class AuthControllers extends BaseController
                 if ($chek->actv == "TRUE") {
                     $key = getenv('TOKEN_SECRET');
                     $iat = time(); 
-                    $exp = $iat + 60 * 60 * 60;
+                    $exp = $iat + 60 * 60 * 60 * 6;
 
                     $payload = array(
                         "iss" => $chek->FullName,
@@ -89,7 +89,7 @@ class AuthControllers extends BaseController
                     // '__Secure-Authorization',
                         '__LKE-Authorization',
                         $token,[
-                            'expires'=>time() +3600 * 6,
+                            'expires'=>$exp,
                             //'prefix' => '__Secure-',
                             // 'prefix' => '__LKE-',
                             'path'=>'/',
@@ -112,21 +112,21 @@ class AuthControllers extends BaseController
                 }
             }else{
                 $data = array(
-                        'token'     =>  '',
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $chek->res,
-                        'msg'       =>  $chek->msg,
-                    );
+                    'token'     =>  '',
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $chek->res,
+                    'msg'       =>  $chek->msg,
+                );
                 return $this->response->setJSON($data);
             }
         }else{
             $data = array(
-                        'token'     =>  '',
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  0,
-                        'msg'       =>  'Validasi Input Gagal.  ',
-                    );
-                return $this->response->setJSON($data);
+                'token'     =>  '',
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'Validasi Input Gagal.  ',
+            );
+            return $this->response->setJSON($data);
         }
     }
 
@@ -136,7 +136,7 @@ class AuthControllers extends BaseController
         $token = null;
         $header = $request->getHeader("Authorization");
         $key = getenv('TOKEN_SECRET');
-         if(!empty($header)) {
+        if(!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
@@ -172,11 +172,11 @@ class AuthControllers extends BaseController
         delete_cookie('__LKE-Authorization');
         
         $data = array(
-                'token_crs' =>  csrf_hash(),
-                'success'   =>  1,
-                'msg'       =>  'success',
-                'redirec'   => base_url().'',
-                );
+            'token_crs' =>  csrf_hash(),
+            'success'   =>  1,
+            'msg'       =>  'success',
+            'redirec'   => base_url().'',
+        );
         return $this->response->setJSON($data);
         
         // return redirect()->to(base_url().'login');
