@@ -101,10 +101,10 @@ class ApiPenilaiControllers extends BaseController
         $keterangan = $parsedData['keterangan'];
         $aprv = isset($parsedData['aprv']) ? $parsedData['aprv'] : null;
         $jawaban = isset($parsedData['jawaban']) ? $parsedData['jawaban'] : null;
-
+        $nilai = isset($parsedData['nilai']) ? $parsedData['nilai'] : null;
         $id_jawaban = json_decode(base64_decode($data))->kondisiOpd[0]->id_jawaban;
         $penilaianModel = new PenilaianModel();
-        $update = $penilaianModel->updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban, $this->decoded->ids);
+        $update = $penilaianModel->updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban, $this->decoded->ids, $nilai);
         if ($update === false) {
             $response = [
                 'status' => 400,

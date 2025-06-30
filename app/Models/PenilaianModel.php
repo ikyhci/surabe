@@ -354,9 +354,12 @@ class PenilaianModel extends Model
         return $query->getResultArray();
     }
     
-    public function updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban, $ids = null)
+    public function updatePoint($id_jawaban, $point, $keterangan, $aprv, $jawaban, $ids = null, $nilai=null)
     {
-        $builder = $this->db->table('lke.lke_jawaban');
+
+        $this->db->transStart();
+
+        $builder = $this->db->table('lke_jawaban');
         $builder->where('id', $id_jawaban);
         $builder->update([
             'nilai' => $point, 
@@ -365,8 +368,35 @@ class PenilaianModel extends Model
             // 'Jawaban' => $jawaban
             'aproveby'  => $ids,
             'update_at' => date('Y-m-d H:i:s')
-
         ]);
+
+        $tbnilai = $this->db->table('lke_nilai_jawaban_user');
+        $adaNilai = $tbnilai->where('IdJawaban', $id_jawaban)->get()->getRow();
+        if($adaNilai) {
+            $tbnilai->where('id', $adaNilai->id)->update([
+            'Nilai' => $point,
+            'Aproved' => $aprv,
+            'Ket' => $keterangan,
+            'PenilaiId' => $ids,
+            'AproveBy' => $ids,
+            'update' => date('Y-m-d H:i:s')
+            ]);
+        } else {
+            $newId = bin2hex(random_bytes(20));
+            $tbnilai->insert([
+            'id'        => $newId,
+            'IdJawaban' => $id_jawaban,
+            'Nilai' => $nilai,
+            'Aproved' => $aprv,
+            'Ket' => $keterangan,
+            'PenilaiId' => $ids,
+            'AproveBy' => $ids,
+            'create_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+
+        $this->db->transComplete();
+
         return $this->db->affectedRows();
         // return true;
     }
