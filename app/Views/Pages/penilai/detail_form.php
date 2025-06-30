@@ -162,15 +162,26 @@
             <ol></ol>
           </div>
           <h6 class="mt-3">Bukti Dukung</h6>
-          <div id="buduk" class="m-3">
+          <div >
+            <ol id="buduk" class="m-3">
 
+            </ol>
           </div>
-          <h6 class="mt-3">Point</h6>
-          <div class="input-group">
-            <input type="hidden" name="data">
-            <input type="number" name="point" id="point" class="form-control w-25" value="" placeholder="Point" readonly>
-            <!-- <input type="range" min="0" max="100" class="form-control" id="rangeInput"> -->
-          </div>
+          <input type="hidden" name="data">
+
+  <div class="row" id="pointSection">
+    <div class="form-group col-6" id="pointContainer1">
+      <label for="point">Point Kondisi</label>
+      <input type="number" name="point" id="point" class="form-control" value="" placeholder="Point" readonly>
+    </div>
+    <div class="form-group col-6" id="pointContainer2">
+      <label for="pointNilai">Point Penilaian</label>
+      <input type="number" name="nilai" class="form-control" id="pointNilai" placeholder="Point Penilaian" list="pointNilaiList" min="0" max="100">
+      <datalist id="pointNilaiList">
+      </datalist>
+    </div>
+  </div>
+
           <h6 class="mt-3">Keterangan</h6>
           <textarea class="form-control" name="keterangan" id="keterangan" rows="3" placeholder="Masukkan keterangan"></textarea>
           <h6 class="mt-3">Persetujuan</h6>
@@ -309,6 +320,8 @@
             }
           }
           generateJawaban(res.data.jenis_jawaban.num, res.data);
+          generateBuktiDukung(res.data)
+
           $('#detail_indikator').modal('show');
         }
       });
@@ -316,14 +329,19 @@
 
 
     function generateJawaban(jenis_jawaban_num, data) {
+      let pointNilaiList = $("#pointNilaiList");
       let parameter = data.parameter;
       let jawabContainer = document.getElementById("jawab");
       jawabContainer.innerHTML = ""; // Kosongkan dulu sebelum mengisi ulang
-      console.log(jenis_jawaban_num);
+      // console.log(jenis_jawaban_num);
 
       if (jenis_jawaban_num == 1) {
+        pointNilaiList.empty();
         // Jika jenis jawaban == 1, tampilkan input range
         let nilai = (data.kondisiOpd[0]) ? data.kondisiOpd[0].nilai : 0;
+        
+        let nilai_linier = (data.kondisiOpd[0]) ? data.kondisiOpd[0].Jawaban : 0;
+        
         let inputGroup = document.createElement("div");
         inputGroup.setAttribute("class", "input-group input-group-sm mb-3");
 
@@ -333,7 +351,7 @@
         inputNumber.setAttribute("min", "0");
         inputNumber.setAttribute("max", "100");
         inputNumber.setAttribute("step", "1");
-        inputNumber.setAttribute("value", nilai + " %");
+        inputNumber.setAttribute("value", nilai_linier + " %");
         inputNumber.setAttribute('disabled', 'disabled');
 
         let inputRange = document.createElement("input");
@@ -362,8 +380,12 @@
           inputNumber.value = value + " %";
           inputRange.value = value;
         });
+        console.log(parameter);
+        
 
       } else if (jenis_jawaban_num == 2) {
+        
+        pointNilaiList.empty();
         // Jika jenis jawaban == 2 tampilkan radio button
         let ol = document.createElement("ol");
         let options = [];
@@ -396,10 +418,16 @@
           li.appendChild(radio);
           li.appendChild(label);
           ol.appendChild(li);
+          
+          pointNilaiList.append(`
+            <option value="${(option == 'YA') ? 100 : 0}" ${jawabanOpd == option ? 'selected' : ''}>${(option == 'YA') ? 100 : 0}</option>
+          `);
         });
 
         jawabContainer.appendChild(ol);
       } else if (jenis_jawaban_num == 4) {
+        pointNilaiList.empty();
+        let nilai = "";
         let ol = document.createElement("ol");
         ol.setAttribute("type", "A");
         let jawabanOpd = (data.kondisiOpd[0]) ? data.kondisiOpd[0].Jawaban : "";
@@ -425,6 +453,14 @@
           li.appendChild(radio);
           li.appendChild(label);
           ol.appendChild(li);
+          // console.log(p);
+          
+          if (p.id == jawabanOpd) {
+            nilai = "selected";  
+          }
+          pointNilaiList.append(`
+            <option value="${p.nilai}" ${nilai}>${p.nilai}</option>
+          `);
         });
 
         jawabContainer.appendChild(ol);
@@ -433,9 +469,9 @@
 
       let inputJawaban = $('input[name="jawaban"]');
       let pointInput = $('#point');
-      inputJawaban.on("change", function() {
-        updatePointInput(jenis_jawaban_num, inputJawaban);
-      });
+      // inputJawaban.on("change", function() {
+      //   updatePointInput(jenis_jawaban_num, inputJawaban);
+      // });
 
       function updatePointInput(jenis_jawaban_num, inputJawaban) {
         let pointInput = $('#point');
@@ -448,7 +484,7 @@
           let parameterId = inputJawaban.filter(':checked').val();
           let idx = parameter.findIndex(p => p.id == parameterId);
           pointInput.val(point[idx] !== undefined ? point[idx] : 0);
-          console.log(parameterId);
+          // console.log(parameterId);
 
           // switch (inputJawaban.filter(':checked').val()) {
           //   case 'A':
@@ -494,14 +530,16 @@
     }
 
     function generateBuktiDukung(data) {
-      console.log(idOpd);
+      // console.log("id OPD: " + idOpd);
 
       $('#buduk').html('');
       data.bukti_dukung.forEach((b, i) => {
         $('#buduk').append(`
+          <li>
           <strong>${b.bukti_dukung}</strong>
           <ul class="list-group" id="${b.id}">
           </ul>
+          </li>
           <br>
         `);
       });
@@ -546,7 +584,7 @@
             xYz = res.csrf_token
             $('input[name="<?= csrf_token() ?>"]').val(xYz);
             // generateBuktiDukung(res.data);
-            // console.log(res);
+            console.log(res);
 
           }
         });
