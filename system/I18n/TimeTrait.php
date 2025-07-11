@@ -265,7 +265,8 @@ trait TimeTrait
      *
      * @throws Exception
      */
-    public static function createFromTimestamp(int $timestamp, $timezone = null, ?string $locale = null)
+    public static function createFromTimestamp(int|float $timestamp, $timezone = null, ?string $locale = null) 
+    // public static function createFromTimestamp(int $timestamp, $timezone = null, ?string $locale = null)
     {
         $time = new self(gmdate('Y-m-d H:i:s', $timestamp), 'UTC', $locale);
 
@@ -940,8 +941,8 @@ trait TimeTrait
         $testTime = $this->getUTCObject($testTime, $timezone);
 
         $ourTime = $this->toDateTime()
-            ->setTimezone(new DateTimeZone('UTC'))
-            ->format('Y-m-d H:i:s');
+        ->setTimezone(new DateTimeZone('UTC'))
+        ->format('Y-m-d H:i:s');
 
         return $testTime->format('Y-m-d H:i:s') === $ourTime;
     }

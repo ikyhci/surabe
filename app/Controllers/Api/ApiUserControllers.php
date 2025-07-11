@@ -64,8 +64,8 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
                 $IDX = null;
-                $LIMIT = null;
-                $OFFSET =null;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
                 $thn = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
 
 
@@ -169,8 +169,8 @@ class ApiUserControllers extends BaseController
             if (!empty($this->decoded->aud)) {
 
                 // $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-                $LIMIT = null;
-                $OFFSET =null;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
                 $thn = $this->request->getVar('thn')? $this->request->getVar('thn') : null;
                 $uid = $this->decoded->ids;
                 // $list = $this->db->query("call View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
@@ -208,8 +208,8 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
                 $IDX = base64_decode($this->request->getVar('form'));
-                $LIMIT = null;
-                $OFFSET =null;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
                 $uid = $this->decoded->ids;
                 $list = $this->db->query("call View_List_Data_Soal_User('".$IDX."','".$LIMIT."','".$OFFSET."','".$uid."')")->getResult();
                 $data = array(
@@ -246,8 +246,8 @@ class ApiUserControllers extends BaseController
             if (!empty($this->decoded->aud)) {
                 // 
                 $IDX = $this->request->getVar('idx');
-                $LIMIT = null;
-                $OFFSET = null;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
                 $userid = $this->decoded->ids;
                 $indk = $this->db->query("call View_Indikator('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getRow();
                 $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
@@ -387,8 +387,8 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
                 $FLS = $this->request->getVar('filesx');
-                $LIMIT = null;
-                $OFFSET =null;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
                 $uid = $this->decoded->ids;
 
                 $list = $this->db->query("call upload_bukti_delete('".$FLS."','".$uid."')")->getRow();

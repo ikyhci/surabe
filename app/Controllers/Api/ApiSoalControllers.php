@@ -21,7 +21,7 @@ class ApiSoalControllers extends BaseController
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
-         if(!empty($header)) {
+        if(!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
@@ -37,21 +37,21 @@ class ApiSoalControllers extends BaseController
             $thn = $this->db->query('SELECT tahun FROM lke_form group by tahun')->getResult();
 
             $tahun = array();
-                foreach ($thn as $key ) {
-                    $tahun[] = $key->tahun;
-                }
-                
+            foreach ($thn as $key ) {
+                $tahun[] = $key->tahun;
+            }
+            
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => array_unique($tahun),
-                );
+                'token_crs' => csrf_hash(),
+                'dt'        => array_unique($tahun),
+            );
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
         
@@ -67,17 +67,17 @@ class ApiSoalControllers extends BaseController
             // $OFFSET =null;
             $list = $this->db->query("call View_Dashboard_Soal()")->getRow();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -104,18 +104,18 @@ class ApiSoalControllers extends BaseController
                     $btswkt."')")->getRow();
 
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
             }
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
         }
@@ -141,10 +141,10 @@ class ApiSoalControllers extends BaseController
                     $nox."')")->getRow();
 
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
 
             }else{
@@ -158,9 +158,9 @@ class ApiSoalControllers extends BaseController
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
         }
@@ -188,10 +188,10 @@ class ApiSoalControllers extends BaseController
                     $rb."','".
                     $nox."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
                 // 
             }else{
@@ -205,9 +205,9 @@ class ApiSoalControllers extends BaseController
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -237,10 +237,10 @@ class ApiSoalControllers extends BaseController
                     $nox."','".
                     $btswkt."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
                 // 
             }else{
@@ -254,9 +254,9 @@ class ApiSoalControllers extends BaseController
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -284,10 +284,10 @@ class ApiSoalControllers extends BaseController
                     $bobot."','".
                     $nox ."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
                 // 
             }else{
@@ -301,9 +301,9 @@ class ApiSoalControllers extends BaseController
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -333,10 +333,10 @@ class ApiSoalControllers extends BaseController
                     $jjwb."','".
                     $nox."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
                 // 
             }else{
@@ -350,9 +350,9 @@ class ApiSoalControllers extends BaseController
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -379,10 +379,10 @@ class ApiSoalControllers extends BaseController
                     $nama."','".
                     $nox."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
                 // 
             }else{
@@ -396,9 +396,9 @@ class ApiSoalControllers extends BaseController
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -426,10 +426,10 @@ class ApiSoalControllers extends BaseController
                     $nox."','".
                     $nilaix."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $save->res,
-                        'msg'       =>  $save->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $save->res,
+                    'msg'       =>  $save->msg,
+                );
                 return $this->response->setJSON($data);
                 // 
             }else{
@@ -443,9 +443,9 @@ class ApiSoalControllers extends BaseController
             
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -467,10 +467,10 @@ class ApiSoalControllers extends BaseController
                     $idx."','".
                     $sts."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $sts->res,
-                        'msg'       =>  $sts->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $sts->res,
+                    'msg'       =>  $sts->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -486,9 +486,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -508,10 +508,10 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -527,9 +527,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -550,10 +550,10 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -569,9 +569,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -591,10 +591,10 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -610,9 +610,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -632,10 +632,10 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -651,9 +651,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -673,10 +673,10 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -692,9 +692,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -714,10 +714,10 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -733,9 +733,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -756,10 +756,10 @@ class ApiSoalControllers extends BaseController
                     $userid."','".
                     $idx."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -775,9 +775,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             
@@ -799,10 +799,10 @@ class ApiSoalControllers extends BaseController
                     $idp."','".
                     $idk."')")->getRow();
                 $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  $del->res,
-                        'msg'       =>  $del->msg,
-                    );
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  $del->res,
+                    'msg'       =>  $del->msg,
+                );
                 return $this->response->setJSON($data);
 
 
@@ -818,9 +818,9 @@ class ApiSoalControllers extends BaseController
 
         } catch (Exception $e) {
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error in : '.$e,
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error in : '.$e,
             );
             return $this->response->setJSON($data);
             

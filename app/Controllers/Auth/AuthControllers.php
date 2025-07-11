@@ -17,7 +17,7 @@ class AuthControllers extends BaseController
     protected $db;
     public function __construct()
     {
-        helper('cookie');
+        // helper('cookie');
         $this->db = db_connect();
     }
     
@@ -28,10 +28,12 @@ class AuthControllers extends BaseController
 
     public function auth()
     {
-        
+
         if ($this->validate([
             'username'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[4]',
-            'password'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[4]'
+            'password'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[4]',
+            // 'reCaptcha2' => 'required|reCaptcha2[login,0.9]',
+            'reCaptcha2' => 'required|reCaptcha2[]',
         ]))
         {
             $unm = $this->request->getVar('username');
