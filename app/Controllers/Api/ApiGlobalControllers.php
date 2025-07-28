@@ -21,6 +21,7 @@ class ApiGlobalControllers extends BaseController
 {
     protected $db;
     protected $decoded;
+    protected $lkeModel;
     
     public function __construct(){
         $request = request();
@@ -38,6 +39,7 @@ class ApiGlobalControllers extends BaseController
         
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
+        $this->lkeModel = new \App\Models\LkeModel();
     }
 
 
@@ -502,6 +504,111 @@ class ApiGlobalControllers extends BaseController
             'msg'       => 'Data berhasil diambil'
         );
 
+        return $this->response->setJSON($data);
+    }
+
+    
+    public function getOpdAspekData()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        
+        try {
+            $opdData = $this->lkeModel->getOpdWithAspekValuesSimple($tahun);
+            
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => $opdData,
+                'success'   => 1,
+                'msg'       => 'Data OPD dengan nilai aspek berhasil diambil'
+            );
+            
+        } catch (Exception $e) {
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => null,
+                'success'   => 0,
+                'msg'       => 'Gagal mengambil data: ' . $e->getMessage()
+            );
+        }
+        
+        return $this->response->setJSON($data);
+    }
+
+    public function getOpdAspekDataDetailed()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        
+        try {
+            $opdData = $this->lkeModel->getOpdWithAspekValues($tahun);
+            
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => $opdData,
+                'success'   => 1,
+                'msg'       => 'Data OPD detail dengan nilai aspek berhasil diambil'
+            );
+            
+        } catch (Exception $e) {
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => null,
+                'success'   => 0,
+                'msg'       => 'Gagal mengambil data: ' . $e->getMessage()
+            );
+        }
+        
+        return $this->response->setJSON($data);
+    }
+
+    public function getRingkasanEvaluasi()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        
+        try {
+            $ringkasan = $this->lkeModel->getRingkasanEvaluasi($tahun);
+            
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => $ringkasan,
+                'success'   => 1,
+                'msg'       => 'Data ringkasan evaluasi berhasil diambil'
+            );
+            
+        } catch (Exception $e) {
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => null,
+                'success'   => 0,
+                'msg'       => 'Gagal mengambil ringkasan evaluasi: ' . $e->getMessage()
+            );
+        }
+        
+        return $this->response->setJSON($data);
+    }
+
+    public function getEvaluasiLengkap()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        
+        try {
+            $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun);
+            
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => $evaluasiData,
+                'success'   => 1,
+                'msg'       => 'Data evaluasi lengkap berhasil diambil'
+            );
+            
+        } catch (Exception $e) {
+            $data = array(
+                'token_crs' => csrf_hash(),
+                'dt'        => null,
+                'success'   => 0,
+                'msg'       => 'Gagal mengambil data evaluasi lengkap: ' . $e->getMessage()
+            );
+        }
+        
         return $this->response->setJSON($data);
     }
 

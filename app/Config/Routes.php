@@ -24,6 +24,18 @@ $routes->group('api',  function ($routes) {
 $routes->group('dashboard', ['filter' => ['appFilter', 'roles:User,Soal,Super Admin,Penilai']], function ($routes) {
 	$routes->get('help', 'Dashboard::help');
 	$routes->get('', 'Dashboard::index');
+	
+	$routes->group('report', function($routes) {
+    $routes->get('/', 'Dashboard::report');
+    $routes->get('getEvaluasiLengkap', 'Pages\ReportController::getEvaluasiLengkap');
+    $routes->get('getRingkasanEvaluasi', 'Pages\ReportController::getRingkasanEvaluasi');
+    $routes->get('getOpdAspekData', 'Pages\ReportController::getOpdAspekData');
+    $routes->get('getNilaiAspekDetailed', 'Pages\ReportController::getNilaiAspekDetailed');
+    $routes->get('exportExcel', 'Pages\ReportController::exportExcel');
+    $routes->get('exportPDF', 'Pages\ReportController::exportPDF');
+    $routes->get('exportPdfOpd', 'Pages\ReportController::exportPdfOpd');
+		
+});
 });
 //Users
 

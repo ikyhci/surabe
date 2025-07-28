@@ -70,21 +70,15 @@ $first_part = $components[1];
       <?php };?>
 
 
+                <li class="sidebar-item <?php if ($first_part=="/report") {echo "active"; } else  {echo "";} ?>">
+                  <a href="<?php echo base_url();?>dashboard/report" class='sidebar-link'>
+                    <i class="bi bi-pen-fill"></i>
+                    <span>Report</span>
+                  </a>
+                </li>
+
       <?php if ($usr == 'Super Admin') {
        ?>
-       <!-- <li class="sidebar-item  has-sub">
-          <a href="#" class='sidebar-link'>
-            <i class="bi bi-pen-fill"></i>
-            <span>Report</span>
-          </a>
-          <ul class="submenu ">
-            <li class="submenu-item ">
-              <a href="#">tess menu</a>
-            </li>
-          </ul>
-        </li> -->
-
-
         <li class="sidebar-title">Management</li>
 
         <li class="sidebar-item <?php if ($first_part=="/user-management") {echo "active"; } else  {echo "";} ?>">

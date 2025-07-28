@@ -13,6 +13,9 @@ use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\Header;
 use CodeIgniter\Model;
 use stdClass;
+use App\Models\LkeModel;
+use App\Models\LkeForm;
+
 
 class ApiSuperAdminControllers extends BaseController
 {
@@ -348,6 +351,7 @@ class ApiSuperAdminControllers extends BaseController
 
     public function capaianOpd()
     {
+        /*
         $dashboardModel = new \App\Models\DashboardModel;
         $tahun = $this->request->getVar('tahun') ?? date('Y') ;
         $list = [];
@@ -369,7 +373,13 @@ class ApiSuperAdminControllers extends BaseController
             $opd->nilai = $nilaisum / count($v->instrumen);
             $list[] = $opd;
         }
-        
+        */
+        $LkeForm = new \App\Models\LkeForm();
+        $model = new LkeModel();
+
+        $tahun = $LkeForm->select('tahun')->orderBy('tahun', 'DESC')->first();
+        $list = $model->getRekapSemuaOpd($tahun);
+
         $data = array(
             'success'   =>  1,
             'msg'       =>  'success',
