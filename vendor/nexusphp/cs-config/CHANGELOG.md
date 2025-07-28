@@ -5,6 +5,53 @@ All notable changes to this library will be documented in this file:
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.26.2](https://github.com/NexusPHP/cs-config/compare/v3.26.1...v3.26.2) - 2025-07-15
+
+- Bump to php-cs-fixer v3.84
+
+## [v3.26.1](https://github.com/NexusPHP/cs-config/compare/v3.26.0...v3.26.1) - 2025-07-08
+
+- Test using php-cs-fixer's highest PHP version supported
+
+## [v3.26.0](https://github.com/NexusPHP/cs-config/compare/v3.25.2...v3.26.0) - 2025-07-04
+
+- Update build badge
+- Bump to php-cs-fixer v3.76
+- Add `multiline_promoted_properties`  fixer
+- Deprecate own fixers
+- Fix phpstan errors
+- Add `static_private_method` fixer
+- Add `new_expression_parentheses` fixer
+- Do not array unpack known arrays
+- Potential fix for code scanning alert no. 1: Workflow does not contain permissions (#6)
+- Potential fix for code scanning alert no. 2: Workflow does not contain permissions (#7)
+- Support allowUnsupportedPhpVersion option in fixer
+- Cleanup code
+
+## [v3.25.2](https://github.com/NexusPHP/cs-config/compare/v3.25.1...v3.25.2) - 2025-02-23
+
+- Add `php_unit_data_provider_method_order` fixer
+
+## [v3.25.1](https://github.com/NexusPHP/cs-config/compare/v3.25.0...v3.25.1) - 2025-01-17
+
+- Enable `modernize_stripos` option to `modernize_strpos` fixer
+
+## [v3.25.0](https://github.com/NexusPHP/cs-config/compare/v3.24.3...v3.25.0) - 2025-01-10
+
+- Bump to php-cs-fixer v3.67
+- Add `types_map` option to `phpdoc_to_*` fixers
+- Add `general_attribute_remove` fixer
+- Bump to phpstan v2.1
+- Remove `phpExecutable` as `setPhpExecutable()` is now deprecated in upstream
+- Add PHP 8.4 to build
+- Add `@phpstan-ignore` to ignored tags in `comment_to_phpdoc`
+- Remove Nexus80 ruleset as PHP 8.0 is no longer supported
+- Add `Nexus83` and `Nexus84` rulesets
+- Make `Nexus82` depend on `Nexus81`'s rules
+- Use explicit `ubuntu-24.04` in actions
+- Add composer scripts
+- Fix errors in phpstan-baseline
+
 ## [v3.24.3](https://github.com/NexusPHP/cs-config/compare/v3.24.2...v3.24.3) - 2024-09-07
 
 - Add new PHPStan errors to baseline

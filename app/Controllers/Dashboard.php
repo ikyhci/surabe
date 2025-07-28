@@ -77,4 +77,20 @@ class Dashboard extends BaseController
             
         }
     }
+
+    public function report()
+    {
+        if (!empty($this->decoded->rln)) {
+            $usr = $this->decoded->rln;
+            $data = array(
+                'usr' => $usr,
+                'uname' => $this->decoded->iss,
+                'token' => get_cookie('Authorization', true,'__LKE-'),
+            );
+            return view('Pages/report',$data);
+        }else{
+            return redirect()->to(base_url().'unauthorized');
+            
+        }
+    }
 }

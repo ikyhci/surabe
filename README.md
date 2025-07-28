@@ -86,6 +86,9 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - menggunakan base url dari file .env (BASE_URL)
 - perbaikan CorsFilters.php
 
+> [28-07-2025]
+
+- Penambahakn Fitur Report (Penilaian OPD, dan ringkasan keseluruhan OPD)
 
 ## What is CodeIgniter?
 
