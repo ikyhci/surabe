@@ -59,8 +59,8 @@ class ApiGlobalControllers extends BaseController
             if (!is_null($upass)) {
                 if ($upass == $reppas) {
                     $uppass = $this->db->query("CALL User_update_password('".
-                    $idx."','".
-                    $reppas."')")->getRow();
+                        $idx."','".
+                        $reppas."')")->getRow();
 
                     $psw = $uppass->res;
 
@@ -75,11 +75,11 @@ class ApiGlobalControllers extends BaseController
                 
             }else{
                 $upddata = $this->db->query("CALL User_Update_data('".
-                        $idx."','".
-                        $uname."','".
-                        $fname."','".
-                        $uphon."','".
-                        $umail."')")->getRow();
+                    $idx."','".
+                    $uname."','".
+                    $fname."','".
+                    $uphon."','".
+                    $umail."')")->getRow();
 
                 $udt = $upddata->res;
             }
@@ -98,17 +98,17 @@ class ApiGlobalControllers extends BaseController
                 );
             }
 
-           
+
 
 
             return $this->response->setJSON($data);
 
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token.'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token.'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -119,22 +119,23 @@ class ApiGlobalControllers extends BaseController
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
             $THN = $this->request->getVar('thn') ? $this->request->getVar('thn') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("call View_Data_List_Soal('".$IDX."','".$LIMIT."','".$OFFSET."','".
                 $THN."')")->getResult();
+
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -144,22 +145,22 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs'     =>  csrf_hash(),
-                    'success'       =>  0,
-                    'msg'           =>  'Access denied cntrl',
-                    'StatusCode'    =>  '401',
-                    );
+                'token_crs'     =>  csrf_hash(),
+                'success'       =>  0,
+                'msg'           =>  'Access denied cntrl',
+                'StatusCode'    =>  '401',
+            );
             return  json_encode($data);
         }
     }
@@ -169,22 +170,22 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("CALL View_Rb('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs'     =>  csrf_hash(),
-                    'success'       =>  0,
-                    'msg'           =>  'Access denied cntrl',
-                    'StatusCode'    =>  '401',
-                    );
+                'token_crs'     =>  csrf_hash(),
+                'success'       =>  0,
+                'msg'           =>  'Access denied cntrl',
+                'StatusCode'    =>  '401',
+            );
             return  json_encode($data);
         }
     }
@@ -193,22 +194,22 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("call View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs'     =>  csrf_hash(),
-                    'success'       =>  0,
-                    'msg'           =>  'Access denied cntrl',
-                    'StatusCode'    =>  '401',
-                );
+                'token_crs'     =>  csrf_hash(),
+                'success'       =>  0,
+                'msg'           =>  'Access denied cntrl',
+                'StatusCode'    =>  '401',
+            );
             return  json_encode($data);
         }
     }
@@ -217,21 +218,21 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("call View_Sub_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -240,21 +241,21 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("call View_sub_sub_aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -263,46 +264,47 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $userid = $this->decoded->ids;
             $list = $this->db->query("call View_Indikator('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
 
     public function getBuktiDukung()
     {
-         if (!empty($this->decoded->aud)) {
+        if (!empty($this->decoded->aud)) {
             $IDX    = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT  = null;
-            $OFFSET = null;
-            $userid = null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
+            $userid = $this->decoded->uid;
+            // $userid = null;
             $list   = $this->db->query("call View_Bukti_dukung('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -316,21 +318,21 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET =null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("call View_Jenis_Jawaban('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -340,25 +342,25 @@ class ApiGlobalControllers extends BaseController
         if (!empty($this->decoded->aud)) {
             $nama_opd = $this->request->getVar('nama_opd') ? $this->request->getVar('nama_opd') : null;
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-            $LIMIT = null;
-            $OFFSET = null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
             $list = $this->db->query("call View_Opd('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
             if($nama_opd){
                 $i = array_search($nama_opd, array_column($list, 'nama_opd'));
                 $list = array($list[$i]);
             }
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -376,7 +378,7 @@ class ApiGlobalControllers extends BaseController
                 $i = array_search($RoleId, array_column($list, 'RoleId'));
                 $list = array($list[$i]);
             } elseif($RoleName && $RoleId){
-                
+
                 $i1 = array_search($RoleId, array_column($list, 'RoleId'));
                 $list1 = array($list[$i1]);
 
@@ -390,17 +392,17 @@ class ApiGlobalControllers extends BaseController
             }
 
             $data = array(
-                    'token_crs' => csrf_hash(),
-                    'dt'        => $list,
-                    );
+                'token_crs' => csrf_hash(),
+                'dt'        => $list,
+            );
 
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -409,28 +411,28 @@ class ApiGlobalControllers extends BaseController
     {
         if (!empty($this->decoded->aud)) {
             $IDX    = $this->decoded->ids ? $this->decoded->ids : null;
-            $LIMIT  = null;
-            $OFFSET = null;
+            $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
+            $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
 
             if ($IDX != null) {
                 $list   = $this->db->query("call View_Users('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
                 $data   = array(
-                        'token_crs' => csrf_hash(),
-                        'dt'        => $list,
-                        );
+                    'token_crs' => csrf_hash(),
+                    'dt'        => $list,
+                );
             }else{
                 $data   = array(
-                        'token_crs' => csrf_hash(),
-                        'dt'        => 'No Data',
-                        );
+                    'token_crs' => csrf_hash(),
+                    'dt'        => 'No Data',
+                );
             }
             return $this->response->setJSON($data);
         }else{
             $data = array(
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  'error invalid token'
-                );
+                'token_crs' =>  csrf_hash(),
+                'success'   =>  0,
+                'msg'       =>  'error invalid token'
+            );
             return $this->response->setJSON($data);
         }
     }
@@ -492,7 +494,7 @@ class ApiGlobalControllers extends BaseController
 
         return $this->response->setJSON($data);
     }
-    
+
     public function getTahun()
     {
         $lke_form = new \App\Models\LkeForm();

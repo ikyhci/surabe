@@ -1960,7 +1960,10 @@ $(document).ready(function(){
 
 	function LoadParameter(thnx){
 		var t = $('#tbl-parameter').DataTable({
-			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+			"lengthMenu": [
+				[10, 25, 50, 100, 200, 300, 400, 500, -1], 
+				['10 Rows', '25 Rows', '50 Rows', '100 Rows', '200 Rows', '300 Rows', '400 Rows', '500 Rows', "All"]
+			],
 			"scrollX": false,
 			"processing": true,
 			"destroy": true,
@@ -1980,7 +1983,7 @@ $(document).ready(function(){
 				},
 				"method": "GET",
 				"dataSrc": function(data){
-
+					console.log(data)
 					csrf.value = data.token_crs
 					return data.dt;
 				},
