@@ -225,12 +225,9 @@
                     let capaian = 0;
                     let row = `<tr>
                         <td>${index + 1}</td>
-                        <td>${item.singkatan}</td>`;
-                    $.each(item.domains, function(index, d) {
-                        row += `<td class="text-center">${d.nilai}</td>`;
-                        capaian += d;
-                    });                    
-                    row += `<td class="text-center">${item.nilai}</td></tr>`;
+                        <td>${item.nama_opd}</td>`;
+                        
+                    row += `<td class="text-center">${item.capaian}</td></tr>`;
                     tableBody.append(row);
                 });
                 
