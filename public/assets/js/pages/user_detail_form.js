@@ -57,17 +57,20 @@ $(document).ready(function(){
 
                         
                         if (JsonResultRow.jwbx == 0 ) {
-                            btncl = 'btn-outline-warning'
+                            btncl = 'btn-warning'
                         }
 
                         if (JsonResultRow.jwbx != 0 ) {
-                            btncl = 'btn-outline-info'
+                            btncl = 'btn-info'
+                            if (JsonResultRow.tombol == 2) {
+                                btncl = 'btn-success'
+                            }
 
                             if (JsonResultRow.tombol == 1) {
-                                btncl = 'btn-outline-primary'
+                                btncl = 'btn-primary'
                             }
                             if (JsonResultRow.tombol == 0) {
-                                btncl = 'btn-outline-danger'
+                                btncl = 'btn-danger'
                             }
                             
                         }
@@ -193,18 +196,28 @@ $(document).ready(function(){
      Pilihan Ganda Template */
 
     function loadPilihanGanda(data, dkn, jwb, fls){
+        // console.log(jwb)
         /* console.log(jwb) */
         var str = '<ol type="A">'
         var plh = '';
         var upl = '';
         var flx = '<ol type="*">';
         var ket = '';
+        var srn = '';
+
+        if (jwb.saranx == null) {
+            srn += '';
+        }else{
+           srn += '<div class="alert alert-info"><h4 class="alert-heading">Saran:</h4>'+
+            '<p>'+jwb.saranx+'.</p></div>'
+        }
 
         if (jwb.tolak == 1) {
             ket += '<div class="alert alert-danger"><h4 class="alert-heading">Di Tolak</h4>'+
             '<p>'+jwb.ketsx+'.</p></div>'
-        }else{
-            ket = '';
+        }else if(jwb.tolak == 2){
+            ket += '<div class="alert alert-success"><h4 class="alert-heading">Di Setujui</h4>'+
+            '<p>'+jwb.ketsx+'.</p></div>'
         }
 
         for (var i = 0; i < data.length; i++) {
@@ -287,6 +300,8 @@ $(document).ready(function(){
         document.getElementById('content-form').innerHTML = str;
         document.getElementById('content-upload').innerHTML = flx;
         document.getElementById('content-info').innerHTML = ket;
+        document.getElementById('content-saran').innerHTML = srn;
+
         $('input[name="jwbn"][value="'+jwb.jwbx+'"]').prop('checked', true);
 
         if (jwb.wktsubasp > 0 || jwb.tombol > 0 || jwb.tombol != null) {
@@ -299,18 +314,27 @@ $(document).ready(function(){
     /* Linear Template */
 
     function loadLinear(data,dkn,jwb, fls){
-
+        console.log(jwb.saranx)
         var str = '<ol type="A">'
         /* var plh = ''; */
         var upl = '';
         var flx = '<ol type="*">';
         var ket = '';
+        var srn = '';
+
+        if (jwb.saranx == null) {
+            srn += '';
+        }else{
+           srn += '<div class="alert alert-info"><h4 class="alert-heading">Saran:</h4>'+
+            '<p>'+jwb.saranx+'.</p></div>'
+        }
 
         if (jwb.tolak == 1) {
             ket += '<div class="alert alert-danger"><h4 class="alert-heading">Di Tolak</h4>'+
             '<p>'+jwb.ketsx+'.</p></div>'
-        }else{
-            ket = '';
+        }else if(jwb.tolak == 2){
+            ket += '<div class="alert alert-success"><h4 class="alert-heading">Di Setujui</h4>'+
+            '<p>'+jwb.ketsx+'.</p></div>'
         }
 
         for (var i = 0; i < data.length; i++) {
@@ -380,6 +404,7 @@ $(document).ready(function(){
         document.getElementById('content-form').innerHTML = str;
         document.getElementById('content-upload').innerHTML = flx;
         document.getElementById('content-info').innerHTML = ket;
+        document.getElementById('content-saran').innerHTML = srn;
 
         $('#customRange2').val(jwb.jwbx)
         var output = document.getElementById("ranges");
@@ -407,12 +432,21 @@ $(document).ready(function(){
         var upl = '';
         var flx = '<ol type="*">';
         var ket = '';
+        var srn = '';
+
+        if (jwb.saranx == null) {
+            srn += '';
+        }else{
+           srn += '<div class="alert alert-info"><h4 class="alert-heading">Saran:</h4>'+
+            '<p>'+jwb.saranx+'.</p></div>'
+        }
 
         if (jwb.tolak == 1) {
             ket += '<div class="alert alert-danger"><h4 class="alert-heading">Di Tolak</h4>'+
             '<p>'+jwb.ketsx+'.</p></div>'
-        }else{
-            ket = '';
+        }else if(jwb.tolak == 2){
+            ket += '<div class="alert alert-success"><h4 class="alert-heading">Di Setujui</h4>'+
+            '<p>'+jwb.ketsx+'.</p></div>'
         }
 
         for (var i = 0; i < data.length; i++) {
@@ -484,6 +518,7 @@ $(document).ready(function(){
         document.getElementById('content-form').innerHTML = str;
         document.getElementById('content-upload').innerHTML = flx;
         document.getElementById('content-info').innerHTML = ket;
+        document.getElementById('content-saran').innerHTML = srn;
         if (jwb.jwbx === 'YA') {
             document.getElementById('jwb1').checked = true;
         }
@@ -579,6 +614,9 @@ $(document).ready(function(){
         var fd = new FormData($('#formdata')[0]);
         var form = document.getElementById('formdata');
         fd.append('csrf_token', csrf.value);
+        // for (var key of fd.entries()) {
+        //     console.log(key[0] + ', ' + key[1]);
+        // }
         if ($('.jwbnx:checked').val()) {
             fd.append('jwbn', $('.jwbnx:checked').val())
         }

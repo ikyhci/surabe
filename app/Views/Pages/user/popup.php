@@ -37,6 +37,8 @@
                 </div>
                 <div id="content-info"></div>
 
+                <div id="content-saran"></div>
+
             </div>
             <div class="modal-footer" id="tblfoot">
                 
