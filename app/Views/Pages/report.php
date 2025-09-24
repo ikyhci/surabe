@@ -193,12 +193,12 @@ $(document).ready(function() {
   });
 
   $('#btn-pdfOpd').click(function() {
-      const opdId = $(this).data('opd_id');
-      if (!opdId) {
-          showError('ID OPD tidak ditemukan. Silakan tutup modal dan buka detail lagi.');
-          return;
-      }
-      exportToPDFOpd(opdId);
+    const opdId = $(this).data('opd_id');
+    if (!opdId) {
+      showError('ID OPD tidak ditemukan. Silakan tutup modal dan buka detail lagi.');
+      return;
+    }
+    exportToPDFOpd(opdId);
   });
 });
 
@@ -439,7 +439,7 @@ function showDetail(opdId, namaOpd) {
             <div class="mb-4">
               <h5 class="fw-bold border-bottom pb-2">
                 ${instrumen.nums}. ${instrumen.nama}
-                <span class="float-end">Nilai: ${instrumen.nilai}</span>
+                <span class="float-end">Nilai: ${instrumen.nilai.toFixed(2)}</span>
               </h5>
 
               <div class="ms-4">
@@ -451,14 +451,14 @@ function showDetail(opdId, namaOpd) {
               <div class="mb-3">
                 <h6 class="fw-bold">
                   ${instrumen.nums}.${aspek.nums}. ${aspek.nama_aspek}
-                  <span class="float-end">Nilai: ${aspek.nilai}</span>
+                  <span class="float-end">Nilai: ${aspek.nilai.toFixed(2)}</span>
                 </h6>
 
                 <div class="ms-4">
             `;
 
             // Sort sub_aspek by nums
-            const sortedSubAspek = aspek.sub_aspek.sort((a, b) => 
+            const sortedSubAspek = aspek.sub_aspek.sort((a, b) =>
               parseInt(a.nums) - parseInt(b.nums)
             );
 
@@ -468,7 +468,7 @@ function showDetail(opdId, namaOpd) {
                 <div class="mb-3">
                   <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-bold">${instrumen.nums}.${aspek.nums}.${subAspek.nums}. ${subAspek.nama_sub_aspek}</span>
-                    <span>Nilai: ${subAspek.nilai}</span>
+                    <span>Nilai: ${subAspek.nilai.toFixed(2)}</span>
                   </div>
 
                   <div class="table-responsive mt-2">
@@ -480,6 +480,7 @@ function showDetail(opdId, namaOpd) {
                           <th style="width: 100px">Nilai</th>
                           <th style="width: 150px">Status</th>
                           <th>Keterangan</th>
+                          <th>Saran</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -489,18 +490,18 @@ function showDetail(opdId, namaOpd) {
               const sortedSSA = subAspek.sub_sub_aspek.sort((a, b) => {
                 const [aMain, aSub] = a.nums.split('.');
                 const [bMain, bSub] = b.nums.split('.');
-                return aMain === bMain ? 
-                  parseInt(aSub) - parseInt(bSub) : 
+                return aMain === bMain ?
+                  parseInt(aSub) - parseInt(bSub) :
                   parseInt(aMain) - parseInt(bMain);
               });
 
               // Loop through sub_sub_aspek
               sortedSSA.forEach((ssa, idxSSA) => {
-                const status = ssa.aprove === null ? 
+                const status = ssa.aprove === null ?
                   '<span class="badge bg-warning">Pending</span>' :
-                  ssa.aprove ? 
-                    '<span class="badge bg-success">Approved</span>' : 
-                    '<span class="badge bg-danger">Rejected</span>';
+                  ssa.aprove ?
+                  '<span class="badge bg-success">Approved</span>' :
+                  '<span class="badge bg-danger">Rejected</span>';
 
                 html += `
                   <tr>
@@ -509,6 +510,7 @@ function showDetail(opdId, namaOpd) {
                     <td class="text-center">${ssa.nilai}</td>
                     <td class="text-center">${status}</td>
                     <td>${ssa.ket || '-'}</td>
+                    <td>${ssa.saran || '-'}</td>
                   </tr>
                 `;
               });
@@ -552,28 +554,28 @@ function exportToPDF() {
 }
 
 function exportToPDFOpd(opdId = '') {
-    if (!opdId) {
-        showError('ID OPD tidak boleh kosong.');
-        return;
-    }
-    
-    // PERBAIKAN: Hilangkan && ekstra dalam URL
-    const tahun = $('#filter-tahun').val();
-    const url = `<?= base_url('dashboard/report/exportPdfOpd') ?>?tahun=${tahun}&opd_id=${opdId}`;
-    
-    // Optional: Tampilkan loading state
-    const originalText = $('#btn-pdfOpd').html();
-    $('#btn-pdfOpd').html('<i class="bi bi-hourglass-split"></i> Generating...');
-    $('#btn-pdfOpd').prop('disabled', true);
-    
-    // Buka dalam tab baru
-    window.open(url, '_blank');
-    
-    // Reset tombol setelah delay singkat
-    setTimeout(() => {
-        $('#btn-pdfOpd').html(originalText);
-        $('#btn-pdfOpd').prop('disabled', false);
-    }, 2000);
+  if (!opdId) {
+    showError('ID OPD tidak boleh kosong.');
+    return;
+  }
+
+  // PERBAIKAN: Hilangkan && ekstra dalam URL
+  const tahun = $('#filter-tahun').val();
+  const url = `<?= base_url('dashboard/report/exportPdfOpd') ?>?tahun=${tahun}&opd_id=${opdId}`;
+
+  // Optional: Tampilkan loading state
+  const originalText = $('#btn-pdfOpd').html();
+  $('#btn-pdfOpd').html('<i class="bi bi-hourglass-split"></i> Generating...');
+  $('#btn-pdfOpd').prop('disabled', true);
+
+  // Buka dalam tab baru
+  window.open(url, '_blank');
+
+  // Reset tombol setelah delay singkat
+  setTimeout(() => {
+    $('#btn-pdfOpd').html(originalText);
+    $('#btn-pdfOpd').prop('disabled', false);
+  }, 2000);
 }
 
 function showError(message) {

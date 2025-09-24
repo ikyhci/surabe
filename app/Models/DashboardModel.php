@@ -24,7 +24,8 @@ class DashboardModel extends Model
                 MAX(nj.Aproved) AS aprove,
                 MAX(nj.Ket) AS ket,
                 COALESCE(AVG(nj.Nilai) * (CAST(ssa.bobot AS DECIMAL(10,2)) / 100), 0) AS nilai,
-                GROUP_CONCAT(nj.Ket SEPARATOR '\n') AS ssa_ket
+                GROUP_CONCAT(nj.Ket SEPARATOR '\n') AS ssa_ket,
+                GROUP_CONCAT(j.saran SEPARATOR '\n') AS ssa_saran
             ")
             ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner')
             ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
@@ -53,6 +54,7 @@ class DashboardModel extends Model
             $data->nums = null;
             $data->bobot = 0;
             $data->Ket = '';
+            $data->saran = '';
             return $data;
         }
     }
@@ -98,65 +100,92 @@ class DashboardModel extends Model
             ->get()->getResult();
     }
 
-    public function nilaiOpd($tahun = null, $opd_id = null)
-    {
-        $tahun = $tahun ?? date('Y');
-        $opd = $this->getOpd($opd_id);
+public function nilaiOpd($tahun = null, $opd_id = null)
+{
+    $tahun = $tahun ?? date('Y');
+    $opd = $this->getOpd($opd_id);
 
-        foreach ($opd as $key => $value) {
-            $opd[$key]->nilai = 0;
-            $instrumen = $this->getInstrumen();
-            $aspek = $this->getAspek($tahun);
-            $i_ket = '';
-            foreach ($aspek as $k => $v) {
-                $aspek[$k]->nums = $v->nums ?? null;
-                $subAspek = $this->getSubAspek($v->id);
-                $a_ket = '';
-                foreach ($subAspek as $kk => $vv) {
-                    $subAspek[$kk]->nums = $vv->nums ?? null;
-                    $subSubAspek = $this->getSubSubAspek($vv->id);
-                    $totalSubSubAspekNilai = 0;
-                    $sa_ket = '';
-                    foreach ($subSubAspek as $kkk => $vvv) {
-                        $subSubAspek[$kkk]->nums = $vvv->nums ?? null;
-                        $hasil = $this->nilaiSubSubAspekOpd($vvv->id, $value->id);
-                        $nilai = $hasil->nilai ?? 0;
+    foreach ($opd as $key => $value) {
+        $opd[$key]->nilai = 0;
+        $instrumen = $this->getInstrumen();
+        $aspek = $this->getAspek($tahun);
+        $i_ket = '';
+        $i_saran = '';
 
-                        $subSubAspek[$kkk]->nilai = $nilai;
-                        $subSubAspek[$kkk]->aprove = $hasil->aprove ?? null;
-                        $subSubAspek[$kkk]->ket = $hasil->ket ?? null;
-                        if (!empty(trim($hasil->ssa_ket ?? ''))) {
-                            $sa_ket .= trim($hasil->ssa_ket) . "\n";
-                        }
-                        $totalSubSubAspekNilai += $nilai;
+        foreach ($aspek as $k => $v) {
+            $aspek[$k]->nums = $v->nums ?? null;
+            $subAspek = $this->getSubAspek($v->id);
+            $a_ket = '';
+            $a_saran = '';
+
+            foreach ($subAspek as $kk => $vv) {
+                $subAspek[$kk]->nums = $vv->nums ?? null;
+                $subSubAspek = $this->getSubSubAspek($vv->id);
+                $totalSubSubAspekNilai = 0;
+                $sa_ket = '';
+                $sa_saran = '';
+
+                foreach ($subSubAspek as $kkk => $vvv) {
+                    $subSubAspek[$kkk]->nums = $vvv->nums ?? null;
+                    $hasil = $this->nilaiSubSubAspekOpd($vvv->id, $value->id);
+                    $nilai = $hasil->nilai ?? 0;
+
+                    $subSubAspek[$kkk]->nilai = $nilai;
+                    $subSubAspek[$kkk]->aprove = $hasil->aprove ?? null;
+                    $subSubAspek[$kkk]->ket = $hasil->ssa_ket ?? null;
+                    $subSubAspek[$kkk]->saran = $hasil->ssa_saran ?? null;
+
+                    // kumpulkan ket
+                    if (!empty(trim($hasil->ssa_ket ?? ''))) {
+                        $sa_ket .= trim($hasil->ssa_ket) . "\n";
                     }
-                    if (!empty(trim($sa_ket))) {
-                        $a_ket .= trim($sa_ket) . "\n";
+
+                    // kumpulkan saran
+                    if (!empty(trim($hasil->ssa_saran ?? ''))) {
+                        $sa_saran .= trim($hasil->ssa_saran) . "\n";
                     }
-                    $subAspek[$kk]->sub_sub_aspek = $subSubAspek;
-                    $subAspek[$kk]->nilai = $totalSubSubAspekNilai;
+
+                    $totalSubSubAspekNilai += $nilai;
                 }
-                if (!empty(trim($a_ket))) {
-                    $i_ket .= trim($a_ket) . "\n";
+
+                if (!empty(trim($sa_ket))) {
+                    $a_ket .= trim($sa_ket) . "\n";
                 }
-                $totalSubAspekNilai = array_sum(array_column($subAspek, 'nilai'));
-                $aspek[$k]->sub_aspek = $subAspek;
-                $aspek[$k]->nilai = count($subAspek) > 0 ? $totalSubAspekNilai / count($subAspek) : 0;
+                if (!empty(trim($sa_saran))) {
+                    $a_saran .= trim($sa_saran) . "\n";
+                }
+
+                $subAspek[$kk]->sub_sub_aspek = $subSubAspek;
+                $subAspek[$kk]->nilai = $totalSubSubAspekNilai;
             }
 
-            foreach ($instrumen as $ik => $iv) {
-                $instrumen[$ik]->nums = $iv->nums ?? null;
-                $aspek_rb = array_filter($aspek, fn($a) => $a->rb_id == $iv->id);
-                $nilai_instrumen = count($aspek_rb) > 0 ? array_sum(array_column($aspek_rb, 'nilai')) / count($aspek_rb) : 0;
-
-                $instrumen[$ik]->nilai = $nilai_instrumen;
-                $instrumen[$ik]->aspek = array_values($aspek_rb);
-                $opd[$key]->nilai += $nilai_instrumen;
+            if (!empty(trim($a_ket))) {
+                $i_ket .= trim($a_ket) . "\n";
+            }
+            if (!empty(trim($a_saran))) {
+                $i_saran .= trim($a_saran) . "\n";
             }
 
-            $opd[$key]->instrumen = $instrumen;
+            $totalSubAspekNilai = array_sum(array_column($subAspek, 'nilai'));
+            $aspek[$k]->sub_aspek = $subAspek;
+            $aspek[$k]->nilai = count($subAspek) > 0 ? $totalSubAspekNilai / count($subAspek) : 0;
         }
 
-        return $opd;
+        foreach ($instrumen as $ik => $iv) {
+            $instrumen[$ik]->nums = $iv->nums ?? null;
+            $aspek_rb = array_filter($aspek, fn($a) => $a->rb_id == $iv->id);
+            $nilai_instrumen = count($aspek_rb) > 0 ? array_sum(array_column($aspek_rb, 'nilai')) / count($aspek_rb) : 0;
+
+            $instrumen[$ik]->nilai = $nilai_instrumen;
+            $instrumen[$ik]->aspek = array_values($aspek_rb);
+            $opd[$key]->nilai += $nilai_instrumen;
+        }
+
+        $opd[$key]->instrumen = $instrumen;
+        $opd[$key]->ket = trim($i_ket);
+        $opd[$key]->saran = trim($i_saran);
     }
+
+    return $opd;
+}
 }
