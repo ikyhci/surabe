@@ -67,10 +67,12 @@ class ApiSuperAdminControllers extends BaseController
             'msg'       =>  'success',
         );
         $user = $this->superAdminModel->getUsers($uid, null, null);
+        $dataTerkait = $this->superAdminModel->checkUserRelations($uid);
         if (count($user)===1) {
             $aspek_penilai = [];
             $lke_role = new \App\Models\LkeRole();
             $aspek_penilai = $lke_role->select('aspek as aspek_id')->where('Uid', $uid)->findAll();
+            $user[0]->data_terkait = $dataTerkait['relations'];
             $user[0]->aspek_penilai = $aspek_penilai;
             $data = array(
                 'token_crs' => csrf_hash(),
@@ -253,27 +255,22 @@ class ApiSuperAdminControllers extends BaseController
 
     public function deleteUser($uid)
     {
-        // fitur belum tersedia
+        $mode = $this->request->getGet('mode') ?? 'soft';
+        $deletedBy = session()->get('uid'); // atau dari token JWT
+
+        // ambil data relasi untuk informasi
+        $relasi_data = $this->superAdminModel->getUserRelations($uid);
+
+        // jalankan delete sesuai mode
+        $result = $this->superAdminModel->deleteUser($uid, $mode, $deletedBy);
+
         return $this->response->setJSON([
-            'token_crs' => csrf_hash(),
-            'res' => false,
-            'msg' => 'Fitur belum tersedia'
+            'token_crs'    => csrf_hash(),
+            'res'          => $result['res'],
+            'mode'         => $mode,
+            'data_terkait' => $relasi_data,
+            'msg'          => $result['msg']
         ]);
-        // $result = $this->superAdminModel->deleteUser($uid);
-    
-        // if ($result['res'] == 1) {
-        //     return $this->response->setJSON([
-        //         'token_crs' => csrf_hash(),
-        //         'res' => true,
-        //         'msg' => $result['msg']
-        //     ]);
-        // } else {
-        //     return $this->response->setJSON([
-        //         'token_crs' => csrf_hash(),
-        //         'res' => false,
-        //         'msg' => $result['msg']
-        //     ]);
-        // }
     }
 
     
