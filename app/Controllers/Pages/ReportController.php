@@ -120,7 +120,7 @@ class ReportController extends BaseController
             $sheet = $spreadsheet->getActiveSheet();
 
             // Header judul
-            $sheet->setCellValue("A{$row}", 'Laporan Evaluasi SPBE Tahun ' . $tahun);
+            $sheet->setCellValue("A{$row}", 'Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah ' . $tahun);
             $sheet->mergeCells("A{$row}:G{$row}");
             $sheet->getStyle("A{$row}")->getFont()->setBold(true)->setSize(14);
             $sheet->getStyle("A{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -227,7 +227,7 @@ class ReportController extends BaseController
             $pdf->setFooterFont(['helvetica', '', 8]);
             
             // Set header data
-            // $pdf->SetHeaderData('', 0, 'LAPORAN EVALUASI SPBE TAHUN ' . $tahun, 'SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK BERINTEGRITAS DAN MANDIRI');
+            // $pdf->SetHeaderData('', 0, 'Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah ' . $tahun, 'SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK BERINTEGRITAS DAN MANDIRI');
             $pdf->SetHeaderData('', 0, 'SURABE BERANI', 'SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK BERINTEGRITAS DAN MANDIRI');
             
             // Set margins for landscape
@@ -246,7 +246,7 @@ class ReportController extends BaseController
             
             // Custom Title
             $pdf->SetFont('helvetica', 'B', 18);
-            $pdf->Cell(0, 12, 'LAPORAN EVALUASI SPBE TAHUN ' . $tahun, 0, 1, 'C');
+            $pdf->Cell(0, 12, 'Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah ' . $tahun, 0, 1, 'C');
             $pdf->Ln(3);
             
             // // Subtitle

@@ -36,7 +36,7 @@ class SuperAdminModel extends Model
     public function getUsers($uid = null, $role = null, $offset = null, $limit = null)
     {
         $builder = $this->db->table('lke_user u')
-            ->select('u.uid, u.UserName, u.FullName, u.Phone, u.EmailAdds,rl.RoleId, rl.RoleName, d.opdid, u.actv')
+            ->select('u.uid, u.UserName, u.FullName, u.Phone, u.EmailAdds,rl.RoleId, rl.RoleName, d.opdid, u.actv, rl.acs')
             ->join('lke_role r', 'r.Uid = u.uid', 'left')
             ->join('lke_roles rl', 'rl.RoleId = r.RoleId', 'left')
             ->join('lke_detail_opd d', 'd.userid = u.uid', 'left')
@@ -69,11 +69,32 @@ class SuperAdminModel extends Model
         return $query->getRow();
     }
 
-    public function updateUser($uid, $uname, $fname, $phn, $eml)
+    public function getUserByOpd($opdId)
     {
+        $builder = $this->db->table('lke_user as u');
+        $builder->select('u.uid, u.UserName, u.FullName, u.EmailAdds, u.Phone');
+        $builder->join('lke_detail_opd as d', 'd.userid = u.uid');
+        $builder->where('d.opdid', $opdId);
+        $query = $builder->get();
+        $users = $query->getResultArray();
+        foreach ($users as $user) {
+            $data_terkait = $this->checkUserRelations($user['uid']);
+            $user['data_terkait'] = $data_terkait;
+            $result[] = $user;
+        }
+        return $result ?? [];
+    }
+
+    public function updateUser($uid, $uname, $fname, $phn, $eml, $pass = null)
+    {
+
+        $uppass = $this->db->query("CALL User_update_password('".
+            $uid."','".
+            $pass."')")->getRowArray();
+
         // Panggil stored procedure dengan parameter
         $query = $this->db->query("CALL User_Update_data(?, ?, ?, ?, ?)", [$uid, $uname, $fname, $phn, $eml]);
-    
+        
         // Ambil hasil dari stored procedure
         $result = $query->getRowArray(); // Mengambil hasil sebagai array asosiatif
     
@@ -324,6 +345,38 @@ class SuperAdminModel extends Model
     // deleteOpd
     public function deleteOpd($uidx, $id)
     {
+        $opd = $this->db->table('lke_opd')->where('id', $id)->get()->getRowArray();
+        if (!$opd) {
+            return [
+                'res' => 'error',
+                'msg' => 'OPD tidak ditemukan'
+            ];
+        }
+        $row = $opd;
+        
+        $user = $this->getUsers($uidx, null, null);
+        if (count($user)===0 || $user[0]->actv != 'TRUE' || $user[0]->acs !== 1) {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => false,
+                'usr' => $user,
+                'msg' => 'anda tidak memiliki akses menghapus data ini'
+            ]);
+        }
+        $deletedBy = $user[0]->FullName;
+
+        $db->table('lke_delete_log')->insert([
+            'table_name' => 'lke_opd',
+            'record_id'  => $row['id'],
+            'data'       => json_encode($row),
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'deleted_by' => $deletedBy
+        ]);
+        // $this->deleteUserByOpd($id, $deletedBy);
+        $userByOpd = $this->getUserByOpd($id);
+        foreach ($userByOpd as $usr) {
+            $this->deleteUser($usr['id'], 'force', $deletedBy);
+        }
         $query = $this->db->query("CALL Opd_delete(?, ?)", [$uidx, $id]);
     
         $result = $query->getRowArray();

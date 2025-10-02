@@ -14,7 +14,7 @@
 }
 </style>
 <div class="page-heading">
-  <h3>Laporan Evaluasi SPBE</h3>
+  <h3>Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah</h3>
 </div>
 <div class="page-content">
   <!-- Filter Card -->

@@ -253,7 +253,7 @@ function showUserDetail() {
   clearForm();
   var uid = $(this).data('uid');
   var actionUrl = "<?= base_url('api/put-user') ?>/" + uid;
-  $('#pwd').hide();
+  // $('#pwd').hide();
   $.ajax({
     url: `<?= base_url('api/get-user') ?>/${uid}`,
     type: 'GET',
