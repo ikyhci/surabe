@@ -185,7 +185,8 @@ class PenilaianModel extends Model
 
         if ($indikator_id && !$aspek_id) {
             return $this->db->table('lke_jawaban a')
-            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket, a.saran')
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, nj.nilai, a.nilai nilaiSementara, a.aprove, a.ket, a.saran')
+            ->join('lke_nilai_jawaban_user nj', 'a.id=nj.idJawaban', 'left')
             ->join('lke_user b', 'a.userid = b.uid', 'inner')
             ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
             ->join('lke_opd d', 'c.opdid = d.id', 'inner')
@@ -202,7 +203,8 @@ class PenilaianModel extends Model
             ->getResultArray();
         } elseif (!$indikator_id && $aspek_id) {
             return $this->db->table('lke_jawaban a')
-            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket, a.saran')
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, nj.nilai, a.nilai nilaiSementara, a.aprove, a.ket, a.saran')
+            ->join('lke_nilai_jawaban_user nj', 'a.id=nj.idJawaban', 'left')
             ->join('lke_user b', 'a.userid = b.uid', 'inner')
             ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
             ->join('lke_opd d', 'c.opdid = d.id', 'inner')
@@ -219,7 +221,8 @@ class PenilaianModel extends Model
             ->getResultArray();
         } elseif ($indikator_id && $aspek_id) {
             return $this->db->table('lke_jawaban a')
-            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket, a.saran')
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, nj.nilai, a.nilai nilaiSementara, a.aprove, a.ket, a.saran')
+            ->join('lke_nilai_jawaban_user nj', 'a.id=nj.idJawaban', 'left')
             ->join('lke_user b', 'a.userid = b.uid', 'inner')
             ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
             ->join('lke_opd d', 'c.opdid = d.id', 'inner')
@@ -237,7 +240,8 @@ class PenilaianModel extends Model
             ->getResultArray();
         } else {
             return $this->db->table('lke_jawaban a')
-            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, a.nilai, a.aprove, a.ket, a.saran')
+            ->select('a.id as id_jawaban, a.Jawaban, d.nama_opd, b.UserName, e.id as id_indikator, e.indikator, nj.nilai, a.nilai nilaiSementara, a.aprove, a.ket, a.saran')
+            ->join('lke_nilai_jawaban_user nj', 'a.id=nj.idJawaban', 'left')
             ->join('lke_user b', 'a.userid = b.uid', 'inner')
             ->join('lke_detail_opd c', 'b.uid = c.userid', 'inner')
             ->join('lke_opd d', 'c.opdid = d.id', 'inner')
