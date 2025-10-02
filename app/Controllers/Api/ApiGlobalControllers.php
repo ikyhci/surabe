@@ -349,6 +349,12 @@ class ApiGlobalControllers extends BaseController
                 $i = array_search($nama_opd, array_column($list, 'nama_opd'));
                 $list = array($list[$i]);
             }
+            if ($IDX) {
+                if (count($list)===1) {
+                    $adminModel = new \App\Models\SuperAdminModel();
+                    $list[0]->data_terkait = $adminModel->getUserByOpd($list[0]->id);
+                }
+            }
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $list,

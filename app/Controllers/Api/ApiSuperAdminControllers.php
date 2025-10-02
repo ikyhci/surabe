@@ -108,11 +108,13 @@ class ApiSuperAdminControllers extends BaseController
         $phn    = $this->request->getPost('Phone');
         $eml    = $this->request->getPost('EmailAdds');
 
+        $pass   = $this->request->getPost('Password');
+
         $rlid = $this->request->getPost('RoleName');
         $opid = $this->request->getPost('nama_opd');
         $aspek_penilai = $this->request->getPost('aspek_penilai');
-    
-        $result = $this->superAdminModel->updateUser($uid, $uname, $fname, $phn, $eml);
+
+        $result = $this->superAdminModel->updateUser($uid, $uname, $fname, $phn, $eml, $pass);
 
         if ($result['res'] == 1) {
             $lke_detail_opd = new \App\Models\LkeDetailOpd();
@@ -253,11 +255,27 @@ class ApiSuperAdminControllers extends BaseController
 
     }
 
-    public function deleteUser($uid)
+    public function deleteUser($uid, $paramMode = null, $uidxx = null)
     {
-        $mode = $this->request->getGet('mode') ?? 'soft';
-        $deletedBy = session()->get('uid'); // atau dari token JWT
 
+        $mode = $paramMode ?? $this->request->getGet('mode') ?? 'soft';
+        
+        $uidx = $uidxx ?? $this->decoded->ids;
+        $user = $this->superAdminModel->getUsers($uidx, null, null);
+        if (count($user)===0 || $user[0]->actv != 'TRUE' || $user[0]->acs != 1) {
+            return $this->response->setJSON([
+                'token_crs' => csrf_hash(),
+                'res' => false,
+                'usr' => $user,
+                'validasi' => [
+                    'count' => (count($user)===0),
+                    'actv' => ($user[0]->actv != 'TRUE'),
+                    'acs' => ($user[0]->acs != 1),
+                ],
+                'msg' => 'anda tidak memiliki akses menghapus user ini'
+            ]);
+        }
+        $deletedBy = $user[0]->FullName;
         // ambil data relasi untuk informasi
         $relasi_data = $this->superAdminModel->getUserRelations($uid);
 
@@ -328,7 +346,7 @@ class ApiSuperAdminControllers extends BaseController
     
         $opid = $this->request->getPost('id');
         $uidx = $this->decoded->ids;
-    
+
         $result = $this->superAdminModel->deleteOpd($uidx, $opid);
     
         if ($result['res'] == 1) {
