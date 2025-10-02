@@ -321,7 +321,13 @@ $(document).ready(function() {
           $('#detail_indikator #param ol').append("<li>" + p.nama_parameter + "</li>");
         });
 
-        $('input[name="point"]').val((res.data.kondisiOpd[0]) ? res.data.kondisiOpd[0].nilai : "");
+        // $('#point').attr('readonly', false);
+        console.log(res.data.kondisiOpd[0].nilaiSementara);
+
+        $('#point').val(res.data.kondisiOpd[0].nilaiSementara);
+        // $('#point').attr('readonly', true);
+        $('#pointNilai').val(res.data.kondisiOpd[0].nilai);
+        // $('input[name="point"]').val((res.data.kondisiOpd[0]) ? res.data.kondisiOpd[0].nilai : "");
         $('input[name="data"]').val(dataOpd);
         $('textarea[name="keterangan"]').val((res.data.kondisiOpd[0]) ? res.data.kondisiOpd[0].ket : "");
         $('textarea[name="saran"]').val((res.data.kondisiOpd[0]) ? res.data.kondisiOpd[0].saran : "");
@@ -481,7 +487,7 @@ $(document).ready(function() {
     }
 
     let inputJawaban = $('input[name="jawaban"]');
-    let pointInput = $('#point');
+    // let pointInput = $('#point');
     // inputJawaban.on("change", function() {
     //   updatePointInput(jenis_jawaban_num, inputJawaban);
     // });
@@ -523,13 +529,13 @@ $(document).ready(function() {
 
     // updatePointInput(jenis_jawaban_num, inputJawaban);
 
-    if (data.kondisiOpd[0].aprove == 'no') {
-      $('#point').val(0);
-    } else if (data.kondisiOpd[0].nilai > 0) {
-      $('#point').val(data.kondisiOpd[0].nilai);
-    } else {
-      updatePointInput(jenis_jawaban_num, inputJawaban);
-    }
+    // if (data.kondisiOpd[0].aprove == 'no') {
+    //   $('#point').val(0);
+    // } else if (data.kondisiOpd[0].nilai > 0) {
+    //   $('#point').val(data.kondisiOpd[0].nilai);
+    // } else {
+    //   updatePointInput(jenis_jawaban_num, inputJawaban);
+    // }
 
 
     $('#approval_no').on('click', function() {
