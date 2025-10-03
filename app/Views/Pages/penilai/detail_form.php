@@ -538,13 +538,13 @@ $(document).ready(function() {
     // }
 
 
-    $('#approval_no').on('click', function() {
-      let pointInput = $('#point');
-      pointInput.val(0);
-    });
-    $('#approval_yes').on('click', function() {
-      updatePointInput(jenis_jawaban_num, inputJawaban);
-    });
+    // $('#approval_no').on('click', function() {
+    //   let pointInput = $('#point');
+    //   pointInput.val(0);
+    // });
+    // $('#approval_yes').on('click', function() {
+    //   updatePointInput(jenis_jawaban_num, inputJawaban);
+    // });
 
   }
 
