@@ -400,7 +400,7 @@ class PenilaianModel extends Model
         $builder = $this->db->table('lke_jawaban');
         $builder->where('id', $id_jawaban);
         $builder->update([
-            'nilai' => $point, 
+            // 'nilai' => $point, 
             'aprove' => $aprv, 
             'ket' => $keterangan,
             'saran' => $saran,
