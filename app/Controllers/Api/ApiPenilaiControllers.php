@@ -93,7 +93,6 @@ class ApiPenilaiControllers extends BaseController
 
     public function simpanPoint()
     {
-        
         $dataForm = $this->request->getVar('dataForm');
         parse_str($dataForm, $parsedData);
         $data = $parsedData['data'];

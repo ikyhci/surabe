@@ -400,7 +400,7 @@ class PenilaianModel extends Model
         $builder = $this->db->table('lke_jawaban');
         $builder->where('id', $id_jawaban);
         $builder->update([
-            // 'nilai' => $point, 
+            'nilai' => $point, 
             'aprove' => $aprv, 
             'ket' => $keterangan,
             'saran' => $saran,
@@ -413,7 +413,7 @@ class PenilaianModel extends Model
         $adaNilai = $tbnilai->where('IdJawaban', $id_jawaban)->get()->getRow();
         if($adaNilai) {
             $tbnilai->where('id', $adaNilai->id)->update([
-            'Nilai' => $point,
+            'Nilai' => $nilai,
             'Aproved' => $aprv,
             'Ket' => $keterangan,
             'PenilaiId' => $ids,
