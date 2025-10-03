@@ -97,7 +97,7 @@ class ApiPenilaiControllers extends BaseController
         $dataForm = $this->request->getVar('dataForm');
         parse_str($dataForm, $parsedData);
         $data = $parsedData['data'];
-        $point = $parsedData['point'];
+        $point = isset($parsedData['point']) ? $parsedData['point'] : null;
         $keterangan = $parsedData['keterangan'];
         $saran = $parsedData['saran'];
         $aprv = isset($parsedData['aprv']) ? $parsedData['aprv'] : null;

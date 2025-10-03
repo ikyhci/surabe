@@ -396,11 +396,11 @@ class PenilaianModel extends Model
     {
 
         $this->db->transStart();
-
+        $point = isset($point) ? $point : null;
         $builder = $this->db->table('lke_jawaban');
         $builder->where('id', $id_jawaban);
         $builder->update([
-            'nilai' => $point, 
+            // 'nilai' => $point, 
             'aprove' => $aprv, 
             'ket' => $keterangan,
             'saran' => $saran,
