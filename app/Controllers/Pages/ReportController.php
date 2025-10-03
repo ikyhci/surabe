@@ -483,7 +483,7 @@ class ReportController extends BaseController
             // Set basic PDF options - Changed to Landscape
             $pdf = new \TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->SetCreator('SURABE BERANI');
-            $pdf->SetTitle('Laporan Detail Evaluasi SPBE');
+            $pdf->SetTitle('Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah');
             $pdf->SetHeaderFont(['helvetica', '', 10]);
             $pdf->SetFooterFont(['helvetica', '', 8]);
             $pdf->SetHeaderData('', 0, 'SURABE BERANI', 'SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK BERINTEGRITAS DAN MANDIRI');
@@ -497,7 +497,7 @@ class ReportController extends BaseController
             // Header section
             $opd = $nilaiAspek[0];
             $pdf->SetFont('helvetica', 'B', 16);
-            $pdf->Cell(0, 10, 'LAPORAN DETAIL EVALUASI SPBE', 0, 1, 'C');
+            $pdf->Cell(0, 10, 'Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah', 0, 1, 'C');
             $pdf->SetFont('helvetica', 'B', 14);
             $pdf->Cell(0, 8, 'TAHUN ' . $tahun, 0, 1, 'C');
             $pdf->Ln(5);
