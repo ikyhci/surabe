@@ -1,10 +1,10 @@
 <?= $this->extend('Layouts/dashboard') ?>
 
 <?= $this->section('styles') ?>
-<style {csp-style-nonce} >
-  .opd-index {
-    width: 50px;
-  }
+<style {csp-style-nonce}>
+.opd-index {
+  width: 50px;
+}
 </style>
 <?= $this->endSection() ?>
 
@@ -25,7 +25,7 @@
           <!-- <php foreach ($aspek as $key => $val) : ?>
             <option value="<= $val->id ?>"><= $val->nama_aspek . ', ' . $val->sub_aspek . ' Tahun ' . $val->tahun ?></option>
           <php endforeach; ?> -->
-            <?php
+          <?php
             // $currentYear = date('Y');
             // for ($i = 0; $i < 5; $i++) {
             //   $year = $currentYear - $i;
@@ -33,9 +33,10 @@
             //   echo "<option value=\"$year\" $selected>$year</option>";
             // }
             ?>
-            <?php foreach ($form as $key => $val) : ?>
-              <option value="<?= $val->id ?>" <?= ($key == 0) ? 'selected' : '' ?>><?= $val->nama . ' Tahun ' . $val->tahun ?></option>
-            <?php endforeach; ?>
+          <?php foreach ($form as $key => $val) : ?>
+          <option value="<?= $val->id ?>" <?= ($key == 0) ? 'selected' : '' ?>>
+            <?= $val->nama . ' Tahun ' . $val->tahun ?></option>
+          <?php endforeach; ?>
         </select>
       </div>
       <br>
@@ -80,46 +81,48 @@
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript">
-  $(document).ready(function() {
-    var token = document.getElementById('token').value;
-    const forms = JSON.parse('<?= json_encode($form) ?>');
-    console.log(forms);
-    console.log($('#aspek').val());
-    
-    getOpd($('#aspek').val());
+$(document).ready(function() {
+  var token = document.getElementById('token').value;
+  const forms = JSON.parse('<?= json_encode($form) ?>');
+  console.log(forms);
+  console.log($('#aspek').val());
 
-    $('#aspek').change(function() {
-      let aspek = $(this).val();
-      getOpd(aspek);
-      console.log(aspek)
-    });
+  getOpd($('#aspek').val());
 
-    
-    function getOpd(asp) {
-      var crs = document.getElementById('<?= csrf_token() ?>').value
-      if (!asp) {
-        asp = $('#aspek').val();
+  $('#aspek').change(function() {
+    let aspek = $(this).val();
+    getOpd(aspek);
+    console.log(aspek)
+  });
+
+
+  function getOpd(asp) {
+    var crs = document.getElementById('<?= csrf_token() ?>').value
+    if (!asp) {
+      asp = $('#aspek').val();
+    }
+
+    $.ajaxSetup({
+      headers: {
+        'Authorization': 'Bearer ' + token
       }
+    });
+    // if (!asp) {
+    //   asp = new Date().getFullYear()
+    // }
+    let tbody = '';
+    $.ajax({
+      url: '<?= base_url('api/penilaian/data-opd?form=') ?>' + asp,
+      type: 'GET',
+      headers: {
+        'Authorization': 'Bearer <?= $token ?>'
+      },
+      success: function(data) {
+        console.log(data);
 
-      $.ajaxSetup({
-        headers:{
-          'Authorization': 'Bearer '+token
-           }
-        });
-      // if (!asp) {
-      //   asp = new Date().getFullYear()
-      // }
-      let tbody = '';
-      $.ajax({
-        url: '<?= base_url('api/penilaian/data-opd?form=') ?>' + asp,
-        type: 'GET',
-        headers: {
-          'Authorization': 'Bearer <?= $token ?>'
-        },
-        success: function(data) {
-          data.data.forEach((opd, index) => {
-        let progress = ((opd.detail.jumlah_kondisi / opd.detail.jumlah_indikator) * 100).toFixed(2);
-        tbody += `
+        data.data.forEach((opd, index) => {
+          let progress = ((opd.detail.jumlah_kondisi / opd.detail.jumlah_indikator) * 100).toFixed(2);
+          tbody += `
           <tr class="bg-light">
             <td class="text-center opd-index">${index + 1}</td>
             <td colspan="2" class="opd_name " data-opdid="${opd.id}">${opd.nama_opd}</td>
@@ -142,23 +145,23 @@
             </td>
           </tr>
         `;
-          });
-          $('.table tbody').html(tbody);
+        });
+        $('.table tbody').html(tbody);
 
-          $('.opd_name').click(function() {
-        let opdid = $(this).data('opdid');
-        let detailRow = $('.opd-detail[data-opdid="' + opdid + '"]');
-        if (detailRow.hasClass('d-none')) {
-          $('.opd-detail').addClass('d-none');
-          detailRow.removeClass('d-none');
-        } else {
-          detailRow.addClass('d-none');
-        }
-          });
-        }
-      });
-    };
+        $('.opd_name').click(function() {
+          let opdid = $(this).data('opdid');
+          let detailRow = $('.opd-detail[data-opdid="' + opdid + '"]');
+          if (detailRow.hasClass('d-none')) {
+            $('.opd-detail').addClass('d-none');
+            detailRow.removeClass('d-none');
+          } else {
+            detailRow.addClass('d-none');
+          }
+        });
+      }
+    });
+  };
 
-  });
+});
 </script>
 <?= $this->endSection() ?>
