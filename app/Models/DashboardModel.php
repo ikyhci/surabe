@@ -68,6 +68,7 @@ class DashboardModel extends Model
         if ($tahun !== null) {
             $aspek->where('lke_form.tahun', $tahun);
         }
+        $aspek->orderBy('nums', 'asc');
         return $aspek->get()->getResult();
     }
 
@@ -75,6 +76,7 @@ class DashboardModel extends Model
         return $this->db->table('lke_sub_aspek')
             ->select('lke_sub_aspek.id, lke_sub_aspek.nama_sub_aspek, lke_sub_aspek.nums')
             ->where('lke_sub_aspek.id_aspek', $id_aspek)
+            ->orderBy('nums', 'asc')
             ->get()->getResult();
     }
 
@@ -82,6 +84,7 @@ class DashboardModel extends Model
         return $this->db->table('lke_sub_sub_aspek')
             ->select('lke_sub_sub_aspek.id, lke_sub_sub_aspek.nama_sub_sub_aspek, lke_sub_sub_aspek.nums')
             ->where('lke_sub_sub_aspek.id_sub_aspek', $id_sub_aspek)
+            ->orderBy('nums', 'asc')
             ->get()->getResult();
     }
 
@@ -97,6 +100,7 @@ class DashboardModel extends Model
     public function getInstrumen() {
         return $this->db->table('lke_rb')
             ->select('lke_rb.id, lke_rb.nama, lke_rb.nums, 0 nilai')
+            ->orderBy('nums', 'asc')
             ->get()->getResult();
     }
 
