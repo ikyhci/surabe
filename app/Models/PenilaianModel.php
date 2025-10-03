@@ -32,7 +32,7 @@ class PenilaianModel extends Model
         $opd = $this->db->query("call View_Opd(null, null, null)")->getResult();
 
         // $indikator = $this->indikatorByAspek($idasp);
-        $indikator = $this->getIndikatorTahunan($tahun, $idSubASpek);
+        $indikator = $this->getIndikatorTahunan($tahun, null);
         $jumlahIndikator = count($indikator);
 
         foreach ($opd as $key => $value) {
