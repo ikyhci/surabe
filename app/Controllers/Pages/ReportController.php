@@ -652,10 +652,28 @@ class ReportController extends BaseController
                         foreach ($subSubAspeks as $ssa) {
                             // Calculate row height based on content
                             $text = $ssa->nama_sub_sub_aspek;
-                            $height = max(
-                                $pdf->getStringHeight($w[1], $text),
-                                6
-                            );
+                            // $height = max(
+                            //     $pdf->getStringHeight($w[1], $text),
+                            //     6
+                            // );
+                            // Hitung tinggi string tiap cell
+                            $heights = [];
+                            $heights[] = $pdf->getStringHeight($w[0], $ssa->nums);
+                            $heights[] = $pdf->getStringHeight($w[1], $text);
+                            $heights[] = $pdf->getStringHeight($w[2], '100%');
+                            $heights[] = $pdf->getStringHeight($w[3], number_format($ssa->nilai, 2));
+                            // $heights[] = $pdf->getStringHeight($w[4], $status);
+                            $heights[] = $pdf->getStringHeight($w[5], $ssa->ket);
+                            $heights[] = $pdf->getStringHeight($w[6], '');
+
+                            // Ambil tinggi terbesar
+                            $height = max($heights);
+
+                            // Set minimal tinggi misalnya 6
+                            if ($height < 6) {
+                                $height = 6;
+                            }
+
 
                             $status = $ssa->aprove === 'yes' ? 'Disetujui' : 
                                      ($ssa->aprove === 'no' ? 'Ditolak' : 'Pending');
