@@ -7,10 +7,16 @@
 
 <style>
 .text-vertikal {
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
   text-align: center;
   height: 200px;
+  padding: 5px;
+  transform: rotate(180deg);
+}
+
+th.text-vertikal {
+  vertical-align: middle;
 }
 </style>
 <div class="page-heading">
@@ -111,7 +117,7 @@
             <tr>
               <th>No</th>
               <th>Instansi</th>
-              <th>Index SPBE</th>
+              <th>Index RB</th>
               <!-- <th></th> -->
               <th class="d-none aspek-header text-vertikal" id="aspek-header-1">-</th>
               <th class="d-none aspek-header text-vertikal" id="aspek-header-2">-</th>
