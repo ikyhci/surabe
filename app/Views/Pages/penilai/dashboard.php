@@ -134,30 +134,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Capaian OPD</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <div class="loading"></div>
-                                <table id="penilaianOpd">
-                                    <thead class="text-center">
-                                        <tr>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
     </div>
     <div class="col-12 col-lg-3">
       <div class="card">
@@ -232,53 +208,14 @@
 let csrf_hash = "<?= csrf_hash() ?>";
 
 $(document).ready(function() {
-  // $.ajax({
-  //     url: "<?= base_url('api/capaian-opd') ?>",
-  //     type: "GET",
-  //     headers: { "Authorization": "Bearer <?= $token ?>" },
-  //     success: function(response) {
-
-  //         csrf_hash=response.token_crs;
-  //         loading('.loading', 'hide');
-  //         let dt = response.dt;
-
-  //         let tableHeader = $('#penilaianOpd thead tr');
-  //         tableHeader.empty();
-  //         tableHeader.append('<th class="col-nilai" >No</th>');
-  //         tableHeader.append('<th>OPD</th>');
-  //         $.each(dt[0].domains, function(index, item) {
-  //             tableHeader.append(`<th class="verticaltext col-nilai" >${item.nama_aspek}</th>`);``
-  //         });
-  //         tableHeader.append('<th>Capaian</th>');
-  //         let tableBody = $('#penilaianOpd tbody');
-  //         tableBody.empty();
-  //         $.each(dt, function(index, item) {
-  //             let capaian = 0;
-  //             let row = `<tr>
-  //                 <td>${index + 1}</td>
-  //                 <td>${item.singkatan}</td>`;
-  //             $.each(item.domains, function(index, d) {
-  //                 row += `<td class="text-center">${d.nilai}</td>`;
-  //                 capaian += d;
-  //             });                    row += `<td class="text-center">${item.nilai}</td></tr>`;
-  //             tableBody.append(row);
-  //         });
-
-  //         let table = $("#penilaianOpd")
-  //         table.addClass('table table-hover table-bordered');
-  //         table.DataTable();
-  //     },
-  //     error: function(xhr, status, error) {
-  //         console.error("AJAX Error: ", status, error);
-  //     }
-  // });
-
 
   $(document).ready(function() {
     $.ajax({
       url: "<?= base_url('api/capaian-opd') ?>",
       method: "GET",
-      headers: { "Authorization": "Bearer <?= $token ?>" },
+      headers: {
+        "Authorization": "Bearer <?= $token ?>"
+      },
       dataType: "json",
       success: function(res) {
         if (res.success) {
@@ -290,7 +227,7 @@ $(document).ready(function() {
                 <tr>
                     <td class="text-center">${i + 1}</td>
                     <td>${row.nama_opd}</td>
-                    <td class="text-center">${row.capaian}%</td>
+                    <td class="text-center">${row.capaian}</td>
                     <td class="text-center">
                         <a href="<?= base_url('rekap/detail/') ?>${row.opd_id}" class="btn btn-sm btn-info">Detail</a>
                     </td>

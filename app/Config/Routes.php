@@ -35,6 +35,7 @@ $routes->group('dashboard', ['filter' => ['appFilter', 'roles:User,Soal,Super Ad
     $routes->get('exportPDF', 'Pages\ReportController::exportPDF');
     $routes->get('exportPdfOpd', 'Pages\ReportController::exportPdfOpd');
 		
+		// $routes->get('data-opd/(:segment)/(:segment)', 'Api\ApiReportController::data_opd/$1/$2');
 });
 });
 //Users
@@ -152,3 +153,9 @@ $routes->group('api', ['filter' => ['apiFilter:Penilai,Super Admin', 'cors']], f
 	$routes->post('penilaian/uploadBuktiDukung', 'Api\ApiPenilaiControllers::uploadBuktiDukung');
 
 });
+
+
+// Report API
+// $routes->group('api', ['filter' => ['apiFilter:User,Soal,Super Admin,Penilai', 'cors']], function ($routes) {
+// 	$routes->get('report/data-opd/(:segment)/(:segment)', 'Api\ApiReportController::data_opd/$1/$2');
+// });

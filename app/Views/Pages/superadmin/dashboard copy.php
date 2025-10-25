@@ -1,25 +1,16 @@
 <?= $this->extend('Layouts/dashboard') ?>
-
 <?= $this->section('styles') ?>
+<!-- Styles -->
 <style {csp-style-nonce}>
-.page-heading {
-  margin-bottom: 1rem;
-}
-
-.info-cards .card {
-  min-height: 120px;
-}
-
-.info-value {
-  font-size: 1.6rem;
-  font-weight: 700;
-}
-
 .verticaltext {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   white-space: normal;
   height: 200px;
+}
+
+.col-nilai {
+  width: 100px;
 }
 
 .loading {
@@ -28,23 +19,15 @@
   align-items: center;
   height: 100%;
 }
-
-.canvas-wrap {
-  height: 320px;
-}
 </style>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-
+<!-- Content -->
 <div class="page-heading">
-  <h3>Dashboard Evaluasi Kinerja OPD</h3>
+  <h3>Dashboard Soal</h3>
 </div>
-
 <div class="page-content">
-
-  <!-- ===== RINGKASAN CARDS ===== -->
-
   <section class="row">
     <div class="col-12 col-lg-9">
       <div class="row">
@@ -186,304 +169,207 @@
 
   </section>
 
-
-  <!-- ===== CHART: Distribusi & Aspek ===== -->
-  <section class="row mt-3">
-    <div class="col-12 col-lg-6">
+  <!-- === SECTION BARU: Ringkasan & Grafik === -->
+  <section class="row mt-4">
+    <div class="col-12 col-lg-4">
       <div class="card">
         <div class="card-header">
-          <h4>Distribusi Kategori Kinerja</h4>
+          <h4>Ringkasan Evaluasi</h4>
         </div>
         <div class="card-body">
-          <div class="canvas-wrap"><canvas id="chartDistribusi"></canvas></div>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Total Instansi</span> <strong id="total-instansi">0</strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Rata-rata Indeks</span> <strong id="rata-rata">0</strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Nilai Tertinggi</span>
+              <span class="text-success fw-bold">
+                <span id="opd-tertinggi">-</span> (<span id="nilai-tertinggi">0</span>)
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Nilai Terendah</span>
+              <span class="text-danger fw-bold">
+                <span id="opd-terendah">-</span> (<span id="nilai-terendah">0</span>)
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-8">
       <div class="card">
         <div class="card-header">
           <h4>Rata-rata Nilai per Aspek</h4>
         </div>
         <div class="card-body">
-          <div class="canvas-wrap"><canvas id="chartAspekAvg"></canvas></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CHART: Top10 & Trend ===== -->
-  <section class="row mt-3">
-    <div class="col-12 col-lg-6">
-      <div class="card">
-        <div class="card-header">
-          <h4>Top 10 OPD</h4>
-        </div>
-        <div class="card-body">
-          <div class="canvas-wrap"><canvas id="chartTop10"></canvas></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 col-lg-6">
-      <div class="card">
-        <div class="card-header">
-          <h4>Tren Rata-rata Indeks per Tahun</h4>
-        </div>
-        <div class="card-body">
-          <div class="canvas-wrap"><canvas id="chartTrend"></canvas></div>
+          <canvas id="chartAspek"></canvas>
         </div>
       </div>
     </div>
   </section>
 
 
-  <!-- ===== TABEL OPD ===== -->
-  <section class="row mt-3">
+  <section class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h4>Peringkat & Capaian OPD</h4>
-          <select id="select-year" class="form-select form-select-sm" style="width:120px;"></select>
+        <div class="card-header">
+          <h4>Capaian OPD</h4>
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            <div class="loading" id="table-loading"></div>
-            <table id="table-opd" class="table table-hover table-bordered">
+            <div class="loading"></div>
+            <table id="penilaianOpd">
               <thead class="text-center">
                 <tr>
-                  <th>No</th>
-                  <th>Nama OPD</th>
-                  <th>Singkatan</th>
-                  <th>Nilai Akhir</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+              </tbody>
             </table>
           </div>
+          <!-- <div id="chart-profile-visit"></div> -->
         </div>
       </div>
     </div>
   </section>
-
 </div>
+
 
 <?= $this->endSection() ?>
 
-
 <?= $this->section('script') ?>
+
 <link {csp-style-nonce} rel="stylesheet" href="/assets/vendors/dataTables/dataTables.min.css">
 <script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
+<script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
+<script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/profil.js"></script>
 <script {csp-script-nonce} src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script {csp-script-nonce}>
-const API_BASE = "<?= base_url('dashboard/report/getEvaluasiLengkap') ?>";
-let charts = {};
-let dataTable;
+<?= $this->include('Pages/profil') ?>
 
-document.addEventListener("DOMContentLoaded", () => {
-  initYears();
-  fetchAndRender();
+<script {csp-script-nonce} type="text/javascript">
+let csrf_hash = "<?= csrf_hash() ?>";
+
+$(document).ready(function() {
+  // tampilkan loading
+  loading('.loading', 'show');
+
+  $.ajax({
+    url: "<?= base_url('dashboard/report/getEvaluasiLengkap?tahun=2025') ?>",
+    type: "GET",
+    success: function(response) {
+      csrf_hash = response.token_crs;
+      loading('.loading', 'hide');
+
+      const ringkasan = response.dt.ringkasan;
+      const opdList = response.dt.data_opd;
+
+      // === UPDATE CARD DI ATAS (OPSIONAL) ===
+      $('.stats-icon i').first().closest('.card-body').find('h6.font-extrabold').text(ringkasan
+        .total_instansi);
+
+      // === SECTION RINGKASAN EVALUASI ===
+      $('#total-instansi').text(ringkasan.total_instansi);
+      $('#rata-rata').text(ringkasan.rata_rata_index.toFixed(2));
+      $('#opd-tertinggi').text(ringkasan.instansi_tertinggi.nama_opd);
+      $('#nilai-tertinggi').text(ringkasan.instansi_tertinggi.capaian.toFixed(2));
+      $('#opd-terendah').text(ringkasan.instansi_terendah.nama_opd);
+      $('#nilai-terendah').text(ringkasan.instansi_terendah.capaian.toFixed(2));
+
+      // === BUAT TABEL CAPAIAN OPD ===
+      let tableHeader = $('#penilaianOpd thead tr');
+      tableHeader.empty();
+      tableHeader.append('<th class="text-center col-nilai">No</th>');
+      tableHeader.append('<th>Nama OPD</th>');
+      tableHeader.append('<th class="text-center">Nilai Akhir</th>');
+
+      let tableBody = $('#penilaianOpd tbody');
+      tableBody.empty();
+
+      opdList.sort((a, b) => b.nilai_akhir - a.nilai_akhir);
+
+      $.each(opdList, function(index, item) {
+        let row = `
+      <tr>
+        <td class="text-center">${index + 1}</td>
+        <td>${item.nama_opd}</td>
+        <td class="text-center fw-bold">${item.nilai_akhir.toFixed(2)}</td>
+      </tr>`;
+        tableBody.append(row);
+      });
+
+      $("#penilaianOpd").addClass('table table-hover table-bordered').DataTable({
+        order: [
+          [2, "desc"]
+        ],
+        pageLength: 10
+      });
+
+      // === BUAT DATA UNTUK CHART PER ASPEK ===
+      const aspekList = {};
+      opdList.forEach(opd => {
+        opd.aspek_values.forEach(aspek => {
+          if (!aspekList[aspek.nama_aspek]) aspekList[aspek.nama_aspek] = [];
+          aspekList[aspek.nama_aspek].push(aspek.skor_index);
+        });
+      });
+
+      const aspekLabels = Object.keys(aspekList);
+      const aspekValues = aspekLabels.map(label => {
+        const scores = aspekList[label];
+        const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+        return avg;
+      });
+
+      // === CHART: RATA-RATA NILAI PER ASPEK ===
+      const ctx = document.getElementById('chartAspek').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: aspekLabels,
+          datasets: [{
+            label: 'Rata-rata Skor',
+            data: aspekValues,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100
+            }
+          }
+        }
+      });
+    },
+    error: function(xhr, status, error) {
+      loading('.loading', 'hide');
+      console.error("AJAX Error: ", status, error);
+      Swal.fire("Error", "Gagal memuat data evaluasi lengkap", "error");
+    }
+  });
 });
 
-function initYears() {
-  const select = document.getElementById("select-year");
-  const now = new Date().getFullYear();
-  for (let y = now; y >= now - 5; y--) {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y;
-    if (y === now) opt.selected = true;
-    select.appendChild(opt);
+function loading(elTarget, toggle) {
+  let eLoading = `<img src="assets/vendors/svg-loaders/audio.svg" class="me-4" style="width: 3rem" alt="audio">`;
+  switch (toggle) {
+    case 'show':
+      $(elTarget).html(`<div class="d-flex justify-content-center align-items-center">${eLoading} Loading...</div>`);
+      break;
+    case 'hide':
+      $(elTarget).html('');
+      break;
   }
-  select.addEventListener("change", fetchAndRender);
-}
-
-async function fetchAndRender() {
-  const tahun = document.getElementById("select-year").value;
-  loading("#table-loading", true);
-  try {
-    const res = await fetch(`${API_BASE}?tahun=${tahun}`);
-    const json = await res.json();
-    const ringkasan = json.dt.ringkasan || {};
-    const opdList = json.dt.data_opd || [];
-
-    updateCards(ringkasan);
-    renderTable(opdList);
-    renderDistribusi(opdList);
-    renderAspekAvg(opdList);
-    renderTop10(opdList);
-    renderTrend(tahun);
-
-  } catch (e) {
-    console.error("Fetch error:", e);
-  } finally {
-    loading("#table-loading", false);
-  }
-}
-
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.innerText = val;
-}
-
-function updateCards(r) {
-  setText("card-total-instansi", r.total_instansi ?? 0);
-  setText("card-rerata", (r.rata_rata_index ?? 0).toFixed(2));
-  setText("card-tertinggi", r.instansi_tertinggi?.nama_opd ?? "-");
-  setText("card-tertinggi-val", r.instansi_tertinggi?.capaian?.toFixed(2) ?? "");
-  setText("card-terendah", r.instansi_terendah?.nama_opd ?? "-");
-  setText("card-terendah-val", r.instansi_terendah?.capaian?.toFixed(2) ?? "");
-}
-
-function renderTable(data) {
-  if (dataTable) dataTable.destroy();
-  const tbody = document.querySelector("#table-opd tbody");
-  tbody.innerHTML = "";
-  data.sort((a, b) => b.nilai_akhir - a.nilai_akhir);
-  data.forEach((d, i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${i+1}</td>
-      <td>${d.nama_opd}</td>
-      <td>${d.singkatan ?? ""}</td>
-      <td class="text-center">${(d.nilai_akhir ?? 0).toFixed(2)}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-  dataTable = $("#table-opd").DataTable({
-    pageLength: 10,
-    order: [
-      [3, "desc"]
-    ]
-  });
-}
-
-function renderDistribusi(list) {
-  const cat = {
-    a: 0,
-    b: 0,
-    c: 0,
-    d: 0
-  };
-  list.forEach(o => {
-    const v = o.nilai_akhir ?? 0;
-    if (v >= 75) cat.a++;
-    else if (v >= 50) cat.b++;
-    else if (v >= 25) cat.c++;
-    else cat.d++;
-  });
-  const ctx = document.getElementById("chartDistribusi").getContext("2d");
-  charts.distribusi?.destroy();
-  charts.distribusi = new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels: ["≥75 Sangat Baik", "50–74 Baik", "25–49 Cukup", "<25 Kurang"],
-      datasets: [{
-        data: [cat.a, cat.b, cat.c, cat.d],
-        backgroundColor: ["#198754", "#0d6efd", "#ffc107", "#dc3545"]
-      }]
-    }
-  });
-}
-
-function renderAspekAvg(list) {
-  const map = {};
-  list.forEach(o => {
-    (o.aspek_values || []).forEach(a => {
-      if (!map[a.nama_aspek]) map[a.nama_aspek] = [];
-      map[a.nama_aspek].push(a.skor_index ?? 0);
-    });
-  });
-  const labels = Object.keys(map);
-  const vals = labels.map(k => {
-    const arr = map[k];
-    return arr.reduce((a, b) => a + b, 0) / (arr.length || 1);
-  });
-  const ctx = document.getElementById("chartAspekAvg").getContext("2d");
-  charts.aspek?.destroy();
-  charts.aspek = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        label: "Rata-rata",
-        data: vals,
-        backgroundColor: "#0d6efd"
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100
-        }
-      }
-    }
-  });
-}
-
-function renderTop10(list) {
-  const sorted = list.slice().sort((a, b) => b.nilai_akhir - a.nilai_akhir).slice(0, 10);
-  const ctx = document.getElementById("chartTop10").getContext("2d");
-  charts.top10?.destroy();
-  charts.top10 = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: sorted.map(o => o.singkatan),
-      datasets: [{
-        label: "Nilai Akhir",
-        data: sorted.map(o => o.nilai_akhir),
-        backgroundColor: "#20c997"
-      }]
-    },
-    options: {
-      indexAxis: "y",
-      scales: {
-        x: {
-          beginAtZero: true,
-          max: 100
-        }
-      }
-    }
-  });
-}
-
-async function renderTrend(currentYear) {
-  const years = [currentYear - 2, currentYear - 1, currentYear];
-  const dataArr = [];
-  for (const y of years) {
-    const res = await fetch(`${API_BASE}?tahun=${y}`).then(r => r.json()).catch(() => null);
-    dataArr.push(res?.dt?.ringkasan?.rata_rata_index ?? 0);
-  }
-  const ctx = document.getElementById("chartTrend").getContext("2d");
-  charts.trend?.destroy();
-  charts.trend = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: years,
-      datasets: [{
-        label: "Rata-rata",
-        data: dataArr,
-        borderColor: "#0dcaf0",
-        tension: 0.3
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100
-        }
-      }
-    }
-  });
-}
-
-function loading(sel, show) {
-  const el = document.querySelector(sel);
-  if (!el) return;
-  el.innerHTML = show ? `<img src="/assets/vendors/svg-loaders/audio.svg" style="width:3rem" alt="loading">` : "";
 }
 </script>
+
 <?= $this->endSection() ?>

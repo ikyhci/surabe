@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use \App\Models\NilaiModel;
 
 class LkeModel extends Model
 {
@@ -14,148 +15,137 @@ class LkeModel extends Model
         $this->db = \Config\Database::connect();
     }
 
-    public function getNilaiSubSubAspek($tahun, $idopd)
-    {
-      return $this->db->table('lke_sub_sub_aspek ssa')
-        ->select("
-            rb.nums AS ururan_rb,
-            rb.nama AS komponen,
-            rb.bobot AS bobot_rb,
-            a.nums AS urutan_aspek,
-            a.nama_aspek,
-            a.bobot AS bobot_as,
-            sa.nums AS urutan_sub_aspek,
-            sa.nama_sub_aspek,
-            sa.bobot AS bobot_sa,
-            ssa.nums AS urutan_sub_sub_aspek,
-            ssa.id,
-            ssa.nama_sub_sub_aspek,
-            ssa.id_sub_aspek,
-            ssa.bobot,
-            COUNT(i.id) AS jumlah_indikator,
-            SUM(IFNULL(j.nilai, 0)) AS total_skor,
-            ROUND(SUM(IFNULL(j.nilai, 0)) / NULLIF(ssa.bobot, 0) * 100, 2) AS skor_index,
-            j.ket AS keterangan,
-        ")
-        ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id')
-        ->join('lke_sub_aspek sa', 'sa.id = ssa.id_sub_aspek')
-        ->join('lke_aspek a', 'a.id = sa.id_aspek')
-        ->join('lke_rb rb', 'rb.id = a.rb_id')
-        ->join('lke_form f', 'f.id = rb.form_id')
-        ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
-        ->join('lke_detail_opd d', 'd.userid = j.userid', 'left')
-        ->where('f.tahun', $tahun)
-        ->where('d.opdid', $idopd)
-        ->groupBy('ssa.id, ssa.nama_sub_sub_aspek, ssa.nums, ssa.id_sub_aspek, ssa.bobot')
-        ->get()
-        ->getResultArray();
+public function getNilaiSubSubAspek($tahun, $idopd)
+{
+  return $this->db->table('lke_sub_sub_aspek ssa')
+    ->select("
+        ssa.id,
+        ssa.id_sub_aspek,
+        ssa.nama_sub_sub_aspek,
+        ssa.bobot,
+        COUNT(i.id) AS jumlah_indikator,
+        AVG(IFNULL(nj.Nilai, 0)) AS rata_rata_nilai
+    ")
+    ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id')
+    ->join('lke_sub_aspek sa', 'sa.id = ssa.id_sub_aspek')
+    ->join('lke_aspek a', 'a.id = sa.id_aspek')
+    ->join('lke_rb rb', 'rb.id = a.rb_id')
+    ->join('lke_form f', 'f.id = rb.form_id')
+    ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
+    ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.id', 'left')
+    ->join('lke_detail_opd d', 'd.userid = j.userid', 'left')
+    ->where('f.tahun', $tahun)
+    ->where('d.opdid', $idopd)
+    ->groupBy('ssa.id, ssa.id_sub_aspek, ssa.nama_sub_sub_aspek, ssa.bobot')
+    ->get()
+    ->getResultArray();
+}
+
+public function getNilaiSubAspek($tahun, $idopd)
+{
+    $subSub = $this->getNilaiSubSubAspek($tahun, $idopd);
+    $grouped = [];
+
+    foreach ($subSub as $row) {
+        $id = $row['id_sub_aspek'];
+        if (!isset($grouped[$id])) {
+            $grouped[$id] = [
+                'id' => $id,
+                'total_nilai' => 0,
+            ];
+        }
+
+        // Hitung nilai SSA dengan bobot
+        $nilaiSSA = ($row['rata_rata_nilai'] * $row['bobot']) / 100;
+
+        $grouped[$id]['total_nilai'] += $nilaiSSA;
     }
 
-    public function getNilaiSubAspek($tahun, $idopd)
-    {
-        $subSub = $this->getNilaiSubSubAspek($tahun, $idopd);
-        $grouped = [];
-
-        foreach ($subSub as $row) {
-            $id = $row['id_sub_aspek'];
-            if (!isset($grouped[$id])) {
-                $grouped[$id] = [
-                    'id' => $id,
-                    'total_bobot' => 0,
-                    'total_skor' => 0,
-                ];
-            }
-
-            $grouped[$id]['total_bobot'] += $row['bobot'];
-            $grouped[$id]['total_skor'] += $row['total_skor'];
-        }
-
-        foreach ($grouped as &$val) {
-            $val['skor_index'] = round(($val['total_bobot'] > 0 ? $val['total_skor'] / $val['total_bobot'] * 100 : 0), 2);
-        }
-
-        return array_values($grouped);
+    foreach ($grouped as &$val) {
+        $val['skor_index'] = round($val['total_nilai'], 2); // langsung sum, tanpa bobot lagi
     }
 
-    public function getNilaiAspek($tahun, $idopd)
-    {
-        $subAspek = $this->getNilaiSubAspek($tahun, $idopd);
-        $grouped = [];
+    return array_values($grouped);
+}
 
-        foreach ($subAspek as $row) {
-            $idSubAspek = $row['id'];
-            $idAspek = $this->db->table('lke_sub_aspek')
-                ->select('id_aspek')
-                ->where('id', $idSubAspek)
-                ->get()
-                ->getRow('id_aspek');
 
-            if (!isset($grouped[$idAspek])) {
-                $grouped[$idAspek] = [
-                    'id' => $idAspek,
-                    'total_skor_index' => 0,
-                    'jumlah_sub_aspek' => 0,
-                ];
-            }
+public function getNilaiAspek($tahun, $idopd)
+{
+    $subAspek = $this->getNilaiSubAspek($tahun, $idopd);
+    $grouped = [];
 
-            $grouped[$idAspek]['total_skor_index'] += $row['skor_index'];
-            $grouped[$idAspek]['jumlah_sub_aspek']++;
+    foreach ($subAspek as $row) {
+        $idAspek = $this->db->table('lke_sub_aspek')
+            ->select('id_aspek')
+            ->where('id', $row['id'])
+            ->get()
+            ->getRow('id_aspek');
+
+        if (!isset($grouped[$idAspek])) {
+            $grouped[$idAspek] = [
+                'id' => $idAspek,
+                'scores' => []
+            ];
         }
 
-        foreach ($grouped as &$val) {
-            $val['skor_index'] = round($val['total_skor_index'] / $val['jumlah_sub_aspek'], 2);
-        }
-
-        return array_values($grouped);
+        $grouped[$idAspek]['scores'][] = $row['skor_index'];
     }
 
-    public function getNilaiRB($tahun, $idopd)
-    {
-        $aspek = $this->getNilaiAspek($tahun, $idopd);
-        $grouped = [];
-
-        foreach ($aspek as $row) {
-            $idAspek = $row['id'];
-            $idRB = $this->db->table('lke_aspek')
-                ->select('rb_id')
-                ->where('id', $idAspek)
-                ->get()
-                ->getRow('rb_id');
-
-            if (!isset($grouped[$idRB])) {
-                $grouped[$idRB] = [
-                    'id' => $idRB,
-                    'total_skor_index' => 0,
-                    'jumlah_aspek' => 0,
-                ];
-            }
-
-            $grouped[$idRB]['total_skor_index'] += $row['skor_index'];
-            $grouped[$idRB]['jumlah_aspek']++;
-        }
-
-        foreach ($grouped as &$val) {
-            $val['skor_index'] = round($val['total_skor_index'] / $val['jumlah_aspek'], 2);
-        }
-
-        return array_values($grouped);
+    foreach ($grouped as &$val) {
+        $val['skor_index'] = count($val['scores']) > 0 
+            ? round(array_sum($val['scores']) / count($val['scores']), 2) 
+            : 0;
     }
 
-    public function getTotalNilaiLKE($tahun, $idopd)
-    {
-        $rb = $this->getNilaiRB($tahun, $idopd);
+    return array_values($grouped);
+}
 
-        $total = 0;
-        $jumlah = count($rb);
-        foreach ($rb as $r) {
-            $total += $r['skor_index'];
+
+public function getNilaiRB($tahun, $idopd)
+{
+    $aspek = $this->getNilaiAspek($tahun, $idopd);
+    $grouped = [];
+
+    foreach ($aspek as $row) {
+        $idRB = $this->db->table('lke_aspek')
+            ->select('rb_id')
+            ->where('id', $row['id'])
+            ->get()
+            ->getRow('rb_id');
+
+        if (!isset($grouped[$idRB])) {
+            $grouped[$idRB] = [
+                'id' => $idRB,
+                'scores' => []
+            ];
         }
 
-        return $jumlah > 0 ? round($total / $jumlah, 2) : 0;
+        $grouped[$idRB]['scores'][] = $row['skor_index'];
     }
+
+    foreach ($grouped as &$val) {
+        $val['skor_index'] = count($val['scores']) > 0
+            ? round(array_sum($val['scores']) / count($val['scores']), 2)
+            : 0;
+    }
+
+    return array_values($grouped);
+}
+
+public function getTotalNilaiLKE($tahun, $idopd)
+{
+    $rb = $this->getNilaiRB($tahun, $idopd);
+
+    $scores = array_column($rb, 'skor_index');
+
+    return !empty($scores) 
+        ? round(array_sum($scores) / count($scores), 2) 
+        : 0;
+}
 
     public function getRekapSemuaOpd($tahun)
     {
+        $tahun = (is_array($tahun))? $tahun['tahun'] : $tahun ;
         $builder = $this->db->table('lke_opd o');
         $builder->select('o.id AS opd_id, o.nama_opd, d.userid');
         $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
@@ -167,12 +157,18 @@ class LkeModel extends Model
 
         $result = [];
         foreach ($opds as $opd) {
-            $capaian = $this->getTotalNilaiLKE($tahun, $opd['opd_id']);
+            // $capaian = $this->getTotalNilaiLKE($tahun, $opd['opd_id']);
+            $nilaiOpdModel = new NilaiModel();
+            $nilaiOpd = $nilaiOpdModel->getNilaiOpd($opd['opd_id'], $tahun);
+            $capaian = $nilaiOpd['opd_nilai'];
+            $rb = $this->getNilaiRB($tahun, $opd['opd_id']);
             $result[] = [
                 'opd_id' => $opd['opd_id'],
                 'nama_opd' => $opd['nama_opd'],
                 'userid' => $opd['userid'],
                 'capaian' => $capaian,
+                'nilai' => $nilaiOpd,
+                'rb'    => $rb,
             ];
         }
 
@@ -312,6 +308,7 @@ class LkeModel extends Model
             ->get()
             ->getResultArray();
     }
+
 
     public function getRekapSubAspek($tahun, $idopd) 
     {
@@ -465,68 +462,105 @@ class LkeModel extends Model
         ];
     }
 
-    public function getOpdWithAspekValuesSimple($tahun)
-    {
-        $builder = $this->db->table('lke_opd o');
-        $builder->select('o.id AS opd_id, o.nama_opd, o.singkatan, d.userid');
-        $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
-        $builder->groupBy('o.id');
-        $builder->orderBy('o.nama_opd');
-        
-        $opds = $builder->get()->getResultArray();
-        
-        $result = [];
-        
-        foreach ($opds as $opd) {
-            // Get nilai aspek for this OPD
-            $aspekNilai = $this->getNilaiAspek($tahun, $opd['opd_id']);
-            
-            // Get aspek details
-            $aspekDetails = $this->db->table('lke_aspek a')
-                ->select('a.id, a.nama_aspek, a.bobot, a.nums')
-                ->join('lke_rb rb', 'rb.id = a.rb_id')
-                ->join('lke_form f', 'f.id = rb.form_id')
-                ->where('f.tahun', $tahun)
-                ->orderBy('a.nums')
-                ->get()
-                ->getResultArray();
-            
-            $aspekValues = [];
-            $totalSkor = 0;
-            $jumlahAspek = count($aspekDetails);
-            
-            foreach ($aspekDetails as $aspek) {
-                $skorIndex = 0;
-                
-                // Find matching score
-                foreach ($aspekNilai as $nilai) {
-                    if ($nilai['id'] == $aspek['id']) {
-                        $skorIndex = $nilai['skor_index'];
-                        break;
-                    }
+public function getOpdWithAspekValuesSimple($tahun)
+{
+    // Ambil OPD dengan filter role
+    $builder = $this->db->table('lke_opd o');
+    $builder->select('o.id AS opd_id, o.nama_opd, o.singkatan, d.userid');
+    $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
+    $builder->join('lke_role r', 'r.Uid = d.userid', 'left');
+    $builder->join('lke_roles rs', 'rs.RoleId = r.RoleId', 'left');
+    $builder->where('rs.acs', 5);
+    $builder->groupBy('o.id');
+    $builder->orderBy('o.nama_opd', 'ASC');
+
+    $opds = $builder->get()->getResultArray();
+
+    $result = [];
+
+    foreach ($opds as $opd) {
+        // Ambil nilai aspek per OPD
+        $aspekNilai = $this->getNilaiAspek($tahun, $opd['opd_id']);
+
+        // Ambil daftar aspek + RB
+        $aspekDetails = $this->db->table('lke_aspek a')
+            ->select('rb.id as rbId, rb.nama as namaRb, a.id, a.nama_aspek, a.bobot, a.nums')
+            ->join('lke_rb rb', 'rb.id = a.rb_id')
+            ->join('lke_form f', 'f.id = rb.form_id')
+            ->where('f.tahun', $tahun)
+            ->orderBy('rb.nums', 'ASC')
+            ->orderBy('a.nums', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        // Ambil rekap sub aspek lengkap
+        $rekapSubAspek = $this->getRekapSubAspek($tahun, $opd['opd_id']);
+
+        $aspekValues = [];
+        $rbGroups = []; // kumpulan skor aspek per RB
+
+        foreach ($aspekDetails as $aspek) {
+            $skorIndex = 0;
+
+            // Cari skor aspek
+            foreach ($aspekNilai as $nilai) {
+                if ($nilai['id'] == $aspek['id']) {
+                    $skorIndex = $nilai['skor_index'];
+                    break;
                 }
-                
-                $aspekValues[] = [
-                    'aspek_id' => $aspek['id'],
-                    'nama_aspek' => $aspek['nama_aspek'],
-                    'skor_index' => $skorIndex
-                ];
-                
-                $totalSkor += $skorIndex;
             }
-            
-            $result[] = [
-                'opd_id' => $opd['opd_id'],
-                'nama_opd' => $opd['nama_opd'],
-                'singkatan' => $opd['singkatan'],
-                'userid' => $opd['userid'],
-                'aspek_values' => $aspekValues,
-                'nilai_akhir' => $jumlahAspek > 0 ? round($totalSkor / $jumlahAspek, 2) : 0
+
+            // Filter sub aspek yang termasuk dalam aspek ini
+            $subAspekFiltered = array_filter($rekapSubAspek, function ($item) use ($aspek) {
+                return $item['nama_aspek'] === $aspek['nama_aspek'];
+            });
+
+            $subAspekList = [];
+            foreach ($subAspekFiltered as $sub) {
+                $subAspekList[] = [
+                    'nama_sub_aspek' => $sub['nama_sub_aspek'],
+                    'bobot' => $sub['bobot'],
+                    'nilai_sa' => $sub['nilai_sa'],
+                    'sub_sub_aspek' => $sub['sub_sub_aspek'] // sudah dalam bentuk array nested
+                ];
+            }
+
+            $aspekValues[] = [
+                'rb_id'         => $aspek['rbId'],
+                'nama_rb'       => $aspek['namaRb'],
+                'aspek_id'      => $aspek['id'],
+                'nama_aspek'    => $aspek['nama_aspek'],
+                'skor_index'    => $skorIndex,
+                'sub_aspek'     => $subAspekList // ✅ tambahan nested data
             ];
+
+            // Tambahkan skor ke grup RB
+            $rbGroups[$aspek['rbId']][] = $skorIndex;
         }
-        
-        return $result;
+
+        // Hitung rata-rata per RB
+        $rbAverages = [];
+        foreach ($rbGroups as $rbId => $scores) {
+            $rbAverages[$rbId] = count($scores) > 0 ? array_sum($scores) / count($scores) : 0;
+        }
+
+        // Hitung nilai akhir OPD
+        $nilaiAkhir = !empty($rbAverages)
+            ? round(array_sum($rbAverages) / count($rbAverages), 2)
+            : 0;
+
+        $result[] = [
+            'opd_id'        => $opd['opd_id'],
+            'nama_opd'      => $opd['nama_opd'],
+            'singkatan'     => $opd['singkatan'],
+            'userid'        => $opd['userid'],
+            'aspek_values'  => $aspekValues,
+            'nilai_akhir'   => $nilaiAkhir
+        ];
     }
+
+    return $result;
+}
 
     public function getDetailEvaluasiByOpd($tahun, $opdId)
     {
