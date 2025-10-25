@@ -183,7 +183,7 @@ $(document).ready(function() {
 
   // Event listeners
   $('#btn-refresh').click(function() {
-    loadReportData();
+    loadReportData(true);
   });
 
   $('#filter-tahun').change(function() {
@@ -208,7 +208,7 @@ $(document).ready(function() {
   });
 });
 
-function loadReportData() {
+function loadReportData(refresh = false) {
   tahun = $('#filter-tahun').val();
 
   // Show loading state
@@ -219,7 +219,8 @@ function loadReportData() {
     url: '<?= base_url('dashboard/report/getEvaluasiLengkap') ?>',
     method: 'GET',
     data: {
-      tahun: tahun
+      tahun: tahun,
+      update: refresh
     },
     dataType: 'json',
     success: function(response) {

@@ -30,31 +30,45 @@ class ReportController extends BaseController
         return view('dashboard/report/index', $data);
     }
 
-    public function getEvaluasiLengkap()
-    {
-        $tahun = $this->request->getGet('tahun') ?? date('Y');
-        
-        try {
+public function getEvaluasiLengkap()
+{
+    $tahun = $this->request->getGet('tahun') ?? date('Y');
+    $update = $this->request->getGet('update') ?? false;
+    $cache = \Config\Services::cache();
+    // pd($update);
+    // buat key unik berdasarkan tahun
+    $cacheKey = 'evaluasi_lengkap_' . $tahun;
+
+    try {
+        // coba ambil dari cache dulu
+        $evaluasiData = $cache->get($cacheKey);
+
+        if ($evaluasiData === null || $update === 'true' || $update === true) {
+            // jika belum ada, ambil dari model
             $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun);
-            
-            $data = array(
-                'token_crs' => csrf_hash(),
-                'dt'        => $evaluasiData,
-                'success'   => 1,
-                'msg'       => 'Data evaluasi lengkap berhasil diambil'
-            );
-            
-        } catch (\Exception $e) {
-            $data = array(
-                'token_crs' => csrf_hash(),
-                'dt'        => null,
-                'success'   => 0,
-                'msg'       => 'Gagal mengambil data evaluasi lengkap: ' . $e->getMessage()
-            );
+
+            // simpan ke cache selama 10 menit (600 detik) 24jam =86400
+            $cache->save($cacheKey, $evaluasiData, 86400);
         }
-        
-        return $this->response->setJSON($data);
+
+        $data = [
+            'token_crs' => csrf_hash(),
+            'dt'        => $evaluasiData,
+            'success'   => 1,
+            'msg'       => 'Data evaluasi lengkap berhasil diambil'
+        ];
+
+    } catch (\Exception $e) {
+        $data = [
+            'token_crs' => csrf_hash(),
+            'dt'        => null,
+            'success'   => 0,
+            'msg'       => 'Gagal mengambil data evaluasi lengkap: ' . $e->getMessage()
+        ];
     }
+
+    return $this->response->setJSON($data);
+}
 
     public function getRingkasanEvaluasi()
     {
@@ -140,8 +154,8 @@ class ReportController extends BaseController
             // Table headers
             $sheet->setCellValue('A'.$row, 'No');
             $sheet->setCellValue('B'.$row, 'Instansi');
-            $sheet->setCellValue('C'.$row, 'Index SPBE');
-            $sheet->setCellValue('D'.$row, 'Predikat');
+            $sheet->setCellValue('C'.$row, 'Index RB');
+            // $sheet->setCellValue('D'.$row, 'Predikat');
 
             // Dynamic aspek headers
             $colIndex = 5; // Column E
@@ -166,7 +180,7 @@ class ReportController extends BaseController
                 $sheet->setCellValue("A{$row}", $index + 1);
                 $sheet->setCellValue("B{$row}", $opd['nama_opd']);
                 $sheet->setCellValue("C{$row}", $opd['nilai_akhir']);
-                $sheet->setCellValue("D{$row}", $this->getPredikat($opd['nilai_akhir']));
+                // $sheet->setCellValue("D{$row}", $this->getPredikat($opd['nilai_akhir']));
 
                 // Nilai aspek
                 $colIndex = 5;
@@ -350,7 +364,7 @@ class ReportController extends BaseController
             
             // Index SPBE column
             $pdf->SetXY($currentX, $startY);
-            $pdf->MultiCell($indexWidth, $headerHeight, 'Index SPBE', 1, 'C', true, 0);
+            $pdf->MultiCell($indexWidth, $headerHeight, 'Index RB', 1, 'C', true, 0);
             $currentX += $indexWidth;
             
             // // Predikat column
@@ -480,7 +494,7 @@ class ReportController extends BaseController
         try {
             $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
             
-            // Set basic PDF options - Changed to Landscape
+            // Set basic PDF options - Landscape
             $pdf = new \TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->SetCreator('SURABE BERANI');
             $pdf->SetTitle('Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah');
@@ -490,7 +504,7 @@ class ReportController extends BaseController
             $pdf->SetMargins(15, 25, 15);
             $pdf->SetHeaderMargin(10);
             $pdf->SetFooterMargin(10);
-            $pdf->SetAutoPageBreak(TRUE, 20);
+            $pdf->SetAutoPageBreak(TRUE, 18); // Margin bottom lebih besar
             $pdf->AddPage();
             $pdf->setPrintHeader(false);
 
@@ -526,13 +540,225 @@ class ReportController extends BaseController
             
             $pdf->Cell($labelWidth, $boxHeight, 'Nilai Akhir', 1, 0, 'L', true);
             $pdf->Cell($colonWidth, $boxHeight, ':', 1, 0, 'C', true);
-            $pdf->Cell($valueWidth, $boxHeight, number_format($opd->nilai, 2), 1, 1, 'L', true);
+            $pdf->Cell($valueWidth, $boxHeight, number_format($opd->nilai/2, 2), 1, 1, 'L', true);
             
             $pdf->Ln(10);
             $pdf->setPrintHeader(true);
 
+            // Ringkasan aspek
+            // Kumpulkan semua aspek dari semua instrumen terlebih dahulu
+            $allAspek = [];
+            foreach ($opd->instrumen as $instrumen) {
+                foreach ($instrumen->aspek as $aspek) {
+                    $allAspek[] = (object)[
+                        'instrumen_nama' => $instrumen->nama,
+                        'instrumen_nums' => $instrumen->nums,
+                        'aspek_nums' => $aspek->nums,
+                        'nama_aspek' => $aspek->nama_aspek,
+                        'nilai' => $aspek->nilai
+                    ];
+                }
+            }
+
+            // Get page dimensions
+            $pageWidth = $pdf->getPageWidth();
+            $pageHeight = $pdf->getPageHeight();
+            $margins = $pdf->getMargins();
+            $effectiveWidth = $pageWidth - $margins['left'] - $margins['right'];
+            $bottomMargin = $pdf->getBreakMargin();
+
+            // Check if new page is needed for summary
+            $requiredHeight = 100; // Perkiraan tinggi untuk ringkasan
+            if ($pdf->GetY() + $requiredHeight > ($pageHeight - $bottomMargin)) {
+                $pdf->AddPage();
+            }
+
+            // Define column widths (50% each for table and chart)
+            $tableWidth = $effectiveWidth * 0.45;
+            $chartWidth = $effectiveWidth * 0.50;
+            $spacing = $effectiveWidth * 0.05;
+
+            // Save current Y position
+            $startY = $pdf->GetY();
+
+            // LEFT SIDE - Table of ALL Aspek Values
+            $pdf->SetFont('helvetica', 'B', 11);
+            $pdf->SetFillColor(220, 220, 220);
+            $pdf->Cell($tableWidth, 8, 'Rekapitulasi Nilai Aspek', 1, 1, 'C', true);
+
+            // Table header
+            $pdf->SetFont('helvetica', 'B', 11);
+            $pdf->SetFillColor(245, 245, 245);
+            $colWidths = [
+                $tableWidth * 0.10,  // No
+                $tableWidth * 0.15,  // Kode
+                $tableWidth * 0.55,  // Nama Aspek
+                $tableWidth * 0.20   // Nilai
+            ];
+
+            $pdf->Cell($colWidths[0], 9, 'No', 1, 0, 'C', true);
+            $pdf->Cell($colWidths[1], 9, 'Kode', 1, 0, 'C', true);
+            $pdf->Cell($colWidths[2], 9, 'Nama Aspek', 1, 0, 'C', true);
+            $pdf->Cell($colWidths[3], 9, 'Nilai', 1, 1, 'C', true);
+
+            // Table data
+            $pdf->SetFont('helvetica', '', 10);
+            $no = 1;
+            $radarData = [];
+            $radarLabels = [];
+
+            foreach ($allAspek as $aspekItem) {
+                $kode = $aspekItem->instrumen_nums . '.' . $aspekItem->aspek_nums;
+                
+                // Calculate row height
+                $height = max($pdf->getStringHeight($colWidths[2], $aspekItem->nama_aspek), 8);
+                
+                $pdf->MultiCell($colWidths[0], $height, $no++, 1, 'C', false, 0);
+                $pdf->MultiCell($colWidths[1], $height, $kode, 1, 'C', false, 0);
+                $pdf->MultiCell($colWidths[2], $height, $aspekItem->nama_aspek, 1, 'L', false, 0);
+                $pdf->MultiCell($colWidths[3], $height, number_format($aspekItem->nilai, 2), 1, 'C', false, 1);
+                
+                // Collect data for radar chart
+                $radarData[] = floatval($aspekItem->nilai);
+                
+                // Create shorter label for radar
+                $labelText = $kode . '. ';
+                $labelText .= strlen($aspekItem->nama_aspek) > 15 ? 
+                            substr($aspekItem->nama_aspek, 0, 15) . '...' : 
+                            $aspekItem->nama_aspek;
+                $radarLabels[] = $labelText;
+            }
+
+            $tableEndY = $pdf->GetY();
+
+            // RIGHT SIDE - Radar Chart
+            $pdf->SetXY($margins['left'] + $tableWidth + $spacing, $startY);
+
+            $chartX = $pdf->GetX();
+            $chartY = $pdf->GetY();
+
+            // Draw radar chart frame
+            $pdf->SetFont('helvetica', 'B', 11);
+            $pdf->SetFillColor(220, 220, 220);
+            $pdf->Cell($chartWidth, 8, 'Diagram Radar - Nilai Aspek', 1, 1, 'C', true);
+
+            // Generate radar chart
+            $chartHeight = $tableEndY - $startY - 8;
+            $pdf->SetXY($chartX, $chartY + 8);
+
+            // Create radar chart
+            $centerX = $chartX + $chartWidth / 2;
+            $centerY = $chartY + 8 + $chartHeight / 2;
+            $radius = min($chartWidth, $chartHeight) / 3.5;
+
+            // Draw chart background
+            $pdf->Rect($chartX, $chartY + 8, $chartWidth, $chartHeight, 'D');
+
+            // Draw radar grid circles
+            $pdf->SetDrawColor(200, 200, 200);
+            $pdf->SetLineStyle(['width' => 0.2, 'dash' => 1]);
+            for ($i = 1; $i <= 4; $i++) {
+                $pdf->Circle($centerX, $centerY, $radius * $i / 4, 0, 360, 'D');
+            }
+
+            // Draw value labels on circles
+            $pdf->SetFont('helvetica', '', 6);
+            $pdf->SetTextColor(150, 150, 150);
+            $maxValue = max(max($radarData), 1);
+            for ($i = 1; $i <= 4; $i++) {
+                $value = ($maxValue / 4) * $i;
+                $labelRadius = $radius * $i / 4;
+                $pdf->SetXY($centerX + $labelRadius + 1, $centerY - 2);
+                $pdf->Cell(10, 3, number_format($value, 0), 0, 0, 'L');
+            }
+            $pdf->SetTextColor(0, 0, 0);
+
+            // Draw axes and plot data
+            $numPoints = count($radarData);
+            if ($numPoints > 0) {
+                $angleStep = 360 / $numPoints;
+                
+                // Draw axes
+                $pdf->SetLineStyle(['width' => 0.2]);
+                $pdf->SetDrawColor(150, 150, 150);
+                for ($i = 0; $i < $numPoints; $i++) {
+                    $angle = deg2rad($i * $angleStep - 90);
+                    $x = $centerX + cos($angle) * $radius;
+                    $y = $centerY + sin($angle) * $radius;
+                    $pdf->Line($centerX, $centerY, $x, $y);
+                    
+                    // Add labels
+                    $pdf->SetFont('helvetica', '', 6);
+                    $labelX = $centerX + cos($angle) * ($radius + 8);
+                    $labelY = $centerY + sin($angle) * ($radius + 8);
+                    
+                    // Adjust label position based on angle
+                    if (cos($angle) < -0.1) {
+                        $pdf->SetXY($labelX - 25, $labelY - 2);
+                        $pdf->Cell(25, 4, $radarLabels[$i], 0, 0, 'R');
+                    } elseif (cos($angle) > 0.1) {
+                        $pdf->SetXY($labelX, $labelY - 2);
+                        $pdf->Cell(25, 4, $radarLabels[$i], 0, 0, 'L');
+                    } else {
+                        $pdf->SetXY($labelX - 12.5, $labelY - 2);
+                        $pdf->Cell(25, 4, $radarLabels[$i], 0, 0, 'C');
+                    }
+                }
+                
+                // Plot data points
+                $pdf->SetDrawColor(0, 100, 200);
+                $pdf->SetFillColor(0, 100, 200);
+                $pdf->SetLineStyle(['width' => 0.8]);
+                
+                $points = [];
+                for ($i = 0; $i < $numPoints; $i++) {
+                    $angle = deg2rad($i * $angleStep - 90);
+                    $normalizedValue = ($radarData[$i] / $maxValue) * $radius;
+                    $x = $centerX + cos($angle) * $normalizedValue;
+                    $y = $centerY + sin($angle) * $normalizedValue;
+                    $points[] = $x;
+                    $points[] = $y;
+                }
+                
+                // Draw filled polygon
+                if (count($points) >= 6) {
+                    $pdf->SetAlpha(0.3);
+                    $pdf->Polygon($points, 'DF');
+                    $pdf->SetAlpha(1);
+                }
+                
+                // Draw lines connecting points
+                $pdf->SetLineStyle(['width' => 0.8]);
+                for ($i = 0; $i < $numPoints; $i++) {
+                    $nextI = ($i + 1) % $numPoints;
+                    $pdf->Line(
+                        $points[$i * 2], 
+                        $points[$i * 2 + 1], 
+                        $points[$nextI * 2], 
+                        $points[$nextI * 2 + 1]
+                    );
+                }
+                
+                // Draw points
+                $pdf->SetFillColor(0, 100, 200);
+                for ($i = 0; $i < $numPoints; $i++) {
+                    $pdf->Circle($points[$i * 2], $points[$i * 2 + 1], 1, 0, 360, 'F');
+                }
+            }
+
+            // Reset drawing color
+            $pdf->SetDrawColor(0, 0, 0);
+            $pdf->SetLineStyle(['width' => 0.2]);
+
+            // Move to next position
+            $pdf->SetY(max($tableEndY, $chartY + 8 + $chartHeight) + 5);
+            $pdf->Ln(5);
+            // Akhir ringkasan aspek 
+
             // Loop through instrumen
             foreach ($opd->instrumen as $instrumen) {
+                $pdf->AddPage();
+                
                 // Instrumen header
                 $pdf->SetFont('helvetica', 'B', 14);
                 $pdf->Cell(0, 10, $instrumen->nums . '. ' . strtoupper($instrumen->nama), 0, 1, 'L');
@@ -542,7 +768,10 @@ class ReportController extends BaseController
 
                 // Loop through aspek
                 foreach ($instrumen->aspek as $aspek) {
-                    if ($pdf->GetY() > 180) { // Adjusted for landscape
+                    // Cek ruang untuk header aspek
+                    $requiredHeight = 30; // Header aspek + spacing
+                    $currentY = $pdf->GetY();
+                    if ($currentY + $requiredHeight > ($pageHeight - $bottomMargin)) {
                         $pdf->AddPage();
                     }
 
@@ -560,25 +789,15 @@ class ReportController extends BaseController
                     // Calculate text widths
                     $aspekWidth = $pdf->GetStringWidth($aspekTitle);
                     $nilaiWidth = $pdf->GetStringWidth($nilai);
-                    $spacing = $pageWidth - $aspekWidth - $nilaiWidth - 10; // 10 for padding
+                    $spacing = $pageWidth - $aspekWidth - $nilaiWidth - 10;
 
                     // Draw aspek header with proper alignment
-                    $pdf->Cell(0, 8, '', 1, 1, 'L', true); // Background cell
-                    $pdf->SetY($pdf->GetY() - 8); // Move back to draw text
+                    $pdf->Cell(0, 8, '', 1, 1, 'L', true);
+                    $pdf->SetY($pdf->GetY() - 8);
                     $pdf->Cell($aspekWidth + 5, 8, $aspekTitle, 0, 0, 'L', false);
                     $pdf->Cell($spacing, 8, '', 0, 0, 'C', false);
                     $pdf->Cell($nilaiWidth + 5, 8, $nilai, 0, 1, 'R', false);
-
-                    // Add spacing after header
                     $pdf->Ln(2);
-                    
-                    // Aspek header
-                    // $pdf->SetFont('helvetica', 'B', 12);
-                    // $pdf->SetFillColor(220, 220, 220);
-                    // $pdf->Cell(0, 8, $instrumen->nums . '.' . $aspek->nums . ' ' . $aspek->nama_aspek, 1, 1, 'L', true);
-                    // $pdf->SetFont('helvetica', '', 11);
-                    // $pdf->Cell(0, 6, 'Nilai: ' . number_format($aspek->nilai, 2), 0, 1, 'L');
-                    // $pdf->Ln(2);
 
                     // Sort sub aspek by nums
                     $subAspeks = (array)$aspek->sub_aspek;
@@ -588,7 +807,10 @@ class ReportController extends BaseController
 
                     // Loop through sub aspek
                     foreach ($subAspeks as $subAspek) {
-                        if ($pdf->GetY() > 180) { // Adjusted for landscape
+                        // Cek ruang untuk header sub aspek + minimal table content
+                        $requiredHeight = 50; // Header + table header + minimal 1 row
+                        $currentY = $pdf->GetY();
+                        if ($currentY + $requiredHeight > ($pageHeight - $bottomMargin)) {
                             $pdf->AddPage();
                         }
 
@@ -599,13 +821,13 @@ class ReportController extends BaseController
 
                         // Calculate column widths
                         $w = [
-                            15,                     // No
-                            round($effectiveWidth * 0.35)-1,  // Indikator
-                            20,                     // Bobot
-                            20,                     // Nilai
-                            20,                     // Status
-                            round($effectiveWidth * 0.20)-3,  // Keterangan
-                            round($effectiveWidth * 0.20)-3   // Saran
+                            15,                           // No
+                            round($effectiveWidth * 0.22)-1,  // Indikator
+                            20,                           // Bobot
+                            20,                           // Nilai
+                            20,                           // Status
+                            round($effectiveWidth * 0.25),     // Keterangan
+                            round($effectiveWidth * 0.25)      // Saran
                         ];
 
                         // Sub Aspek header with full width and proper alignment
@@ -647,36 +869,32 @@ class ReportController extends BaseController
                             return $a->nums <=> $b->nums;
                         });
 
-                        // Data rows
+                        // Data rows - TIDAK ADA PEMERIKSAAN PAGE BREAK DI SINI
+                        // Biarkan AutoPageBreak TCPDF yang menangani
                         $pdf->SetFont('helvetica', '', 9);
                         foreach ($subSubAspeks as $ssa) {
                             // Calculate row height based on content
                             $text = $ssa->nama_sub_sub_aspek;
-                            // $height = max(
-                            //     $pdf->getStringHeight($w[1], $text),
-                            //     6
-                            // );
+                            
                             // Hitung tinggi string tiap cell
                             $heights = [];
                             $heights[] = $pdf->getStringHeight($w[0], $ssa->nums);
                             $heights[] = $pdf->getStringHeight($w[1], $text);
                             $heights[] = $pdf->getStringHeight($w[2], '100%');
                             $heights[] = $pdf->getStringHeight($w[3], number_format($ssa->nilai, 2));
-                            // $heights[] = $pdf->getStringHeight($w[4], $status);
                             $heights[] = $pdf->getStringHeight($w[5], $ssa->ket);
                             $heights[] = $pdf->getStringHeight($w[6], '');
 
                             // Ambil tinggi terbesar
-                            $height = max($heights);
+                            $height = max($heights) + 5;
 
-                            // Set minimal tinggi misalnya 6
+                            // Set minimal tinggi
                             if ($height < 6) {
                                 $height = 6;
                             }
 
-
                             $status = $ssa->aprove === 'yes' ? 'Disetujui' : 
-                                     ($ssa->aprove === 'no' ? 'Ditolak' : 'Pending');
+                                    ($ssa->aprove === 'no' ? 'Ditolak' : 'Pending');
 
                             // Print row with uniform height
                             $pdf->MultiCell($w[0], $height, $ssa->nums, 1, 'C', false, 0);
@@ -684,7 +902,7 @@ class ReportController extends BaseController
                             $pdf->MultiCell($w[2], $height, '100%', 1, 'C', false, 0);
                             $pdf->MultiCell($w[3], $height, number_format($ssa->nilai, 2), 1, 'C', false, 0);
                             $pdf->MultiCell($w[4], $height, $status, 1, 'C', false, 0);
-                            $pdf->MultiCell($w[5], $height, ($ssa->ket ), 1, 'L', false, 0);
+                            $pdf->MultiCell($w[5], $height, $ssa->ket, 1, 'L', false, 0);
                             $pdf->MultiCell($w[6], $height, '', 1, 'L', false, 1);
                         }
                         
@@ -714,7 +932,6 @@ class ReportController extends BaseController
             ]);
         }
     }
-
     // Helper function to sanitize filename
     private function sanitizeFilename($filename)
     {
