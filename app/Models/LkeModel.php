@@ -143,13 +143,17 @@ public function getTotalNilaiLKE($tahun, $idopd)
         : 0;
 }
 
-    public function getRekapSemuaOpd($tahun)
+    public function getRekapSemuaOpd($tahun, $opd_id = null)
     {
+        
         $tahun = (is_array($tahun))? $tahun['tahun'] : $tahun ;
         $builder = $this->db->table('lke_opd o');
         $builder->select('o.id AS opd_id, o.nama_opd, d.userid');
         $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
         $builder->join('lke_user u', 'u.uid = d.userid', 'left');
+        if (isset($opd_id)) {
+            $builder->where('o.id', $opd_id);
+        }
         $builder->groupBy('o.id');
         $builder->orderBy('o.nama_opd');
 
@@ -392,10 +396,10 @@ public function getTotalNilaiLKE($tahun, $idopd)
         return $result;
     }
 
-    public function getRingkasanEvaluasi($tahun)
+    public function getRingkasanEvaluasi($tahun, $opd_id = null)
     {
         // Get all OPDs with their final scores
-        $opds = $this->getRekapSemuaOpd($tahun);
+        $opds = $this->getRekapSemuaOpd($tahun, $opd_id);
         
         // Filter OPDs that have scores (exclude those with 0 scores)
         $opdsWithScores = array_filter($opds, function($opd) {
@@ -454,15 +458,16 @@ public function getTotalNilaiLKE($tahun, $idopd)
         ];
     }
 
-    public function getEvaluasiLengkap($tahun)
+    public function getEvaluasiLengkap($tahun, $opd_id = null)
     {
+        // pd($opd_id);
         return [
-            'ringkasan' => $this->getRingkasanEvaluasi($tahun),
-            'data_opd' => $this->getOpdWithAspekValuesSimple($tahun)
+            'ringkasan' => $this->getRingkasanEvaluasi($tahun, $opd_id),
+            'data_opd' => $this->getOpdWithAspekValuesSimple($tahun, $opd_id)
         ];
     }
 
-public function getOpdWithAspekValuesSimple($tahun)
+public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
 {
     // Ambil OPD dengan filter role
     $builder = $this->db->table('lke_opd o');
@@ -471,6 +476,9 @@ public function getOpdWithAspekValuesSimple($tahun)
     $builder->join('lke_role r', 'r.Uid = d.userid', 'left');
     $builder->join('lke_roles rs', 'rs.RoleId = r.RoleId', 'left');
     $builder->where('rs.acs', 5);
+    if (isset($opd_id)) {
+        $builder->where('o.id', $opd_id);
+    }
     $builder->groupBy('o.id');
     $builder->orderBy('o.nama_opd', 'ASC');
 
@@ -537,7 +545,7 @@ public function getOpdWithAspekValuesSimple($tahun)
             // Tambahkan skor ke grup RB
             $rbGroups[$aspek['rbId']][] = $skorIndex;
         }
-
+        // \pd($rbGroups);
         // Hitung rata-rata per RB
         $rbAverages = [];
         foreach ($rbGroups as $rbId => $scores) {

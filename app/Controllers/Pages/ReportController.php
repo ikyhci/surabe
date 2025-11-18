@@ -3,6 +3,7 @@
 namespace App\Controllers\Pages;
 use App\Controllers\BaseController;
 use App\Models\LkeModel;
+use App\Models\LkeUser;
 use App\Models\DashboardModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -10,15 +11,32 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class ReportController extends BaseController
 {
     protected $lkeModel;
+    protected $LkeUser;
+
+    protected $decoded;
 
     public function __construct()
     {
+
+        helper('cookie');
+        $key = getenv('TOKEN_SECRET');
+        $token = get_cookie('Authorization', true,'__LKE-');
+        if (!$token) {
+            return redirect()->to(base_url().'unauthorized');
+        }
+        $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
+
         $this->lkeModel = new LkeModel();
+        $this->LkeUser = new LkeUser();
         $this->DashboardModel = new DashboardModel();
+
+        // pd($this->decoded);
     }
 
     public function index()
@@ -34,18 +52,24 @@ public function getEvaluasiLengkap()
 {
     $tahun = $this->request->getGet('tahun') ?? date('Y');
     $update = $this->request->getGet('update') ?? false;
+    $uid = $this->decoded->ids;
+
     $cache = \Config\Services::cache();
     // pd($update);
     // buat key unik berdasarkan tahun
-    $cacheKey = 'evaluasi_lengkap_' . $tahun;
-
+    $cacheKey = 'evaluasi_lengkap_' . $uid . $tahun;
+    $opd_id = null;
+    $opdUser = $this->LkeUser->opd_user($uid);
+    if(count($opdUser) >= 1 && $this->decoded->rln != 'Super Admin') {
+        $opd_id = $opdUser[0]['opd_id'];
+    }
     try {
         // coba ambil dari cache dulu
         $evaluasiData = $cache->get($cacheKey);
 
         if ($evaluasiData === null || $update === 'true' || $update === true) {
             // jika belum ada, ambil dari model
-            $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun);
+            $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun, $opd_id);
 
             // simpan ke cache selama 10 menit (600 detik) 24jam =86400
             $cache->save($cacheKey, $evaluasiData, 86400);
@@ -493,7 +517,7 @@ public function getEvaluasiLengkap()
 
         try {
             $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
-            
+            // pd($nilaiAspek);
             // Set basic PDF options - Landscape
             $pdf = new \TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->SetCreator('SURABE BERANI');
@@ -540,7 +564,7 @@ public function getEvaluasiLengkap()
             
             $pdf->Cell($labelWidth, $boxHeight, 'Nilai Akhir', 1, 0, 'L', true);
             $pdf->Cell($colonWidth, $boxHeight, ':', 1, 0, 'C', true);
-            $pdf->Cell($valueWidth, $boxHeight, number_format($opd->nilai/2, 2), 1, 1, 'L', true);
+            $pdf->Cell($valueWidth, $boxHeight, number_format($opd->nilai, 2), 1, 1, 'L', true);
             
             $pdf->Ln(10);
             $pdf->setPrintHeader(true);
@@ -555,7 +579,8 @@ public function getEvaluasiLengkap()
                         'instrumen_nums' => $instrumen->nums,
                         'aspek_nums' => $aspek->nums,
                         'nama_aspek' => $aspek->nama_aspek,
-                        'nilai' => $aspek->nilai
+                        'nilai' => $aspek->nilai,
+                        'bobot_rb'  => $instrumen->bobot
                     ];
                 }
             }
@@ -629,6 +654,21 @@ public function getEvaluasiLengkap()
                 $radarLabels[] = $labelText;
             }
 
+            $pdf->Ln(4); // jarak dari tabel ke catatan
+
+            $pdf->SetFont('helvetica', '', 8); // ukuran kecil
+            $pdf->SetFillColor(255, 255, 255); // latar putih
+            $pdf->SetTextColor(0, 0, 0); // teks hitam
+
+            $note = "NB:\n".
+                    "I.A - I.C = RB General Perangkat Daerah\n".
+                    "II.A - II.B = RB Tematik Perangkat Daerah\n".
+                    "Bobot RB General = 65\n".
+                    "Bobot RB Tematik = 35";
+
+            $pdf->MultiCell(0, 5, $note, 0, 'L', false);
+
+            
             $tableEndY = $pdf->GetY();
 
             // RIGHT SIDE - Radar Chart
@@ -883,7 +923,8 @@ public function getEvaluasiLengkap()
                             $heights[] = $pdf->getStringHeight($w[2], '100%');
                             $heights[] = $pdf->getStringHeight($w[3], number_format($ssa->nilai, 2));
                             $heights[] = $pdf->getStringHeight($w[5], $ssa->ket);
-                            $heights[] = $pdf->getStringHeight($w[6], '');
+                            // $heights[] = $pdf->getStringHeight($w[6], '');
+                            $heights[] = $pdf->getStringHeight($w[6], $ssa->saran);
 
                             // Ambil tinggi terbesar
                             $height = max($heights) + 5;
@@ -903,7 +944,7 @@ public function getEvaluasiLengkap()
                             $pdf->MultiCell($w[3], $height, number_format($ssa->nilai, 2), 1, 'C', false, 0);
                             $pdf->MultiCell($w[4], $height, $status, 1, 'C', false, 0);
                             $pdf->MultiCell($w[5], $height, $ssa->ket, 1, 'L', false, 0);
-                            $pdf->MultiCell($w[6], $height, '', 1, 'L', false, 1);
+                            $pdf->MultiCell($w[6], $height, $ssa->saran, 1, 'L', false, 1);
                         }
                         
                         $pdf->Ln(5);
@@ -1165,5 +1206,72 @@ public function getEvaluasiLengkap()
         }, $structuredData));
     }
 
+    public function viewLaporanOpd()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        $opdId = $this->request->getGet('opd_id');
+
+        if (!$opdId) {
+            return redirect()->back()->with('error', 'OPD ID tidak ditemukan');
+        }
+
+        // try {
+            $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
+            
+            if (empty($nilaiAspek)) {
+                return redirect()->back()->with('error', 'Data tidak ditemukan');
+            }
+
+            // Prepare data
+            $opd = $nilaiAspek[0];
+            
+            // Kumpulkan semua aspek dari semua instrumen
+            $allAspek = [];
+            foreach ($opd->instrumen as $instrumen) {
+                foreach ($instrumen->aspek as $aspek) {
+                    $allAspek[] = (object)[
+                        'instrumen_nama' => $instrumen->nama,
+                        'instrumen_nums' => $instrumen->nums,
+                        'aspek_nums' => $aspek->nums,
+                        'nama_aspek' => $aspek->nama_aspek,
+                        'nilai' => $aspek->nilai,
+                        'bobot_rb' => $instrumen->bobot
+                    ];
+                }
+            }
+
+            // Prepare radar chart data
+            $radarData = [];
+            $radarLabels = [];
+            foreach ($allAspek as $aspekItem) {
+                $kode = $aspekItem->instrumen_nums . '.' . $aspekItem->aspek_nums;
+                $radarData[] = floatval($aspekItem->nilai);
+                
+                $labelText = $kode . '. ';
+                $labelText .= strlen($aspekItem->nama_aspek) > 20 ? 
+                            substr($aspekItem->nama_aspek, 0, 20) . '...' : 
+                            $aspekItem->nama_aspek;
+                $radarLabels[] = $labelText;
+            }
+
+            $usr = $this->decoded->rln;
+            $data = [
+                'title' => 'Laporan Evaluasi Indeks Reformasi Birokrasi',
+                'tahun' => $tahun,
+                'opd' => $opd,
+                'allAspek' => $allAspek,
+                'radarData' => json_encode($radarData),
+                'radarLabels' => json_encode($radarLabels),
+                'usr' => $usr,
+            ];
+
+            // return view('Pages/laporan/view_opd', $data);
+            return view('Pages/laporan/view_opd_layout', $data);
+
+        // } catch (\Exception $e) {
+        //     log_message('error', 'View Laporan OPD Error: ' . $e->getMessage());
+        //     return redirect()->back()->with('error', 'Gagal memuat laporan: ' . $e->getMessage());
+        // }
+    }
 
 }
