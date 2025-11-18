@@ -153,11 +153,28 @@ class DashboardModel extends Model
         return $opd->get()->getResult();
     }
 
+    // public function getInstrumen() {
+    //     return $this->db->table('lke_rb')
+    //         ->select('lke_rb.id, lke_rb.nama, lke_rb.nums, 0 nilai')
+    //         ->orderBy('nums', 'asc')
+    //         ->get()->getResult();
+    // }
     public function getInstrumen() {
         return $this->db->table('lke_rb')
-            ->select('lke_rb.id, lke_rb.nama, lke_rb.nums, 0 nilai')
+            ->select("
+                lke_rb.id,
+                lke_rb.nama,
+                lke_rb.nums,
+                0 AS nilai,
+                CASE
+                    WHEN lke_rb.nama like '%RB General Perangkat Daerah%' THEN 65
+                    WHEN lke_rb.nama like '%RB TEMATIK PERANGKAT DAERAH%' THEN 35
+                    ELSE 0
+                END AS bobot
+            ")
             ->orderBy('nums', 'asc')
-            ->get()->getResult();
+            ->get()
+            ->getResult();
     }
 
     public function nilaiOpd($tahun = null, $opd_id = null)
@@ -236,9 +253,9 @@ class DashboardModel extends Model
                 $aspek_rb = array_filter($aspek, fn($a) => $a->rb_id == $iv->id);
                 $nilai_instrumen = count($aspek_rb) > 0 ? array_sum(array_column($aspek_rb, 'nilai')) / count($aspek_rb) : 0;
 
-                $instrumen[$ik]->nilai = $nilai_instrumen;
+                $instrumen[$ik]->nilai = ($nilai_instrumen/100) * $instrumen[$ik]->bobot;
                 $instrumen[$ik]->aspek = array_values($aspek_rb);
-                $opd[$key]->nilai += $nilai_instrumen;
+                $opd[$key]->nilai += $instrumen[$ik]->nilai;
             }
 
             $opd[$key]->instrumen = $instrumen;

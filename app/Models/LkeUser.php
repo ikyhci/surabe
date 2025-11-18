@@ -76,4 +76,19 @@ class LkeUser extends Model
         }
         return $userInfo;
     }
+    
+    public function opd_user($uid)
+    {
+        $builder = $this->db->table('lke_opd o');
+        $builder->select('o.id AS opd_id, o.nama_opd, d.userid');
+        $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
+        $builder->join('lke_user u', 'u.uid = d.userid', 'left');
+        $builder->where('d.userid', $uid);
+        $builder->groupBy('o.id');
+        $builder->orderBy('o.nama_opd');
+
+        return $builder->get()->getResultArray();
+    }
+
+
 }
