@@ -57,6 +57,10 @@
             <label for="nama_opd">Nama OPD</label>
             <input type="text" class="form-control" id="nama_opd" name="nama_opd" required>
           </div>
+          <div class="form-group">
+            <label for="singkatan">Singkatan</label>
+            <input type="text" class="form-control" id="singkatan" name="singkatan" required>
+          </div>
           <input type="hidden" id="opd_id" name="opd_id">
           <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
         </form>
@@ -136,6 +140,7 @@ $(document).ready(function() {
           let opd = res.dt[0];
           $('#opd_id').val(opd.id);
           $('#nama_opd').val(opd.nama_opd);
+          $('#singkatan').val(opd.singkatan || '');
           $('#opdModal').modal('show');
         }
       }

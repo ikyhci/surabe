@@ -344,14 +344,16 @@ class ApiGlobalControllers extends BaseController
             $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
             $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
             $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
-            $list = $this->db->query("call View_Opd('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+            // $list = $this->db->query("call View_Opd('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+            $adminModel = new \App\Models\SuperAdminModel();
+            $list = $adminModel->getOpd($IDX, $nama_opd, $LIMIT, $OFFSET);
+            // pd($list);
             if($nama_opd){
                 $i = array_search($nama_opd, array_column($list, 'nama_opd'));
                 $list = array($list[$i]);
             }
             if ($IDX) {
                 if (count($list)===1) {
-                    $adminModel = new \App\Models\SuperAdminModel();
                     $list[0]->data_terkait = $adminModel->getUserByOpd($list[0]->id);
                 }
             }

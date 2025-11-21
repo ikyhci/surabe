@@ -310,8 +310,8 @@ class ApiSuperAdminControllers extends BaseController
         $opid = $this->request->getPost('opd_id');
         $opnm = $this->request->getPost('nama_opd');
         $uidx = $this->decoded->ids;
-    
-        $result = $this->superAdminModel->updateOpd($uidx, $opid, $opnm);
+        $singkatan = $this->request->getPost('singkatan');
+        $result = $this->superAdminModel->updateOpd($uidx, $opid, $opnm, $singkatan);
     
         if ($result['res'] == 1) {
             return $this->response->setJSON([
