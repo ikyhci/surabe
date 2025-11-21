@@ -460,7 +460,7 @@ public function getTotalNilaiLKE($tahun, $idopd)
 
     public function getEvaluasiLengkap($tahun, $opd_id = null)
     {
-        // pd($opd_id);
+        // pd(['tahun' => $tahun, 'opd_id' => $opd_id]);
         return [
             'ringkasan' => $this->getRingkasanEvaluasi($tahun, $opd_id),
             'data_opd' => $this->getOpdWithAspekValuesSimple($tahun, $opd_id)
@@ -469,30 +469,30 @@ public function getTotalNilaiLKE($tahun, $idopd)
 
 public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
 {
-    // Ambil OPD dengan filter role
     $builder = $this->db->table('lke_opd o');
     $builder->select('o.id AS opd_id, o.nama_opd, o.singkatan, d.userid');
     $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
     $builder->join('lke_role r', 'r.Uid = d.userid', 'left');
     $builder->join('lke_roles rs', 'rs.RoleId = r.RoleId', 'left');
     $builder->where('rs.acs', 5);
-    if (isset($opd_id)) {
+    if ($opd_id) {
         $builder->where('o.id', $opd_id);
     }
     $builder->groupBy('o.id');
     $builder->orderBy('o.nama_opd', 'ASC');
 
     $opds = $builder->get()->getResultArray();
-
     $result = [];
 
     foreach ($opds as $opd) {
-        // Ambil nilai aspek per OPD
         $aspekNilai = $this->getNilaiAspek($tahun, $opd['opd_id']);
-
-        // Ambil daftar aspek + RB
         $aspekDetails = $this->db->table('lke_aspek a')
             ->select('rb.id as rbId, rb.nama as namaRb, a.id, a.nama_aspek, a.bobot, a.nums')
+            ->select("CASE
+                        WHEN rb.nama like '%RB General Perangkat Daerah%' THEN 65
+                        WHEN rb.nama like '%RB Tematik Perangkat Daerah%' THEN 35
+                        ELSE 0
+                    END AS bobot_rb")
             ->join('lke_rb rb', 'rb.id = a.rb_id')
             ->join('lke_form f', 'f.id = rb.form_id')
             ->where('f.tahun', $tahun)
@@ -501,16 +501,14 @@ public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
             ->get()
             ->getResultArray();
 
-        // Ambil rekap sub aspek lengkap
         $rekapSubAspek = $this->getRekapSubAspek($tahun, $opd['opd_id']);
 
         $aspekValues = [];
-        $rbGroups = []; // kumpulan skor aspek per RB
+        $rbScores = []; // ['RB General' => [skor1, skor2,...], 'RB Tematik' => [...]]
+        $rbWeights = []; // bobot RB per nama_rb
 
         foreach ($aspekDetails as $aspek) {
             $skorIndex = 0;
-
-            // Cari skor aspek
             foreach ($aspekNilai as $nilai) {
                 if ($nilai['id'] == $aspek['id']) {
                     $skorIndex = $nilai['skor_index'];
@@ -518,10 +516,9 @@ public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
                 }
             }
 
-            // Filter sub aspek yang termasuk dalam aspek ini
-            $subAspekFiltered = array_filter($rekapSubAspek, function ($item) use ($aspek) {
+            $subAspekFiltered = array_values(array_filter($rekapSubAspek, function ($item) use ($aspek) {
                 return $item['nama_aspek'] === $aspek['nama_aspek'];
-            });
+            }));
 
             $subAspekList = [];
             foreach ($subAspekFiltered as $sub) {
@@ -529,42 +526,50 @@ public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
                     'nama_sub_aspek' => $sub['nama_sub_aspek'],
                     'bobot' => $sub['bobot'],
                     'nilai_sa' => $sub['nilai_sa'],
-                    'sub_sub_aspek' => $sub['sub_sub_aspek'] // sudah dalam bentuk array nested
+                    'sub_sub_aspek' => $sub['sub_sub_aspek'] ?? []
                 ];
             }
 
             $aspekValues[] = [
-                'rb_id'         => $aspek['rbId'],
-                'nama_rb'       => $aspek['namaRb'],
-                'aspek_id'      => $aspek['id'],
-                'nama_aspek'    => $aspek['nama_aspek'],
-                'skor_index'    => $skorIndex,
-                'sub_aspek'     => $subAspekList // ✅ tambahan nested data
+                'rb_id' => $aspek['rbId'],
+                'nama_rb' => $aspek['namaRb'],
+                'bobot_rb' => $aspek['bobot_rb'],
+                'aspek_id' => $aspek['id'],
+                'nama_aspek' => $aspek['nama_aspek'],
+                'skor_index' => $skorIndex,
+                'sub_aspek' => $subAspekList
             ];
 
-            // Tambahkan skor ke grup RB
-            $rbGroups[$aspek['rbId']][] = $skorIndex;
-        }
-        // \pd($rbGroups);
-        // Hitung rata-rata per RB
-        $rbAverages = [];
-        foreach ($rbGroups as $rbId => $scores) {
-            $rbAverages[$rbId] = count($scores) > 0 ? array_sum($scores) / count($scores) : 0;
+            $rbScores[$aspek['namaRb']][] = $skorIndex;
+            $rbWeights[$aspek['namaRb']] = $aspek['bobot_rb'];
         }
 
-        // Hitung nilai akhir OPD
-        $nilaiAkhir = !empty($rbAverages)
-            ? round(array_sum($rbAverages) / count($rbAverages), 2)
-            : 0;
+        // Hitung nilai RB per kategori
+        $rbValues = [];
+        foreach ($rbScores as $namaRb => $scores) {
+            $average = count($scores) ? array_sum($scores) / count($scores) : 0;
+            $rbValues[$namaRb] = round($average, 2);
+        }
+
+        // Hitung nilai akhir tertimbang (optional)
+        $nilaiAkhir = 0;
+        $totalBobot = 0;
+        foreach ($rbValues as $namaRb => $avg) {
+            $nilaiAkhir += $avg * ($rbWeights[$namaRb] ?? 0);
+            $totalBobot += $rbWeights[$namaRb] ?? 0;
+        }
+        $nilaiAkhir = $totalBobot ? round($nilaiAkhir / $totalBobot, 2) : 0;
 
         $result[] = [
-            'opd_id'        => $opd['opd_id'],
-            'nama_opd'      => $opd['nama_opd'],
-            'singkatan'     => $opd['singkatan'],
-            'userid'        => $opd['userid'],
-            'aspek_values'  => $aspekValues,
-            'nilai_akhir'   => $nilaiAkhir
+            'opd_id' => $opd['opd_id'],
+            'nama_opd' => $opd['nama_opd'],
+            'singkatan' => $opd['singkatan'],
+            'userid' => $opd['userid'],
+            'aspek_values' => $aspekValues,
+            'rb_values' => $rbValues,
+            'nilai_akhir' => $nilaiAkhir
         ];
+        // \pd($result);
     }
 
     return $result;

@@ -53,14 +53,14 @@ public function getEvaluasiLengkap()
     $tahun = $this->request->getGet('tahun') ?? date('Y');
     $update = $this->request->getGet('update') ?? false;
     $uid = $this->decoded->ids;
-
+    
     $cache = \Config\Services::cache();
     // pd($update);
     // buat key unik berdasarkan tahun
     $cacheKey = 'evaluasi_lengkap_' . $uid . $tahun;
     $opd_id = null;
     $opdUser = $this->LkeUser->opd_user($uid);
-    if(count($opdUser) >= 1 && $this->decoded->rln != 'Super Admin') {
+    if(count($opdUser) >= 1 && $this->decoded->iss == 'User') {
         $opd_id = $opdUser[0]['opd_id'];
     }
     try {
@@ -516,7 +516,10 @@ public function getEvaluasiLengkap()
         }
 
         try {
+
+            // $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun, $opdId);
             $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
+            // \pd(['nilaiAspek' => $nilaiAspek, 'evaluasiData' => $evaluasiData]);
             // pd($nilaiAspek);
             // Set basic PDF options - Landscape
             $pdf = new \TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
