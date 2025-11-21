@@ -323,13 +323,15 @@ class SuperAdminModel extends Model
     }
 
     // updateOpd
-    public function updateOpd($uidx, $id, $nama_opd)
+    public function updateOpd($uidx, $id, $nama_opd, $singkatan)
     {
         $query = $this->db->query("CALL Opd_add_edit(?, ?, ?)", [$uidx, $id, $nama_opd]);
-    
+        $opd = $this->db->table('lke_opd');
+
         $result = $query->getRowArray();
     
         if ($result['res'] == 1) {
+            $opd->where('id', $id)->update(['singkatan' => $singkatan]);
             return [
                 'res' => 'success',
                 'msg' => $result['msg']
@@ -394,16 +396,28 @@ class SuperAdminModel extends Model
         }
     }
 
-    public function getOpd($id_opd = null){
+    public function getOpd($id_opd = null, $nama_opd = null, $limit = null, $offset = null)
+    {
+        $builder = $this->db->table('lke_opd')
+                            ->select('id, id AS id_opd, nama_opd, singkatan');
 
-        $builder = $this->db->table('lke_opd')->select('id id_opd, nama_opd, singkatan');
-        
+        // Filter berdasarkan ID (sekarang idx = id_opd)
         if (!is_null($id_opd)) {
             $builder->where('id', $id_opd);
         }
-        
-        $query = $builder->get();
 
+        // Filter berdasarkan nama_opd (like)
+        if (!is_null($nama_opd)) {
+            $builder->like('nama_opd', $nama_opd);
+        }
+
+        // Limit dan offset untuk pagination
+        if (!is_null($limit)) {
+            $builder->limit($limit, $offset);
+        }
+
+        $query = $builder->get();
         return $query->getResult();
     }
+
 }
