@@ -222,9 +222,14 @@ th.text-vertikal {
         <div class="col-md-4 mb-3">
           <label>Tahun</label>
           <select class="form-select" id="filter-tahun">
-            <option value="2025" <?= date('Y') === '2025' ? 'selected' : '' ?>>2025</option>
+            <?php for($year = date('Y'); $year >= (date('Y') -5); $year--) : ?>
+            <option value="<?= $year ?>" <?= $year == date('Y') ? 'selected' : '' ?>>
+              <?= $year ?>
+            </option>
+            <?php endfor; ?>
+            <!-- <option value="2025" <?= date('Y') === '2025' ? 'selected' : '' ?>>2025</option>
             <option value="2024" <?= date('Y') === '2024' ? 'selected' : '' ?>>2024</option>
-            <option value="2023" <?= date('Y') === '2023' ? 'selected' : '' ?>>2023</option>
+            <option value="2023" <?= date('Y') === '2023' ? 'selected' : '' ?>>2023</option> -->
           </select>
         </div>
         <div class="col-md-4 mb-3">
