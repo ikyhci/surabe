@@ -1277,4 +1277,75 @@ public function getEvaluasiLengkap()
         // }
     }
 
+    public function getLaporanOpdJson()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        $opdId = $this->request->getGet('opd_id');
+
+        if (!$opdId) {
+            return $this->response->setStatusCode(400)
+                                ->setJSON(['error' => true, 'message' => 'OPD ID tidak ditemukan']);
+        }
+
+        try {
+            $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
+
+            if (empty($nilaiAspek)) {
+                return $this->response->setStatusCode(404)
+                                    ->setJSON(['error' => true, 'message' => 'Data tidak ditemukan']);
+            }
+
+            // Ambil data OPD pertama
+            $opd = $nilaiAspek[0];
+
+            // Kumpulkan semua aspek dari semua instrumen
+            $allAspek = [];
+            foreach ($opd->instrumen as $instrumen) {
+                foreach ($instrumen->aspek as $aspek) {
+                    $allAspek[] = [
+                        'instrumen_nama' => $instrumen->nama,
+                        'instrumen_nums' => $instrumen->nums,
+                        'aspek_nums' => $aspek->nums,
+                        'nama_aspek' => $aspek->nama_aspek,
+                        'nilai' => floatval($aspek->nilai),
+                        'bobot_rb' => $instrumen->bobot
+                    ];
+                }
+            }
+
+            // Siapkan data untuk radar chart
+            $radarData = [];
+            $radarLabels = [];
+            foreach ($allAspek as $aspekItem) {
+                $kode = $aspekItem['instrumen_nums'] . '.' . $aspekItem['aspek_nums'];
+                $radarData[] = $aspekItem['nilai'];
+
+                $labelText = $kode . '. ';
+                $labelText .= strlen($aspekItem['nama_aspek']) > 20 ? 
+                                substr($aspekItem['nama_aspek'], 0, 20) . '...' : 
+                                $aspekItem['nama_aspek'];
+                $radarLabels[] = $labelText;
+            }
+
+            $usr = $this->decoded->rln ?? null;
+
+            $data = [
+                'error' => false,
+                'tahun' => $tahun,
+                'opd' => $opd,
+                'allAspek' => $allAspek,
+                'radarData' => $radarData,
+                'radarLabels' => $radarLabels,
+                'usr' => $usr,
+            ];
+
+            return $this->response->setStatusCode(200)->setJSON($data);
+
+        } catch (\Exception $e) {
+            log_message('error', 'Get Laporan OPD JSON Error: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)
+                                ->setJSON(['error' => true, 'message' => 'Gagal memuat laporan: ' . $e->getMessage()]);
+        }
+    }
+
 }

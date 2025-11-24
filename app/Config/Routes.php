@@ -35,6 +35,7 @@ $routes->group('dashboard', ['filter' => ['appFilter', 'roles:User,Soal,Super Ad
     $routes->get('exportPDF', 'Pages\ReportController::exportPDF');
     $routes->get('exportPdfOpd', 'Pages\ReportController::exportPdfOpd');
     $routes->get('view-opd', 'Pages\ReportController::viewLaporanOpd');
+    $routes->get('data-opd', 'Pages\ReportController::getLaporanOpdJson');
 		
 		// $routes->get('data-opd/(:segment)/(:segment)', 'Api\ApiReportController::data_opd/$1/$2');
 });

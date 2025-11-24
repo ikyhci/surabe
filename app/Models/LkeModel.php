@@ -4,6 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 use \App\Models\NilaiModel;
+use App\Models\DashboardModel;
 
 class LkeModel extends Model
 {
@@ -251,67 +252,71 @@ public function getTotalNilaiLKE($tahun, $idopd)
         return $result;
     }
 
-    public function getNilaiAspekDetailed($tahun, $idopd)
-    {
-        return $this->db->table('lke_indikator i')
-            ->select("
-                CONCAT(rb.nums, '.', a.nums, '.', sa.nums, '.', ssa.nums) AS urutan,
-                rb.nama AS komponen,
-                rb.bobot AS bobot_rb,
-                a.nama_aspek,
-                a.bobot AS bobot_as,
-                sa.nama_sub_aspek,
-                sa.bobot AS bobot_sa,
-                ssa.nama_sub_sub_aspek,
-                ssa.bobot AS bobot_ssa,
-                i.indikator,
-                j.jawaban,
-                j.nilai AS nilai_jawaban,
-                nj.Nilai AS nilai_penilai,
-                nj.Aproved,
-                nj.Ket,
-                CASE 
-                    WHEN j.id IS NULL THEN 'Belum diisi'
-                    ELSE 'Sudah diisi'
-                END AS status_pengisian
-            ")
-            // INNER JOIN
-            ->join('lke_sub_sub_aspek ssa', 'i.id_sub_sub_aspek = ssa.id')
-            ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id')
-            ->join('lke_aspek a', 'sa.id_aspek = a.id')
-            ->join('lke_rb rb', 'a.rb_id = rb.id')
-            ->join('lke_form f', 'rb.form_id = f.id')
-            // LEFT JOIN
-            ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
-            ->join('lke_user u', 'j.userid = u.uid', 'left')
-            ->join('lke_detail_opd dopd', 'dopd.userid = u.uid', 'left')
-            ->join('lke_opd o', 'dopd.opdid = o.id AND o.id = ' . $this->db->escape($idopd), 'left') // filter di ON clause
-            ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.id', 'left')
-            // WHERE filter tahun (aman)
-            ->where('f.tahun', $tahun)
-            // ORDER BY logika
-            ->orderBy("
-                CASE rb.nums
-                    WHEN 'I' THEN 1
-                    WHEN 'II' THEN 2
-                    WHEN 'III' THEN 3
-                    WHEN 'IV' THEN 4
-                    WHEN 'V' THEN 5
-                    WHEN 'VI' THEN 6
-                    WHEN 'VII' THEN 7
-                    WHEN 'VIII' THEN 8
-                    WHEN 'IX' THEN 9
-                    WHEN 'X' THEN 10
-                    ELSE 99
-                END
-            ", '', false) // false to avoid escaping the CASE
-            ->orderBy('a.nums', 'ASC')
-            ->orderBy('CAST(sa.nums AS UNSIGNED)', 'ASC', false)
-            ->orderBy('CAST(ssa.nums AS UNSIGNED)', 'ASC', false)
-            ->orderBy('i.nums', 'ASC')
-            ->get()
-            ->getResultArray();
-    }
+public function getNilaiAspekDetailed($tahun, $idopd)
+{
+    return $this->db->table('lke_indikator i')
+        ->select("
+            CONCAT(rb.nums, '.', a.nums, '.', sa.nums, '.', ssa.nums) AS urutan,
+            rb.nama AS komponen,
+            rb.bobot AS bobot_rb,
+            a.nama_aspek,
+            a.bobot AS bobot_as,
+            sa.nama_sub_aspek,
+            sa.bobot AS bobot_sa,
+            ssa.nama_sub_sub_aspek,
+            ssa.bobot AS bobot_ssa,
+            i.indikator,
+            j.jawaban,
+            j.nilai AS nilai_jawaban,
+            nj.Nilai AS nilai_penilai,
+            nj.Aproved,
+            nj.Ket,
+            CASE 
+                WHEN j.id IS NULL THEN 'Belum diisi'
+                ELSE 'Sudah diisi'
+            END AS status_pengisian
+        ")
+        // INNER JOIN
+        ->join('lke_sub_sub_aspek ssa', 'i.id_sub_sub_aspek = ssa.id')
+        ->join('lke_sub_aspek sa', 'ssa.id_sub_aspek = sa.id')
+        ->join('lke_aspek a', 'sa.id_aspek = a.id')
+        ->join('lke_rb rb', 'a.rb_id = rb.id')
+        ->join('lke_form f', 'rb.form_id = f.id')
+        // LEFT JOIN
+        ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
+        ->join('lke_user u', 'j.userid = u.uid', 'left')
+        ->join('lke_detail_opd dopd', 'dopd.userid = u.uid', 'left')
+        ->join('lke_opd o', 'dopd.opdid = o.id', 'left') // hapus filter di ON
+        ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.id', 'left')
+        // WHERE
+        ->where('f.tahun', $tahun)
+        ->groupStart() // buka kurung untuk filter OPD
+            ->where('o.id', $idopd)
+            ->orWhere('o.id IS NULL') // tetap tampil jika tidak ada OPD
+        ->groupEnd()
+        // ORDER BY logika
+        ->orderBy("
+            CASE rb.nums
+                WHEN 'I' THEN 1
+                WHEN 'II' THEN 2
+                WHEN 'III' THEN 3
+                WHEN 'IV' THEN 4
+                WHEN 'V' THEN 5
+                WHEN 'VI' THEN 6
+                WHEN 'VII' THEN 7
+                WHEN 'VIII' THEN 8
+                WHEN 'IX' THEN 9
+                WHEN 'X' THEN 10
+                ELSE 99
+            END
+        ", '', false)
+        ->orderBy('a.nums', 'ASC')
+        ->orderBy('CAST(sa.nums AS UNSIGNED)', 'ASC', false)
+        ->orderBy('CAST(ssa.nums AS UNSIGNED)', 'ASC', false)
+        ->orderBy('i.nums', 'ASC')
+        ->get()
+        ->getResultArray();
+}
 
 
     public function getRekapSubAspek($tahun, $idopd) 
@@ -460,10 +465,33 @@ public function getTotalNilaiLKE($tahun, $idopd)
 
     public function getEvaluasiLengkap($tahun, $opd_id = null)
     {
-        // pd(['tahun' => $tahun, 'opd_id' => $opd_id]);
+
+        $opds = [];
+        $data_opds = [];
+        if (!$opd_id) {
+            $builder = $this->db->table('lke_opd o');
+            $builder->select('o.id AS opd_id, o.nama_opd, o.singkatan, d.userid');
+            $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
+            $builder->join('lke_role r', 'r.Uid = d.userid', 'left');
+            $builder->join('lke_roles rs', 'rs.RoleId = r.RoleId', 'left');
+            $builder->where('rs.acs', 5);
+            $builder->groupBy('o.id');
+            $builder->orderBy('o.nama_opd', 'ASC');
+
+            $opds = $builder->get()->getResultArray();
+        }
+        // \pd($opds);
+        foreach ($opds as $value) {
+            $data_opds[] = $this->getLaporanOpdJson($tahun, $value['opd_id']);
+            // pd($data_opds);
+        }
+
+        // pd(['tahun' => $tahun, 'opd_id' => $opd_id, 'data_opds' => $data_opds]);
         return [
             'ringkasan' => $this->getRingkasanEvaluasi($tahun, $opd_id),
-            'data_opd' => $this->getOpdWithAspekValuesSimple($tahun, $opd_id)
+            'data_opd' => $data_opds
+            // 'data_opd' => $this->getLaporanOpdJson($tahun, $opd_id)
+
         ];
     }
 
@@ -645,5 +673,61 @@ public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
         return $progress;
     }
 
+    public function getLaporanOpdJson($tahun, $opdId)
+    {
+        // Instance DashboardModel untuk memanggil nilaiOpd()
+        $dashboardModel = new DashboardModel();
+
+        // Ambil data penilaian
+        $nilaiAspek = $dashboardModel->nilaiOpd($tahun, $opdId);
+
+        if (empty($nilaiAspek)) {
+            return [
+                'error' => true,
+                'message' => 'Data tidak ditemukan'
+            ];
+        }
+
+        // Ambil data OPD pertama
+        $opd = $nilaiAspek[0];
+
+        // Kumpulkan semua aspek dari semua instrumen
+        $allAspek = [];
+        foreach ($opd->instrumen as $instrumen) {
+            foreach ($instrumen->aspek as $aspek) {
+                $allAspek[] = [
+                    'instrumen_nama' => $instrumen->nama,
+                    'instrumen_nums' => $instrumen->nums,
+                    'aspek_nums' => $aspek->nums,
+                    'nama_aspek' => $aspek->nama_aspek,
+                    'nilai' => floatval($aspek->nilai),
+                    'bobot_rb' => $instrumen->bobot
+                ];
+            }
+        }
+
+        // Siapkan radar chart
+        $radarData = [];
+        $radarLabels = [];
+        foreach ($allAspek as $aspekItem) {
+            $kode = $aspekItem['instrumen_nums'] . '.' . $aspekItem['aspek_nums'];
+            $radarData[] = $aspekItem['nilai'];
+
+            $labelText = $kode . '. ';
+            $labelText .= strlen($aspekItem['nama_aspek']) > 20 ?
+                          substr($aspekItem['nama_aspek'], 0, 20) . '...' :
+                          $aspekItem['nama_aspek'];
+            $radarLabels[] = $labelText;
+        }
+
+        return [
+            'error' => false,
+            'tahun' => $tahun,
+            'opd' => $opd,
+            'allAspek' => $allAspek,
+            'radarData' => $radarData,
+            'radarLabels' => $radarLabels,
+        ];
+    }
 
 }
