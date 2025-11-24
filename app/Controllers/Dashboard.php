@@ -54,7 +54,9 @@ class Dashboard extends BaseController
             }
             if ($usr == 'Penilai') {
               
-                return view('Pages/penilai/dashboard',$data);
+                // return view('Pages/penilai/dashboard',$data);
+                return view('Pages/superadmin/dashboard',$data);
+
             }
             if ($usr == 'Super Admin') {
                 

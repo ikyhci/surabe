@@ -482,48 +482,36 @@ function updateTable(dataOpd) {
   $('.aspek-header').addClass('d-none');
   let tbody = '';
 
-  if (dataOpd.length === 0 || dataOpd[0].aspek_values.length === 0) {
+  if (!dataOpd || dataOpd.length === 0) {
     tbody = `
-      <tr>
-        <td colspan="8" class="text-center">Tidak ada data untuk tahun ini</td>
-      </tr>
+      <tr><td colspan="8" class="text-center">Tidak ada data untuk tahun ini</td></tr>
     `;
   } else {
-    if (dataOpd[0] && dataOpd[0].aspek_values) {
-      $('#tableHeaderAspek').attr('colspan', dataOpd[0].aspek_values.length);
-      dataOpd[0].aspek_values.forEach((aspek, index) => {
-        if (index <= dataOpd[0].aspek_values.length) {
-          $(`#aspek-header-${index + 1}`).removeClass('d-none');
-          $(`#aspek-header-${index + 1}`).text(aspek.nama_aspek);
-        }
+
+    // Tampilkan header aspek dari allAspek pertama
+    if (dataOpd[0].allAspek) {
+      dataOpd[0].allAspek.forEach((aspek, index) => {
+        $(`#aspek-header-${index + 1}`).removeClass('d-none')
+          .text(`${aspek.nama_aspek}`);
       });
     }
 
-    dataOpd.forEach((opd, index) => {
-      const predikat = getPredikat(opd.nilai_akhir);
-      const badgeClass = getPredikatBadgeClass(predikat);
+    // Isi baris tabel
+    dataOpd.forEach((item, index) => {
+      const opd = item.opd;
+      const aspekColumns = item.radarData ?
+        item.radarData.map(v => `<td>${parseFloat(v).toFixed(2)}</td>`).join('') :
+        '';
 
-      let aspekColumns = '';
-      if (opd.aspek_values) {
-        for (let i = 0; i < opd.aspek_values.length; i++) {
-          const aspekValue = opd.aspek_values[i] ? opd.aspek_values[i].skor_index : '-';
-          aspekColumns += `<td>${aspekValue}</td>`;
-        }
-      } else {
-        aspekColumns = '<td>-</td><td>-</td><td>-</td>';
-      }
-
-      // PERUBAHAN: Tombol menjadi link
       tbody += `
         <tr>
           <td>${index + 1}</td>
           <td>${opd.nama_opd}</td>
-          <td><strong>${opd.nilai_akhir}</strong></td>
+          <td><strong>${parseFloat(opd.nilai).toFixed(2)}</strong></td>
           ${aspekColumns}
           <td>
-            <a href="<?= base_url('dashboard/report/view-opd') ?>?tahun=${tahun}&opd_id=${opd.opd_id}" 
-               class="btn btn-sm btn-info" 
-               >
+            <a href="<?= base_url('dashboard/report/view-opd') ?>?tahun=${tahun}&opd_id=${opd.id}"
+              class="btn btn-sm btn-info">
               <i class="bi bi-eye"></i> Detail
             </a>
           </td>
@@ -536,56 +524,36 @@ function updateTable(dataOpd) {
 }
 
 function updateChart(dataOpd) {
-  if (dataOpd.length === 0) return;
+  if (!dataOpd.length) return;
 
-  const aspekNames = [];
-  const aspekAverages = [];
+  const labels = dataOpd[0].radarLabels;
+  const averages = [];
 
-  if (dataOpd[0] && dataOpd[0].aspek_values) {
-    dataOpd[0].aspek_values.forEach((aspek, index) => {
-      aspekNames.push(aspek.nama_aspek);
+  labels.forEach((label, index) => {
+    let total = 0;
+    let count = 0;
 
-      let total = 0;
-      let count = 0;
-
-      dataOpd.forEach(opd => {
-        if (opd.aspek_values && opd.aspek_values[index]) {
-          total += parseFloat(opd.aspek_values[index].skor_index);
-          count++;
-        }
-      });
-
-      aspekAverages.push(count > 0 ? (total / count).toFixed(2) : 0);
+    dataOpd.forEach(item => {
+      if (item.radarData && item.radarData[index] != null) {
+        total += parseFloat(item.radarData[index]);
+        count++;
+      }
     });
-  }
+
+    averages.push(count > 0 ? (total / count).toFixed(2) : 0);
+  });
+
+  if (reportChart) reportChart.destroy();
 
   const ctx = document.getElementById('reportChart');
-
-  if (reportChart) {
-    reportChart.destroy();
-  }
 
   reportChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: aspekNames,
+      labels,
       datasets: [{
-        label: 'Rata-rata Index per Aspek',
-        data: aspekAverages,
-        backgroundColor: [
-          'rgba(54, 162, 235, 0.5)',
-          'rgba(75, 192, 192, 0.5)',
-          'rgba(153, 102, 255, 0.5)',
-          'rgba(255, 99, 132, 0.5)',
-          'rgba(255, 159, 64, 0.5)'
-        ],
-        borderColor: [
-          'rgba(54, 162, 235, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 99, 132, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
+        label: 'Rata-rata Per Aspek',
+        data: averages,
         borderWidth: 1
       }]
     },

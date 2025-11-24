@@ -32,6 +32,42 @@
 .canvas-wrap {
   height: 320px;
 }
+
+.legend-columns {
+  column-count: 3;
+  column-gap: 14px;
+  font-size: 0.75rem;
+  /* PERKECIL UKURAN TEKS */
+  margin-top: 10px;
+}
+
+.legend-columns div {
+  break-inside: avoid;
+  margin-bottom: 4px;
+  /* rapikan jarak antar baris */
+  display: flex;
+  align-items: center;
+}
+
+.legend-columns span {
+  width: 10px;
+  /* perkecil icon warna */
+  height: 10px;
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+.canvas-wrap {
+  height: 320px;
+  /* tetap */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 </style>
 <?= $this->endSection() ?>
 
@@ -188,25 +224,30 @@
 
 
   <!-- ===== CHART: Distribusi & Aspek ===== -->
-  <section class="row mt-3">
-    <div class="col-12 col-lg-6">
-      <div class="card">
+  <section class="row mt-3 align-items-stretch">
+    <div class="col-12 col-lg-6 d-flex">
+      <div class="card h-100 w-100">
         <div class="card-header">
           <h4>Distribusi Kategori Kinerja</h4>
         </div>
         <div class="card-body">
-          <div class="canvas-wrap"><canvas id="chartDistribusi"></canvas></div>
+          <div class="canvas-wrap">
+            <canvas id="chartDistribusi"></canvas>
+          </div>
+          <div id="legend-distribusi" class="legend-columns"></div>
         </div>
       </div>
     </div>
 
-    <div class="col-12 col-lg-6">
-      <div class="card">
+    <div class="col-12 col-lg-6 d-flex">
+      <div class="card h-100 w-100">
         <div class="card-header">
           <h4>Rata-rata Nilai per Aspek</h4>
         </div>
         <div class="card-body">
-          <div class="canvas-wrap"><canvas id="chartAspekAvg"></canvas></div>
+          <div class="canvas-wrap">
+            <canvas id="chartAspekAvg"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -305,8 +346,8 @@ async function fetchAndRender() {
   try {
     const res = await fetch(`${API_BASE}?tahun=${tahun}`);
     const json = await res.json();
-    const ringkasan = json.dt.ringkasan || {};
-    const opdList = json.dt.data_opd || [];
+    const ringkasan = json.dt?.ringkasan ?? {};
+    const opdList = json.dt?.data_opd ?? [];
 
     updateCards(ringkasan);
     renderTable(opdList);
@@ -330,27 +371,30 @@ function setText(id, val) {
 function updateCards(r) {
   setText("card-total-instansi", r.total_instansi ?? 0);
   setText("card-rerata", (r.rata_rata_index ?? 0).toFixed(2));
-  setText("card-tertinggi", r.instansi_tertinggi?.nama_opd ?? "-");
-  setText("card-tertinggi-val", r.instansi_tertinggi?.capaian?.toFixed(2) ?? "");
-  setText("card-terendah", r.instansi_terendah?.nama_opd ?? "-");
-  setText("card-terendah-val", r.instansi_terendah?.capaian?.toFixed(2) ?? "");
+  setText("card-tertinggi", r.tertinggi?.nama_opd ?? "-");
+  setText("card-tertinggi-val", r.tertinggi?.nilai?.toFixed(2) ?? "");
+  setText("card-terendah", r.terendah?.nama_opd ?? "-");
+  setText("card-terendah-val", r.terendah?.nilai?.toFixed(2) ?? "");
 }
 
 function renderTable(data) {
   if (dataTable) dataTable.destroy();
   const tbody = document.querySelector("#table-opd tbody");
   tbody.innerHTML = "";
-  data.sort((a, b) => b.nilai_akhir - a.nilai_akhir);
+
+  data.sort((a, b) => b.opd.nilai - a.opd.nilai);
+
   data.forEach((d, i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${i+1}</td>
-      <td>${d.nama_opd}</td>
-      <td>${d.singkatan ?? ""}</td>
-      <td class="text-center">${(d.nilai_akhir ?? 0).toFixed(2)}</td>
+    tbody.innerHTML += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${d.opd.nama_opd}</td>
+        <td>${d.opd.singkatan ?? ""}</td>
+        <td class="text-center">${(d.opd.nilai ?? 0).toFixed(2)}</td>
+      </tr>
     `;
-    tbody.appendChild(tr);
   });
+
   dataTable = $("#table-opd").DataTable({
     pageLength: 10,
     order: [
@@ -361,45 +405,83 @@ function renderTable(data) {
 
 function renderDistribusi(list) {
   const cat = {
-    a: 0,
-    b: 0,
-    c: 0,
-    d: 0
+    D: 0,
+    C: 0,
+    CC: 0,
+    B: 0,
+    BB: 0,
+    A: 0,
+    AA: 0
   };
+
   list.forEach(o => {
-    const v = o.nilai_akhir ?? 0;
-    if (v >= 75) cat.a++;
-    else if (v >= 50) cat.b++;
-    else if (v >= 25) cat.c++;
-    else cat.d++;
+    const v = o.opd.nilai ?? 0;
+    if (v <= 30) cat.D++;
+    else if (v <= 50) cat.C++;
+    else if (v <= 60) cat.CC++;
+    else if (v <= 70) cat.B++;
+    else if (v <= 80) cat.BB++;
+    else if (v <= 90) cat.A++;
+    else if (v <= 100) cat.AA++;
   });
+
+  const labels = [
+    "0–30 Sangat Buruk",
+    ">30–50 Buruk",
+    ">50–60 Cukup",
+    ">60–70 Cukup Baik",
+    ">70–80 Baik",
+    ">80–90 Sangat Baik",
+    ">90–100 Istimewa"
+  ];
+
+  const values = [cat.D, cat.C, cat.CC, cat.B, cat.BB, cat.A, cat.AA];
+  const colors = ["#dc3545", "#ff6f6f", "#ffc107", "#ffe17a", "#0d6efd", "#198754", "#009688"];
+
   const ctx = document.getElementById("chartDistribusi").getContext("2d");
+
   charts.distribusi?.destroy();
   charts.distribusi = new Chart(ctx, {
     type: "pie",
     data: {
-      labels: ["≥75 Sangat Baik", "50–74 Baik", "25–49 Cukup", "<25 Kurang"],
+      labels,
       datasets: [{
-        data: [cat.a, cat.b, cat.c, cat.d],
-        backgroundColor: ["#198754", "#0d6efd", "#ffc107", "#dc3545"]
+        data: values,
+        backgroundColor: colors
       }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
     }
   });
+
+  // Buat legend 3 kolom
+  const legendContainer = document.getElementById("legend-distribusi");
+  legendContainer.innerHTML = labels.map((lbl, i) => `
+      <div><span style="background:${colors[i]}"></span>${lbl} : <b>${values[i]}</b></div>
+  `).join("");
 }
 
 function renderAspekAvg(list) {
-  const map = {};
+  if (!list.length) return;
+
+  const labels = list[0].radarLabels ?? [];
+  const totals = Array(labels.length).fill(0);
+  const counts = Array(labels.length).fill(0);
+
   list.forEach(o => {
-    (o.aspek_values || []).forEach(a => {
-      if (!map[a.nama_aspek]) map[a.nama_aspek] = [];
-      map[a.nama_aspek].push(a.skor_index ?? 0);
+    (o.radarData ?? []).forEach((v, i) => {
+      totals[i] += parseFloat(v);
+      counts[i]++;
     });
   });
-  const labels = Object.keys(map);
-  const vals = labels.map(k => {
-    const arr = map[k];
-    return arr.reduce((a, b) => a + b, 0) / (arr.length || 1);
-  });
+
+  const avg = totals.map((t, i) => (t / (counts[i] || 1)).toFixed(2));
+
   const ctx = document.getElementById("chartAspekAvg").getContext("2d");
   charts.aspek?.destroy();
   charts.aspek = new Chart(ctx, {
@@ -407,9 +489,8 @@ function renderAspekAvg(list) {
     data: {
       labels,
       datasets: [{
-        label: "Rata-rata",
-        data: vals,
-        backgroundColor: "#0d6efd"
+        label: "Rata-rata Per Aspek",
+        data: avg
       }]
     },
     options: {
@@ -424,17 +505,18 @@ function renderAspekAvg(list) {
 }
 
 function renderTop10(list) {
-  const sorted = list.slice().sort((a, b) => b.nilai_akhir - a.nilai_akhir).slice(0, 10);
+  const sorted = list.slice().sort((a, b) => b.opd.nilai - a.opd.nilai).slice(0, 10);
+
   const ctx = document.getElementById("chartTop10").getContext("2d");
   charts.top10?.destroy();
+
   charts.top10 = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: sorted.map(o => o.singkatan),
+      labels: sorted.map(o => o.opd.singkatan),
       datasets: [{
-        label: "Nilai Akhir",
-        data: sorted.map(o => o.nilai_akhir),
-        backgroundColor: "#20c997"
+        label: "Nilai",
+        data: sorted.map(o => o.opd.nilai)
       }]
     },
     options: {
@@ -452,10 +534,12 @@ function renderTop10(list) {
 async function renderTrend(currentYear) {
   const years = [currentYear - 2, currentYear - 1, currentYear];
   const dataArr = [];
+
   for (const y of years) {
     const res = await fetch(`${API_BASE}?tahun=${y}`).then(r => r.json()).catch(() => null);
     dataArr.push(res?.dt?.ringkasan?.rata_rata_index ?? 0);
   }
+
   const ctx = document.getElementById("chartTrend").getContext("2d");
   charts.trend?.destroy();
   charts.trend = new Chart(ctx, {
@@ -464,18 +548,8 @@ async function renderTrend(currentYear) {
       labels: years,
       datasets: [{
         label: "Rata-rata",
-        data: dataArr,
-        borderColor: "#0dcaf0",
-        tension: 0.3
+        data: dataArr
       }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100
-        }
-      }
     }
   });
 }
