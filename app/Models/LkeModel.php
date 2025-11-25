@@ -463,7 +463,7 @@ public function getNilaiAspekDetailed($tahun, $idopd)
         ];
     }
 
-    public function getEvaluasiLengkap($tahun, $opd_id = null)
+    public function getEvaluasiLengkap($tahun, $opd_id = null, $update = false)
     {
 
         $opds = [];
@@ -482,7 +482,7 @@ public function getNilaiAspekDetailed($tahun, $idopd)
         }
         // \pd($opds);
         foreach ($opds as $value) {
-            $data_opds[] = $this->getLaporanOpdJson($tahun, $value['opd_id']);
+            $data_opds[] = $this->getLaporanOpdJson($tahun, $value['opd_id'], $update);
             // pd($data_opds);
         }
 
@@ -673,8 +673,22 @@ public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
         return $progress;
     }
 
-    public function getLaporanOpdJson($tahun, $opdId)
+    public function getLaporanOpdJson($tahun, $opdId, $update = false)
     {
+        $cache = cache();
+        $cacheKey = "laporan_opd_{$tahun}_{$opdId}";
+
+        // Jika update = true, hapus cache lama dulu
+        if ($update === true) {
+            $cache->delete($cacheKey);
+        }
+
+        // Jika cache tersedia dan bukan mode update, kembalikan cache
+        $cachedData = $cache->get($cacheKey);
+        if ($cachedData !== null && $update === false) {
+            return $cachedData;
+        }
+
         // Instance DashboardModel untuk memanggil nilaiOpd()
         $dashboardModel = new DashboardModel();
 
@@ -715,12 +729,12 @@ public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
 
             $labelText = $kode . '. ';
             $labelText .= strlen($aspekItem['nama_aspek']) > 20 ?
-                          substr($aspekItem['nama_aspek'], 0, 20) . '...' :
-                          $aspekItem['nama_aspek'];
+                        substr($aspekItem['nama_aspek'], 0, 20) . '...' :
+                        $aspekItem['nama_aspek'];
             $radarLabels[] = $labelText;
         }
 
-        return [
+        $result = [
             'error' => false,
             'tahun' => $tahun,
             'opd' => $opd,
@@ -728,6 +742,10 @@ public function getOpdWithAspekValuesSimple($tahun, $opd_id = null)
             'radarData' => $radarData,
             'radarLabels' => $radarLabels,
         ];
-    }
 
+        // Simpan ke cache selama 10 menit
+        $cache->save($cacheKey, $result, 600);
+
+        return $result;
+    }
 }
