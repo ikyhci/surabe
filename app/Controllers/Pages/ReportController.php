@@ -69,7 +69,7 @@ public function getEvaluasiLengkap()
 
         if ($evaluasiData === null || $update === 'true' || $update === true) {
             // jika belum ada, ambil dari model
-            $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun, $opd_id);
+            $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun, $opd_id, $update);
 
             // simpan ke cache selama 10 menit (600 detik) 24jam =86400
             $cache->save($cacheKey, $evaluasiData, 86400);
