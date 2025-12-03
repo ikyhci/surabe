@@ -27,15 +27,32 @@ public function nilaiSubSubAspekOpd($id_ssa, $id_opd = null)
             ssa.jenis_perhitungan,
             COALESCE(MAX(nj.Nilai), 0) as nilai_indikator,
             MAX(nj.Aproved) as aprove_status,
-            MAX(nj.Ket) as keterangan,
-            MAX(j.saran) as saran
+            GROUP_CONCAT(
+                CASE 
+                    WHEN nj.Ket IS NOT NULL AND TRIM(nj.Ket) != '' 
+                    THEN CONCAT(ssa.nums, '.', i.nums, '. ', nj.Ket, '. \n') 
+                    ELSE NULL 
+                END
+                SEPARATOR '\n'
+            ) AS keterangan,
+
+            GROUP_CONCAT(
+                CASE 
+                    WHEN j.saran IS NOT NULL AND TRIM(j.saran) != '' 
+                    THEN CONCAT(ssa.nums, '.', i.nums, '. ', j.saran, '.') 
+                    ELSE NULL 
+                END
+                SEPARATOR '\n'
+            ) AS saran
+
         ")
         ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner')
         ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
         ->join('lke_user u', 'u.uid = j.userid', 'left')
         ->join('lke_detail_opd do', 'do.userid = u.uid', 'left')
         ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.id', 'left')
-        ->where('ssa.id', $id_ssa);
+        ->where('ssa.id', $id_ssa)
+        ->orderBy('i.nums', 'asc');
 
     if ($id_opd !== null) {
         $builder->where('do.opdid', $id_opd);
