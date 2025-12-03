@@ -13,107 +13,104 @@ class DashboardModel extends Model
         $this->db = db_connect();
     }
 
-    public function nilaiSubSubAspekOpd($id_ssa, $id_opd = null)
-    {
-        // Query untuk mendapatkan nilai per indikator terlebih dahulu
-        $builder = $this->db->table('lke_sub_sub_aspek ssa')
-            ->select("
-                ssa.id as sub_sub_aspek_id,
-                ssa.nama_sub_sub_aspek,
-                ssa.bobot,
-                ssa.nums,
-                i.id as indikator_id,
-                COALESCE(MAX(nj.Nilai), 0) as nilai_indikator,
-                MAX(nj.Aproved) as aprove_status,
-                MAX(nj.Ket) as keterangan,
-                MAX(j.saran) as saran
-            ")
-            ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner')
-            ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
-            ->join('lke_user u', 'u.uid = j.userid', 'left')
-            ->join('lke_detail_opd do', 'do.userid = u.uid', 'left')
-            ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.id', 'left')
-            ->where('ssa.id', $id_ssa);
+public function nilaiSubSubAspekOpd($id_ssa, $id_opd = null)
+{
+    // Query untuk mendapatkan nilai per indikator
+    $builder = $this->db->table('lke_sub_sub_aspek ssa')
+        ->select("
+            ssa.id as sub_sub_aspek_id,
+            ssa.nama_sub_sub_aspek,
+            ssa.bobot,
+            ssa.nums,
+            i.id as indikator_id,
+            i.max_point,
+            ssa.jenis_perhitungan,
+            COALESCE(MAX(nj.Nilai), 0) as nilai_indikator,
+            MAX(nj.Aproved) as aprove_status,
+            MAX(nj.Ket) as keterangan,
+            MAX(j.saran) as saran
+        ")
+        ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner')
+        ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
+        ->join('lke_user u', 'u.uid = j.userid', 'left')
+        ->join('lke_detail_opd do', 'do.userid = u.uid', 'left')
+        ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.id', 'left')
+        ->where('ssa.id', $id_ssa);
 
-        if ($id_opd !== null) {
-            $builder->where('do.opdid', $id_opd);
-        }
-
-        $builder->groupBy('ssa.id, ssa.nama_sub_sub_aspek, ssa.bobot, ssa.nums, i.id');
-        
-        $results = $builder->get()->getResult();
-
-        if (!empty($results)) {
-            $total_nilai = 0;
-            $count = count($results);
-            $bobot = $results[0]->bobot;
-            $aprove_list = [];
-            $ket_list = [];
-            $saran_list = [];
-            
-            foreach ($results as $row) {
-                $total_nilai += floatval($row->nilai_indikator);
-                
-                if (!empty($row->aprove_status)) {
-                    $aprove_list[] = $row->aprove_status;
-                }
-                if (!empty(trim($row->keterangan))) {
-                    $ket_list[] = trim($row->keterangan);
-                }
-                if (!empty(trim($row->saran))) {
-                    $saran_list[] = trim($row->saran);
-                }
-            }
-            
-            $rata_rata = $count > 0 ? $total_nilai / $count : 0;
-            $nilai_final = $rata_rata * (floatval($bobot) / 100);
-            $opd_name = null;
-            if ($id_opd !== null) {
-                $opd = $this->db->table('lke_opd')
-                    ->select('nama_opd')
-                    ->where('id', $id_opd)
-                    ->get()->getRow();
-                $opd_name = $opd->nama_opd ?? null;
-            }
-            $data = new \stdClass();
-            $data->nama_opd = $opd_name;
-            $data->nama_sub_sub_aspek = $results[0]->nama_sub_sub_aspek;
-            $data->nilai = $this->floatRound($nilai_final);
-            $data->aprove = !empty($aprove_list) ? max($aprove_list) : null;
-            $data->nums = $results[0]->nums;
-            $data->bobot = $bobot;
-            $data->ssa_ket = !empty($ket_list) ? implode("\n", $ket_list) : '';
-            $data->ssa_saran = !empty($saran_list) ? implode("\n", $saran_list) : '';
-            
-            return $data;
-        } else {
-            // Jika tidak ada data, ambil info sub_sub_aspek saja
-            $ssa_info = $this->db->table('lke_sub_sub_aspek')
-                ->select('nama_sub_sub_aspek, bobot, nums')
-                ->where('id', $id_ssa)
-                ->get()->getRow();
-            
-            $opd_name = null;
-            if ($id_opd !== null) {
-                $opd = $this->db->table('lke_opd')
-                    ->select('nama_opd')
-                    ->where('id', $id_opd)
-                    ->get()->getRow();
-                $opd_name = $opd->nama_opd ?? null;
-            }
-            
-            $data = new \stdClass();
-            $data->nama_opd = $opd_name;
-            $data->nama_sub_sub_aspek = $ssa_info->nama_sub_sub_aspek ?? null;
-            $data->nilai = $this->floatRound(0);
-            $data->aprove = null;
-            $data->nums = $ssa_info->nums ?? null;
-            $data->bobot = $ssa_info->bobot ?? 0;
-            $data->ssa_ket = '';
-            $data->ssa_saran = '';
-            return $data;
-        }
+    if ($id_opd !== null) {
+        $builder->where('do.opdid', $id_opd);
     }
+
+    $builder->groupBy('ssa.id, ssa.nama_sub_sub_aspek, ssa.bobot, ssa.nums, i.id');
+
+    $results = $builder->get()->getResult();
+
+    if (!empty($results)) {
+        $count = count($results);
+        $bobot = floatval($results[0]->bobot);
+        $aprove_list = [];
+        $ket_list = [];
+        $saran_list = [];
+        $jenis = $results[0]->jenis_perhitungan ?? 'avg';
+        $sum = 0;
+
+        foreach ($results as $row) {
+            $nilai = floatval($row->nilai_indikator);
+            $sum += $nilai;
+
+            if (!empty($row->aprove_status)) $aprove_list[] = $row->aprove_status;
+            if (!empty(trim($row->keterangan))) $ket_list[] = trim($row->keterangan);
+            if (!empty(trim($row->saran))) $saran_list[] = trim($row->saran);
+        }
+
+        $nilai_final = ($jenis === 'avg' && $count > 0) ? ($sum / $count) * ($bobot / 100) : $sum * ($bobot / 100);
+        $opd_name = null;
+        if ($id_opd !== null) {
+            $opd = $this->db->table('lke_opd')
+                ->select('nama_opd')
+                ->where('id', $id_opd)
+                ->get()->getRow();
+            $opd_name = $opd->nama_opd ?? null;
+        }
+        $data = new \stdClass();
+        $data->nama_opd = $opd_name;
+        $data->nama_sub_sub_aspek = $results[0]->nama_sub_sub_aspek;
+        $data->nilai = $this->floatRound($nilai_final);
+        $data->aprove = !empty($aprove_list) ? max($aprove_list) : null;
+        $data->nums = $results[0]->nums;
+        $data->bobot = $bobot;
+        $data->ssa_ket = !empty($ket_list) ? implode("\n", $ket_list) : '';
+        $data->ssa_saran = !empty($saran_list) ? implode("\n", $saran_list) : '';
+
+        return $data;
+    } else {
+        // Jika tidak ada data, ambil info sub_sub_aspek saja
+        $ssa_info = $this->db->table('lke_sub_sub_aspek')
+            ->select('nama_sub_sub_aspek, bobot, nums, jenis_perhitungan')
+            ->where('id', $id_ssa)
+            ->get()->getRow();
+
+        $opd_name = null;
+        if ($id_opd !== null) {
+            $opd = $this->db->table('lke_opd')
+                ->select('nama_opd')
+                ->where('id', $id_opd)
+                ->get()->getRow();
+            $opd_name = $opd->nama_opd ?? null;
+        }
+
+        $data = new \stdClass();
+        $data->nama_opd = $opd_name;
+        $data->nama_sub_sub_aspek = $ssa_info->nama_sub_sub_aspek ?? null;
+        $data->nilai = $this->floatRound(0);
+        $data->aprove = null;
+        $data->nums = $ssa_info->nums ?? null;
+        $data->bobot = $ssa_info->bobot ?? 0;
+        $data->ssa_ket = '';
+        $data->ssa_saran = '';
+        return $data;
+    }
+}
 
     public function getAspek($tahun = null) {
         $aspek = $this->db->table('lke_aspek')
