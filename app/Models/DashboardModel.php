@@ -15,7 +15,24 @@ class DashboardModel extends Model
 
 public function nilaiSubSubAspekOpd($id_ssa, $id_opd = null)
 {
+    // $id_ssa = "057226d2d134fa7f7d12730846d47ea91c482d83";
+    // $id_opd = "619577ef9777f6503fdd23b17d0794c21f81cd35";
     // Query untuk mendapatkan nilai per indikator
+    $jawabanSubQuery = "
+        SELECT 
+            j2.id_indikator,
+            j2.id AS jawaban_id,
+            j2.saran
+        FROM lke_jawaban j2
+    ";
+
+    if ($id_opd !== null) {
+        $jawabanSubQuery .= "
+            INNER JOIN lke_detail_opd do2
+                ON do2.userid = j2.userid
+            AND do2.opdid = " . $this->db->escape($id_opd);
+    }
+
     $builder = $this->db->table('lke_sub_sub_aspek ssa')
         ->select("
             ssa.id as sub_sub_aspek_id,
@@ -26,42 +43,31 @@ public function nilaiSubSubAspekOpd($id_ssa, $id_opd = null)
             i.max_point,
             ssa.jenis_perhitungan,
             COALESCE(MAX(nj.Nilai), 0) as nilai_indikator,
-            MAX(nj.Aproved) as aprove_status,
+            COALESCE(MAX(nj.Aproved), 'Belum dinilai') as aprove_status,
             GROUP_CONCAT(
                 CASE 
                     WHEN nj.Ket IS NOT NULL AND TRIM(nj.Ket) != '' 
-                    THEN CONCAT(ssa.nums, '.', i.nums, '. ', nj.Ket, '. \n') 
-                    ELSE NULL 
+                    THEN CONCAT(ssa.nums, '.', i.nums, '. ', nj.Ket)
                 END
                 SEPARATOR '\n'
             ) AS keterangan,
-
             GROUP_CONCAT(
                 CASE 
                     WHEN j.saran IS NOT NULL AND TRIM(j.saran) != '' 
-                    THEN CONCAT(ssa.nums, '.', i.nums, '. ', j.saran, '.') 
-                    ELSE NULL 
+                    THEN CONCAT(ssa.nums, '.', i.nums, '. ', j.saran)
                 END
                 SEPARATOR '\n'
             ) AS saran
-
         ")
         ->join('lke_indikator i', 'i.id_sub_sub_aspek = ssa.id', 'inner')
-        ->join('lke_jawaban j', 'j.id_indikator = i.id', 'left')
-        ->join('lke_user u', 'u.uid = j.userid', 'left')
-        ->join('lke_detail_opd do', 'do.userid = u.uid', 'left')
-        ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.id', 'left')
+        ->join("($jawabanSubQuery) j", 'j.id_indikator = i.id', 'left')
+        ->join('lke_nilai_jawaban_user nj', 'nj.IdJawaban = j.jawaban_id', 'left')
         ->where('ssa.id', $id_ssa)
+        ->groupBy('ssa.id, ssa.nama_sub_sub_aspek, ssa.bobot, ssa.nums, i.id')
         ->orderBy('i.nums', 'asc');
 
-    if ($id_opd !== null) {
-        $builder->where('do.opdid', $id_opd);
-    }
-
-    $builder->groupBy('ssa.id, ssa.nama_sub_sub_aspek, ssa.bobot, ssa.nums, i.id');
-
     $results = $builder->get()->getResult();
-
+    // pd($results);
     if (!empty($results)) {
         $count = count($results);
         $bobot = floatval($results[0]->bobot);
@@ -222,6 +228,7 @@ public function nilaiSubSubAspekOpd($id_ssa, $id_opd = null)
                         $nilai = $hasil->nilai ?? 0;
 
                         $subSubAspek[$kkk]->nilai = $nilai;
+                        $subSubAspek[$kkk]->bobot = $hasil->bobot ?? null;
                         $subSubAspek[$kkk]->aprove = $hasil->aprove ?? null;
                         $subSubAspek[$kkk]->ket = $hasil->ssa_ket ?? null;
                         $subSubAspek[$kkk]->saran = $hasil->ssa_saran ?? null;
@@ -278,6 +285,40 @@ public function nilaiSubSubAspekOpd($id_ssa, $id_opd = null)
         }
 
         return $opd;
+    }
+
+    public function getDetailSubSubAspekOpd($opdId, $subSubAspekId)
+    {
+        $sql = "
+            SELECT
+                i.id AS indikator_id,
+                i.indikator,
+                i.max_point,
+                ssa.id AS sub_sub_aspek_id,
+                ssa.nama_sub_sub_aspek,
+                COALESCE(nj.Nilai, 0) AS nilai_indikator,
+                nj.Aproved AS aprove_status,
+                CASE
+                    WHEN j.jawaban_id IS NULL THEN 'OPD belum menginput penilaian mandiri'
+                    WHEN nj.IdJawaban IS NULL THEN 'Belum dilakukan penilaian'
+                    ELSE nj.Ket
+                END AS keterangan,
+                j.saran AS saran
+            FROM lke_indikator i
+            INNER JOIN lke_sub_sub_aspek ssa ON ssa.id = i.id_sub_sub_aspek
+            LEFT JOIN (
+                SELECT j2.id_indikator, j2.id AS jawaban_id, j2.saran
+                FROM lke_jawaban j2
+                INNER JOIN lke_detail_opd do2 
+                    ON do2.userid = j2.userid 
+                    AND do2.opdid = ?
+            ) AS j ON j.id_indikator = i.id
+            LEFT JOIN lke_nilai_jawaban_user nj ON nj.IdJawaban = j.jawaban_id
+            WHERE ssa.id = ?
+            ORDER BY i.nums ASC
+        ";
+
+        return $this->db->query($sql, [$opdId, $subSubAspekId])->getResultArray();
     }
 
     private function floatRound($v, $precision = 2)

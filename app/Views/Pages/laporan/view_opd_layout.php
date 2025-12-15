@@ -412,6 +412,7 @@ body {
                 <th style="width: 10%">Status</th>
                 <th style="width: 25%">Keterangan</th>
                 <th style="width: 25%">Saran</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -419,8 +420,9 @@ body {
               <tr>
                 <td class="text-center"><?= esc($ssa->nums) ?></td>
                 <td><?= esc($ssa->nama_sub_sub_aspek) ?></td>
-                <td class="text-center">100%</td>
-                <td class="text-center"><strong><?= number_format($ssa->nilai, 2) ?></strong></td>
+                <td class="text-center"><?= $ssa->bobot ?></td>
+                <td class="text-center">
+                  <strong><?= number_format($ssa->nilai, 2) ?></strong>
                 <td class="text-center">
                   <?php
                                         if ($ssa->aprove === 'yes') {
@@ -432,8 +434,13 @@ body {
                                         }
                                         ?>
                 </td>
-                <td><?= esc($ssa->ket) ?></td>
-                <td><?= esc($ssa->saran) ?></td>
+                <td><?= shortTextWithTooltip($ssa->ket) ?></td>
+                <td><?= shortTextWithTooltip($ssa->saran) ?></td>
+                <td><button class="btn btn-sm btn-info detail-ssa" data-opdId="<?= $opd->id ?>"
+                    data-idssa="<?= $ssa->id ?>" data-nmssa="<?= esc($ssa->nama_sub_sub_aspek) ?>"
+                    data-bobotssa="<?= $ssa->bobot ?>">detail</button>
+                </td>
+                </td>
               </tr>
               <?php endforeach; ?>
             </tbody>
@@ -451,6 +458,39 @@ body {
     <p><strong>Laporan dibuat pada:</strong> <?= date('d/m/Y H:i:s') ?></p>
     <p><strong>Sistem:</strong> SURABE BERANI - Sistem Pengukuran Reformasi Birokrasi Elektronik Berintegritas dan
       Mandiri</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailSsaModal" tabindex="-1" aria-labelledby="detailSsaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailSsaModalLabel">Detail SSA</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Konten akan diisi via JS -->
+        <table class="table table-bordered" id="detailSsaTable">
+          <thead>
+            <tr>
+              <th>Indikator</th>
+              <!-- <th>Max Point</th> -->
+              <th>Nilai</th>
+              <th>Status Persetujuan</th>
+              <th>Keterangan</th>
+              <th>Saran</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data akan diinsert di sini -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -513,6 +553,46 @@ new Chart(ctx, {
       }
     }
   }
+});
+
+let detailSsaBtn = $('.detail-ssa');
+
+detailSsaBtn.on('click', function() {
+  let opdId = $(this).data('opdid');
+  let nmSsa = $(this).data('nmssa');
+  let idSsa = $(this).data('idssa');
+  let bobotSsa = $(this).data('bobotssa');
+
+  $('#detailSsaModalLabel').text("Detail " + nmSsa + " (bobot=" + bobotSsa + ")");
+  fetch(`/dashboard/report/data-opd/detailSsa?opdId=${opdId}&idSsa=${idSsa}`)
+    .then(response => response.json())
+    .then(data => {
+      // console.log(data);
+
+      // Bersihkan tbody dulu
+      let tbody = $('#detailSsaTable tbody');
+      tbody.empty();
+
+      // Loop data dan buat baris tabel
+      data.forEach(item => {
+        let row = `
+                    <tr>
+                        <td>${item.indikator}</td>
+                        
+                        <td>${item.nilai_indikator}</td>
+                        <td>${item.aprove_status ?? '-'}</td>
+                        <td>${item.keterangan ?? '-'}</td>
+                        <td>${item.saran ?? '-'}</td>
+                    </tr>
+                `;
+        tbody.append(row);
+      });
+
+      // Tampilkan modal
+      let modal = new bootstrap.Modal(document.getElementById('detailSsaModal'));
+      modal.show();
+    })
+    .catch(error => console.error('Error:', error));
 });
 </script>
 <?= $this->endSection() ?>
