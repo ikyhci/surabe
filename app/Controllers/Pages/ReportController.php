@@ -1348,4 +1348,30 @@ public function getEvaluasiLengkap()
         }
     }
 
+public function detailSsa()
+{
+    // Ambil parameter dari query string dengan aman
+    $id_opd = $this->request->getGet('opdId');
+    $id_ssa = $this->request->getGet('idSsa');
+
+    // Cek apakah parameter ada
+    if (empty($id_opd) || empty($id_ssa)) {
+        return $this->response
+                    ->setStatusCode(400)
+                    ->setJSON([
+                        'status' => 'error',
+                        'message' => 'Parameter opdId dan idSsa wajib diisi.'
+                    ]);
+    }
+
+    // Panggil model
+    $dashboardModel = new \App\Models\DashboardModel();
+    $data = $dashboardModel->getDetailSubSubAspekOpd($id_opd, $id_ssa);
+
+    // Kirim response JSON
+    return $this->response
+                ->setStatusCode(200)
+                ->setJSON($data);
+}
+
 }
