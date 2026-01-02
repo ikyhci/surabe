@@ -14,7 +14,7 @@ class Cookie extends BaseConfig
      *
      * Set a cookie name prefix if you need to avoid collisions.
      */
-    public string $prefix = '__LKE-';
+    public string $prefix = '__Secure-LKE-';
 
     /**
      * --------------------------------------------------------------------------

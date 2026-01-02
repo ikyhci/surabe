@@ -26,7 +26,7 @@ class ReportController extends BaseController
 
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('Authorization', true,'__LKE-');
+        $token = get_cookie('Authorization', true,'__Secure-LKE-');
         if (!$token) {
             return redirect()->to(base_url().'unauthorized');
         }

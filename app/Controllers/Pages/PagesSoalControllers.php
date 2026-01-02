@@ -17,7 +17,7 @@ class PagesSoalControllers extends BaseController
     public function __construct(){
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('Authorization', true,'__LKE-');
+        $token = get_cookie('Authorization', true,'__Secure-LKE-');
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $usr = $this->decoded->rln;
         if ($usr != 'Soal' || $usr != 'Super Admin') {
