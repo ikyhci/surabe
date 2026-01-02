@@ -60,7 +60,7 @@ class Filters extends BaseFilters
             'pagecache',  // Web Page Caching
             'cors',
             'clearSession',
-            'apiFilter',
+            // 'apiFilter',
         ],
         'after' => [
             'pagecache',   // Web Page Caching
