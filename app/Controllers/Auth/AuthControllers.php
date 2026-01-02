@@ -30,79 +30,92 @@ class AuthControllers extends BaseController
     {
 
         if ($this->validate([
-            'username'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[4]',
-            'password'  => 'required|trim|regex_match[/[a-zA-Z0-9@.]/]|min_length[4]',
-            // 'reCaptcha2' => 'required|reCaptcha2[login,0.9]',
-            // 'reCaptcha2' => 'required|reCaptcha2[]',
+            'username' => 'required|trim|regex_match[/^[a-zA-Z0-9@.]+$/]|min_length[4]',
+            'password' => 'required|trim|min_length[4]',
+            'captcha'   => 'required'
         ]))
         {
+            $stored = session()->get('captcha_code');
+            $captcha = $this->request->getVar('captcha');
             $unm = $this->request->getVar('username');
             $psw = $this->request->getVar('password');
-            $chek = $this->db->query("CALL User_Auth('".$unm."','".$psw."')")->getRow();
-            if ($chek->res == 0 ) {
-                $data = array(
-                    'token'     =>  '',
-                    'token_crs' =>  csrf_hash(),
-                    'success'   =>  0,
-                    'msg'       =>  $chek->msg
-                );
-
-                return $this->response->setJSON($data); 
-            }
-            if ($chek->res == 1 ) 
-            {
-                if ($chek->actv == "TRUE") {
-                    $key = getenv('TOKEN_SECRET');
-                    $iat = time(); 
-                    $exp = $iat + 60 * 60 * 60 * 6;
-
-                    $payload = array(
-                        "iss" => $chek->FullName,
-                        "aud" => $chek->UserName,
-                        "sub" => "Login LKE APP",
-                        "iat" => $iat, 
-                        "exp" => $exp, 
-                        "ids" => $chek->uid,
-                        "rln" => $chek->RoleName,
-                    );
-
-                    $token = JWT::encode($payload, $key, 'HS256');
-
+            if (strtoupper($captcha) === $stored) {
+                // $chek = $this->db->query("CALL User_Auth('".$unm."','".$psw."')")->getRow();
+                $sql = "CALL User_Auth(?, ?)";
+                $chek = $this->db->query($sql, [$unm, $psw])->getRow();
+                if ($chek->res == 0 ) {
                     $data = array(
-                        'token'     =>  $token,
-                        'direct'    =>  'dashboard',
-                        'exp'       =>  $exp,
+                        'token'     =>  '',
                         'token_crs' =>  csrf_hash(),
-                        'success'   =>  1,
-                        'msg'       =>  'succes'
+                        'success'   =>  0,
+                        'msg'       =>  $chek->msg
                     );
 
-                    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
-                        $ip = $_SERVER['HTTP_CLIENT_IP'];
-                    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
-                        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                    } else {
-                        $ip = $_SERVER['REMOTE_ADDR'];
-                    } 
+                    return $this->response->setJSON($data); 
+                }
+                if ($chek->res == 1 ) 
+                {
+                    if ($chek->actv == "TRUE") {
+                        $key = getenv('TOKEN_SECRET');
+                        $iat = time(); 
+                        $exp = $iat + 60 * 60 * 60 * 6;
 
-                    $logs = $this->db->query("CALL log_user('".$chek->uid."','".$ip."', 'LOGIN')");
+                        $payload = array(
+                            "iss" => $chek->FullName,
+                            "aud" => $chek->UserName,
+                            "sub" => "Login LKE APP",
+                            "iat" => $iat, 
+                            "exp" => $exp, 
+                            "ids" => $chek->uid,
+                            "rln" => $chek->RoleName,
+                        );
 
-                    setcookie(
-                    // '__Secure-Authorization',
-                        '__LKE-Authorization',
-                        $token,[
-                            'expires'=>$exp,
-                            //'prefix' => '__Secure-',
-                            // 'prefix' => '__LKE-',
-                            'path'=>'/',
-                            'domain'=> '',
-                            'secure'=>true,
-                            'httponly'=>true,
-                            'samesite'=>Cookie::SAMESITE_LAX,
-                        ]
-                    );
-                    return $this->response->setJSON($data);
+                        $token = JWT::encode($payload, $key, 'HS256');
 
+                        $data = array(
+                            'token'     =>  $token,
+                            'direct'    =>  'dashboard',
+                            'exp'       =>  $exp,
+                            'token_crs' =>  csrf_hash(),
+                            'success'   =>  1,
+                            'msg'       =>  'succes'
+                        );
+
+                        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+                            $ip = $_SERVER['HTTP_CLIENT_IP'];
+                        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+                            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                        } else {
+                            $ip = $_SERVER['REMOTE_ADDR'];
+                        } 
+
+                        $logs = $this->db->query("CALL log_user('".$chek->uid."','".$ip."', 'LOGIN')");
+
+                        setcookie(
+                        // '__Secure-Authorization',
+                            '__LKE-Authorization',
+                            $token,[
+                                'expires'=>$exp,
+                                //'prefix' => '__Secure-',
+                                // 'prefix' => '__LKE-',
+                                'path'=>'/',
+                                'domain'=> '',
+                                'secure'=>true,
+                                'httponly'=>true,
+                                'samesite'=>Cookie::SAMESITE_LAX,
+                            ]
+                        );
+                        return $this->response->setJSON($data);
+
+                    }else{
+                        $data = array(
+                            'token'     =>  '',
+                            'token_crs' =>  csrf_hash(),
+                            'success'   =>  $chek->res,
+                            'msg'       =>  $chek->msg,
+                        );
+                        return $this->response->setJSON($data);
+                    }
                 }else{
                     $data = array(
                         'token'     =>  '',
@@ -116,11 +129,12 @@ class AuthControllers extends BaseController
                 $data = array(
                     'token'     =>  '',
                     'token_crs' =>  csrf_hash(),
-                    'success'   =>  $chek->res,
-                    'msg'       =>  $chek->msg,
+                    'success'   =>  0,
+                    'msg'       =>  "ops.. CAPTCHA salah.!",
                 );
                 return $this->response->setJSON($data);
             }
+            
         }else{
             $data = array(
                 'token'     =>  '',

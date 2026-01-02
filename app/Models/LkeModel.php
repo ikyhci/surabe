@@ -179,6 +179,42 @@ public function getTotalNilaiLKE($tahun, $idopd)
 
         return $result;
     }
+
+    public function getRekapSemuaOpdPublic($tahun, $opd_id = null)
+    {
+        $tahun = (is_array($tahun))? $tahun['tahun'] : $tahun ;
+        $builder = $this->db->table('lke_opd o');
+        $builder->select('o.id AS opd_id, o.nama_opd, o.singkatan, d.userid');
+        $builder->join('lke_detail_opd d', 'd.opdid = o.id', 'left');
+        $builder->join('lke_user u', 'u.uid = d.userid', 'left');
+        if (isset($opd_id)) {
+            $builder->where('o.id', $opd_id);
+        }
+        $builder->groupBy('o.id');
+        $builder->orderBy('o.nama_opd');
+
+        $opds = $builder->get()->getResultArray();
+
+        $result = [];
+        foreach ($opds as $opd) {
+            // $capaian = $this->getTotalNilaiLKE($tahun, $opd['opd_id']);
+            $nilaiOpdModel = new NilaiModel();
+            $nilaiOpd = $nilaiOpdModel->getNilaiOpd($opd['opd_id'], $tahun);
+            $capaian = $nilaiOpd['opd_nilai'];
+            // $rb = $this->getNilaiRB($tahun, $opd['opd_id']);
+            $result[] = [
+                // 'opd_id' => $opd['opd_id'],
+                'opd_name' => $opd['nama_opd'],
+                'short_opd' => $opd['singkatan'],
+                // 'userid' => $opd['userid'],
+                'achievement' => $capaian,
+                // 'nilai' => $nilaiOpd,
+                // 'rb'    => $rb,
+            ];
+        }
+
+        return $result;
+    }
       
     public function getOpdWithAspekValues($tahun)
     {

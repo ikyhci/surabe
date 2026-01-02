@@ -31,6 +31,8 @@
                     <div class="login-card">
                         <h1 class="auth-title">Log in.</h1>
                         <form id="login" method="POST" class="needs-validations login-form" novalidate>
+                            <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>"
+                                            value="<?= csrf_hash() ?>">
                             <div class="form-group position-relative has-icon-left mb-4">
 
                                 <input type="text" name="username" class="form-control form-control" placeholder="Username" required>
@@ -44,9 +46,15 @@
                                     <i class="bi bi-shield-lock"></i>
                                 </div>
                             </div>
-                            <!-- capcha -->
-                            <?= reCaptcha2('reCaptcha2', ['id' => 'recaptcha_v2'], ['action' => 'login']);?>
-                            <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                            <div class="form-group mb-4 justify-content-center text-center">
+                                        <img src="<?= $captchaImage ?>" alt="CAPTCHA" id="captcha">
+                                        <!-- <button class="btn btn-primary">refresh chapcha</button> -->
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="floating-label" for="Username">CAPTCHA</label>
+                                        <input type="text" class="form-control" id="captcha" name="captcha"
+                                            placeholder="" required>
+                                    </div>
                             <button type="submit" id="btnLogin"class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
                         </form>
                     </div>

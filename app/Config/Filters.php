@@ -38,6 +38,7 @@ class Filters extends BaseFilters
         'appFilter'     => \App\Filters\AppFilters::class, //register auth
         'cors'          => \App\Filters\CorsFilters::class, //register cors
         'roles'         => \App\Filters\Roles::class,
+        'clearSession'  => \App\Filters\ClearSession::class,
     ];
 
     /**
@@ -58,6 +59,7 @@ class Filters extends BaseFilters
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
             'cors',
+            'clearSession',
             // 'apiFilter',
         ],
         'after' => [

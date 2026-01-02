@@ -17,6 +17,8 @@ $routes->get('/unauthorized', 'PublicPages::Unauthorized');
 //login api
 $routes->group('api',  function ($routes) {
 	$routes->post('login', 'Auth\AuthControllers::auth');
+	$routes->get('v1/capaian','PublicPages::getCapaian');
+	$routes->get('v1','PublicPages::apis');
 	
 });
 
