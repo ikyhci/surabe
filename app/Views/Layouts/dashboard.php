@@ -35,7 +35,7 @@
     <!-- token auth -->
     <?php 
     helper('cookie');
-    $token = get_cookie('Authorization', true,'__LKE-');
+    $token = get_cookie('LKE_Authorization', true,'__Secure-');
     echo '
     <input type="hidden" name="token" id="token" value="'.$token.'">';
     ?>
