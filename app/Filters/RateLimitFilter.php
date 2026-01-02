@@ -26,33 +26,30 @@ class RateLimitFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         //
-        $ip     = $request->getIPAddress();
-        $method = strtolower($request->getMethod()); // GET, POST, PUT, dll
+            $ip     = $request->getIPAddress();
+            $method = strtolower($request->getMethod());
 
-        // hanya cek GET, POST, PUT
-        if (! in_array($method, ['get', 'post', 'put'])) {
-            return;
-        }
+            // hanya cek GET, POST, PUT
+            if (! in_array($method, ['get', 'post', 'put'])) {
+                return;
+            }
 
-        $cache = cache();
-        $key   = "rate_limit_{$ip}_{$method}";
+            $cache = cache();
+            $key   = "rate_limit_{$ip}_{$method}";
 
-        $data = $cache->get($key) ?? ['count' => 0, 'time' => time()];
+            // ambil counter, default 0
+            $count = $cache->get($key) ?? 0;
 
-        // reset jika sudah lewat 60 detik
-        if (time() - $data['time'] > 60) {
-            $data = ['count' => 0, 'time' => time()];
-        }
+            $count++;
 
-        $data['count']++;
+            // simpan dengan TTL 10 detik 
+            $cache->save($key, $count, 10);
 
-        $cache->save($key, $data, 120); // simpan 2 menit
-
-        if ($data['count'] > 10) {
-            return service('response')
-                ->setStatusCode(429) // Too Many Requests
-                ->setBody("Too many {$method} requests from your IP. Please wait a minute.");
-        }
+            if ($count > 10) {
+                return service('response')
+                    ->setStatusCode(429) // Too Many Requests
+                    ->setBody("Too many {$method} requests from your IP. Please wait a minute.");
+            }
     }
 
     /**

@@ -36,10 +36,10 @@ class AuthControllers extends BaseController
         ]))
         {
             $stored = session()->get('captcha_code');
-            $captcha = $this->request->getVar('captcha');
+            $captcha = strtoupper($this->request->getVar('captcha'));
             $unm = $this->request->getVar('username');
             $psw = $this->request->getVar('password');
-            if (strtoupper($captcha) === $stored) {
+            if ($captcha === $stored) {
                 // $chek = $this->db->query("CALL User_Auth('".$unm."','".$psw."')")->getRow();
                 $sql = "CALL User_Auth(?, ?)";
                 $chek = $this->db->query($sql, [$unm, $psw])->getRow();
@@ -93,7 +93,7 @@ class AuthControllers extends BaseController
 
                         setcookie(
                         // '__Secure-Authorization',
-                            '____Secure-LKE-Authorization',
+                            '__Secure-LKE-Authorization',
                             $token,[
                                 'expires'=>$exp,
                                 //'prefix' => '__Secure-',
@@ -173,7 +173,7 @@ class AuthControllers extends BaseController
 
         setcookie(
             // '__Secure-Authorization',
-            '____Secure-LKE-Authorization',
+            '__Secure-LKE-Authorization',
             '',[
                 'expires'=>'',
                 //'prefix' => '__Secure-',
@@ -186,7 +186,7 @@ class AuthControllers extends BaseController
             ]
         );
         // delete_cookie('__Secure-Authorization');
-        delete_cookie('____Secure-LKE-Authorization');
+        delete_cookie('__Secure-LKE-Authorization');
         
         $data = array(
             'token_crs' =>  csrf_hash(),
