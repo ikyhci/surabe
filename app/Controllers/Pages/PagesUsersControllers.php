@@ -20,7 +20,7 @@ class PagesUsersControllers extends BaseController
 
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('Authorization', true,'__Secure-LKE-');
+        $token = get_cookie('Authorization', true,'__Secure-LKE_');
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
