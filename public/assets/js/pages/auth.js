@@ -29,10 +29,11 @@
                             type:"POST",
                                 url: url+'api/login',//url.replace(/\/[^\/]*$/, '/api/login'),
                                 data:fd,
-                                dataType: 'JSON',
+                                dataType: 'json',
                                 processData : false,
                                 contentType: false,
                                 cache: false,
+                                xhrFields: { withCredentials: true },
                                 success:function(data) {
 				console.log(data)
                                    setTimeout(function(){
