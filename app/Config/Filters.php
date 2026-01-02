@@ -60,7 +60,7 @@ class Filters extends BaseFilters
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
             'cors',
-            'clearSession',
+            // 'clearSession',
             // 'apiFilter',
         ],
         'after' => [
@@ -78,6 +78,7 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
+            'clearSession',
             'honeypot',
             'csrf',
             'invalidchars',
