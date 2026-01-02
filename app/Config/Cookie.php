@@ -14,7 +14,7 @@ class Cookie extends BaseConfig
      *
      * Set a cookie name prefix if you need to avoid collisions.
      */
-    public string $prefix = '__Secure-';
+    public string $prefix = '';
 
     /**
      * --------------------------------------------------------------------------
@@ -45,7 +45,7 @@ class Cookie extends BaseConfig
      *
      * Set to `.your-domain.com` for site-wide cookies.
      */
-    public string $domain = 'https://surabe.sultengprov.go.id/';
+    public string $domain = '';
 
     /**
      * --------------------------------------------------------------------------
@@ -54,7 +54,7 @@ class Cookie extends BaseConfig
      *
      * Cookie will only be set if a secure HTTPS connection exists.
      */
-    public bool $secure = true;
+    public bool $secure = false;
 
     /**
      * --------------------------------------------------------------------------
@@ -63,7 +63,7 @@ class Cookie extends BaseConfig
      *
      * Cookie will only be accessible via HTTP(S) (no JavaScript).
      */
-    public bool $httponly = true;
+    public bool $httponly = false;
 
     /**
      * --------------------------------------------------------------------------

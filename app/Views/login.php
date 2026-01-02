@@ -30,8 +30,10 @@
                     </div>
                     <div class="login-card">
                         <h1 class="auth-title">Log in.</h1>
+                                                    
                         <form id="login" method="POST" class="needs-validations login-form" novalidate>
-                            <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>"
+
+                                            <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>"
                                             value="<?= csrf_hash() ?>">
                             <div class="form-group position-relative has-icon-left mb-4">
 

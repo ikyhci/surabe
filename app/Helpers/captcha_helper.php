@@ -5,7 +5,11 @@ use CodeIgniter\Files\File;
 function generateCaptcha()
 {
     $code = substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 6);
-    session()->set('captcha_code', $code);
+    // session()->set('captcha_code', $code);
+    $ip  = service('request')->getIPAddress();
+    $key = 'captcha_' . $ip;
+
+    cache()->save($key, $code, 300);// berlaku 5 menit
 
     $width = 150;
     $height = 50;

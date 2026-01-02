@@ -52,6 +52,7 @@ class App extends BaseConfig
      */
     public string $indexPage = 'index.php';
 
+    public $sessionRegenerateDestroy = false;
     /**
      * --------------------------------------------------------------------------
      * URI PROTOCOL

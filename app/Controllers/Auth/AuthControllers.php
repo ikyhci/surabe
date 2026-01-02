@@ -29,17 +29,20 @@ class AuthControllers extends BaseController
     public function auth()
     {
 
+
         if ($this->validate([
             'username' => 'required|trim|regex_match[/^[a-zA-Z0-9@.]+$/]|min_length[4]',
             'password' => 'required|trim|min_length[4]',
             'captcha'   => 'required',
         ]))
         {
-            $stored = session()->get('captcha_code');
-            $captcha = strtoupper($this->request->getVar('captcha'));
+            // $stored = cache()->get($key);//session()->get('captcha_code');
+            // $captcha = strtoupper($this->request->getVar('captcha'));
             $unm = $this->request->getVar('username');
             $psw = $this->request->getVar('password');
-            if ($captcha === $stored) {
+            $stored = cache()->get('captcha_'.$this->request->getVar('token'));
+            if ($stored !== strtoupper($this->request->getVar('captcha'))) {
+            // if ($captcha === $stored) {
                 // $chek = $this->db->query("CALL User_Auth('".$unm."','".$psw."')")->getRow();
                 $sql = "CALL User_Auth(?, ?)";
                 $chek = $this->db->query($sql, [$unm, $psw])->getRow();
