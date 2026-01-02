@@ -32,7 +32,7 @@ class AuthControllers extends BaseController
         if ($this->validate([
             'username' => 'required|trim|regex_match[/^[a-zA-Z0-9@.]+$/]|min_length[4]',
             'password' => 'required|trim|min_length[4]',
-            'captcha'   => 'required'
+            'captcha'   => 'required',
         ]))
         {
             $stored = session()->get('captcha_code');
@@ -93,7 +93,7 @@ class AuthControllers extends BaseController
 
                         setcookie(
                         // '__Secure-Authorization',
-                            '__LKE-Authorization',
+                            '____Secure-LKE-Authorization',
                             $token,[
                                 'expires'=>$exp,
                                 //'prefix' => '__Secure-',
@@ -168,11 +168,12 @@ class AuthControllers extends BaseController
         } else {
             $ip = $_SERVER['REMOTE_ADDR'];
         } 
-        $logs = $this->db->query("CALL log_user('".$id."','".$ip."', 'LOGOUT')");
+        $sql = "CALL log_user(?,?,?)";
+        $logs = $this->db->query($sql, [$id, $ip, 'LOGOUT']);//"CALL log_user('".$id."','".$ip."', 'LOGOUT')");
 
         setcookie(
             // '__Secure-Authorization',
-            '__LKE-Authorization',
+            '____Secure-LKE-Authorization',
             '',[
                 'expires'=>'',
                 //'prefix' => '__Secure-',
@@ -185,7 +186,7 @@ class AuthControllers extends BaseController
             ]
         );
         // delete_cookie('__Secure-Authorization');
-        delete_cookie('__LKE-Authorization');
+        delete_cookie('____Secure-LKE-Authorization');
         
         $data = array(
             'token_crs' =>  csrf_hash(),
