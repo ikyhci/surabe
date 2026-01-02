@@ -5,11 +5,8 @@ namespace App\Filters;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Throwable; 
 
-class AppFilters implements FilterInterface
+class RateLimitFilter implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -26,35 +23,36 @@ class AppFilters implements FilterInterface
      *
      * @return RequestInterface|ResponseInterface|string|void
      */
-    
-    protected $key;
-    protected $decoded;
-    protected $token;
     public function before(RequestInterface $request, $arguments = null)
     {
         //
-        helper('cookie');
-        $key = getenv('TOKEN_SECRET');
-        // $token = get_cookie('Authorization', true,'__Secure-') ? get_cookie('Authorization', true,'__Secure-') : null;
-        $token = get_cookie('Authorization', true,'__Secure-LKE-') ? get_cookie('Authorization', true,'__Secure-LKE-') : null;
+        $ip     = $request->getIPAddress();
+        $method = strtolower($request->getMethod()); // GET, POST, PUT, dll
 
-  
-        // check if token is null or empty
-        if(is_null($token) || empty($token)) {
-
-            return redirect()->to(base_url().'unauthorized');
+        // hanya cek GET, POST, PUT
+        if (! in_array($method, ['get', 'post', 'put'])) {
+            return;
         }
 
-  
-        try {
+        $cache = cache();
+        $key   = "rate_limit_{$ip}_{$method}";
 
-            $decoded = JWT::decode($token, new Key($key, 'HS256'));  
+        $data = $cache->get($key) ?? ['count' => 0, 'time' => time()];
 
-        } catch (\Throwable $ex) {
-
-            return redirect()->to(base_url().'unauthorized');
+        // reset jika sudah lewat 60 detik
+        if (time() - $data['time'] > 60) {
+            $data = ['count' => 0, 'time' => time()];
         }
 
+        $data['count']++;
+
+        $cache->save($key, $data, 120); // simpan 2 menit
+
+        if ($data['count'] > 10) {
+            return service('response')
+                ->setStatusCode(429) // Too Many Requests
+                ->setBody("Too many {$method} requests from your IP. Please wait a minute.");
+        }
     }
 
     /**

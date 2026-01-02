@@ -21,7 +21,7 @@ class PagesPenilaiControllers extends BaseController
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
     
-        $token = $_COOKIE['__LKE-Authorization']; // get_cookie('__LKE-Authorization');
+        $token = $_COOKIE['__Secure-LKE-Authorization']; // get_cookie('__LKE-Authorization');
 
         
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));

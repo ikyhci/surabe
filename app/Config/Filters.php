@@ -39,6 +39,7 @@ class Filters extends BaseFilters
         'cors'          => \App\Filters\CorsFilters::class, //register cors
         'roles'         => \App\Filters\Roles::class,
         'clearSession'  => \App\Filters\ClearSession::class,
+        'ratelimit'     => \App\Filters\RateLimitFilter::class,
     ];
 
     /**
@@ -80,7 +81,8 @@ class Filters extends BaseFilters
             'honeypot',
             'csrf',
             'invalidchars',
-            'cors'
+            'cors',
+            'ratelimit',
         ],
         'after' => [
             // 'honeypot',
