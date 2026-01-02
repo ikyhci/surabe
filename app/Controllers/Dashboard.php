@@ -20,7 +20,8 @@ class Dashboard extends BaseController
         helper('cookie');
         // // $this->db = db_connect();
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('Authorization', true,'__LKE-');
+        // LKE_Authorization
+        $token = get_cookie('LKE_Authorization', true,'__Secure-');
         if (!$token) {
             return redirect()->to(base_url().'unauthorized');
         }

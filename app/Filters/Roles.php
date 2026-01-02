@@ -37,7 +37,7 @@ class Roles implements FilterInterface
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
         // $token = get_cookie('Authorization', true,'__Secure-') ? get_cookie('Authorization', true,'__Secure-') : null;
-        $token = get_cookie('Authorization', true,'__Secure-LKE_') ? get_cookie('Authorization', true,'__Secure-LKE_') : null;
+        $token = get_cookie('LKE_Authorization', true,'__Secure-') ? get_cookie('LKE_Authorization', true,'__Secure-') : null;
 
   
         // check if token is null or empty
