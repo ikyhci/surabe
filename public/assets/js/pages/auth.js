@@ -27,7 +27,7 @@
                     {
                         $.ajax({
                             type:"POST",
-                                url: url+'api/login',//url.replace(/\/[^\/]*$/, '/api/login'),
+                                url: url+'api/login',
                                 data:fd,
                                 dataType: 'json',
                                 processData : false,

@@ -30,7 +30,7 @@
                     </div>
                     <div class="login-card">
                         <h1 class="auth-title">Log in.</h1>
-                        <form id="login" action="api/login" method="POST" class="needs-validations login-form" novalidate>
+                        <form id="login" method="POST" class="needs-validations login-form" novalidate>
                             <input type="hidden" id="<?= csrf_token() ?>" name="<?= csrf_token() ?>"
                                             value="<?= csrf_hash() ?>">
                             <div class="form-group position-relative has-icon-left mb-4">
@@ -55,8 +55,7 @@
                                         <input type="text" class="form-control" id="captcha" name="captcha"
                                             placeholder="" required>
                                     </div>
-                            <!-- <button type="submit" id="btnLogin" class="btn btn-primary btn-block shadow-lg mt-5">Log in</button> -->
-                            <button type="submit"  class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
+                            <button type="submit" id="btnLogin" class="btn btn-primary btn-block shadow-lg mt-5">Log in</button>
                         </form>
                     </div>
                 </div>
