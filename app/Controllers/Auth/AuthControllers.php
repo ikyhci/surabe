@@ -93,7 +93,7 @@ class AuthControllers extends BaseController
 
                         setcookie(
                         // '__Secure-Authorization',
-                            '__Secure-LKE-Authorization',
+                            '__Secure-LKE_Authorization',
                             $token,[
                                 'expires'=>$exp,
                                 //'prefix' => '__Secure-',
@@ -173,7 +173,7 @@ class AuthControllers extends BaseController
 
         setcookie(
             // '__Secure-Authorization',
-            '__Secure-LKE-Authorization',
+            '__Secure-LKE_Authorization',
             '',[
                 'expires'=>'',
                 //'prefix' => '__Secure-',
@@ -186,7 +186,7 @@ class AuthControllers extends BaseController
             ]
         );
         // delete_cookie('__Secure-Authorization');
-        delete_cookie('__Secure-LKE-Authorization');
+        delete_cookie('__Secure-LKE_Authorization');
         
         $data = array(
             'token_crs' =>  csrf_hash(),

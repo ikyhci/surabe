@@ -29,7 +29,7 @@ class ApiGlobalControllers extends BaseController
         $token = null;
         $header = $request->getHeader("Authorization");
         if (!$header) {
-            $token = $request->getCookie('__Secure-LKE-Authorization');
+            $token = $request->getCookie('__Secure-LKE_Authorization');
         }
         if(!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {

@@ -23,7 +23,7 @@ class PagesSuperAdminControllers extends BaseController
     public function __construct(){
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $token = $_COOKIE['__Secure-LKE-Authorization']; // get_cookie('__LKE-Authorization');
+        $token = $_COOKIE['__Secure-LKE_Authorization']; // get_cookie('__LKE-Authorization');
 
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         
