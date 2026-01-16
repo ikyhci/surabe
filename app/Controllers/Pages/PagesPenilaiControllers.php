@@ -87,6 +87,7 @@ class PagesPenilaiControllers extends BaseController
         $this->data['dt']           = ($asp)? $asp : null ;
         $this->data['aspeks']        = $data ;
         $this->data['forms']        = $penilaianModel->getForm($this->data['form']['idForm']);
+        $this->data['formids'] = $this->data['form']['idForm'];
         // pd($this->data);
         return view('/Pages/penilai/detail_form', $this->data);
     }
