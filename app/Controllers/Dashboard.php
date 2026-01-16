@@ -43,7 +43,7 @@ class Dashboard extends BaseController
             $data = array(
                 'usr' => $usr,
                 'uname' => $this->decoded->iss,
-                'token' => get_cookie('Authorization', true,'__LKE-'),
+                'token' => get_cookie('LKE_Authorization', true,'__Secure-'), //__Secure-LKE_Authorization
             );
             if ($usr == 'User') {
 
