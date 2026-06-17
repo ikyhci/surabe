@@ -60,3 +60,4 @@ tests/_output/
 #*.sql
 .user.ini
 *.log
+/public/uploadfile/*
