@@ -16,12 +16,13 @@ class ApiSoalControllers extends BaseController
     protected $db;
     protected $decoded;
 
-    public function __construct(){
+    public function __construct()
+    {
         $request = request();
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
-        if(!empty($header)) {
+        if (!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
@@ -37,16 +38,16 @@ class ApiSoalControllers extends BaseController
             $thn = $this->db->query('SELECT tahun FROM lke_form group by tahun')->getResult();
 
             $tahun = array();
-            foreach ($thn as $key ) {
+            foreach ($thn as $key) {
                 $tahun[] = $key->tahun;
             }
-            
+
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => array_unique($tahun),
             );
             return $this->response->setJSON($data);
-        }else{
+        } else {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
@@ -54,8 +55,6 @@ class ApiSoalControllers extends BaseController
             );
             return $this->response->setJSON($data);
         }
-        
-
     }
 
 
@@ -72,7 +71,7 @@ class ApiSoalControllers extends BaseController
             );
 
             return $this->response->setJSON($data);
-        }else{
+        } else {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
@@ -94,14 +93,14 @@ class ApiSoalControllers extends BaseController
                 $tahun  = $this->request->getVar('tahun');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Form_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $tahun."','".
-                    $desk."','".
-                    $eval."','".
-                    $btswkt."')")->getRow();
+                $save = $this->db->query("CALL Form_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $nama . "','" .
+                    $tahun . "','" .
+                    $desk . "','" .
+                    $eval . "','" .
+                    $btswkt . "')")->getRow();
 
                 $data = array(
                     'token_crs' =>  csrf_hash(),
@@ -110,12 +109,11 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
         }
@@ -129,16 +127,16 @@ class ApiSoalControllers extends BaseController
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
                 $fmx    = $this->request->getVar('forms');
-                $nox    = $this->request->getVar('nourut'); 
+                $nox    = $this->request->getVar('nourut');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Rb_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $bobot."','".
-                    $fmx."','".
-                    $nox."')")->getRow();
+                $save = $this->db->query("CALL Rb_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $nama . "','" .
+                    $bobot . "','" .
+                    $fmx . "','" .
+                    $nox . "')")->getRow();
 
                 $data = array(
                     'token_crs' =>  csrf_hash(),
@@ -146,8 +144,7 @@ class ApiSoalControllers extends BaseController
                     'msg'       =>  $save->msg,
                 );
                 return $this->response->setJSON($data);
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -155,12 +152,11 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
         }
@@ -177,16 +173,16 @@ class ApiSoalControllers extends BaseController
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
                 $rb     = $this->request->getVar('rb');
-                $nox    = $this->request->getVar('nourut'); 
+                $nox    = $this->request->getVar('nourut');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Aspek_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $bobot."','".
-                    $rb."','".
-                    $nox."')")->getRow();
+                $save = $this->db->query("CALL Aspek_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $nama . "','" .
+                    $bobot . "','" .
+                    $rb . "','" .
+                    $nox . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $save->res,
@@ -194,7 +190,7 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
                 // 
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -202,15 +198,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -224,18 +218,18 @@ class ApiSoalControllers extends BaseController
                 $aspk   = $this->request->getVar('aspek');
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
-                $nox    = $this->request->getVar('nourut'); 
+                $nox    = $this->request->getVar('nourut');
                 $btswkt = $this->request->getVar('wkt');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Sub_Aspek_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $aspk."','".
-                    $bobot."','".
-                    $nox."','".
-                    $btswkt."')")->getRow();
+                $save = $this->db->query("CALL Sub_Aspek_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $nama . "','" .
+                    $aspk . "','" .
+                    $bobot . "','" .
+                    $nox . "','" .
+                    $btswkt . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $save->res,
@@ -243,7 +237,7 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
                 // 
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -251,15 +245,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -273,16 +265,18 @@ class ApiSoalControllers extends BaseController
                 $aspk   = $this->request->getVar('subaspek');
                 $nama   = $this->request->getVar('nama');
                 $bobot  = $this->request->getVar('bobot');
-                $nox    = $this->request->getVar('nourut'); 
+                $nox    = $this->request->getVar('nourut');
+                $perhi  = $this->request->getVar('perhitungan');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Sub_Sub_Aspek_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $aspk."','".
-                    $bobot."','".
-                    $nox ."')")->getRow();
+                $save = $this->db->query("CALL Sub_Sub_Aspek_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $nama . "','" .
+                    $aspk . "','" .
+                    $bobot . "','" .
+                    $nox . "','" .
+                    $perhi . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $save->res,
@@ -290,7 +284,7 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
                 // 
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -298,15 +292,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -322,16 +314,18 @@ class ApiSoalControllers extends BaseController
                 $ssasp  = $this->request->getVar('subsubaspek');
                 $nama   = $this->request->getVar('nama');
                 $jjwb   = $this->request->getVar('jjwb');
-                $nox    = $this->request->getVar('nourut'); 
+                $nox    = $this->request->getVar('nourut');
+                $maxpoint = $this->request->getVar('maxpoint');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Indikator_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $ssasp."','".
-                    $nama."','".
-                    $jjwb."','".
-                    $nox."')")->getRow();
+                $save = $this->db->query("CALL Indikator_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $ssasp . "','" .
+                    $nama . "','" .
+                    $jjwb . "','" .
+                    $nox . "','" .
+                    $maxpoint . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $save->res,
@@ -339,7 +333,7 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
                 // 
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -347,17 +341,14 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
-
     }
 
     public function saveBuktiDukung()
@@ -369,15 +360,15 @@ class ApiSoalControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indkt');
                 $nama   = $this->request->getVar('nama');
-                $nox    = $this->request->getVar('nourut'); 
+                $nox    = $this->request->getVar('nourut');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Bukti_dukung_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $indkt."','".
-                    $nama."','".
-                    $nox."')")->getRow();
+                $save = $this->db->query("CALL Bukti_dukung_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $indkt . "','" .
+                    $nama . "','" .
+                    $nox . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $save->res,
@@ -385,7 +376,7 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
                 // 
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -393,15 +384,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -414,17 +403,17 @@ class ApiSoalControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indikator');
                 $nama   = $this->request->getVar('nama');
-                $nox    = $this->request->getVar('nourut'); 
+                $nox    = $this->request->getVar('nourut');
                 $nilaix = $this->request->getVar('nilai');
                 $userid = $this->decoded->ids;
 
-                $save = $this->db->query("CALL Parameter_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $indkt."','".
-                    $nox."','".
-                    $nilaix."')")->getRow();
+                $save = $this->db->query("CALL Parameter_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $nama . "','" .
+                    $indkt . "','" .
+                    $nox . "','" .
+                    $nilaix . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $save->res,
@@ -432,7 +421,7 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
                 // 
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -440,17 +429,15 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
-    } 
+    }
 
     public function stsForm()
     {
@@ -462,19 +449,17 @@ class ApiSoalControllers extends BaseController
                 $sts     = $this->request->getVar('stsx');
                 $userid = $this->decoded->ids;
 
-                $sts = $this->db->query("CALL Form_Enb_Dsb('".
-                    $userid."','".
-                    $idx."','".
-                    $sts."')")->getRow();
+                $sts = $this->db->query("CALL Form_Enb_Dsb('" .
+                    $userid . "','" .
+                    $idx . "','" .
+                    $sts . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $sts->res,
                     'msg'       =>  $sts->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -482,19 +467,16 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
-    
+
     public function delForm()
     {
         try {
@@ -504,18 +486,16 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Form_delete('".
-                    $userid."','".
-                    $idx."')")->getRow();
+                $del = $this->db->query("CALL Form_delete('" .
+                    $userid . "','" .
+                    $idx . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -523,16 +503,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -546,18 +523,16 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Rb_delete('".
-                    $userid."','".
-                    $idx."')")->getRow();
+                $del = $this->db->query("CALL Rb_delete('" .
+                    $userid . "','" .
+                    $idx . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -565,16 +540,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -587,18 +559,16 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Aspek_delete('".
-                    $userid."','".
-                    $idx."')")->getRow();
+                $del = $this->db->query("CALL Aspek_delete('" .
+                    $userid . "','" .
+                    $idx . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -606,16 +576,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -628,18 +595,16 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Sub_Aspek_delete('".
-                    $userid."','".
-                    $idx."')")->getRow();
+                $del = $this->db->query("CALL Sub_Aspek_delete('" .
+                    $userid . "','" .
+                    $idx . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -647,16 +612,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -669,18 +631,16 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL sub_Sub_Aspek_delete('".
-                    $userid."','".
-                    $idx."')")->getRow();
+                $del = $this->db->query("CALL sub_Sub_Aspek_delete('" .
+                    $userid . "','" .
+                    $idx . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -688,16 +648,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -710,18 +667,16 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Indikator_delete('".
-                    $userid."','".
-                    $idx."')")->getRow();
+                $del = $this->db->query("CALL Indikator_delete('" .
+                    $userid . "','" .
+                    $idx . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -729,16 +684,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -752,18 +704,16 @@ class ApiSoalControllers extends BaseController
                 $idx     = $this->request->getVar('idx');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Bukti_dukung_delete('".
-                    $userid."','".
-                    $idx."')")->getRow();
+                $del = $this->db->query("CALL Bukti_dukung_delete('" .
+                    $userid . "','" .
+                    $idx . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -771,16 +721,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -794,19 +741,17 @@ class ApiSoalControllers extends BaseController
                 $idk     = $this->request->getVar('idk');
                 $userid = $this->decoded->ids;
 
-                $del = $this->db->query("CALL Parameter_delete('".
-                    $userid."','".
-                    $idp."','".
-                    $idk."')")->getRow();
+                $del = $this->db->query("CALL Parameter_delete('" .
+                    $userid . "','" .
+                    $idp . "','" .
+                    $idk . "')")->getRow();
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  $del->res,
                     'msg'       =>  $del->msg,
                 );
                 return $this->response->setJSON($data);
-
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -814,17 +759,13 @@ class ApiSoalControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
-
 }

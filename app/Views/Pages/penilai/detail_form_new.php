@@ -1,3 +1,18 @@
+<?php
+
+/** @var array|object $opd */
+/** @var string $idx */
+/** @var array|object $allAspek */
+/** @var array|object $aspek */
+/** @var array|object $radarLabels */
+/** @var string $title */
+/** @var array|object $forms */
+/** @var array|object $form */
+/** @var string $uname */
+/** @var string $usr */
+/** @var string $token */
+?>
+
 <?= $this->extend('Layouts/dashboard') ?>
 <?= $this->section('styles') ?>
 <!-- Styles -->
@@ -12,18 +27,23 @@
   .clickable {
     cursor: pointer;
   }
+
   .tr-header-1 {
-    background-color:rgb(183, 221, 255); /* Light blue */
+    background-color: rgb(183, 221, 255);
+    /* Light blue */
     /* text-transform: uppercase; */
     font-weight: bold;
   }
+
   .tr-header-2 {
-    background-color:rgb(204, 228, 191); /* Very light gray */
-  }
-  .tr-header-3 {
-    background-color: #fcfcf0; /* Soft yellow */
+    background-color: rgb(204, 228, 191);
+    /* Very light gray */
   }
 
+  .tr-header-3 {
+    background-color: #fcfcf0;
+    /* Soft yellow */
+  }
 </style>
 
 <?= $this->endSection() ?>
@@ -62,12 +82,12 @@
       <br>
     </div>
   </div>
-  
+
 
   <?php foreach ($forms->rb as $key => $rb) : ?>
     <div class="card">
       <div class="card-header header-sm">
-        <h5 class="card-title"><?=$rb->nums .". ". $rb->nama ?></h5>
+        <h5 class="card-title"><?= $rb->nums . ". " . $rb->nama ?></h5>
       </div>
       <div class="card-body">
         <div class="table-responsive" style="overflow-x: auto;">
@@ -80,35 +100,35 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($rb->aspek as $key => $aspek) :?>
+              <?php foreach ($rb->aspek as $key => $aspek) : ?>
                 <tr class="<?= $rb->id ?> list-aspek tr-header-1">
-                  <td colspan="6"><?=$aspek->nums .". ". $aspek->nama_aspek ?></td>
+                  <td colspan="6"><?= $aspek->nums . ". " . $aspek->nama_aspek ?></td>
                 </tr>
                 <?php foreach ($aspek->sub_aspek as $sub_aspek) : ?>
                   <tr class="<?= $aspek->id ?> list-sa tr-header-2">
                     <td width="1%"></td>
-                    <td colspan="3"><?=$sub_aspek->nums .". ". $sub_aspek->nama_sub_aspek ?></td>
+                    <td colspan="3"><?= $sub_aspek->nums . ". " . $sub_aspek->nama_sub_aspek ?></td>
                     <td></td>
                     <td></td>
                   </tr>
-                  <?php foreach($sub_aspek->sub_sub_aspek as $key => $sub_sub_aspek): ?>
+                  <?php foreach ($sub_aspek->sub_sub_aspek as $key => $sub_sub_aspek): ?>
                     <tr class="list-ssa <?= $sub_aspek->id ?> list-ssa tr-header-3">
                       <td width="1%"></td>
                       <td width="1%"></td>
-                      <td colspan="2"><?=$sub_sub_aspek->nums .". ". $sub_sub_aspek->nama_sub_sub_aspek ?></td>
+                      <td colspan="2"><?= $sub_sub_aspek->nums . ". " . $sub_sub_aspek->nama_sub_sub_aspek ?></td>
                       <td></td>
                       <td>
-                        <?php if(count($sub_sub_aspek->indikator) > 0) : ?>
-                        <i id="<?= $sub_sub_aspek->id ?>" class="bi bi-plus clickable"></i>
+                        <?php if (count($sub_sub_aspek->indikator) > 0) : ?>
+                          <i id="<?= $sub_sub_aspek->id ?>" class="bi bi-plus clickable"></i>
                         <?php endif; ?>
                       </td>
                     </tr>
-                    <?php foreach($sub_sub_aspek->indikator as $key => $indikator): ?>
+                    <?php foreach ($sub_sub_aspek->indikator as $key => $indikator): ?>
                       <tr class="<?= $sub_sub_aspek->id ?> list-ind d-none">
                         <td width="1%"></td>
                         <td width="1%"></td>
                         <td width="1%"></td>
-                        <td ><?= $indikator->nums .". ". $indikator->indikator ?> </td>
+                        <td><?= $indikator->nums . ". " . $indikator->indikator ?> </td>
                         <td></td>
                         <td>
                           <?php if (!empty($indikator->kondisiOpd)) : ?>
@@ -295,7 +315,7 @@
         },
         success: function(res) {
           xYz = res.csrf_token
-          if(res.data.kondisiOpd.length == 0) {
+          if (res.data.kondisiOpd.length == 0) {
             alert('Data belum diisi, silahkan isi terlebih dahulu');
             return;
           }
@@ -344,8 +364,8 @@
     function generateJawaban(jenis_jawaban_num, data) {
       let parameter = data.parameter;
       let jawabContainer = document.getElementById("jawab");
-      jawabContainer.innerHTML = ""; 
-      
+      jawabContainer.innerHTML = "";
+
       if (jenis_jawaban_num == 1) {
         // Jika jenis jawaban == 1, tampilkan input range
         let nilai = (data.kondisiOpd[0]) ? data.kondisiOpd[0].nilai : 0;

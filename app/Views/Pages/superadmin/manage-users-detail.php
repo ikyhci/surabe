@@ -1,3 +1,18 @@
+<?php
+
+/** @var array|object $opd */
+/** @var string $idx */
+/** @var array|object $dt */
+/** @var array|object $aspeks */
+/** @var array|object $readOnly */
+/** @var string $title */
+/** @var array|object $user */
+/** @var array|object $sub_title */
+/** @var string $uname */
+/** @var string $usr */
+/** @var string $token */
+?>
+
 <?= $this->extend('Layouts/dashboard') ?>
 
 <?= $this->section('content') ?>
@@ -86,25 +101,25 @@
 
   <?= $this->section('script') ?>
   <script {csp-script-nonce} type="text/javascript">
-  // Menunggu DOM siap
-  document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector('form');
-    const newPassword = document.getElementById('newPassword');
-    const confirmPassword = document.getElementById('confirmPassword');
-    const submitButton = document.querySelector('button[type="submit"]');
+    // Menunggu DOM siap
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.querySelector('form');
+      const newPassword = document.getElementById('newPassword');
+      const confirmPassword = document.getElementById('confirmPassword');
+      const submitButton = document.querySelector('button[type="submit"]');
 
-    form.addEventListener('submit', function(event) {
-      // Mengecek apakah password baru dan konfirmasi password cocok
-      if (newPassword.value !== confirmPassword.value) {
-        event.preventDefault(); // Mencegah form disubmit
-        alert("Password dan konfirmasi password tidak cocok. Silakan coba lagi.");
-        confirmPassword.focus(); // Fokus ke konfirmasi password
-        return false;
-      }
+      form.addEventListener('submit', function(event) {
+        // Mengecek apakah password baru dan konfirmasi password cocok
+        if (newPassword.value !== confirmPassword.value) {
+          event.preventDefault(); // Mencegah form disubmit
+          alert("Password dan konfirmasi password tidak cocok. Silakan coba lagi.");
+          confirmPassword.focus(); // Fokus ke konfirmasi password
+          return false;
+        }
 
-      // Jika password sudah cocok, form dapat disubmit
-      return true;
+        // Jika password sudah cocok, form dapat disubmit
+        return true;
+      });
     });
-  });
   </script>
   <?= $this->endSection() ?>

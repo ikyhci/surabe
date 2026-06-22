@@ -1,3 +1,18 @@
+<?php
+
+/** @var array|object $opd */
+/** @var string $idx */
+/** @var array|object $dt */
+/** @var array|object $aspeks */
+/** @var array|object $readOnly */
+/** @var string $title */
+/** @var array|object $user */
+/** @var array|object $sub_title */
+/** @var string $uname */
+/** @var string $usr */
+/** @var string $token */
+?>
+
 <?= $this->extend('Layouts/dashboard') ?>
 
 <?= $this->section('content') ?>
@@ -135,311 +150,311 @@
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
 
 <script {csp-script-nonce} type="text/javascript">
-const TOKEN = "<?= ($token) ? $token : "" ?>";
-let opdSelect;
-let roleSelect;
-let aspekSelect;
-let tahunSelect;
-let aspek_penilai = [];
+  const TOKEN = "<?= ($token) ? $token : "" ?>";
+  let opdSelect;
+  let roleSelect;
+  let aspekSelect;
+  let tahunSelect;
+  let aspek_penilai = [];
 
-$(document).ready(function() {
-  initializeDataTable();
-  setupEventHandlers();
-});
+  $(document).ready(function() {
+    initializeDataTable();
+    setupEventHandlers();
+  });
 
-function initializeDataTable() {
-  $('#table').DataTable({
-    "processing": false,
-    "serverSide": false,
-    "ajax": {
-      "url": "<?= base_url('api/get-users') ?>",
-      "type": "GET",
-      "headers": {
-        'Authorization': 'Bearer ' + TOKEN
+  function initializeDataTable() {
+    $('#table').DataTable({
+      "processing": false,
+      "serverSide": false,
+      "ajax": {
+        "url": "<?= base_url('api/get-users') ?>",
+        "type": "GET",
+        "headers": {
+          'Authorization': 'Bearer ' + TOKEN
+        },
+        "dataSrc": "dt"
       },
-      "dataSrc": "dt"
-    },
-    "columns": [{
-        "data": data => data.uid.substring(0, 10)
-      },
-      {
-        "data": "FullName"
-      },
-      {
-        "data": "Phone"
-      },
-      {
-        "data": "EmailAdds"
-      },
-      {
-        "data": "RoleName"
-      },
-      {
-        "data": data => `
+      "columns": [{
+          "data": data => data.uid.substring(0, 10)
+        },
+        {
+          "data": "FullName"
+        },
+        {
+          "data": "Phone"
+        },
+        {
+          "data": "EmailAdds"
+        },
+        {
+          "data": "RoleName"
+        },
+        {
+          "data": data => `
           <button data-uid="${data.uid}" class="btnDetail btn btn-primary btn-sm">Detail</button>
           <button data-uid="${data.uid}" class="btnDelete btn btn-danger btn-sm">Delete</button>
         `
-      }
-    ]
-  });
-}
-
-function loadRoles() {
-  $.ajax({
-    url: '/api/get-roles',
-    method: 'GET',
-    dataType: 'json',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      if (response.dt) {
-        const roleSelect = new Choices('#RoleName');
-        roleSelect.setValue(response.dt.map(dt => ({
-          value: dt.RoleId,
-          label: dt.RoleName
-        })));
-      }
-    },
-    error: function() {
-      console.log('Gagal mengambil data role');
-    }
-  });
-}
-
-function loadOrganizations() {
-  $.ajax({
-    url: '/api/get-opd',
-    method: 'GET',
-    dataType: 'json',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      if (response.dt) {
-        const opdSelect = new Choices('#nama_opd');
-        opdSelect.setValue(response.dt.map(dt => ({
-          value: dt.id,
-          label: dt.nama_opd
-        })));
-      }
-    },
-    error: function() {
-      console.log('Gagal mengambil data organization');
-    }
-  });
-}
-
-function setupEventHandlers() {
-  setTimeout(function() {
-    var searchBox = $('.dt-search');
-    var addButton = $('<button>')
-      .addClass('btn btn-primary ml-2')
-      .text('Tambah')
-      .attr('id', 'btn-tambah')
-      .on('click', addUser);
-    searchBox.after(addButton);
-  }, 100);
-
-  $('#table').on('click', '.btnDetail', showUserDetail);
-  $('#table').on('click', '.btnDelete', deleteUser);
-  $('#Password, #ConfirmPassword').on('keyup', validatePasswords);
-  $('#formDetail').on('submit', submitForm);
-  $('#RoleName').on('change', handleRoleChange);
-  $('#tahunPenilaian').on('change', loadAspects);
-}
-
-function showUserDetail() {
-  clearForm();
-  var uid = $(this).data('uid');
-  var actionUrl = "<?= base_url('api/put-user') ?>/" + uid;
-  // $('#pwd').hide();
-  $.ajax({
-    url: `<?= base_url('api/get-user') ?>/${uid}`,
-    type: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      // console.log(response.dt);
-      aspek_penilai = response.dt.aspek_penilai.map(ap => ap.aspek_id);
-
-      $('#formDetail').attr('action', actionUrl);
-      $('#UserName').val(response.dt.UserName);
-      $('#FullName').val(response.dt.FullName);
-      $('#Phone').val(response.dt.Phone);
-      $('#EmailAdds').val(response.dt.EmailAdds);
-      SelectOpd(response.dt.opdid);
-      SelectRole(response.dt.RoleId);
-      loadAspects(aspek_penilai);
-      $('#userModal').modal('show');
-    },
-    error: function() {
-      alert('Gagal mengambil data user.');
-    }
-  });
-}
-
-function addUser() {
-  clearForm();
-  $('#pwd').show();
-  var actionUrl = "<?= base_url('api/add-user') ?>";
-  $('#formDetail').attr('action', actionUrl);
-  $('#formDetail').attr('method', 'POST');
-  $('#UserName').val('');
-  $('#FullName').val('');
-  $('#Phone').val('');
-  $('#EmailAdds').val('');
-  SelectOpd();
-  SelectRole();
-  $('#userModal').modal('show');
-}
-
-function SelectOpd(selectedId = null) {
-  if (opdSelect) {
-    opdSelect.destroy();
+        }
+      ]
+    });
   }
-  $.ajax({
-    url: '/api/get-opd',
-    type: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      if (response.dt) {
-        var opd = response.dt;
-        var options = opd.map(function(item) {
-          return {
-            value: item.id,
-            label: item.nama_opd,
-            selected: item.id == selectedId
-          };
-        });
-        opdSelect = new Choices('#nama_opd', {
-          choices: options,
-          shouldSort: false
-        });
-      }
-    },
-    error: function() {
-      console.error('Gagal mengambil data OPD.');
-    }
-  });
-}
 
-function SelectRole(selectedId = null) {
-  if (roleSelect) {
-    roleSelect.destroy();
+  function loadRoles() {
+    $.ajax({
+      url: '/api/get-roles',
+      method: 'GET',
+      dataType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        if (response.dt) {
+          const roleSelect = new Choices('#RoleName');
+          roleSelect.setValue(response.dt.map(dt => ({
+            value: dt.RoleId,
+            label: dt.RoleName
+          })));
+        }
+      },
+      error: function() {
+        console.log('Gagal mengambil data role');
+      }
+    });
   }
-  $.ajax({
-    url: '/api/get-roles',
-    type: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      if (response.dt) {
-        var roles = response.dt;
-        var options = roles.map(function(item) {
-          return {
-            value: item.RoleId,
-            label: item.RoleName,
-            selected: item.RoleId == selectedId
-          };
-        });
-        roleSelect = new Choices('#RoleName', {
-          choices: options,
-          shouldSort: false
-        });
-        if (selectedId) {
-          let role = roles.find(role => role.RoleId == selectedId);
-          if (role.acs == '2') {
-            $('#tahunForm').removeClass('d-none');
-            loadYears(selectedId);
+
+  function loadOrganizations() {
+    $.ajax({
+      url: '/api/get-opd',
+      method: 'GET',
+      dataType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        if (response.dt) {
+          const opdSelect = new Choices('#nama_opd');
+          opdSelect.setValue(response.dt.map(dt => ({
+            value: dt.id,
+            label: dt.nama_opd
+          })));
+        }
+      },
+      error: function() {
+        console.log('Gagal mengambil data organization');
+      }
+    });
+  }
+
+  function setupEventHandlers() {
+    setTimeout(function() {
+      var searchBox = $('.dt-search');
+      var addButton = $('<button>')
+        .addClass('btn btn-primary ml-2')
+        .text('Tambah')
+        .attr('id', 'btn-tambah')
+        .on('click', addUser);
+      searchBox.after(addButton);
+    }, 100);
+
+    $('#table').on('click', '.btnDetail', showUserDetail);
+    $('#table').on('click', '.btnDelete', deleteUser);
+    $('#Password, #ConfirmPassword').on('keyup', validatePasswords);
+    $('#formDetail').on('submit', submitForm);
+    $('#RoleName').on('change', handleRoleChange);
+    $('#tahunPenilaian').on('change', loadAspects);
+  }
+
+  function showUserDetail() {
+    clearForm();
+    var uid = $(this).data('uid');
+    var actionUrl = "<?= base_url('api/put-user') ?>/" + uid;
+    // $('#pwd').hide();
+    $.ajax({
+      url: `<?= base_url('api/get-user') ?>/${uid}`,
+      type: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        // console.log(response.dt);
+        aspek_penilai = response.dt.aspek_penilai.map(ap => ap.aspek_id);
+
+        $('#formDetail').attr('action', actionUrl);
+        $('#UserName').val(response.dt.UserName);
+        $('#FullName').val(response.dt.FullName);
+        $('#Phone').val(response.dt.Phone);
+        $('#EmailAdds').val(response.dt.EmailAdds);
+        SelectOpd(response.dt.opdid);
+        SelectRole(response.dt.RoleId);
+        loadAspects(aspek_penilai);
+        $('#userModal').modal('show');
+      },
+      error: function() {
+        alert('Gagal mengambil data user.');
+      }
+    });
+  }
+
+  function addUser() {
+    clearForm();
+    $('#pwd').show();
+    var actionUrl = "<?= base_url('api/add-user') ?>";
+    $('#formDetail').attr('action', actionUrl);
+    $('#formDetail').attr('method', 'POST');
+    $('#UserName').val('');
+    $('#FullName').val('');
+    $('#Phone').val('');
+    $('#EmailAdds').val('');
+    SelectOpd();
+    SelectRole();
+    $('#userModal').modal('show');
+  }
+
+  function SelectOpd(selectedId = null) {
+    if (opdSelect) {
+      opdSelect.destroy();
+    }
+    $.ajax({
+      url: '/api/get-opd',
+      type: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        if (response.dt) {
+          var opd = response.dt;
+          var options = opd.map(function(item) {
+            return {
+              value: item.id,
+              label: item.nama_opd,
+              selected: item.id == selectedId
+            };
+          });
+          opdSelect = new Choices('#nama_opd', {
+            choices: options,
+            shouldSort: false
+          });
+        }
+      },
+      error: function() {
+        console.error('Gagal mengambil data OPD.');
+      }
+    });
+  }
+
+  function SelectRole(selectedId = null) {
+    if (roleSelect) {
+      roleSelect.destroy();
+    }
+    $.ajax({
+      url: '/api/get-roles',
+      type: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        if (response.dt) {
+          var roles = response.dt;
+          var options = roles.map(function(item) {
+            return {
+              value: item.RoleId,
+              label: item.RoleName,
+              selected: item.RoleId == selectedId
+            };
+          });
+          roleSelect = new Choices('#RoleName', {
+            choices: options,
+            shouldSort: false
+          });
+          if (selectedId) {
+            let role = roles.find(role => role.RoleId == selectedId);
+            if (role.acs == '2') {
+              $('#tahunForm').removeClass('d-none');
+              loadYears(selectedId);
+            }
           }
         }
+      },
+      error: function() {
+        console.error('Gagal mengambil data Role.');
       }
-    },
-    error: function() {
-      console.error('Gagal mengambil data Role.');
-    }
-  });
-}
-
-function validatePasswords() {
-  if ($('#Password').val() !== $('#ConfirmPassword').val()) {
-    $('#pwdValidation').text('Passwords do not match');
-  } else {
-    $('#pwdValidation').text('');
+    });
   }
-}
 
-function submitForm(event) {
-  event.preventDefault();
-  $.ajax({
-    url: $(this).attr('action'),
-    type: "POST",
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    data: {
-      UserName: $('#UserName').val(),
-      FullName: $('#FullName').val(),
-      Phone: $('#Phone').val(),
-      EmailAdds: $('#EmailAdds').val(),
-      RoleName: $('#RoleName').val(),
-      nama_opd: $('#nama_opd').val(),
-      Password: $('#Password').val(),
-      aspek_penilai: $('#aspek').val(),
-      ConfirmPassword: $('#ConfirmPassword').val(),
-      "<?= csrf_token() ?>": $('#<?= csrf_token() ?>').val()
-    },
-    success: function(response) {
-      $('#<?= csrf_token() ?>').val(response.token_crs);
-      if (typeof response.msg === 'object') {
-        let errorMsg = '';
-        for (const [key, value] of Object.entries(response.msg)) {
-          errorMsg += `${key}: ${value}\n`;
-        }
-        alert(errorMsg);
-      } else {
-        alert(response.msg);
-      }
-      if (response.res) {
-        $('#userModal').modal('hide');
-        $('#table').DataTable().ajax.reload();
-      }
-    },
-    error: function(xhr) {
-      alert("Terjadi kesalahan: " + xhr.responseText);
+  function validatePasswords() {
+    if ($('#Password').val() !== $('#ConfirmPassword').val()) {
+      $('#pwdValidation').text('Passwords do not match');
+    } else {
+      $('#pwdValidation').text('');
     }
-  });
-}
+  }
 
-function deleteUser() {
-  var uid = $(this).data('uid');
-  var actionUrl = "<?= base_url('api/delete-user') ?>/" + uid;
-
-  $.ajax({
-    url: `<?= base_url('api/get-user') ?>/${uid}`,
-    type: 'GET',
-    headers: {
-      Authorization: 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      const user = response.dt;
-
-      // Buat tabel data terkait
-      let relatedRows = '';
-      if (user.data_terkait) {
-        for (let [key, val] of Object.entries(user.data_terkait)) {
-          relatedRows += `<tr><th>${key}</th><td>${val}</td></tr>`;
+  function submitForm(event) {
+    event.preventDefault();
+    $.ajax({
+      url: $(this).attr('action'),
+      type: "POST",
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      data: {
+        UserName: $('#UserName').val(),
+        FullName: $('#FullName').val(),
+        Phone: $('#Phone').val(),
+        EmailAdds: $('#EmailAdds').val(),
+        RoleName: $('#RoleName').val(),
+        nama_opd: $('#nama_opd').val(),
+        Password: $('#Password').val(),
+        aspek_penilai: $('#aspek').val(),
+        ConfirmPassword: $('#ConfirmPassword').val(),
+        "<?= csrf_token() ?>": $('#<?= csrf_token() ?>').val()
+      },
+      success: function(response) {
+        $('#<?= csrf_token() ?>').val(response.token_crs);
+        if (typeof response.msg === 'object') {
+          let errorMsg = '';
+          for (const [key, value] of Object.entries(response.msg)) {
+            errorMsg += `${key}: ${value}\n`;
+          }
+          alert(errorMsg);
+        } else {
+          alert(response.msg);
         }
+        if (response.res) {
+          $('#userModal').modal('hide');
+          $('#table').DataTable().ajax.reload();
+        }
+      },
+      error: function(xhr) {
+        alert("Terjadi kesalahan: " + xhr.responseText);
       }
+    });
+  }
 
-      Swal.fire({
-        title: "Anda Yakin?",
-        html: `
+  function deleteUser() {
+    var uid = $(this).data('uid');
+    var actionUrl = "<?= base_url('api/delete-user') ?>/" + uid;
+
+    $.ajax({
+      url: `<?= base_url('api/get-user') ?>/${uid}`,
+      type: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        const user = response.dt;
+
+        // Buat tabel data terkait
+        let relatedRows = '';
+        if (user.data_terkait) {
+          for (let [key, val] of Object.entries(user.data_terkait)) {
+            relatedRows += `<tr><th>${key}</th><td>${val}</td></tr>`;
+          }
+        }
+
+        Swal.fire({
+          title: "Anda Yakin?",
+          html: `
           <div style="text-align:left">
             <table class="table table-sm">
               <tr><th>Username</th><td>${user.UserName}</td></tr>
@@ -477,156 +492,156 @@ function deleteUser() {
             </div>
           </div>
         `,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Hapus!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Ambil mode dari checkbox
-          let deleteMode = $('input[name="deleteMode"]:checked').val();
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Hapus!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Ambil mode dari checkbox
+            let deleteMode = $('input[name="deleteMode"]:checked').val();
 
-          $.ajax({
-            url: actionUrl + '?mode=' + deleteMode,
-            type: 'DELETE',
-            data: {
-              "<?= csrf_token() ?>": $('#<?= csrf_token() ?>').val(),
-            },
-            headers: {
-              Authorization: 'Bearer ' + TOKEN
-            },
-            success: function(response) {
-              if (response.res) {
-                Swal.fire({
-                  title: "Terhapus!",
-                  text: "User berhasil dihapus.",
-                  icon: "success"
-                });
-                $('#table').DataTable().ajax.reload();
-              } else {
-                Swal.fire({
-                  title: "Gagal!",
-                  text: response.msg,
-                  icon: "error"
-                });
+            $.ajax({
+              url: actionUrl + '?mode=' + deleteMode,
+              type: 'DELETE',
+              data: {
+                "<?= csrf_token() ?>": $('#<?= csrf_token() ?>').val(),
+              },
+              headers: {
+                Authorization: 'Bearer ' + TOKEN
+              },
+              success: function(response) {
+                if (response.res) {
+                  Swal.fire({
+                    title: "Terhapus!",
+                    text: "User berhasil dihapus.",
+                    icon: "success"
+                  });
+                  $('#table').DataTable().ajax.reload();
+                } else {
+                  Swal.fire({
+                    title: "Gagal!",
+                    text: response.msg,
+                    icon: "error"
+                  });
+                }
+              },
+              error: function() {
+                alert('Gagal menghapus data user.');
               }
-            },
-            error: function() {
-              alert('Gagal menghapus data user.');
-            }
-          });
-        }
-      });
-    },
-    error: function() {
-      Swal.fire({
-        title: "Gagal!",
-        text: "Gagal mengambil data user.",
-        icon: "error"
-      });
-    }
-  });
-}
-
-function handleRoleChange() {
-  var role_id = $(this).val();
-  $.ajax({
-    url: '/api/get-roles',
-    type: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    data: {
-      RoleId: role_id
-    },
-    success: function(response) {
-      if (response.dt && response.dt.length > 0) {
-        let user_role = response.dt[0];
-        let role_acs = user_role.acs;
-        if (role_acs == '2') {
-          $('#tahunForm').removeClass('d-none');
-          loadYears(role_id);
-        } else {
-          $('#tahunForm').addClass('d-none');
-          $('#aspek-penilai').html('');
-        }
-      }
-    },
-    error: function() {
-      console.error('Gagal mengambil data role.');
-    }
-  });
-}
-
-function loadYears(role_id) {
-  if (tahunSelect) {
-    tahunSelect.destroy();
-  }
-  tahunSelect = new Choices('#tahunPenilaian', {
-    placeholder: true,
-    searchPlaceholderValue: 'Pilih Tahun',
-    itemSelectText: '',
-    shouldSort: false
-  });
-
-  $.ajax({
-    url: '/api/get-tahun',
-    type: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      if (response.dt) {
-        response.dt.unshift({
-          id: '0',
-          nama: '- Pilih Tahun -'
+            });
+          }
         });
-        tahunSelect.setValue(response.dt.map(dt => ({
-          value: dt.id,
-          label: dt.nama
-        })));
-        $('#tahunPenilaian').trigger('change');
+      },
+      error: function() {
+        Swal.fire({
+          title: "Gagal!",
+          text: "Gagal mengambil data user.",
+          icon: "error"
+        });
       }
-    },
-    error: function() {
-      console.error('Gagal mengambil data tahun.');
-    }
-  });
-
-}
-
-function loadAspects() {
-
-  if (aspekSelect) {
-    aspekSelect.destroy();
+    });
   }
 
-  let form_id = $('#tahunPenilaian').val();
-  if (form_id == '0') {
-    $('#aspek-penilai').html('');
-    return;
-  }
-
-  $.ajax({
-    url: '/api/get-aspek-by-form/',
-    type: 'GET',
-    data: {
-      FormId: form_id
-    },
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-    },
-    success: function(response) {
-      if (response.dt) {
-        let optionsHtml = '';
-
-        for (let dt of response.dt) {
-          let selected = aspek_penilai.includes(dt.id) ? 'selected' : '';
-          optionsHtml += `<option value="${dt.id}" ${selected}>${dt.nama_sub_aspek}</option>`;
+  function handleRoleChange() {
+    var role_id = $(this).val();
+    $.ajax({
+      url: '/api/get-roles',
+      type: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      data: {
+        RoleId: role_id
+      },
+      success: function(response) {
+        if (response.dt && response.dt.length > 0) {
+          let user_role = response.dt[0];
+          let role_acs = user_role.acs;
+          if (role_acs == '2') {
+            $('#tahunForm').removeClass('d-none');
+            loadYears(role_id);
+          } else {
+            $('#tahunForm').addClass('d-none');
+            $('#aspek-penilai').html('');
+          }
         }
+      },
+      error: function() {
+        console.error('Gagal mengambil data role.');
+      }
+    });
+  }
 
-        $('#aspek-penilai').html(`
+  function loadYears(role_id) {
+    if (tahunSelect) {
+      tahunSelect.destroy();
+    }
+    tahunSelect = new Choices('#tahunPenilaian', {
+      placeholder: true,
+      searchPlaceholderValue: 'Pilih Tahun',
+      itemSelectText: '',
+      shouldSort: false
+    });
+
+    $.ajax({
+      url: '/api/get-tahun',
+      type: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        if (response.dt) {
+          response.dt.unshift({
+            id: '0',
+            nama: '- Pilih Tahun -'
+          });
+          tahunSelect.setValue(response.dt.map(dt => ({
+            value: dt.id,
+            label: dt.nama
+          })));
+          $('#tahunPenilaian').trigger('change');
+        }
+      },
+      error: function() {
+        console.error('Gagal mengambil data tahun.');
+      }
+    });
+
+  }
+
+  function loadAspects() {
+
+    if (aspekSelect) {
+      aspekSelect.destroy();
+    }
+
+    let form_id = $('#tahunPenilaian').val();
+    if (form_id == '0') {
+      $('#aspek-penilai').html('');
+      return;
+    }
+
+    $.ajax({
+      url: '/api/get-aspek-by-form/',
+      type: 'GET',
+      data: {
+        FormId: form_id
+      },
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      success: function(response) {
+        if (response.dt) {
+          let optionsHtml = '';
+
+          for (let dt of response.dt) {
+            let selected = aspek_penilai.includes(dt.id) ? 'selected' : '';
+            optionsHtml += `<option value="${dt.id}" ${selected}>${dt.nama_sub_aspek}</option>`;
+          }
+
+          $('#aspek-penilai').html(`
             <div class="form-group">
               <label for="aspek">Aspek Penilaian</label>
               <select id="aspek" name="aspek[]" class="form-select" multiple>
@@ -635,38 +650,38 @@ function loadAspects() {
             </div>
           `);
 
-        aspekSelect = new Choices('#aspek', {
-          placeholder: true,
-          searchPlaceholderValue: 'Pilih Aspek Penilaian',
-          itemSelectText: '',
-          shouldSort: false,
-          removeItemButton: true,
-        });
+          aspekSelect = new Choices('#aspek', {
+            placeholder: true,
+            searchPlaceholderValue: 'Pilih Aspek Penilaian',
+            itemSelectText: '',
+            shouldSort: false,
+            removeItemButton: true,
+          });
+        }
+      },
+      error: function() {
+        console.error('Gagal mengambil data aspek.');
       }
-    },
-    error: function() {
-      console.error('Gagal mengambil data aspek.');
+    });
+  }
+
+
+  function clearForm() {
+    $('#UserName').val('');
+    $('#FullName').val('');
+    $('#Phone').val('');
+    $('#EmailAdds').val('');
+    $('#Password').val('');
+    $('#ConfirmPassword').val('');
+    $('#tahunForm').addClass('d-none');
+    $('#tahunPenilaian').html('');
+    $('#aspek-penilai').html('');
+    if (roleSelect) {
+      roleSelect.clearStore();
     }
-  });
-}
-
-
-function clearForm() {
-  $('#UserName').val('');
-  $('#FullName').val('');
-  $('#Phone').val('');
-  $('#EmailAdds').val('');
-  $('#Password').val('');
-  $('#ConfirmPassword').val('');
-  $('#tahunForm').addClass('d-none');
-  $('#tahunPenilaian').html('');
-  $('#aspek-penilai').html('');
-  if (roleSelect) {
-    roleSelect.clearStore();
+    if (opdSelect) {
+      opdSelect.clearStore();
+    }
   }
-  if (opdSelect) {
-    opdSelect.clearStore();
-  }
-}
 </script>
 <?= $this->endSection() ?>

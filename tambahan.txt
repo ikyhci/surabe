@@ -3,3 +3,6 @@
 2. Tambahkan Waktu Pengimputan Data Di Sub Aspek 
 
 3. Tambah urutan di sub sub aspek tambah nomor (fix 90%)
+
+Tambahkan Data Prevew Contoh Jawaban / evident , di parameter
+

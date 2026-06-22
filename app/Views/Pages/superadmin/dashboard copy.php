@@ -1,24 +1,39 @@
+<?php
+
+/** @var array|object $opd */
+/** @var string $idx */
+/** @var array|object $dt */
+/** @var array|object $aspeks */
+/** @var array|object $radarLabels */
+/** @var string $title */
+/** @var array|object $forms */
+/** @var array|object $form */
+/** @var string $uname */
+/** @var string $usr */
+/** @var string $token */
+?>
+
 <?= $this->extend('Layouts/dashboard') ?>
 <?= $this->section('styles') ?>
 <!-- Styles -->
 <style {csp-style-nonce}>
-.verticaltext {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: normal;
-  height: 200px;
-}
+  .verticaltext {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: normal;
+    height: 200px;
+  }
 
-.col-nilai {
-  width: 100px;
-}
+  .col-nilai {
+    width: 100px;
+  }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 </style>
 <?= $this->endSection() ?>
 
@@ -247,129 +262,129 @@
 <link {csp-style-nonce} rel="stylesheet" href="/assets/vendors/dataTables/dataTables.min.css">
 <script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
-<script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/profil.js"></script>
+<script {csp-script-nonce} src="<?php echo base_url(); ?>assets/js/pages/profil.js"></script>
 <script {csp-script-nonce} src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <?= $this->include('Pages/profil') ?>
 
 <script {csp-script-nonce} type="text/javascript">
-let csrf_hash = "<?= csrf_hash() ?>";
+  let csrf_hash = "<?= csrf_hash() ?>";
 
-$(document).ready(function() {
-  // tampilkan loading
-  loading('.loading', 'show');
+  $(document).ready(function() {
+    // tampilkan loading
+    loading('.loading', 'show');
 
-  $.ajax({
-    url: "<?= base_url('dashboard/report/getEvaluasiLengkap?tahun=2025') ?>",
-    type: "GET",
-    success: function(response) {
-      csrf_hash = response.token_crs;
-      loading('.loading', 'hide');
+    $.ajax({
+      url: "<?= base_url('dashboard/report/getEvaluasiLengkap?tahun=2025') ?>",
+      type: "GET",
+      success: function(response) {
+        csrf_hash = response.token_crs;
+        loading('.loading', 'hide');
 
-      const ringkasan = response.dt.ringkasan;
-      const opdList = response.dt.data_opd;
+        const ringkasan = response.dt.ringkasan;
+        const opdList = response.dt.data_opd;
 
-      // === UPDATE CARD DI ATAS (OPSIONAL) ===
-      $('.stats-icon i').first().closest('.card-body').find('h6.font-extrabold').text(ringkasan
-        .total_instansi);
+        // === UPDATE CARD DI ATAS (OPSIONAL) ===
+        $('.stats-icon i').first().closest('.card-body').find('h6.font-extrabold').text(ringkasan
+          .total_instansi);
 
-      // === SECTION RINGKASAN EVALUASI ===
-      $('#total-instansi').text(ringkasan.total_instansi);
-      $('#rata-rata').text(ringkasan.rata_rata_index.toFixed(2));
-      $('#opd-tertinggi').text(ringkasan.instansi_tertinggi.nama_opd);
-      $('#nilai-tertinggi').text(ringkasan.instansi_tertinggi.capaian.toFixed(2));
-      $('#opd-terendah').text(ringkasan.instansi_terendah.nama_opd);
-      $('#nilai-terendah').text(ringkasan.instansi_terendah.capaian.toFixed(2));
+        // === SECTION RINGKASAN EVALUASI ===
+        $('#total-instansi').text(ringkasan.total_instansi);
+        $('#rata-rata').text(ringkasan.rata_rata_index.toFixed(2));
+        $('#opd-tertinggi').text(ringkasan.instansi_tertinggi.nama_opd);
+        $('#nilai-tertinggi').text(ringkasan.instansi_tertinggi.capaian.toFixed(2));
+        $('#opd-terendah').text(ringkasan.instansi_terendah.nama_opd);
+        $('#nilai-terendah').text(ringkasan.instansi_terendah.capaian.toFixed(2));
 
-      // === BUAT TABEL CAPAIAN OPD ===
-      let tableHeader = $('#penilaianOpd thead tr');
-      tableHeader.empty();
-      tableHeader.append('<th class="text-center col-nilai">No</th>');
-      tableHeader.append('<th>Nama OPD</th>');
-      tableHeader.append('<th class="text-center">Nilai Akhir</th>');
+        // === BUAT TABEL CAPAIAN OPD ===
+        let tableHeader = $('#penilaianOpd thead tr');
+        tableHeader.empty();
+        tableHeader.append('<th class="text-center col-nilai">No</th>');
+        tableHeader.append('<th>Nama OPD</th>');
+        tableHeader.append('<th class="text-center">Nilai Akhir</th>');
 
-      let tableBody = $('#penilaianOpd tbody');
-      tableBody.empty();
+        let tableBody = $('#penilaianOpd tbody');
+        tableBody.empty();
 
-      opdList.sort((a, b) => b.nilai_akhir - a.nilai_akhir);
+        opdList.sort((a, b) => b.nilai_akhir - a.nilai_akhir);
 
-      $.each(opdList, function(index, item) {
-        let row = `
+        $.each(opdList, function(index, item) {
+          let row = `
       <tr>
         <td class="text-center">${index + 1}</td>
         <td>${item.nama_opd}</td>
         <td class="text-center fw-bold">${item.nilai_akhir.toFixed(2)}</td>
       </tr>`;
-        tableBody.append(row);
-      });
-
-      $("#penilaianOpd").addClass('table table-hover table-bordered').DataTable({
-        order: [
-          [2, "desc"]
-        ],
-        pageLength: 10
-      });
-
-      // === BUAT DATA UNTUK CHART PER ASPEK ===
-      const aspekList = {};
-      opdList.forEach(opd => {
-        opd.aspek_values.forEach(aspek => {
-          if (!aspekList[aspek.nama_aspek]) aspekList[aspek.nama_aspek] = [];
-          aspekList[aspek.nama_aspek].push(aspek.skor_index);
+          tableBody.append(row);
         });
-      });
 
-      const aspekLabels = Object.keys(aspekList);
-      const aspekValues = aspekLabels.map(label => {
-        const scores = aspekList[label];
-        const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-        return avg;
-      });
+        $("#penilaianOpd").addClass('table table-hover table-bordered').DataTable({
+          order: [
+            [2, "desc"]
+          ],
+          pageLength: 10
+        });
 
-      // === CHART: RATA-RATA NILAI PER ASPEK ===
-      const ctx = document.getElementById('chartAspek').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: aspekLabels,
-          datasets: [{
-            label: 'Rata-rata Skor',
-            data: aspekValues,
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 100
+        // === BUAT DATA UNTUK CHART PER ASPEK ===
+        const aspekList = {};
+        opdList.forEach(opd => {
+          opd.aspek_values.forEach(aspek => {
+            if (!aspekList[aspek.nama_aspek]) aspekList[aspek.nama_aspek] = [];
+            aspekList[aspek.nama_aspek].push(aspek.skor_index);
+          });
+        });
+
+        const aspekLabels = Object.keys(aspekList);
+        const aspekValues = aspekLabels.map(label => {
+          const scores = aspekList[label];
+          const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+          return avg;
+        });
+
+        // === CHART: RATA-RATA NILAI PER ASPEK ===
+        const ctx = document.getElementById('chartAspek').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: aspekLabels,
+            datasets: [{
+              label: 'Rata-rata Skor',
+              data: aspekValues,
+              backgroundColor: 'rgba(54, 162, 235, 0.7)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100
+              }
             }
           }
-        }
-      });
-    },
-    error: function(xhr, status, error) {
-      loading('.loading', 'hide');
-      console.error("AJAX Error: ", status, error);
-      Swal.fire("Error", "Gagal memuat data evaluasi lengkap", "error");
-    }
+        });
+      },
+      error: function(xhr, status, error) {
+        loading('.loading', 'hide');
+        console.error("AJAX Error: ", status, error);
+        Swal.fire("Error", "Gagal memuat data evaluasi lengkap", "error");
+      }
+    });
   });
-});
 
-function loading(elTarget, toggle) {
-  let eLoading = `<img src="assets/vendors/svg-loaders/audio.svg" class="me-4" style="width: 3rem" alt="audio">`;
-  switch (toggle) {
-    case 'show':
-      $(elTarget).html(`<div class="d-flex justify-content-center align-items-center">${eLoading} Loading...</div>`);
-      break;
-    case 'hide':
-      $(elTarget).html('');
-      break;
+  function loading(elTarget, toggle) {
+    let eLoading = `<img src="assets/vendors/svg-loaders/audio.svg" class="me-4" style="width: 3rem" alt="audio">`;
+    switch (toggle) {
+      case 'show':
+        $(elTarget).html(`<div class="d-flex justify-content-center align-items-center">${eLoading} Loading...</div>`);
+        break;
+      case 'hide':
+        $(elTarget).html('');
+        break;
+    }
   }
-}
 </script>
 
 <?= $this->endSection() ?>

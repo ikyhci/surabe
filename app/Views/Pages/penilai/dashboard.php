@@ -1,24 +1,40 @@
+<?php
+
+/** @var array|object $opd */
+/** @var string $tahun */
+/** @var array|object $allAspek */
+/** @var array|object $radarData */
+/** @var array|object $radarLabels */
+/** @var string $title */
+/** @var array|object $profileVisitData */
+/** @var array|object $profileVisitLabels */
+/** @var string $uname */
+/** @var string $usr */
+/** @var string $token */
+
+?>
+
 <?= $this->extend('Layouts/dashboard') ?>
 <?= $this->section('styles') ?>
 <!-- Styles -->
 <style {csp-style-nonce}>
-.verticaltext {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: normal;
-  height: 200px;
-}
+  .verticaltext {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: normal;
+    height: 200px;
+  }
 
-.col-nilai {
-  width: 100px;
-}
+  .col-nilai {
+    width: 100px;
+  }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 </style>
 <?= $this->endSection() ?>
 
@@ -200,30 +216,30 @@
 <link {csp-style-nonce} rel="stylesheet" href="/assets/vendors/dataTables/dataTables.min.css">
 <script {csp-script-nonce} src="/assets/vendors/dataTables/dataTables.min.js"></script>
 <script {csp-script-nonce} src="/assets/vendors/sweetalert/sweetalert.min.js"></script>
-<script {csp-script-nonce} src="<?php echo base_url();?>assets/js/pages/profil.js"></script>
+<script {csp-script-nonce} src="<?php echo base_url(); ?>assets/js/pages/profil.js"></script>
 
 <?= $this->include('Pages/profil') ?>
 
 <script {csp-script-nonce} type="text/javascript">
-let csrf_hash = "<?= csrf_hash() ?>";
-
-$(document).ready(function() {
+  let csrf_hash = "<?= csrf_hash() ?>";
 
   $(document).ready(function() {
-    $.ajax({
-      url: "<?= base_url('api/capaian-opd') ?>",
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer <?= $token ?>"
-      },
-      dataType: "json",
-      success: function(res) {
-        if (res.success) {
-          let tbody = $('#penilaianOpd tbody');
-          tbody.empty();
 
-          $.each(res.dt, function(i, row) {
-            let html = `
+    $(document).ready(function() {
+      $.ajax({
+        url: "<?= base_url('api/capaian-opd') ?>",
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer <?= $token ?>"
+        },
+        dataType: "json",
+        success: function(res) {
+          if (res.success) {
+            let tbody = $('#penilaianOpd tbody');
+            tbody.empty();
+
+            $.each(res.dt, function(i, row) {
+              let html = `
                 <tr>
                     <td class="text-center">${i + 1}</td>
                     <td>${row.nama_opd}</td>
@@ -233,34 +249,34 @@ $(document).ready(function() {
                     </td>
                 </tr>
             `;
-            tbody.append(html);
-          });
-        } else {
-          alert("Gagal mengambil data: " + res.msg);
+              tbody.append(html);
+            });
+          } else {
+            alert("Gagal mengambil data: " + res.msg);
+          }
+        },
+        error: function() {
+          alert("Gagal terhubung ke server.");
         }
-      },
-      error: function() {
-        alert("Gagal terhubung ke server.");
-      }
+      });
     });
+
   });
 
-});
-
-function loading(elTarget, togle) {
-  let eLoading = `<img src="assets/vendors/svg-loaders/audio.svg" class="me-4" style="width: 3rem" alt="audio">`;
-  switch (togle) {
-    case 'show':
-      $(elTarget).append(
-        `<div class="d-flex justify-content-center align-items-center">${eLoading} Loading...</div>`
-      );
-      break;
-    case 'hide':
-      $(elTarget).html('');
-      break;
+  function loading(elTarget, togle) {
+    let eLoading = `<img src="assets/vendors/svg-loaders/audio.svg" class="me-4" style="width: 3rem" alt="audio">`;
+    switch (togle) {
+      case 'show':
+        $(elTarget).append(
+          `<div class="d-flex justify-content-center align-items-center">${eLoading} Loading...</div>`
+        );
+        break;
+      case 'hide':
+        $(elTarget).html('');
+        break;
+    }
   }
-}
-// loading('.loading', 'show');
+  // loading('.loading', 'show');
 </script>
 
 <?= $this->endSection() ?>

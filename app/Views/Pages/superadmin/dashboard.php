@@ -1,73 +1,88 @@
+<?php
+
+/** @var array|object $opd */
+/** @var string $idx */
+/** @var array|object $dt */
+/** @var array|object $aspeks */
+/** @var array|object $radarLabels */
+/** @var string $title */
+/** @var array|object $forms */
+/** @var array|object $form */
+/** @var string $uname */
+/** @var string $usr */
+/** @var string $token */
+?>
+
 <?= $this->extend('Layouts/dashboard') ?>
 
 <?= $this->section('styles') ?>
 <style {csp-style-nonce}>
-.page-heading {
-  margin-bottom: 1rem;
-}
+  .page-heading {
+    margin-bottom: 1rem;
+  }
 
-.info-cards .card {
-  min-height: 120px;
-}
+  .info-cards .card {
+    min-height: 120px;
+  }
 
-.info-value {
-  font-size: 1.6rem;
-  font-weight: 700;
-}
+  .info-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
 
-.verticaltext {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: normal;
-  height: 200px;
-}
+  .verticaltext {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: normal;
+    height: 200px;
+  }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 
-.canvas-wrap {
-  height: 320px;
-}
+  .canvas-wrap {
+    height: 320px;
+  }
 
-.legend-columns {
-  column-count: 3;
-  column-gap: 14px;
-  font-size: 0.75rem;
-  /* PERKECIL UKURAN TEKS */
-  margin-top: 10px;
-}
+  .legend-columns {
+    column-count: 3;
+    column-gap: 14px;
+    font-size: 0.75rem;
+    /* PERKECIL UKURAN TEKS */
+    margin-top: 10px;
+  }
 
-.legend-columns div {
-  break-inside: avoid;
-  margin-bottom: 4px;
-  /* rapikan jarak antar baris */
-  display: flex;
-  align-items: center;
-}
+  .legend-columns div {
+    break-inside: avoid;
+    margin-bottom: 4px;
+    /* rapikan jarak antar baris */
+    display: flex;
+    align-items: center;
+  }
 
-.legend-columns span {
-  width: 10px;
-  /* perkecil icon warna */
-  height: 10px;
-  display: inline-block;
-  margin-right: 5px;
-  border-radius: 3px;
-}
+  .legend-columns span {
+    width: 10px;
+    /* perkecil icon warna */
+    height: 10px;
+    display: inline-block;
+    margin-right: 5px;
+    border-radius: 3px;
+  }
 
-.canvas-wrap {
-  height: 320px;
-  /* tetap */
-}
+  .canvas-wrap {
+    height: 320px;
+    /* tetap */
+  }
 
-.card-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 </style>
 <?= $this->endSection() ?>
 
@@ -318,74 +333,74 @@
 <script {csp-script-nonce} src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script {csp-script-nonce}>
-const API_BASE = "<?= base_url('dashboard/report/getEvaluasiLengkap') ?>";
-let charts = {};
-let dataTable;
+  const API_BASE = "<?= base_url('dashboard/report/getEvaluasiLengkap') ?>";
+  let charts = {};
+  let dataTable;
 
-document.addEventListener("DOMContentLoaded", () => {
-  initYears();
-  fetchAndRender();
-});
+  document.addEventListener("DOMContentLoaded", () => {
+    initYears();
+    fetchAndRender();
+  });
 
-function initYears() {
-  const select = document.getElementById("select-year");
-  const now = new Date().getFullYear();
-  for (let y = now; y >= now - 5; y--) {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y;
-    if (y === now) opt.selected = true;
-    select.appendChild(opt);
+  function initYears() {
+    const select = document.getElementById("select-year");
+    const now = new Date().getFullYear();
+    for (let y = now; y >= now - 5; y--) {
+      const opt = document.createElement("option");
+      opt.value = y;
+      opt.textContent = y;
+      if (y === now) opt.selected = true;
+      select.appendChild(opt);
+    }
+    select.addEventListener("change", fetchAndRender);
   }
-  select.addEventListener("change", fetchAndRender);
-}
 
-async function fetchAndRender() {
-  const tahun = document.getElementById("select-year").value;
-  loading("#table-loading", true);
-  try {
-    const res = await fetch(`${API_BASE}?tahun=${tahun}`);
-    const json = await res.json();
-    const ringkasan = json.dt?.ringkasan ?? {};
-    const opdList = json.dt?.data_opd ?? [];
+  async function fetchAndRender() {
+    const tahun = document.getElementById("select-year").value;
+    loading("#table-loading", true);
+    try {
+      const res = await fetch(`${API_BASE}?tahun=${tahun}`);
+      const json = await res.json();
+      const ringkasan = json.dt?.ringkasan ?? {};
+      const opdList = json.dt?.data_opd ?? [];
 
-    updateCards(ringkasan);
-    renderTable(opdList);
-    renderDistribusi(opdList);
-    renderAspekAvg(opdList);
-    renderTop10(opdList);
-    renderTrend(tahun);
+      updateCards(ringkasan);
+      renderTable(opdList);
+      renderDistribusi(opdList);
+      renderAspekAvg(opdList);
+      renderTop10(opdList);
+      renderTrend(tahun);
 
-  } catch (e) {
-    console.error("Fetch error:", e);
-  } finally {
-    loading("#table-loading", false);
+    } catch (e) {
+      console.error("Fetch error:", e);
+    } finally {
+      loading("#table-loading", false);
+    }
   }
-}
 
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.innerText = val;
-}
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = val;
+  }
 
-function updateCards(r) {
-  setText("card-total-instansi", r.total_instansi ?? 0);
-  setText("card-rerata", (r.rata_rata_index ?? 0).toFixed(2));
-  setText("card-tertinggi", r.tertinggi?.nama_opd ?? "-");
-  setText("card-tertinggi-val", r.tertinggi?.nilai?.toFixed(2) ?? "");
-  setText("card-terendah", r.terendah?.nama_opd ?? "-");
-  setText("card-terendah-val", r.terendah?.nilai?.toFixed(2) ?? "");
-}
+  function updateCards(r) {
+    setText("card-total-instansi", r.total_instansi ?? 0);
+    setText("card-rerata", (r.rata_rata_index ?? 0).toFixed(2));
+    setText("card-tertinggi", r.tertinggi?.nama_opd ?? "-");
+    setText("card-tertinggi-val", r.tertinggi?.nilai?.toFixed(2) ?? "");
+    setText("card-terendah", r.terendah?.nama_opd ?? "-");
+    setText("card-terendah-val", r.terendah?.nilai?.toFixed(2) ?? "");
+  }
 
-function renderTable(data) {
-  if (dataTable) dataTable.destroy();
-  const tbody = document.querySelector("#table-opd tbody");
-  tbody.innerHTML = "";
+  function renderTable(data) {
+    if (dataTable) dataTable.destroy();
+    const tbody = document.querySelector("#table-opd tbody");
+    tbody.innerHTML = "";
 
-  data.sort((a, b) => b.opd.nilai - a.opd.nilai);
+    data.sort((a, b) => b.opd.nilai - a.opd.nilai);
 
-  data.forEach((d, i) => {
-    tbody.innerHTML += `
+    data.forEach((d, i) => {
+      tbody.innerHTML += `
       <tr>
         <td>${i + 1}</td>
         <td>${d.opd.nama_opd}</td>
@@ -393,171 +408,171 @@ function renderTable(data) {
         <td class="text-center">${(d.opd.nilai ?? 0).toFixed(2)}</td>
       </tr>
     `;
-  });
-
-  dataTable = $("#table-opd").DataTable({
-    pageLength: 10,
-    order: [
-      [3, "desc"]
-    ]
-  });
-}
-
-function renderDistribusi(list) {
-  const cat = {
-    D: 0,
-    C: 0,
-    CC: 0,
-    B: 0,
-    BB: 0,
-    A: 0,
-    AA: 0
-  };
-
-  list.forEach(o => {
-    const v = o.opd.nilai ?? 0;
-    if (v <= 30) cat.D++;
-    else if (v <= 50) cat.C++;
-    else if (v <= 60) cat.CC++;
-    else if (v <= 70) cat.B++;
-    else if (v <= 80) cat.BB++;
-    else if (v <= 90) cat.A++;
-    else if (v <= 100) cat.AA++;
-  });
-
-  const labels = [
-    "0–30 Sangat Buruk",
-    ">30–50 Buruk",
-    ">50–60 Cukup",
-    ">60–70 Cukup Baik",
-    ">70–80 Baik",
-    ">80–90 Sangat Baik",
-    ">90–100 Istimewa"
-  ];
-
-  const values = [cat.D, cat.C, cat.CC, cat.B, cat.BB, cat.A, cat.AA];
-  const colors = ["#dc3545", "#ff6f6f", "#ffc107", "#ffe17a", "#0d6efd", "#198754", "#009688"];
-
-  const ctx = document.getElementById("chartDistribusi").getContext("2d");
-
-  charts.distribusi?.destroy();
-  charts.distribusi = new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels,
-      datasets: [{
-        data: values,
-        backgroundColor: colors
-      }]
-    },
-    options: {
-      plugins: {
-        legend: {
-          display: false
-        }
-      }
-    }
-  });
-
-  // Buat legend 3 kolom
-  const legendContainer = document.getElementById("legend-distribusi");
-  legendContainer.innerHTML = labels.map((lbl, i) => `
-      <div><span style="background:${colors[i]}"></span>${lbl} : <b>${values[i]}</b></div>
-  `).join("");
-}
-
-function renderAspekAvg(list) {
-  if (!list.length) return;
-
-  const labels = list[0].radarLabels ?? [];
-  const totals = Array(labels.length).fill(0);
-  const counts = Array(labels.length).fill(0);
-
-  list.forEach(o => {
-    (o.radarData ?? []).forEach((v, i) => {
-      totals[i] += parseFloat(v);
-      counts[i]++;
     });
-  });
 
-  const avg = totals.map((t, i) => (t / (counts[i] || 1)).toFixed(2));
-
-  const ctx = document.getElementById("chartAspekAvg").getContext("2d");
-  charts.aspek?.destroy();
-  charts.aspek = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        label: "Rata-rata Per Aspek",
-        data: avg
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100
-        }
-      }
-    }
-  });
-}
-
-function renderTop10(list) {
-  const sorted = list.slice().sort((a, b) => b.opd.nilai - a.opd.nilai).slice(0, 10);
-
-  const ctx = document.getElementById("chartTop10").getContext("2d");
-  charts.top10?.destroy();
-
-  charts.top10 = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: sorted.map(o => o.opd.singkatan),
-      datasets: [{
-        label: "Nilai",
-        data: sorted.map(o => o.opd.nilai)
-      }]
-    },
-    options: {
-      indexAxis: "y",
-      scales: {
-        x: {
-          beginAtZero: true,
-          max: 100
-        }
-      }
-    }
-  });
-}
-
-async function renderTrend(currentYear) {
-  const years = [currentYear - 2, currentYear - 1, currentYear];
-  const dataArr = [];
-
-  for (const y of years) {
-    const res = await fetch(`${API_BASE}?tahun=${y}`).then(r => r.json()).catch(() => null);
-    dataArr.push(res?.dt?.ringkasan?.rata_rata_index ?? 0);
+    dataTable = $("#table-opd").DataTable({
+      pageLength: 10,
+      order: [
+        [3, "desc"]
+      ]
+    });
   }
 
-  const ctx = document.getElementById("chartTrend").getContext("2d");
-  charts.trend?.destroy();
-  charts.trend = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: years,
-      datasets: [{
-        label: "Rata-rata",
-        data: dataArr
-      }]
-    }
-  });
-}
+  function renderDistribusi(list) {
+    const cat = {
+      D: 0,
+      C: 0,
+      CC: 0,
+      B: 0,
+      BB: 0,
+      A: 0,
+      AA: 0
+    };
 
-function loading(sel, show) {
-  const el = document.querySelector(sel);
-  if (!el) return;
-  el.innerHTML = show ? `<img src="/assets/vendors/svg-loaders/audio.svg" style="width:3rem" alt="loading">` : "";
-}
+    list.forEach(o => {
+      const v = o.opd.nilai ?? 0;
+      if (v <= 30) cat.D++;
+      else if (v <= 50) cat.C++;
+      else if (v <= 60) cat.CC++;
+      else if (v <= 70) cat.B++;
+      else if (v <= 80) cat.BB++;
+      else if (v <= 90) cat.A++;
+      else if (v <= 100) cat.AA++;
+    });
+
+    const labels = [
+      "0–30 Sangat Buruk",
+      ">30–50 Buruk",
+      ">50–60 Cukup",
+      ">60–70 Cukup Baik",
+      ">70–80 Baik",
+      ">80–90 Sangat Baik",
+      ">90–100 Istimewa"
+    ];
+
+    const values = [cat.D, cat.C, cat.CC, cat.B, cat.BB, cat.A, cat.AA];
+    const colors = ["#dc3545", "#ff6f6f", "#ffc107", "#ffe17a", "#0d6efd", "#198754", "#009688"];
+
+    const ctx = document.getElementById("chartDistribusi").getContext("2d");
+
+    charts.distribusi?.destroy();
+    charts.distribusi = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+
+    // Buat legend 3 kolom
+    const legendContainer = document.getElementById("legend-distribusi");
+    legendContainer.innerHTML = labels.map((lbl, i) => `
+      <div><span style="background:${colors[i]}"></span>${lbl} : <b>${values[i]}</b></div>
+  `).join("");
+  }
+
+  function renderAspekAvg(list) {
+    if (!list.length) return;
+
+    const labels = list[0].radarLabels ?? [];
+    const totals = Array(labels.length).fill(0);
+    const counts = Array(labels.length).fill(0);
+
+    list.forEach(o => {
+      (o.radarData ?? []).forEach((v, i) => {
+        totals[i] += parseFloat(v);
+        counts[i]++;
+      });
+    });
+
+    const avg = totals.map((t, i) => (t / (counts[i] || 1)).toFixed(2));
+
+    const ctx = document.getElementById("chartAspekAvg").getContext("2d");
+    charts.aspek?.destroy();
+    charts.aspek = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Rata-rata Per Aspek",
+          data: avg
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  }
+
+  function renderTop10(list) {
+    const sorted = list.slice().sort((a, b) => b.opd.nilai - a.opd.nilai).slice(0, 10);
+
+    const ctx = document.getElementById("chartTop10").getContext("2d");
+    charts.top10?.destroy();
+
+    charts.top10 = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: sorted.map(o => o.opd.singkatan),
+        datasets: [{
+          label: "Nilai",
+          data: sorted.map(o => o.opd.nilai)
+        }]
+      },
+      options: {
+        indexAxis: "y",
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  }
+
+  async function renderTrend(currentYear) {
+    const years = [currentYear - 2, currentYear - 1, currentYear];
+    const dataArr = [];
+
+    for (const y of years) {
+      const res = await fetch(`${API_BASE}?tahun=${y}`).then(r => r.json()).catch(() => null);
+      dataArr.push(res?.dt?.ringkasan?.rata_rata_index ?? 0);
+    }
+
+    const ctx = document.getElementById("chartTrend").getContext("2d");
+    charts.trend?.destroy();
+    charts.trend = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: years,
+        datasets: [{
+          label: "Rata-rata",
+          data: dataArr
+        }]
+      }
+    });
+  }
+
+  function loading(sel, show) {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.innerHTML = show ? `<img src="/assets/vendors/svg-loaders/audio.svg" style="width:3rem" alt="loading">` : "";
+  }
 </script>
 <?= $this->endSection() ?>
