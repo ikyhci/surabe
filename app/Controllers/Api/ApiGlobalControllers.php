@@ -62,6 +62,7 @@ class ApiGlobalControllers extends BaseController
                         'success'   =>  0,
                         'msg'       =>  'error password tidak sama.'
                     );
+                    return $this->response->setJSON($data);
                 }
             } else {
                 $upddata = $this->db->query("CALL User_Update_data('" .
@@ -80,18 +81,15 @@ class ApiGlobalControllers extends BaseController
                     'success'   =>  1,
                     'msg'       =>  'Data dan Password Berhasil Di Perbarui.'
                 );
+                return $this->response->setJSON($data);
             } else if ($udt == 1) {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  1,
                     'msg'       =>  'Data Berhasil Di Perbarui.'
                 );
+                return $this->response->setJSON($data);
             }
-
-
-
-
-            return $this->response->setJSON($data);
         } else {
             $data = array(
                 'token_crs' =>  csrf_hash(),
