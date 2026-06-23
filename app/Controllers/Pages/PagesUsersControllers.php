@@ -3,50 +3,46 @@
 namespace App\Controllers\Pages;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
-use CodeIgniter\Cookie\Cookie;
-use CodeIgniter\Cookie\CookieStore;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-// use Exception;
 
 class PagesUsersControllers extends BaseController
 {
 
     protected $db;
     protected $decoded;
-    public function __construct(){
+    public function __construct()
+    {
 
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('Authorization', true,'__Secure-LKE_');
+        $token = get_cookie('Authorization', true, '__Secure-LKE_');
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
-    
+
     public function index()
     {
         if (!empty($this->decoded->rln)) {
             $IDX = null;
             $LIMIT = null;
-            $OFFSET =null;
-            $thn = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+            $OFFSET = null;
+            $thn = $this->db->query("CALL View_Forms('" . $IDX . "','" . $LIMIT . "','" . $OFFSET . "')")->getResult();
 
 
 
             $usr = $this->decoded->rln;
             $tahun = array();
-                foreach ($thn as $key ) {
-                    $tahun[] = $key->tahun;
-                }
+            foreach ($thn as $key) {
+                $tahun[] = $key->tahun;
+            }
             $data = array(
                 'usr'  => $usr,
                 'thn'  => array_unique($tahun),
-                 );
-            return view('Pages/user/penilaian_mandiri',$data);
-        }else{
-            return redirect()->to(base_url().'unauthorized');
+            );
+            return view('Pages/user/penilaian_mandiri', $data);
+        } else {
+            return redirect()->to(base_url() . 'unauthorized');
         }
     }
 
@@ -54,37 +50,36 @@ class PagesUsersControllers extends BaseController
     {
         if (!empty($this->decoded->rln)) {
             $usr = $this->decoded->rln;
-            
+
             $IDX = $this->request->getVar('idx');
             $LIMIT = null;
-            $OFFSET =null;
+            $OFFSET = null;
             $encode = base64_encode($IDX);
 
-            $asp = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
+            $asp = $this->db->query("CALL View_Forms('" . $IDX . "','" . $LIMIT . "','" . $OFFSET . "')")->getRow();
 
             if (!is_null($asp)) {
-                 $data = array(
+                $data = array(
                     'usr'       => $usr,
                     'token_crs' => csrf_hash(),
                     'success'   => $asp->res,
                     'msg'       => $asp->msg,
-                    'idx'       => $IDX ,
-                    
-                    'dt'        => 'dashboard/detail-form?form='.base64_encode($asp->id),
+                    'idx'       => $IDX,
+
+                    'dt'        => 'dashboard/detail-form?form=' . base64_encode($asp->id),
                     // ''
-                  );
-                return $this->response->setJSON($data);
-               
-             }else{
-                $data = array(
-                        'token_crs' =>  csrf_hash(),
-                        'success'   =>  0,
-                        'msg'       =>  'error, Data tidak di temukan.',
                 );
                 return $this->response->setJSON($data);
-             }
-        }else{
-            return redirect()->to(base_url().'unauthorized');
+            } else {
+                $data = array(
+                    'token_crs' =>  csrf_hash(),
+                    'success'   =>  0,
+                    'msg'       =>  'error, Data tidak di temukan.',
+                );
+                return $this->response->setJSON($data);
+            }
+        } else {
+            return redirect()->to(base_url() . 'unauthorized');
         }
     }
 
@@ -92,28 +87,27 @@ class PagesUsersControllers extends BaseController
     {
         if (!empty($this->decoded->rln)) {
             $usr = $this->decoded->rln;
-            
+
             $IDX = base64_decode($this->request->getVar('form'));
             $LIMIT = 1;
-            $OFFSET =null;
+            $OFFSET = null;
 
-            $asp = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getRow();
+            $asp = $this->db->query("CALL View_Forms('" . $IDX . "','" . $LIMIT . "','" . $OFFSET . "')")->getRow();
             if (!is_null($asp)) {
-                 $data = array(
+                $data = array(
                     'usr'       => $usr,
                     'token_crs' => csrf_hash(),
                     'success'   => $asp->res,
                     'msg'       => $asp->msg,
-                    'idx'       => base64_encode($IDX) ,
+                    'idx'       => base64_encode($IDX),
                     'dt'        => $asp,
-                  );
-                return view('Pages/user/detail_form',$data);
-            }else{
-                return redirect()->to(base_url().'404');
+                );
+                return view('Pages/user/detail_form', $data);
+            } else {
+                return redirect()->to(base_url() . '404');
             }
-
-        }else{
-            return redirect()->to(base_url().'unauthorized');
+        } else {
+            return redirect()->to(base_url() . 'unauthorized');
         }
     }
 

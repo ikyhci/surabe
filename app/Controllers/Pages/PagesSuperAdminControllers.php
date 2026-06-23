@@ -3,15 +3,8 @@
 namespace App\Controllers\Pages;
 
 use App\Controllers\BaseController;
-// use CodeIgniter\HTTP\ResponseInterface;
-// use CodeIgniter\Database\Database;
-use App\Models\SuperAdminModel;
-
-use CodeIgniter\Cookie\Cookie;
-use CodeIgniter\Cookie\CookieStore;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
 
 class PagesSuperAdminControllers extends BaseController
 {
@@ -19,14 +12,15 @@ class PagesSuperAdminControllers extends BaseController
     protected $superAdminModel;
     public $data;
     protected $decoded;
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
         $token = $_COOKIE['__Secure-LKE_Authorization']; // get_cookie('__LKE-Authorization');
 
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
-        
+
         $this->db = db_connect();
         $this->data = [
             // 'title' => 'Super Admin',
@@ -35,7 +29,7 @@ class PagesSuperAdminControllers extends BaseController
             'token' => $token
         ];
     }
-    
+
     public function index()
     {
         redirect()->to('/');
@@ -49,7 +43,7 @@ class PagesSuperAdminControllers extends BaseController
         return view('Pages/superadmin/manage-users', $this->data);
     }
 
-    public function manageUsersDetail($uid) 
+    public function manageUsersDetail($uid)
     {
         $this->data['first_part'] = 'user-management';
         $this->data['title'] = 'User Management';

@@ -3,12 +3,8 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
 use Exception;
 
 class ApiUserControllers extends BaseController
@@ -17,12 +13,13 @@ class ApiUserControllers extends BaseController
     protected $db;
     protected $decoded;
 
-    public function __construct(){
+    public function __construct()
+    {
         $request = request();
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
-        if(!empty($header)) {
+        if (!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
@@ -57,21 +54,21 @@ class ApiUserControllers extends BaseController
     //         return $this->response->setJSON($data);
     //     }
     // }
-    
+
     public function getDashboard()
     {
         //
         try {
             if (!empty($this->decoded->aud)) {
                 $IDX = null;
-                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
-                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
-                $thn = $this->db->query("CALL View_Forms('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null;
+                $OFFSET = $this->request->getVar('ofs') ? $this->request->getVar('ofs') : null;
+                $thn = $this->db->query("CALL View_Forms('" . $IDX . "','" . $LIMIT . "','" . $OFFSET . "')")->getResult();
 
 
                 // $usr = $this->decoded->rln;
                 $tahun = array();
-                foreach ($thn as $key ) {
+                foreach ($thn as $key) {
                     $tahun[] = $key->tahun;
                 }
                 $data = array(
@@ -81,7 +78,7 @@ class ApiUserControllers extends BaseController
                     'msg'       =>  'success',
                 );
                 return $this->response->setJSON($data);
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -89,12 +86,11 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
         }
@@ -106,11 +102,11 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
 
-                $nlx = $this->db->query("CALL View_Dashboard_User('".
-                    $this->decoded->ids."','".
-                    $this->request->getVar('thn')."','".
-                    $this->request->getVar('apv')."')")->getResult();
-                
+                $nlx = $this->db->query("CALL View_Dashboard_User('" .
+                    $this->decoded->ids . "','" .
+                    $this->request->getVar('thn') . "','" .
+                    $this->request->getVar('apv') . "')")->getResult();
+
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -118,8 +114,7 @@ class ApiUserControllers extends BaseController
                     'msg'       =>  'success',
                 );
                 return $this->response->setJSON($data);
-
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -127,12 +122,11 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
         }
@@ -144,7 +138,7 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
                 // code...
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -152,15 +146,14 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-        } 
+        }
     }
 
     public function getPenilaianMandiri()
@@ -169,12 +162,12 @@ class ApiUserControllers extends BaseController
             if (!empty($this->decoded->aud)) {
 
                 // $IDX = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
-                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
-                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
-                $thn = $this->request->getVar('thn')? $this->request->getVar('thn') : null;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null;
+                $OFFSET = $this->request->getVar('ofs') ? $this->request->getVar('ofs') : null;
+                $thn = $this->request->getVar('thn') ? $this->request->getVar('thn') : null;
                 $uid = $this->decoded->ids;
                 // $list = $this->db->query("call View_Aspek('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
-                $list = $this->db->query("call View_Penilaian_Mandiri('".$thn."','".$uid."')")->getResult();
+                $list = $this->db->query("call View_Penilaian_Mandiri('" . $thn . "','" . $uid . "')")->getResult();
                 $data = array(
                     'token_crs' => csrf_hash(),
                     'dt'        => $list,
@@ -183,7 +176,7 @@ class ApiUserControllers extends BaseController
                 );
 
                 return $this->response->setJSON($data);
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -191,15 +184,13 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -208,10 +199,10 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
                 $IDX = base64_decode($this->request->getVar('form'));
-                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
-                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null;
+                $OFFSET = $this->request->getVar('ofs') ? $this->request->getVar('ofs') : null;
                 $uid = $this->decoded->ids;
-                $list = $this->db->query("call View_List_Data_Soal_User('".$IDX."','".$LIMIT."','".$OFFSET."','".$uid."')")->getResult();
+                $list = $this->db->query("call View_List_Data_Soal_User('" . $IDX . "','" . $LIMIT . "','" . $OFFSET . "','" . $uid . "')")->getResult();
                 $data = array(
                     'token_crs' => csrf_hash(),
                     'dt'        =>  $list,
@@ -220,7 +211,7 @@ class ApiUserControllers extends BaseController
                 );
 
                 return $this->response->setJSON($data);
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -228,15 +219,13 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -246,14 +235,14 @@ class ApiUserControllers extends BaseController
             if (!empty($this->decoded->aud)) {
                 // 
                 $IDX = $this->request->getVar('idx');
-                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
-                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null;
+                $OFFSET = $this->request->getVar('ofs') ? $this->request->getVar('ofs') : null;
                 $userid = $this->decoded->ids;
-                $indk = $this->db->query("call View_Indikator('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getRow();
-                $prmt = $this->db->query("call View_Parameter('".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
-                $bkd  = $this->db->query("call View_Bukti_dukung('".$IDX."','".$userid."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $indk = $this->db->query("call View_Indikator('" . $IDX . "','" . $userid . "','" . $LIMIT . "','" . $OFFSET . "')")->getRow();
+                $prmt = $this->db->query("call View_Parameter('" . $IDX . "','" . $LIMIT . "','" . $OFFSET . "')")->getResult();
+                $bkd  = $this->db->query("call View_Bukti_dukung('" . $IDX . "','" . $userid . "','" . $LIMIT . "','" . $OFFSET . "')")->getResult();
 
-                $flx = $this->db->query("CALL View_UploadFile(null,'".$userid."','".$IDX."','".$LIMIT."','".$OFFSET."')")->getResult();
+                $flx = $this->db->query("CALL View_UploadFile(null,'" . $userid . "','" . $IDX . "','" . $LIMIT . "','" . $OFFSET . "')")->getResult();
 
                 $data = array(
                     'token_crs' => csrf_hash(),
@@ -268,7 +257,7 @@ class ApiUserControllers extends BaseController
                 );
 
                 return $this->response->setJSON($data);
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -276,17 +265,14 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
-
     }
 
     public function saveJawaban()
@@ -298,18 +284,18 @@ class ApiUserControllers extends BaseController
                 $id     = $this->request->getVar('idx') ? $this->request->getVar('idx') : null;
                 $indkt  = $this->request->getVar('indikator');
                 $nama   = $this->request->getVar('jwbn');
-                $userid = $this->decoded->ids;//$this->decoded->userid
+                $userid = $this->decoded->ids; //$this->decoded->userid
                 // $idjwb  = $this->request->getVar('jwbxid'): null;
                 // $valFile = [];
                 // $valFile2 = [];
 
-                $save = $this->db->query("CALL Jawaban_add_edit('".
-                    $userid."','".
-                    $id."','".
-                    $nama."','".
-                    $indkt."')")->getRow();
+                $save = $this->db->query("CALL Jawaban_add_edit('" .
+                    $userid . "','" .
+                    $id . "','" .
+                    $nama . "','" .
+                    $indkt . "')")->getRow();
 
-                $getFl = $this->db->query("CALL View_File_For_Upload('".$indkt."','".$userid."',null,null)")->getResult();
+                $getFl = $this->db->query("CALL View_File_For_Upload('" . $indkt . "','" . $userid . "',null,null)")->getResult();
 
                 foreach ($getFl as $key) {
 
@@ -343,26 +329,25 @@ class ApiUserControllers extends BaseController
                             $newName = $this->request->getFile($key->id)->getRandomName();
                             // $valFile[] = $key->id;
                             $this->request->getFile($key->id)->move('uploadfile', $newName);
-                            $savebukti = $this->db->query("CALL upload_bukti_add_edit('".
-                                $userid."','".
-                                $id."','".
-                                $key->id."','".
-                                $newName."')")->getRow();
+                            $savebukti = $this->db->query("CALL upload_bukti_add_edit('" .
+                                $userid . "','" .
+                                $id . "','" .
+                                $key->id . "','" .
+                                $newName . "')")->getRow();
                         }
                     }
-                    
                 }
 
                 $data = array(
                     'token_crs' => csrf_hash(),
                     'success'   => 1,
-                    'msg'       => 'Tambah Data Berhasil :'.$save->msg,
-                        // 'filesx'    => $valFile,
-                        // 'filex2'    => $valFile2,
+                    'msg'       => 'Tambah Data Berhasil :' . $save->msg,
+                    // 'filesx'    => $valFile,
+                    // 'filex2'    => $valFile2,
                 );
                 return $this->response->setJSON($data);
                 // 
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -370,15 +355,13 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
             return $this->response->setJSON($data);
-            
         }
     }
 
@@ -387,15 +370,15 @@ class ApiUserControllers extends BaseController
         try {
             if (!empty($this->decoded->aud)) {
                 $FLS = $this->request->getVar('filesx');
-                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null ;
-                $OFFSET =$this->request->getVar('ofs') ? $this->request->getVar('ofs') : null ;
+                $LIMIT = $this->request->getVar('lmt') ? $this->request->getVar('lmt') : null;
+                $OFFSET = $this->request->getVar('ofs') ? $this->request->getVar('ofs') : null;
                 $uid = $this->decoded->ids;
 
-                $list = $this->db->query("call upload_bukti_delete('".$FLS."','".$uid."')")->getRow();
+                $list = $this->db->query("call upload_bukti_delete('" . $FLS . "','" . $uid . "')")->getRow();
                 if ($list->res = 1) {
-                    unlink('uploadfile/'.$FLS);
+                    unlink('uploadfile/' . $FLS);
                 }
-                
+
 
                 $data = array(
                     'token_crs' => csrf_hash(),
@@ -406,7 +389,7 @@ class ApiUserControllers extends BaseController
                 );
 
                 return $this->response->setJSON($data);
-            }else{
+            } else {
                 $data = array(
                     'token_crs' =>  csrf_hash(),
                     'success'   =>  0,
@@ -414,14 +397,13 @@ class ApiUserControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-
         } catch (Exception $e) {
             $data = array(
                 'token_crs' =>  csrf_hash(),
                 'success'   =>  0,
-                'msg'       =>  'error in : '.$e,
+                'msg'       =>  'error in : ' . $e,
             );
-            return $this->response->setJSON($data); 
+            return $this->response->setJSON($data);
         }
     }
 }

@@ -26,30 +26,30 @@ class RateLimitFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         //
-            $ip     = $request->getIPAddress();
-            $method = strtolower($request->getMethod());
+        $ip     = $request->getIPAddress();
+        $method = strtolower($request->getMethod());
 
-            // hanya cek GET, POST, PUT
-            if (! in_array($method, ['get', 'post', 'put'])) {
-                return;
-            }
+        // hanya cek GET, POST, PUT
+        if (! in_array($method, ['get', 'post', 'put'])) {
+            return;
+        }
 
-            $cache = cache();
-            $key   = "rate_limit_{$ip}_{$method}";
+        $cache = cache();
+        $key   = "rate_limit_{$ip}_{$method}";
 
-            // ambil counter, default 0
-            $count = $cache->get($key) ?? 0;
+        // ambil counter, default 0
+        $count = $cache->get($key) ?? 0;
 
-            $count++;
+        $count++;
 
-            // simpan dengan TTL 10 detik 
-            $cache->save($key, $count, 10);
+        // simpan dengan TTL 10 detik 
+        $cache->save($key, $count, 1);
 
-            if ($count > 10) {
-                return service('response')
-                    ->setStatusCode(429) // Too Many Requests
-                    ->setBody("Too many {$method} requests from your IP. Please wait a minute.");
-            }
+        if ($count > 10) {
+            return service('response')
+                ->setStatusCode(429) // Too Many Requests
+                ->setBody("Too many {$method} requests from your IP. Please wait a minute.");
+        }
     }
 
     /**

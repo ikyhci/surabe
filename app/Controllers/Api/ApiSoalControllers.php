@@ -3,12 +3,8 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
 use Exception;
 
 class ApiSoalControllers extends BaseController

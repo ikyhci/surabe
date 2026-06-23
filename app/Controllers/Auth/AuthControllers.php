@@ -3,24 +3,21 @@
 namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Cookie\Cookie;
-use CodeIgniter\Cookie\CookieStore;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
 
 class AuthControllers extends BaseController
 {
     protected $db;
+    protected $decoded;
+
     public function __construct()
     {
         // helper('cookie');
         $this->db = db_connect();
     }
-    
+
     public function index()
     {
         //
@@ -34,19 +31,18 @@ class AuthControllers extends BaseController
             'username' => 'required|trim|regex_match[/^[a-zA-Z0-9@.]+$/]|min_length[4]',
             'password' => 'required|trim|min_length[4]',
             'captcha'   => 'required',
-        ]))
-        {
+        ])) {
             // $stored = cache()->get($key);//session()->get('captcha_code');
             // $captcha = strtoupper($this->request->getVar('captcha'));
             $unm = $this->request->getVar('username');
             $psw = $this->request->getVar('password');
-            $stored = cache()->get('captcha_'.$this->request->getVar('token'));
+            $stored = cache()->get('captcha_' . $this->request->getVar('token'));
             if ($stored !== strtoupper($this->request->getVar('captcha'))) {
-            // if ($captcha === $stored) {
+                // if ($captcha === $stored) {
                 // $chek = $this->db->query("CALL User_Auth('".$unm."','".$psw."')")->getRow();
                 $sql = "CALL User_Auth(?, ?)";
                 $chek = $this->db->query($sql, [$unm, $psw])->getRow();
-                if ($chek->res == 0 ) {
+                if ($chek->res == 0) {
                     $data = array(
                         'token'     =>  '',
                         'token_crs' =>  csrf_hash(),
@@ -54,21 +50,20 @@ class AuthControllers extends BaseController
                         'msg'       =>  $chek->msg
                     );
 
-                    return $this->response->setJSON($data); 
+                    return $this->response->setJSON($data);
                 }
-                if ($chek->res == 1 ) 
-                {
+                if ($chek->res == 1) {
                     if ($chek->actv == "TRUE") {
                         $key = getenv('TOKEN_SECRET');
-                        $iat = time(); 
+                        $iat = time();
                         $exp = $iat + 60 * 60 * 60 * 6;
 
                         $payload = array(
                             "iss" => $chek->FullName,
                             "aud" => $chek->UserName,
                             "sub" => "Login LKE APP",
-                            "iat" => $iat, 
-                            "exp" => $exp, 
+                            "iat" => $iat,
+                            "exp" => $exp,
                             "ids" => $chek->uid,
                             "rln" => $chek->RoleName,
                         );
@@ -90,27 +85,27 @@ class AuthControllers extends BaseController
                             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
                         } else {
                             $ip = $_SERVER['REMOTE_ADDR'];
-                        } 
+                        }
 
-                        $logs = $this->db->query("CALL log_user('".$chek->uid."','".$ip."', 'LOGIN')");
+                        $logs = $this->db->query("CALL log_user('" . $chek->uid . "','" . $ip . "', 'LOGIN')");
 
                         setcookie(
-                        // '__Secure-Authorization',
+                            // '__Secure-Authorization',
                             '__Secure-LKE_Authorization',
-                            $token,[
-                                'expires'=>$exp,
+                            $token,
+                            [
+                                'expires' => $exp,
                                 //'prefix' => '__Secure-',
                                 // 'prefix' => '__LKE-',
-                                'path'=>'/',
-                                'domain'=> '',
-                                'secure'=>true,
-                                'httponly'=>true,
-                                'samesite'=>Cookie::SAMESITE_LAX,
+                                'path' => '/',
+                                'domain' => '',
+                                'secure' => true,
+                                'httponly' => true,
+                                'samesite' => Cookie::SAMESITE_LAX,
                             ]
                         );
                         return $this->response->setJSON($data);
-
-                    }else{
+                    } else {
                         $data = array(
                             'token'     =>  '',
                             'token_crs' =>  csrf_hash(),
@@ -119,7 +114,7 @@ class AuthControllers extends BaseController
                         );
                         return $this->response->setJSON($data);
                     }
-                }else{
+                } else {
                     $data = array(
                         'token'     =>  '',
                         'token_crs' =>  csrf_hash(),
@@ -128,7 +123,7 @@ class AuthControllers extends BaseController
                     );
                     return $this->response->setJSON($data);
                 }
-            }else{
+            } else {
                 $data = array(
                     'token'     =>  '',
                     'token_crs' =>  csrf_hash(),
@@ -137,8 +132,7 @@ class AuthControllers extends BaseController
                 );
                 return $this->response->setJSON($data);
             }
-            
-        }else{
+        } else {
             $data = array(
                 'token'     =>  '',
                 'token_crs' =>  csrf_hash(),
@@ -155,7 +149,7 @@ class AuthControllers extends BaseController
         $token = null;
         $header = $request->getHeader("Authorization");
         $key = getenv('TOKEN_SECRET');
-        if(!empty($header)) {
+        if (!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
@@ -170,35 +164,36 @@ class AuthControllers extends BaseController
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
             $ip = $_SERVER['REMOTE_ADDR'];
-        } 
+        }
         $sql = "CALL log_user(?,?,?)";
-        $logs = $this->db->query($sql, [$id, $ip, 'LOGOUT']);//"CALL log_user('".$id."','".$ip."', 'LOGOUT')");
+        $logs = $this->db->query($sql, [$id, $ip, 'LOGOUT']); //"CALL log_user('".$id."','".$ip."', 'LOGOUT')");
 
         setcookie(
             // '__Secure-Authorization',
             '__Secure-LKE_Authorization',
-            '',[
-                'expires'=>'',
+            '',
+            [
+                'expires' => '',
                 //'prefix' => '__Secure-',
                 // 'prefix' => '__LKE-',
-                'path'=>'/',
-                'domain'=> '',
-                'secure'=>true,
-                'httponly'=>true,
-                'samesite'=>Cookie::SAMESITE_LAX,
+                'path' => '/',
+                'domain' => '',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => Cookie::SAMESITE_LAX,
             ]
         );
         // delete_cookie('__Secure-Authorization');
         delete_cookie('__Secure-LKE_Authorization');
-        
+
         $data = array(
             'token_crs' =>  csrf_hash(),
             'success'   =>  1,
             'msg'       =>  'success',
-            'redirec'   => base_url().'',
+            'redirec'   => base_url() . '',
         );
         return $this->response->setJSON($data);
-        
+
         // return redirect()->to(base_url().'login');
     }
 }

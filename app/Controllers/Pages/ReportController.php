@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers\Pages;
+
 use App\Controllers\BaseController;
 use App\Models\LkeModel;
 use App\Models\LkeUser;
@@ -10,7 +11,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -18,17 +18,18 @@ class ReportController extends BaseController
 {
     protected $lkeModel;
     protected $LkeUser;
-
+    protected $DashboardModel;
     protected $decoded;
+
 
     public function __construct()
     {
 
         helper('cookie');
         $key = getenv('TOKEN_SECRET');
-        $token = get_cookie('Authorization', true,'__Secure-LKE_');
+        $token = get_cookie('Authorization', true, '__Secure-LKE_');
         if (!$token) {
-            return redirect()->to(base_url().'unauthorized');
+            return redirect()->to(base_url() . 'unauthorized');
         }
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
 
@@ -44,70 +45,68 @@ class ReportController extends BaseController
         $data = [
             'title' => 'Laporan Evaluasi SPBE'
         ];
-        
+
         return view('dashboard/report/index', $data);
     }
 
-public function getEvaluasiLengkap()
-{
-    $tahun = $this->request->getGet('tahun') ?? date('Y');
-    $update = $this->request->getGet('update') ?? false;
-    $uid = $this->decoded->ids;
-    
-    $cache = \Config\Services::cache();
-    // pd($update);
-    // buat key unik berdasarkan tahun
-    $cacheKey = 'evaluasi_lengkap_' . $uid . $tahun;
-    $opd_id = null;
-    $opdUser = $this->LkeUser->opd_user($uid);
-    if(count($opdUser) >= 1 && $this->decoded->iss == 'User') {
-        $opd_id = $opdUser[0]['opd_id'];
-    }
-    try {
-        // coba ambil dari cache dulu
-        $evaluasiData = $cache->get($cacheKey);
+    public function getEvaluasiLengkap()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        $update = $this->request->getGet('update') ?? false;
+        $uid = $this->decoded->ids;
 
-        if ($evaluasiData === null || $update === 'true' || $update === true) {
-            // jika belum ada, ambil dari model
-            $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun, $opd_id, $update);
+        $cache = \Config\Services::cache();
+        // pd($update);
+        // buat key unik berdasarkan tahun
+        $cacheKey = 'evaluasi_lengkap_' . $uid . $tahun;
+        $opd_id = null;
+        $opdUser = $this->LkeUser->opd_user($uid);
+        if (count($opdUser) >= 1 && $this->decoded->iss == 'User') {
+            $opd_id = $opdUser[0]['opd_id'];
+        }
+        try {
+            // coba ambil dari cache dulu
+            $evaluasiData = $cache->get($cacheKey);
 
-            // simpan ke cache selama 10 menit (600 detik) 24jam =86400
-            $cache->save($cacheKey, $evaluasiData, 86400);
+            if ($evaluasiData === null || $update === 'true' || $update === true) {
+                // jika belum ada, ambil dari model
+                $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun, $opd_id, $update);
+
+                // simpan ke cache selama 10 menit (600 detik) 24jam =86400
+                $cache->save($cacheKey, $evaluasiData, 86400);
+            }
+
+            $data = [
+                'token_crs' => csrf_hash(),
+                'dt'        => $evaluasiData,
+                'success'   => 1,
+                'msg'       => 'Data evaluasi lengkap berhasil diambil'
+            ];
+        } catch (\Exception $e) {
+            $data = [
+                'token_crs' => csrf_hash(),
+                'dt'        => null,
+                'success'   => 0,
+                'msg'       => 'Gagal mengambil data evaluasi lengkap: ' . $e->getMessage()
+            ];
         }
 
-        $data = [
-            'token_crs' => csrf_hash(),
-            'dt'        => $evaluasiData,
-            'success'   => 1,
-            'msg'       => 'Data evaluasi lengkap berhasil diambil'
-        ];
-
-    } catch (\Exception $e) {
-        $data = [
-            'token_crs' => csrf_hash(),
-            'dt'        => null,
-            'success'   => 0,
-            'msg'       => 'Gagal mengambil data evaluasi lengkap: ' . $e->getMessage()
-        ];
+        return $this->response->setJSON($data);
     }
-
-    return $this->response->setJSON($data);
-}
 
     public function getRingkasanEvaluasi()
     {
         $tahun = $this->request->getGet('tahun') ?? date('Y');
-        
+
         try {
             $ringkasan = $this->lkeModel->getRingkasanEvaluasi($tahun);
-            
+
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $ringkasan,
                 'success'   => 1,
                 'msg'       => 'Data ringkasan evaluasi berhasil diambil'
             );
-            
         } catch (\Exception $e) {
             $data = array(
                 'token_crs' => csrf_hash(),
@@ -116,24 +115,23 @@ public function getEvaluasiLengkap()
                 'msg'       => 'Gagal mengambil ringkasan evaluasi: ' . $e->getMessage()
             );
         }
-        
+
         return $this->response->setJSON($data);
     }
 
     public function getOpdAspekData()
     {
         $tahun = $this->request->getGet('tahun') ?? date('Y');
-        
+
         try {
             $opdData = $this->lkeModel->getOpdWithAspekValuesSimple($tahun);
-            
+
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $opdData,
                 'success'   => 1,
                 'msg'       => 'Data OPD dengan nilai aspek berhasil diambil'
             );
-            
         } catch (\Exception $e) {
             $data = array(
                 'token_crs' => csrf_hash(),
@@ -142,7 +140,7 @@ public function getEvaluasiLengkap()
                 'msg'       => 'Gagal mengambil data: ' . $e->getMessage()
             );
         }
-        
+
         return $this->response->setJSON($data);
     }
 
@@ -162,7 +160,7 @@ public function getEvaluasiLengkap()
             $sheet->mergeCells("A{$row}:G{$row}");
             $sheet->getStyle("A{$row}")->getFont()->setBold(true)->setSize(14);
             $sheet->getStyle("A{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            
+
             // Ringkasan
             $row++; // Move to next row
             // $ringkasan = $evaluasiData['ringkasan'];
@@ -176,9 +174,9 @@ public function getEvaluasiLengkap()
             // $row++;
             $row++;
             // Table headers
-            $sheet->setCellValue('A'.$row, 'No');
-            $sheet->setCellValue('B'.$row, 'Instansi');
-            $sheet->setCellValue('C'.$row, 'Index RB');
+            $sheet->setCellValue('A' . $row, 'No');
+            $sheet->setCellValue('B' . $row, 'Instansi');
+            $sheet->setCellValue('C' . $row, 'Index RB');
             // $sheet->setCellValue('D'.$row, 'Predikat');
 
             // Dynamic aspek headers
@@ -232,7 +230,6 @@ public function getEvaluasiLengkap()
 
             $writer->save('php://output');
             exit;
-
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'success' => 0,
@@ -244,100 +241,100 @@ public function getEvaluasiLengkap()
     public function exportPDF()
     {
         $tahun = $this->request->getGet('tahun') ?? date('Y');
-        
+
         try {
             // Load TCPDF library (install via composer)
             // composer require tecnickcom/tcpdf
-            
+
             $evaluasiData = $this->lkeModel->getEvaluasiLengkap($tahun);
-            
+
             // Set orientation to Landscape
             $pdf = new \TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            
+
             // Set document information
             $pdf->SetCreator('SURABE BERANI');
             $pdf->SetTitle('Laporan Evaluasi SPBE ' . $tahun);
             $pdf->SetSubject('Laporan Evaluasi SPBE');
             $pdf->SetKeywords('LKE, SPBE, Evaluasi, Laporan, surabe, berani');
-            
+
             // Set header and footer
             $pdf->setHeaderFont(['helvetica', '', 10]);
             $pdf->setFooterFont(['helvetica', '', 8]);
-            
+
             // Set header data
             // $pdf->SetHeaderData('', 0, 'Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah ' . $tahun, 'SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK BERINTEGRITAS DAN MANDIRI');
             $pdf->SetHeaderData('', 0, 'SURABE BERANI', 'SISTEM PENGUKURAN REFORMASI BIROKRASI ELEKTRONIK BERINTEGRITAS DAN MANDIRI');
-            
+
             // Set margins for landscape
             $pdf->SetMargins(10, 25, 10); // Reduced margins
             $pdf->SetHeaderMargin(10);
             $pdf->SetFooterMargin(10);
-            
+
             // Set auto page breaks
             $pdf->SetAutoPageBreak(TRUE, 20);
-            
+
             // Add page
             $pdf->AddPage();
-            
+
             // Remove default header for first page to create custom header
             $pdf->setPrintHeader(false);
-            
+
             // Custom Title
             $pdf->SetFont('helvetica', 'B', 18);
             $pdf->Cell(0, 12, 'Laporan Hasil Evaluasi Indeks Reformasi Birokrasi Pemerintah Daerah ' . $tahun, 0, 1, 'C');
             $pdf->Ln(3);
-            
+
             // // Subtitle
             // $pdf->SetFont('helvetica', '', 12);
             // $pdf->Cell(0, 8, 'Sistem Evaluasi Laporan Kinerja Evaluasi', 0, 1, 'C');
             // $pdf->Ln(8);
-            
+
             // Enable header for next pages
             $pdf->setPrintHeader(true);
-            
+
             // Ringkasan Section
             $ringkasan = $evaluasiData['ringkasan'];
             $pdf->SetFont('helvetica', 'B', 14);
             $pdf->Cell(0, 10, 'RINGKASAN EVALUASI', 0, 1, 'L');
             $pdf->Ln(2);
-            
+
             // Ringkasan in box style
             $pdf->SetFont('helvetica', '', 11);
             $pdf->SetFillColor(240, 240, 240);
-            
+
             // Create a summary box
             $boxWidth = 65;
             $boxHeight = 8;
-            
+
             // Row 1
             $pdf->Cell($boxWidth, $boxHeight, 'Total Instansi', 1, 0, 'L', true);
             $pdf->Cell(5, $boxHeight, ':', 1, 0, 'C', true);
             $pdf->Cell(30, $boxHeight, $ringkasan['total_instansi'] . ' Instansi', 1, 0, 'L', true);
-            
+
             $pdf->Cell(20, $boxHeight, '', 0, 0, 'L'); // Spacer
-            
+
             $pdf->Cell($boxWidth, $boxHeight, 'Rata-rata Index', 1, 0, 'L', true);
             $pdf->Cell(5, $boxHeight, ':', 1, 0, 'C', true);
             $pdf->Cell(30, $boxHeight, $ringkasan['rata_rata_index'], 1, 1, 'L', true);
-            
+
             // Row 2
             $pdf->Cell($boxWidth, $boxHeight, 'Nilai Tertinggi', 1, 0, 'L', true);
             $pdf->Cell(5, $boxHeight, ':', 1, 0, 'C', true);
             $pdf->Cell(30, $boxHeight, $ringkasan['tertinggi'], 1, 0, 'L', true);
-            
+
             $pdf->Cell(20, $boxHeight, '', 0, 0, 'L'); // Spacer
-            
+
             $pdf->Cell($boxWidth, $boxHeight, 'Nilai Terendah', 1, 0, 'L', true);
             $pdf->Cell(5, $boxHeight, ':', 1, 0, 'C', true);
             $pdf->Cell(30, $boxHeight, $ringkasan['terendah'], 1, 1, 'L', true);
-            
+
             $pdf->Ln(10);
-            
+
             // Table Section
             $pdf->SetFont('helvetica', 'B', 14);
             $pdf->Cell(0, 10, 'DAFTAR HASIL EVALUASI', 0, 1, 'L');
             $pdf->Ln(2);
-            
+
             // Calculate column widths for landscape (A4 landscape = 297mm - 20mm margins = 277mm)
             $pageWidth = 277; // Available width in landscape
             $noWidth = 10;
@@ -346,56 +343,56 @@ public function getEvaluasiLengkap()
             $instansiWidth = 65 + $predikatWidth; // Reduced for better fit
             $predikatWidth = 0;
 
-            
+
             // Calculate remaining width for aspek columns
             $usedWidth = $noWidth + $instansiWidth + $indexWidth + $predikatWidth;
             $remainingWidth = $pageWidth - $usedWidth;
-            
+
             // Dynamic aspek width based on number of aspek
             $aspekCount = 0;
             if (!empty($evaluasiData['data_opd'])) {
                 $aspekCount = count($evaluasiData['data_opd'][0]['aspek_values']);
             }
             $aspekWidth = $aspekCount > 0 ? $remainingWidth / $aspekCount : 30;
-            
+
             // Ensure minimum width for aspek columns
             if ($aspekWidth < 20) {
                 $aspekWidth = 20;
             }
-            
+
             // Table headers with wrap text
             $pdf->SetFont('helvetica', 'B', 10);
             $pdf->SetFillColor(220, 220, 220);
-            
+
             // Header row height
             $headerHeight = 18;
-            
+
             // Save current position
             $startY = $pdf->GetY();
-            
+
             // Draw header cells with MultiCell for text wrapping
             $currentX = $pdf->GetX();
-            
+
             // No column
             $pdf->SetXY($currentX, $startY);
             $pdf->MultiCell($noWidth, $headerHeight, 'No', 1, 'C', true, 0);
             $currentX += $noWidth;
-            
+
             // Nama Instansi column
             $pdf->SetXY($currentX, $startY);
             $pdf->MultiCell($instansiWidth, $headerHeight, 'Nama Instansi', 1, 'C', true, 0);
             $currentX += $instansiWidth;
-            
+
             // Index SPBE column
             $pdf->SetXY($currentX, $startY);
             $pdf->MultiCell($indexWidth, $headerHeight, 'Index RB', 1, 'C', true, 0);
             $currentX += $indexWidth;
-            
+
             // // Predikat column
             // $pdf->SetXY($currentX, $startY);
             // $pdf->MultiCell($predikatWidth, $headerHeight, 'Predikat', 1, 'C', true, 0);
             // $currentX += $predikatWidth;
-            
+
             // Dynamic aspek headers with text wrapping
             if (!empty($evaluasiData['data_opd'])) {
                 foreach ($evaluasiData['data_opd'][0]['aspek_values'] as $aspek) {
@@ -406,17 +403,17 @@ public function getEvaluasiLengkap()
                     $currentX += $aspekWidth;
                 }
             }
-            
+
             // Move to next line after headers
             $pdf->SetY($startY + $headerHeight);
-            
+
             // Table data with wrap text
             $pdf->SetFont('helvetica', '', 10);
             $pdf->SetFillColor(255, 255, 255);
-            
+
             // Set uniform row height for all data rows
             $uniformRowHeight = 15; // Fixed height for all rows
-            
+
             $rowCount = 0;
             foreach ($evaluasiData['data_opd'] as $index => $opd) {
                 // Alternate row colors
@@ -426,39 +423,39 @@ public function getEvaluasiLengkap()
                 } else {
                     $pdf->SetFillColor(255, 255, 255);
                 }
-                
+
                 // Save current position
                 $startY = $pdf->GetY();
                 $currentX = $pdf->GetX();
-                
+
                 // Check if we need a new page
                 if ($startY + $uniformRowHeight > $pdf->getPageHeight() - 30) {
                     $pdf->AddPage();
                     $startY = $pdf->GetY();
                 }
-                
+
                 // No column
                 $pdf->SetXY($currentX, $startY);
                 $pdf->MultiCell($noWidth, $uniformRowHeight, $index + 1, 1, 'C', $fill, 0);
                 $currentX += $noWidth;
-                
+
                 // Nama OPD column with text wrapping
                 $pdf->SetXY($currentX, $startY);
                 $namaOpd = $this->wrapText($opd['nama_opd'], 40, 5);
                 $pdf->MultiCell($instansiWidth, $uniformRowHeight, $namaOpd, 1, 'L', $fill, 0);
                 $currentX += $instansiWidth;
-                
+
                 // Index SPBE column
                 $pdf->SetXY($currentX, $startY);
                 $pdf->MultiCell($indexWidth, $uniformRowHeight, $opd['nilai_akhir'], 1, 'C', $fill, 0);
                 $currentX += $indexWidth;
-                
+
                 // // Predikat column
                 // $pdf->SetXY($currentX, $startY);
                 // $predikat = $this->getPredikat($opd['nilai_akhir']);
                 // $pdf->MultiCell($predikatWidth, $uniformRowHeight, $predikat, 1, 'C', $fill, 0);
                 // $currentX += $predikatWidth;
-                
+
                 // Aspek values
                 if (isset($opd['aspek_values'])) {
                     foreach ($opd['aspek_values'] as $aspek) {
@@ -467,33 +464,32 @@ public function getEvaluasiLengkap()
                         $currentX += $aspekWidth;
                     }
                 }
-                
+
                 // Move to next row with uniform height
                 $pdf->SetY($startY + $uniformRowHeight);
                 $rowCount++;
             }
-            
+
             // Footer information
             $pdf->Ln(10);
             $pdf->SetFont('helvetica', 'I', 8);
             $pdf->Cell(0, 5, 'Laporan dibuat pada: ' . date('d/m/Y H:i:s'), 0, 1, 'L');
-            
+
             // // Legend for Predikat
             // $pdf->Ln(5);
             // $pdf->SetFont('helvetica', 'B', 10);
             // $pdf->Cell(0, 6, 'Keterangan Predikat:', 0, 1, 'L');
-            
+
             // $pdf->SetFont('helvetica', '', 9);
             // $pdf->Cell(40, 5, 'Sangat Baik: >= 85', 0, 0, 'L');
             // $pdf->Cell(30, 5, 'Baik: 70-84', 0, 0, 'L');
             // $pdf->Cell(30, 5, 'Kurang: 55-69', 0, 0, 'L');
             // $pdf->Cell(30, 5, 'Buruk: < 55', 0, 1, 'L');
-            
+
             // Output PDF
             $filename = "Laporan_Evaluasi_SPBE_{$tahun}.pdf";
             $pdf->Output($filename, 'D');
             exit;
-            
         } catch (\Exception $e) {
             log_message('error', 'Export PDF Error: ' . $e->getMessage());
             return $this->response->setJSON([
@@ -547,28 +543,28 @@ public function getEvaluasiLengkap()
             $pdf->SetFont('helvetica', 'B', 12);
             $pdf->Cell(0, 8, 'INFORMASI PERANGKAT DAERAH', 0, 1, 'L');
             $pdf->Ln(2);
-            
+
             $pdf->SetFont('helvetica', '', 11);
             $pdf->SetFillColor(240, 240, 240);
-            
+
             // OPD Details with adjusted widths for landscape
             $boxHeight = 8;
             $labelWidth = 80;
             $colonWidth = 5;
             $valueWidth = 180;
-            
+
             $pdf->Cell($labelWidth, $boxHeight, 'Nama OPD', 1, 0, 'L', true);
             $pdf->Cell($colonWidth, $boxHeight, ':', 1, 0, 'C', true);
             $pdf->Cell($valueWidth, $boxHeight, $opd->nama_opd, 1, 1, 'L', true);
-            
+
             $pdf->Cell($labelWidth, $boxHeight, 'Singkatan', 1, 0, 'L', true);
             $pdf->Cell($colonWidth, $boxHeight, ':', 1, 0, 'C', true);
             $pdf->Cell($valueWidth, $boxHeight, $opd->singkatan, 1, 1, 'L', true);
-            
+
             $pdf->Cell($labelWidth, $boxHeight, 'Nilai Akhir', 1, 0, 'L', true);
             $pdf->Cell($colonWidth, $boxHeight, ':', 1, 0, 'C', true);
             $pdf->Cell($valueWidth, $boxHeight, number_format($opd->nilai, 2), 1, 1, 'L', true);
-            
+
             $pdf->Ln(10);
             $pdf->setPrintHeader(true);
 
@@ -637,23 +633,23 @@ public function getEvaluasiLengkap()
 
             foreach ($allAspek as $aspekItem) {
                 $kode = $aspekItem->instrumen_nums . '.' . $aspekItem->aspek_nums;
-                
+
                 // Calculate row height
                 $height = max($pdf->getStringHeight($colWidths[2], $aspekItem->nama_aspek), 8);
-                
+
                 $pdf->MultiCell($colWidths[0], $height, $no++, 1, 'C', false, 0);
                 $pdf->MultiCell($colWidths[1], $height, $kode, 1, 'C', false, 0);
                 $pdf->MultiCell($colWidths[2], $height, $aspekItem->nama_aspek, 1, 'L', false, 0);
                 $pdf->MultiCell($colWidths[3], $height, number_format($aspekItem->nilai, 2), 1, 'C', false, 1);
-                
+
                 // Collect data for radar chart
                 $radarData[] = floatval($aspekItem->nilai);
-                
+
                 // Create shorter label for radar
                 $labelText = $kode . '. ';
-                $labelText .= strlen($aspekItem->nama_aspek) > 15 ? 
-                            substr($aspekItem->nama_aspek, 0, 15) . '...' : 
-                            $aspekItem->nama_aspek;
+                $labelText .= strlen($aspekItem->nama_aspek) > 15 ?
+                    substr($aspekItem->nama_aspek, 0, 15) . '...' :
+                    $aspekItem->nama_aspek;
                 $radarLabels[] = $labelText;
             }
 
@@ -663,15 +659,15 @@ public function getEvaluasiLengkap()
             $pdf->SetFillColor(255, 255, 255); // latar putih
             $pdf->SetTextColor(0, 0, 0); // teks hitam
 
-            $note = "NB:\n".
-                    "I.A - I.C = RB General Perangkat Daerah\n".
-                    "II.A - II.B = RB Tematik Perangkat Daerah\n".
-                    "Bobot RB General = 65\n".
-                    "Bobot RB Tematik = 35";
+            $note = "NB:\n" .
+                "I.A - I.C = RB General Perangkat Daerah\n" .
+                "II.A - II.B = RB Tematik Perangkat Daerah\n" .
+                "Bobot RB General = 65\n" .
+                "Bobot RB Tematik = 35";
 
             $pdf->MultiCell(0, 5, $note, 0, 'L', false);
 
-            
+
             $tableEndY = $pdf->GetY();
 
             // RIGHT SIDE - Radar Chart
@@ -720,7 +716,7 @@ public function getEvaluasiLengkap()
             $numPoints = count($radarData);
             if ($numPoints > 0) {
                 $angleStep = 360 / $numPoints;
-                
+
                 // Draw axes
                 $pdf->SetLineStyle(['width' => 0.2]);
                 $pdf->SetDrawColor(150, 150, 150);
@@ -729,12 +725,12 @@ public function getEvaluasiLengkap()
                     $x = $centerX + cos($angle) * $radius;
                     $y = $centerY + sin($angle) * $radius;
                     $pdf->Line($centerX, $centerY, $x, $y);
-                    
+
                     // Add labels
                     $pdf->SetFont('helvetica', '', 6);
                     $labelX = $centerX + cos($angle) * ($radius + 8);
                     $labelY = $centerY + sin($angle) * ($radius + 8);
-                    
+
                     // Adjust label position based on angle
                     if (cos($angle) < -0.1) {
                         $pdf->SetXY($labelX - 25, $labelY - 2);
@@ -747,12 +743,12 @@ public function getEvaluasiLengkap()
                         $pdf->Cell(25, 4, $radarLabels[$i], 0, 0, 'C');
                     }
                 }
-                
+
                 // Plot data points
                 $pdf->SetDrawColor(0, 100, 200);
                 $pdf->SetFillColor(0, 100, 200);
                 $pdf->SetLineStyle(['width' => 0.8]);
-                
+
                 $points = [];
                 for ($i = 0; $i < $numPoints; $i++) {
                     $angle = deg2rad($i * $angleStep - 90);
@@ -762,26 +758,26 @@ public function getEvaluasiLengkap()
                     $points[] = $x;
                     $points[] = $y;
                 }
-                
+
                 // Draw filled polygon
                 if (count($points) >= 6) {
                     $pdf->SetAlpha(0.3);
                     $pdf->Polygon($points, 'DF');
                     $pdf->SetAlpha(1);
                 }
-                
+
                 // Draw lines connecting points
                 $pdf->SetLineStyle(['width' => 0.8]);
                 for ($i = 0; $i < $numPoints; $i++) {
                     $nextI = ($i + 1) % $numPoints;
                     $pdf->Line(
-                        $points[$i * 2], 
-                        $points[$i * 2 + 1], 
-                        $points[$nextI * 2], 
+                        $points[$i * 2],
+                        $points[$i * 2 + 1],
+                        $points[$nextI * 2],
                         $points[$nextI * 2 + 1]
                     );
                 }
-                
+
                 // Draw points
                 $pdf->SetFillColor(0, 100, 200);
                 for ($i = 0; $i < $numPoints; $i++) {
@@ -801,7 +797,7 @@ public function getEvaluasiLengkap()
             // Loop through instrumen
             foreach ($opd->instrumen as $instrumen) {
                 $pdf->AddPage();
-                
+
                 // Instrumen header
                 $pdf->SetFont('helvetica', 'B', 14);
                 $pdf->Cell(0, 10, $instrumen->nums . '. ' . strtoupper($instrumen->nama), 0, 1, 'L');
@@ -844,7 +840,7 @@ public function getEvaluasiLengkap()
 
                     // Sort sub aspek by nums
                     $subAspeks = (array)$aspek->sub_aspek;
-                    usort($subAspeks, function($a, $b) {
+                    usort($subAspeks, function ($a, $b) {
                         return $a->nums <=> $b->nums;
                     });
 
@@ -865,7 +861,7 @@ public function getEvaluasiLengkap()
                         // Calculate column widths
                         $w = [
                             15,                           // No
-                            round($effectiveWidth * 0.22)-1,  // Indikator
+                            round($effectiveWidth * 0.22) - 1,  // Indikator
                             20,                           // Bobot
                             20,                           // Nilai
                             20,                           // Status
@@ -896,7 +892,7 @@ public function getEvaluasiLengkap()
                         // Table header
                         $pdf->SetFont('helvetica', 'B', 10);
                         $pdf->SetFillColor(245, 245, 245);
-                        
+
                         // Header row
                         $pdf->Cell($w[0], 7, 'No', 1, 0, 'C', true);
                         $pdf->Cell($w[1], 7, 'Indikator', 1, 0, 'C', true);
@@ -908,7 +904,7 @@ public function getEvaluasiLengkap()
 
                         // Sort and display sub sub aspek
                         $subSubAspeks = (array)$subAspek->sub_sub_aspek;
-                        usort($subSubAspeks, function($a, $b) {
+                        usort($subSubAspeks, function ($a, $b) {
                             return $a->nums <=> $b->nums;
                         });
 
@@ -918,7 +914,7 @@ public function getEvaluasiLengkap()
                         foreach ($subSubAspeks as $ssa) {
                             // Calculate row height based on content
                             $text = $ssa->nama_sub_sub_aspek;
-                            
+
                             // Hitung tinggi string tiap cell
                             $heights = [];
                             $heights[] = $pdf->getStringHeight($w[0], $ssa->nums);
@@ -937,8 +933,7 @@ public function getEvaluasiLengkap()
                                 $height = 6;
                             }
 
-                            $status = $ssa->aprove === 'yes' ? 'Disetujui' : 
-                                    ($ssa->aprove === 'no' ? 'Ditolak' : 'Pending');
+                            $status = $ssa->aprove === 'yes' ? 'Disetujui' : ($ssa->aprove === 'no' ? 'Ditolak' : 'Pending');
 
                             // Print row with uniform height
                             $pdf->MultiCell($w[0], $height, $ssa->nums, 1, 'C', false, 0);
@@ -949,7 +944,7 @@ public function getEvaluasiLengkap()
                             $pdf->MultiCell($w[5], $height, $ssa->ket, 1, 'L', false, 0);
                             $pdf->MultiCell($w[6], $height, $ssa->saran, 1, 'L', false, 1);
                         }
-                        
+
                         $pdf->Ln(5);
                     }
                     $pdf->Ln(3);
@@ -967,7 +962,6 @@ public function getEvaluasiLengkap()
             $filename = $this->sanitizeFilename($filename);
             $pdf->Output($filename, 'D');
             exit;
-
         } catch (\Exception $e) {
             log_message('error', 'Export PDF OPD Error: ' . $e->getMessage());
             return $this->response->setJSON([
@@ -990,35 +984,35 @@ public function getEvaluasiLengkap()
         if (strlen($text) <= $maxLength) {
             return $text;
         }
-        
+
         // Try to break at word boundaries
         $words = explode(' ', $text);
         $lines = [];
         $currentLine = '';
-        
+
         foreach ($words as $word) {
-          $xxx = $currentLine . ' ' . $word;
-          if (strlen($xxx) <= $maxLength || (strlen($xxx)-$maxLength) <= $toleransi) {
-              $currentLine .= ($currentLine ? ' ' : '') . $word;
-          } else {
-              if ($currentLine) {
-                  $lines[] = $currentLine;
-              }
-              $currentLine = $word;
-          }
+            $xxx = $currentLine . ' ' . $word;
+            if (strlen($xxx) <= $maxLength || (strlen($xxx) - $maxLength) <= $toleransi) {
+                $currentLine .= ($currentLine ? ' ' : '') . $word;
+            } else {
+                if ($currentLine) {
+                    $lines[] = $currentLine;
+                }
+                $currentLine = $word;
+            }
         }
-        
+
         if ($currentLine) {
             $lines[] = $currentLine;
         }
-        
+
         return implode("\n", $lines);
     }
 
     private function calculateMaxLines($texts, $widths)
     {
         $maxLines = 1;
-        
+
         foreach ($texts as $index => $text) {
             if (isset($widths[$index])) {
                 $maxLength = $widths[$index] * 0.6; // Approximate character width
@@ -1026,7 +1020,7 @@ public function getEvaluasiLengkap()
                 $maxLines = max($maxLines, $lines);
             }
         }
-        
+
         return $maxLines;
     }
 
@@ -1042,7 +1036,7 @@ public function getEvaluasiLengkap()
     {
         $tahun = $this->request->getGet('tahun') ?? date('Y');
         $opdId = $this->request->getGet('opd_id');
-        
+
         if (!$opdId) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -1051,23 +1045,22 @@ public function getEvaluasiLengkap()
                 'msg' => 'OPD ID tidak ditemukan'
             ]);
         }
-        
+
         try {
             $detailData = $this->lkeModel->getDetailEvaluasiByOpd($tahun, $opdId);
             $progressData = $this->lkeModel->getProgressEvaluasi($tahun, $opdId);
-            
+
             $result = [
                 'detail_evaluasi' => $detailData,
                 'progress' => $progressData
             ];
-            
+
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $result,
                 'success'   => 1,
                 'msg'       => 'Detail evaluasi berhasil diambil'
             );
-            
         } catch (\Exception $e) {
             $data = array(
                 'token_crs' => csrf_hash(),
@@ -1076,24 +1069,23 @@ public function getEvaluasiLengkap()
                 'msg'       => 'Gagal mengambil detail evaluasi: ' . $e->getMessage()
             );
         }
-        
+
         return $this->response->setJSON($data);
     }
 
     public function getProgressOverall()
     {
         $tahun = $this->request->getGet('tahun') ?? date('Y');
-        
+
         try {
             $progressData = $this->lkeModel->getProgressEvaluasi($tahun);
-            
+
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $progressData,
                 'success'   => 1,
                 'msg'       => 'Data progress berhasil diambil'
             );
-            
         } catch (\Exception $e) {
             $data = array(
                 'token_crs' => csrf_hash(),
@@ -1102,7 +1094,7 @@ public function getEvaluasiLengkap()
                 'msg'       => 'Gagal mengambil data progress: ' . $e->getMessage()
             );
         }
-        
+
         return $this->response->setJSON($data);
     }
 
@@ -1110,7 +1102,7 @@ public function getEvaluasiLengkap()
     {
         $tahun = $this->request->getGet('tahun') ?? date('Y');
         $opdId = $this->request->getGet('opd_id');
-        
+
         if (!$opdId) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -1119,18 +1111,17 @@ public function getEvaluasiLengkap()
                 'msg' => 'OPD ID tidak ditemukan'
             ]);
         }
-        
+
         try {
             // $nilaiAspek = $this->lkeModel->getNilaiSubAspek($tahun, $opdId);
             $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
-            
+
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $nilaiAspek, //$this->formatAspekNested($nilaiAspek),
                 'success'   => 1,
                 'msg'       => 'Data nilai aspek berhasil diambil'
             );
-            
         } catch (\Exception $e) {
             $data = array(
                 'token_crs' => csrf_hash(),
@@ -1139,7 +1130,7 @@ public function getEvaluasiLengkap()
                 'msg'       => 'Gagal mengambil data nilai aspek: ' . $e->getMessage()
             );
         }
-        
+
         return $this->response->setJSON($data);
     }
 
@@ -1219,57 +1210,57 @@ public function getEvaluasiLengkap()
         }
 
         // try {
-            $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
-            
-            if (empty($nilaiAspek)) {
-                return redirect()->back()->with('error', 'Data tidak ditemukan');
+        $nilaiAspek = $this->DashboardModel->nilaiOpd($tahun, $opdId);
+
+        if (empty($nilaiAspek)) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
+
+        // Prepare data
+        $opd = $nilaiAspek[0];
+
+        // Kumpulkan semua aspek dari semua instrumen
+        $allAspek = [];
+        foreach ($opd->instrumen as $instrumen) {
+            foreach ($instrumen->aspek as $aspek) {
+                $allAspek[] = (object)[
+                    'instrumen_nama' => $instrumen->nama,
+                    'instrumen_nums' => $instrumen->nums,
+                    'aspek_nums' => $aspek->nums,
+                    'nama_aspek' => $aspek->nama_aspek,
+                    'nilai' => $aspek->nilai,
+                    'bobot_rb' => $instrumen->bobot
+                ];
             }
+        }
 
-            // Prepare data
-            $opd = $nilaiAspek[0];
-            
-            // Kumpulkan semua aspek dari semua instrumen
-            $allAspek = [];
-            foreach ($opd->instrumen as $instrumen) {
-                foreach ($instrumen->aspek as $aspek) {
-                    $allAspek[] = (object)[
-                        'instrumen_nama' => $instrumen->nama,
-                        'instrumen_nums' => $instrumen->nums,
-                        'aspek_nums' => $aspek->nums,
-                        'nama_aspek' => $aspek->nama_aspek,
-                        'nilai' => $aspek->nilai,
-                        'bobot_rb' => $instrumen->bobot
-                    ];
-                }
-            }
+        // Prepare radar chart data
+        $radarData = [];
+        $radarLabels = [];
+        foreach ($allAspek as $aspekItem) {
+            $kode = $aspekItem->instrumen_nums . '.' . $aspekItem->aspek_nums;
+            $radarData[] = floatval($aspekItem->nilai);
 
-            // Prepare radar chart data
-            $radarData = [];
-            $radarLabels = [];
-            foreach ($allAspek as $aspekItem) {
-                $kode = $aspekItem->instrumen_nums . '.' . $aspekItem->aspek_nums;
-                $radarData[] = floatval($aspekItem->nilai);
-                
-                $labelText = $kode . '. ';
-                $labelText .= strlen($aspekItem->nama_aspek) > 20 ? 
-                            substr($aspekItem->nama_aspek, 0, 20) . '...' : 
-                            $aspekItem->nama_aspek;
-                $radarLabels[] = $labelText;
-            }
+            $labelText = $kode . '. ';
+            $labelText .= strlen($aspekItem->nama_aspek) > 20 ?
+                substr($aspekItem->nama_aspek, 0, 20) . '...' :
+                $aspekItem->nama_aspek;
+            $radarLabels[] = $labelText;
+        }
 
-            $usr = $this->decoded->rln;
-            $data = [
-                'title' => 'Laporan Evaluasi Indeks Reformasi Birokrasi',
-                'tahun' => $tahun,
-                'opd' => $opd,
-                'allAspek' => $allAspek,
-                'radarData' => json_encode($radarData),
-                'radarLabels' => json_encode($radarLabels),
-                'usr' => $usr,
-            ];
+        $usr = $this->decoded->rln;
+        $data = [
+            'title' => 'Laporan Evaluasi Indeks Reformasi Birokrasi',
+            'tahun' => $tahun,
+            'opd' => $opd,
+            'allAspek' => $allAspek,
+            'radarData' => json_encode($radarData),
+            'radarLabels' => json_encode($radarLabels),
+            'usr' => $usr,
+        ];
 
-            // return view('Pages/laporan/view_opd', $data);
-            return view('Pages/laporan/view_opd_layout', $data);
+        // return view('Pages/laporan/view_opd', $data);
+        return view('Pages/laporan/view_opd_layout', $data);
 
         // } catch (\Exception $e) {
         //     log_message('error', 'View Laporan OPD Error: ' . $e->getMessage());
@@ -1284,7 +1275,7 @@ public function getEvaluasiLengkap()
 
         if (!$opdId) {
             return $this->response->setStatusCode(400)
-                                ->setJSON(['error' => true, 'message' => 'OPD ID tidak ditemukan']);
+                ->setJSON(['error' => true, 'message' => 'OPD ID tidak ditemukan']);
         }
 
         try {
@@ -1292,7 +1283,7 @@ public function getEvaluasiLengkap()
 
             if (empty($nilaiAspek)) {
                 return $this->response->setStatusCode(404)
-                                    ->setJSON(['error' => true, 'message' => 'Data tidak ditemukan']);
+                    ->setJSON(['error' => true, 'message' => 'Data tidak ditemukan']);
             }
 
             // Ambil data OPD pertama
@@ -1321,9 +1312,9 @@ public function getEvaluasiLengkap()
                 $radarData[] = $aspekItem['nilai'];
 
                 $labelText = $kode . '. ';
-                $labelText .= strlen($aspekItem['nama_aspek']) > 20 ? 
-                                substr($aspekItem['nama_aspek'], 0, 20) . '...' : 
-                                $aspekItem['nama_aspek'];
+                $labelText .= strlen($aspekItem['nama_aspek']) > 20 ?
+                    substr($aspekItem['nama_aspek'], 0, 20) . '...' :
+                    $aspekItem['nama_aspek'];
                 $radarLabels[] = $labelText;
             }
 
@@ -1340,38 +1331,36 @@ public function getEvaluasiLengkap()
             ];
 
             return $this->response->setStatusCode(200)->setJSON($data);
-
         } catch (\Exception $e) {
             log_message('error', 'Get Laporan OPD JSON Error: ' . $e->getMessage());
             return $this->response->setStatusCode(500)
-                                ->setJSON(['error' => true, 'message' => 'Gagal memuat laporan: ' . $e->getMessage()]);
+                ->setJSON(['error' => true, 'message' => 'Gagal memuat laporan: ' . $e->getMessage()]);
         }
     }
 
-public function detailSsa()
-{
-    // Ambil parameter dari query string dengan aman
-    $id_opd = $this->request->getGet('opdId');
-    $id_ssa = $this->request->getGet('idSsa');
+    public function detailSsa()
+    {
+        // Ambil parameter dari query string dengan aman
+        $id_opd = $this->request->getGet('opdId');
+        $id_ssa = $this->request->getGet('idSsa');
 
-    // Cek apakah parameter ada
-    if (empty($id_opd) || empty($id_ssa)) {
+        // Cek apakah parameter ada
+        if (empty($id_opd) || empty($id_ssa)) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON([
+                    'status' => 'error',
+                    'message' => 'Parameter opdId dan idSsa wajib diisi.'
+                ]);
+        }
+
+        // Panggil model
+        $dashboardModel = new \App\Models\DashboardModel();
+        $data = $dashboardModel->getDetailSubSubAspekOpd($id_opd, $id_ssa);
+
+        // Kirim response JSON
         return $this->response
-                    ->setStatusCode(400)
-                    ->setJSON([
-                        'status' => 'error',
-                        'message' => 'Parameter opdId dan idSsa wajib diisi.'
-                    ]);
+            ->setStatusCode(200)
+            ->setJSON($data);
     }
-
-    // Panggil model
-    $dashboardModel = new \App\Models\DashboardModel();
-    $data = $dashboardModel->getDetailSubSubAspekOpd($id_opd, $id_ssa);
-
-    // Kirim response JSON
-    return $this->response
-                ->setStatusCode(200)
-                ->setJSON($data);
-}
-
 }

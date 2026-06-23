@@ -3,15 +3,15 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class PublicPages extends BaseController
 {
-   
+
     public function login()
     {
         $captchaImage = generateCaptcha();
-        return view('login',
+        return view(
+            'login',
             ['captchaImage' => $captchaImage]
         );
     }
@@ -24,10 +24,10 @@ class PublicPages extends BaseController
     public function apis()
     {
         $data = array(
-                'token_crs' =>  csrf_hash(),
-                'success'   =>  1,
-                'msg'       =>  'Api v1.0'
-            );
+            'token_crs' =>  csrf_hash(),
+            'success'   =>  1,
+            'msg'       =>  'Api v1.0'
+        );
         return $this->response->setJSON($data);
     }
 
@@ -39,16 +39,17 @@ class PublicPages extends BaseController
 
         $thx = $this->request->getVar('t');
         $token = $this->request->getVar('token');
-        if (!$token|| $token != 'abcdefg') {
+        if (!$token || $token != 'abcdefg') {
             $data = array(
                 'success'   =>  1,
                 'msg'       => 'success',
                 // 'token_crs' => csrf_hash(),
                 'data'        => [
-                    'return'=>'result'],
+                    'return' => 'result'
+                ],
             );
             return $this->response->setJSON($data);
-        }else{
+        } else {
             // $tahun = $LkeForm->select('tahun')->orderBy('tahun', 'DESC')->first();
             $list = $model->getRekapSemuaOpdPublic($thx);
 

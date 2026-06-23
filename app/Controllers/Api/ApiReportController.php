@@ -3,13 +3,6 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
-use Exception;
 
 class ApiReportController extends BaseController
 {
@@ -17,7 +10,8 @@ class ApiReportController extends BaseController
     protected $db;
     protected $decoded;
 
-    public function __construct(){
+    public function __construct()
+    {
         $request = request();
         $key = getenv('TOKEN_SECRET');
         $token = null;
@@ -32,7 +26,8 @@ class ApiReportController extends BaseController
     }
 
 
-    public function data_opd($tahun, $opdId) {
+    public function data_opd($tahun, $opdId)
+    {
         $nilaiModel = new \App\Models\NilaiModel();
 
         if (empty($opdId) || empty($tahun)) {
@@ -58,5 +53,4 @@ class ApiReportController extends BaseController
         );
         return $this->response->setJSON($data);
     }
-
 }

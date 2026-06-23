@@ -3,18 +3,10 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\SuperAdminModel;
-use CodeIgniter\HTTP\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Config\Services;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\Header;
-use CodeIgniter\Model;
-use stdClass;
 use App\Models\LkeModel;
-use App\Models\LkeForm;
 
 
 class ApiSuperAdminControllers extends BaseController
@@ -22,13 +14,14 @@ class ApiSuperAdminControllers extends BaseController
     protected $superAdminModel;
     protected $decoded;
     protected $db;
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         $request = request();
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
-         if(!empty($header)) {
+        if (!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
@@ -38,7 +31,8 @@ class ApiSuperAdminControllers extends BaseController
         $this->superAdminModel = new SuperAdminModel();
     }
 
-    public function getUsers(){
+    public function getUsers()
+    {
 
         $uid = $this->request->getVar('uid') ? $this->request->getVar('uid') : null;
         $role = $this->request->getVar('role') ? $this->request->getVar('role') : null;
@@ -68,7 +62,7 @@ class ApiSuperAdminControllers extends BaseController
         );
         $user = $this->superAdminModel->getUsers($uid, null, null);
         $dataTerkait = $this->superAdminModel->checkUserRelations($uid);
-        if (count($user)===1) {
+        if (count($user) === 1) {
             $aspek_penilai = [];
             $lke_role = new \App\Models\LkeRole();
             $aspek_penilai = $lke_role->select('aspek as aspek_id')->where('Uid', $uid)->findAll();
@@ -94,7 +88,7 @@ class ApiSuperAdminControllers extends BaseController
             'Phone'      => 'required|numeric|min_length[10]|max_length[15]',
             'EmailAdds'  => 'required|valid_email|max_length[100]',
         ]);
-    
+
         if (!$this->validate($validation->getRules())) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -102,7 +96,7 @@ class ApiSuperAdminControllers extends BaseController
                 'msg' => $validation->getErrors()
             ]);
         }
-    
+
         $uname  = $this->request->getPost('UserName');
         $fname  = $this->request->getPost('FullName');
         $phn    = $this->request->getPost('Phone');
@@ -129,13 +123,13 @@ class ApiSuperAdminControllers extends BaseController
                         'aspek' => $value,
                     ]);
                 }
-            }else {
+            } else {
                 $lke_role->insert([
                     'Uid' => $uid,
                     'RoleId' => $rlid,
                 ]);
             }
-            
+
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
                 'res' => true,
@@ -150,7 +144,7 @@ class ApiSuperAdminControllers extends BaseController
             ]);
         }
     }
-    
+
     public function addUser()
     {
         $validation = \Config\Services::validation();
@@ -162,7 +156,7 @@ class ApiSuperAdminControllers extends BaseController
             'RoleName'   => 'required',
             'nama_opd'   => 'required',
         ]);
-    
+
         if (!$this->validate($validation->getRules())) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -180,11 +174,11 @@ class ApiSuperAdminControllers extends BaseController
         $opid = $this->request->getPost('nama_opd');
         $aspek_penilai = $this->request->getPost('aspek_penilai');
         // $result = $this->superAdminModel->addUser($uidx, $uname, $fname, $pswd, $phn, $eml, $rlid, $opid);
-        
+
         $lke_user = new \App\Models\LkeUser();
         $lke_role = new \App\Models\LkeRole();
         $lke_detail_opd = new \App\Models\LkeDetailOpd();
-        $hashPass = null;//$this->superAdminModel->EncPass($pswd);
+        $hashPass = null; //$this->superAdminModel->EncPass($pswd);
         $user_data = [
             'uid'       => $uidx,
             'UserName'  => $uname,
@@ -199,7 +193,7 @@ class ApiSuperAdminControllers extends BaseController
         try {
             $lke_user->insert($user_data);
             // $lke_user->query("CALL User_Cretae_new(?, ?, ?, ?, ?, ?, ?, ?)", [$uidx, $uname, $fname, $pswd, $phn, $eml, $rlid, $opid]);
-            
+
             if ($lke_user->affectedRows() > 0) {
                 $user_id = $uidx;
                 $lke_detail_opd->insert([
@@ -210,7 +204,7 @@ class ApiSuperAdminControllers extends BaseController
                 ]);
                 // $lke_role->where('Uid', $user_id)->delete();
                 // $lke_user->query("UPDATE lke_user SET PassEnc = EncPass(?) WHERE Uid = ?", [$pswd, $user_id]);
-                $lke_user->query("CALL User_update_password(?, ?)", [ $user_id, $pswd ]);
+                $lke_user->query("CALL User_update_password(?, ?)", [$user_id, $pswd]);
                 if (!empty($aspek_penilai)) {
                     $aspek = new \App\Models\LkeAspek();
                     // $aspek->whereIn('id', $aspek_penilai)->update(['penilaiid' => $user_id]);
@@ -222,13 +216,13 @@ class ApiSuperAdminControllers extends BaseController
                             'Create_at' => date('Y-m-d H:i:s'),
                         ]);
                     }
-                }else {
+                } else {
                     $lke_role->save([
                         'Uid' => $user_id,
                         'RoleId' => $rlid,
                     ]);
                 }
-                
+
                 return $this->response->setJSON([
                     'token_crs' => csrf_hash(),
                     'res' => true,
@@ -252,23 +246,22 @@ class ApiSuperAdminControllers extends BaseController
                 'data' => $user_data
             ]);
         }
-
     }
 
     public function deleteUser($uid, $paramMode = null, $uidxx = null)
     {
 
         $mode = $paramMode ?? $this->request->getGet('mode') ?? 'soft';
-        
+
         $uidx = $uidxx ?? $this->decoded->ids;
         $user = $this->superAdminModel->getUsers($uidx, null, null);
-        if (count($user)===0 || $user[0]->actv != 'TRUE' || $user[0]->acs != 1) {
+        if (count($user) === 0 || $user[0]->actv != 'TRUE' || $user[0]->acs != 1) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
                 'res' => false,
                 'usr' => $user,
                 'validasi' => [
-                    'count' => (count($user)===0),
+                    'count' => (count($user) === 0),
                     'actv' => ($user[0]->actv != 'TRUE'),
                     'acs' => ($user[0]->acs != 1),
                 ],
@@ -291,14 +284,14 @@ class ApiSuperAdminControllers extends BaseController
         ]);
     }
 
-    
+
     public function saveOPD()
     {
         $validation = \Config\Services::validation();
         $validation->setRules([
             'nama_opd'   => 'required|min_length[3]|max_length[100]',
         ]);
-    
+
         if (!$this->validate($validation->getRules())) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -306,13 +299,13 @@ class ApiSuperAdminControllers extends BaseController
                 'msg' => $validation->getErrors()
             ]);
         }
-    
+
         $opid = $this->request->getPost('opd_id');
         $opnm = $this->request->getPost('nama_opd');
         $uidx = $this->decoded->ids;
         $singkatan = $this->request->getPost('singkatan');
         $result = $this->superAdminModel->updateOpd($uidx, $opid, $opnm, $singkatan);
-    
+
         if ($result['res'] == 1) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -335,7 +328,7 @@ class ApiSuperAdminControllers extends BaseController
         $validation->setRules([
             'id'   => 'required|numeric',
         ]);
-    
+
         if (!$this->validate($validation->getRules())) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -343,12 +336,12 @@ class ApiSuperAdminControllers extends BaseController
                 'msg' => $validation->getErrors()
             ]);
         }
-    
+
         $opid = $this->request->getPost('id');
         $uidx = $this->decoded->ids;
 
         $result = $this->superAdminModel->deleteOpd($uidx, $opid);
-    
+
         if ($result['res'] == 1) {
             return $this->response->setJSON([
                 'token_crs' => csrf_hash(),
@@ -423,7 +416,7 @@ class ApiSuperAdminControllers extends BaseController
             'success'   => 1,
             'msg'       => 'Data berhasil diambil'
         );
-        
+
 
         return $this->response->setJSON($data);
     }

@@ -5,10 +5,6 @@ namespace App\Controllers\Api;
 use App\Controllers\BaseController;
 use App\Models\LkeUser;
 use App\Models\PenilaianModel;
-use CodeIgniter\HTTP\Header;
-use CodeIgniter\HTTP\Response;
-use CodeIgniter\HTTP\ResponseInterface;
-use Config\Services;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -16,13 +12,14 @@ class ApiPenilaiControllers extends BaseController
 {
     protected $db;
     protected $decoded;
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         $request = request();
         $key = getenv('TOKEN_SECRET');
         $token = null;
         $header = $request->getHeader("Authorization");
-         if(!empty($header)) {
+        if (!empty($header)) {
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
@@ -30,7 +27,7 @@ class ApiPenilaiControllers extends BaseController
         $this->decoded = JWT::decode($token, new Key($key, 'HS256'));
         $this->db = db_connect();
     }
-    
+
     public function index()
     {
         //
@@ -41,9 +38,9 @@ class ApiPenilaiControllers extends BaseController
         $lke_user = new LkeUser();
 
         $userInfo = $lke_user->UserInfo($this->decoded->ids);
-        
+
         if ($userInfo->acs == '2') {
-            $ids_aspek = array_map(function($aspek) {
+            $ids_aspek = array_map(function ($aspek) {
                 return $aspek->id;
             }, $userInfo->aspek);
         } else {
@@ -52,12 +49,12 @@ class ApiPenilaiControllers extends BaseController
         if (empty($ids_aspek)) {
             $ids_aspek = null;
         }
-        
+
         // $idaspek = $this->request->getVar('asp');
         // $tahun = $this->request->getVar('thn');
         $form_id = $this->request->getVar('form');
         $penilaianModel = new PenilaianModel();
-        
+
         $form = $penilaianModel->getForm($form_id);
 
         if (!empty($form)) {
@@ -113,7 +110,7 @@ class ApiPenilaiControllers extends BaseController
                 'point' => $point
             ];
             return $this->response->setJSON($response);
-        }else{
+        } else {
             $response = [
                 'csrf_token' => csrf_hash(),
                 'status' => 200,
@@ -134,7 +131,8 @@ class ApiPenilaiControllers extends BaseController
         // return $this->response->setJSON($response);
     }
 
-    public function uploadBuktiDukung(){
+    public function uploadBuktiDukung()
+    {
 
         $penilaianModel = new PenilaianModel();
         $idOpd = $this->request->getVar('idOpd');
@@ -165,7 +163,7 @@ class ApiPenilaiControllers extends BaseController
                     'message' => 'File Gagal diunggah',
                     'data' => $indikator
                 ];
-            }else {
+            } else {
                 $response = [
                     'csrf_token' => csrf_hash(),
                     'status' => 200,
@@ -181,7 +179,7 @@ class ApiPenilaiControllers extends BaseController
                 'data' => $indikator
             ];
         }
-        
+
         return $this->response->setJSON($response);
     }
 }
