@@ -259,6 +259,7 @@ class ApiGlobalControllers extends BaseController
             $data = array(
                 'token_crs' => csrf_hash(),
                 'dt'        => $list,
+                'idx'       => $IDX
             );
 
             return $this->response->setJSON($data);

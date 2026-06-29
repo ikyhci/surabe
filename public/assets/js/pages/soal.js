@@ -299,7 +299,6 @@ $(document).ready(function () {
 				type: 'GET',
 				dataType: 'json',
 				success: function (res) {
-					// console.log(res.dt[0].jenis_jawaban)
 					csrf.value = res.token_crs
 					if (res.dt[0].jenis_jawaban == 'Pilihan Ganda') {
 						$('#pilihan-ganda').removeClass('d-none');
@@ -369,15 +368,9 @@ $(document).ready(function () {
 			dataType: 'JSON',
 			success: function (res) {
 				csrf.value = res.token_crs
-
-
 				$('#rb').find('option').remove()
 				$('#rb').append('<option value="" selected disabled>Choose...</option>');
 				$('#rb').val("").trigger('change')
-
-
-
-
 				for (var i = 0; i < res.dt.length; i++) {
 					$("#rb").append('<option value=' + res.dt[i].id + '>' + res.dt[i].nama + '</option>');
 				}
@@ -431,7 +424,9 @@ $(document).ready(function () {
 		$('#view-data').modal('show');
 		tabls.innerHTML = '';
 		tabls.innerHTML = formatRB()
-		loadRB()
+		let forms = document.getElementById('forms').value;
+		$('#forms').val(forms).trigger('change')
+		loadRB(forms)
 	})
 
 	$(document).on('click', '.view-aspek', function () {
@@ -441,7 +436,9 @@ $(document).ready(function () {
 		$('#view-data').modal('show');
 		tabls.innerHTML = '';
 		tabls.innerHTML = formatAspek()
-		loadaspek()
+		let rbs = document.getElementById('rb').value;
+		$('#rb').val(rbs).trigger('change')
+		loadaspek(rbs)
 	})
 
 	$(document).on('click', '.view-sub-aspek', function () {
@@ -451,7 +448,9 @@ $(document).ready(function () {
 		$('#view-data').modal('show');
 		tabls.innerHTML = '';
 		tabls.innerHTML = formatSubaspek()
-		loadsubaspek()
+		let asp = document.getElementById('aspek').value;
+		$('#aspek').val(asp).trigger('change')
+		loadsubaspek(asp)
 	})
 
 	$(document).on('click', '.view-sub-sub-aspek', function () {
@@ -461,7 +460,9 @@ $(document).ready(function () {
 		$('#view-data').modal('show');
 		tabls.innerHTML = '';
 		tabls.innerHTML = formatSubsubaspek()
-		loadsubsubaspek()
+		let subasp = document.getElementById('subaspek').value;
+		$('#subaspek').val(subasp).trigger('change')
+		loadsubsubaspek(subasp)
 	})
 
 	$(document).on('click', '.view-indikator', function () {
@@ -471,7 +472,9 @@ $(document).ready(function () {
 		$('#view-data').modal('show');
 		tabls.innerHTML = '';
 		tabls.innerHTML = formatIndikator()
-		loadindikator()
+		let subsubasp = document.getElementById('subsubaspek').value;
+		$('#subsubaspek').val(subsubasp).trigger('change')
+		loadindikator(subsubasp)
 	})
 
 	$(document).on('click', '.indikator-view', function () {
@@ -1635,7 +1638,7 @@ $(document).ready(function () {
 		});
 	}
 
-	function loadRB() {
+	function loadRB(forms) {
 		var t = $('#tbl-rb').DataTable({
 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
@@ -1652,7 +1655,8 @@ $(document).ready(function () {
 					'Authorization': 'Bearer ' + token
 				},
 				"data": {
-					csrf_token: csrf.value
+					csrf_token: csrf.value,
+					find: forms
 				},
 				"method": "GET",
 				"dataSrc": function (data) {
@@ -1691,7 +1695,7 @@ $(document).ready(function () {
 		});
 	}
 
-	function loadaspek() {
+	function loadaspek(rbs) {
 		var t = $('#tbl-aspek').DataTable({
 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
@@ -1708,7 +1712,8 @@ $(document).ready(function () {
 					'Authorization': 'Bearer ' + token
 				},
 				"data": {
-					csrf_token: csrf.value
+					csrf_token: csrf.value,
+					idx: rbs
 				},
 				"method": "GET",
 				"dataSrc": function (data) {
@@ -1747,7 +1752,7 @@ $(document).ready(function () {
 		});
 	}
 
-	function loadsubaspek() {
+	function loadsubaspek(asp) {
 		var t = $('#tbl-sub-aspek').DataTable({
 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
@@ -1764,7 +1769,8 @@ $(document).ready(function () {
 					'Authorization': 'Bearer ' + token
 				},
 				"data": {
-					csrf_token: csrf.value
+					csrf_token: csrf.value,
+					idx: asp
 				},
 				"method": "GET",
 				"dataSrc": function (data) {
@@ -1803,7 +1809,7 @@ $(document).ready(function () {
 		});
 	}
 
-	function loadsubsubaspek() {
+	function loadsubsubaspek(subasp) {
 		var t = $('#tbl-sub-sub-aspek').DataTable({
 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
@@ -1820,7 +1826,8 @@ $(document).ready(function () {
 					'Authorization': 'Bearer ' + token
 				},
 				"data": {
-					csrf_token: csrf.value
+					csrf_token: csrf.value,
+					idx: subasp
 				},
 				"method": "GET",
 				"dataSrc": function (data) {
@@ -1859,7 +1866,7 @@ $(document).ready(function () {
 		});
 	}
 
-	function loadindikator() {
+	function loadindikator(subsubasp) {
 		var t = $('#tbl-indikator').DataTable({
 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			"destroy": true,
@@ -1876,7 +1883,8 @@ $(document).ready(function () {
 					'Authorization': 'Bearer ' + token
 				},
 				"data": {
-					csrf_token: csrf.value
+					csrf_token: csrf.value,
+					idx: subsubasp
 				},
 				"method": "GET",
 				"dataSrc": function (data) {
@@ -1998,7 +2006,6 @@ $(document).ready(function () {
 				},
 				"method": "GET",
 				"dataSrc": function (data) {
-					console.log(data)
 					csrf.value = data.token_crs
 					return data.dt;
 				},

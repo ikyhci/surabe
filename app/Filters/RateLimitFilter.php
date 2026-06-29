@@ -35,7 +35,9 @@ class RateLimitFilter implements FilterInterface
         }
 
         $cache = cache();
-        $key   = "rate_limit_{$ip}_{$method}";
+        $safeIp = preg_replace('/[^A-Za-z0-9_\-]/', '_', $ip);
+        $key = "rate_limit_{$safeIp}_{$method}";
+
 
         // ambil counter, default 0
         $count = $cache->get($key) ?? 0;
